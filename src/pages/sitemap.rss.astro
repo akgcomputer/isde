@@ -1,0 +1,77 @@
+---
+// src/pages/sitemap.rss.astro
+const siteUrl = 'https://isdeyeter.com';
+const currentDate = new Date();
+
+const posts = [
+  {
+    title: 'İş De Yeter Platformu Lansmanı',
+    description: 'İşinizi büyüten tüm çözümler tek platformda: İş De Yeter - 5000+ hizmet ve ürün',
+    url: '/',
+    date: new Date('2024-01-01'),
+    author: 'İş De Yeter Ekibi'
+  },
+  {
+    title: 'Yapay Zeka Destekli Hizmet Platformu',
+    description: 'AI destekli chatbot çözümleri ile müşteri deneyimini dönüştürün. WhatsApp, Instagram, Web Site chatbot entegrasyonları',
+    url: '/ai-destek-chatbot',
+    date: new Date('2024-01-15'),
+    author: 'İş De Yeter Teknoloji Ekibi'
+  },
+  {
+    title: 'Global Şirket Kurulum Rehberi',
+    description: 'ABD, İngiltere ve Estonyada şirket kurmanın püf noktaları. LLC şirket kurma, vergi danışmanlığı, banka hesabı açılışı',
+    url: '/sirket-kurulum',
+    date: new Date('2024-01-20'),
+    author: 'İş De Yeter Danışmanlık Ekibi'
+  },
+  {
+    title: 'Bulut Muhasebe Çözümleri',
+    description: 'Online muhasebe yazılımı ile iş süreçlerinizi dijitalleştirin. 22 banka API entegrasyonu, e-fatura, e-arşiv',
+    url: '/neden-bulut-muhasebe-yazilimi',
+    date: new Date('2024-01-25'),
+    author: 'İş De Yeter Finans Ekibi'
+  },
+  {
+    title: 'E-ticaret Paketleri ve Çözümleri',
+    description: 'E-ticaret sitenizi kurun, SEO optimizasyonu yapın ve satışlarınızı artırın. E-ticaret entegrasyonları ve pazarlama çözümleri',
+    url: '/e-ticaret-paketleri',
+    date: new Date('2024-01-30'),
+    author: 'İş De Yeter E-ticaret Ekibi'
+  }
+];
+---
+
+<?xml version="1.0" encoding="UTF-8"?>
+<rss version="2.0" xmlns:atom="http://www.w3.org/2005/Atom">
+  <channel>
+    <title>İş De Yeter - Güncellemeler ve Haberler</title>
+    <description>İşinizi büyüten tüm çözümler, yeni hizmetler ve platform güncellemeleri</description>
+    <link>${siteUrl}</link>
+    <atom:link href="${siteUrl}/sitemap.rss" rel="self" type="application/rss+xml"/>
+    <language>tr</language>
+    <copyright>Copyright ${currentDate.getFullYear()} İş De Yeter. Tüm hakları saklıdır.</copyright>
+    <lastBuildDate>${currentDate.toUTCString()}</lastBuildDate>
+    <pubDate>${currentDate.toUTCString()}</pubDate>
+    <ttl>60</ttl>
+    <image>
+      <url>${siteUrl}/img/isdeyeter-logo-5000px.png</url>
+      <title>İş De Yeter</title>
+      <link>${siteUrl}</link>
+    </image>
+    
+    {
+      posts.map(post => `
+    <item>
+      <title><![CDATA[${post.title}]]></title>
+      <description><![CDATA[${post.description}]]></description>
+      <link>${siteUrl}${post.url}</link>
+      <guid isPermaLink="true">${siteUrl}${post.url}</guid>
+      <pubDate>${post.date.toUTCString()}</pubDate>
+      <author>${post.author}</author>
+      <category>İş Çözümleri</category>
+    </item>
+      `).join('')
+    }
+  </channel>
+</rss>

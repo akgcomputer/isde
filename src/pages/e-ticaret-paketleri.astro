@@ -1,0 +1,645 @@
+---
+// /src/pages/e-ticaret-paketleri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import eTicaretPaketleriData from './data/eticaret-fiyatlar.json';
+import configData from './data/config.json';
+
+const whatsappNumber = configData.whatsapp;
+
+const heroTitle = "E-Ticaret Paketleri";
+const heroSlogan = "Online satış dünyasına ÜCRETSİZ ve profesyonel adım atın";
+const heroDescription = "İhtiyacınıza uygun e-ticaret paketlerimizle online mağazanızı kurun, satışlarınızı artırın. Muhasebe  ve Pazaryeri entegrasyonları, güvenli ödeme sistemleri ve profesyonel destekle e-ticaret yolculuğunuzu güvenle başlatın.";
+
+const eTicaretPaketleri = eTicaretPaketleriData.eTicaretPaketleri;
+
+// Yardımcı fonksiyon
+const getSeviyeRenk = (seviye) => {
+    const renkler = {
+        'profesyonel': 'seviye-profesyonel',
+        'pro-plus': 'seviye-pro-plus',
+        'smart': 'seviye-smart',
+        'premium-pro': 'seviye-premium-pro',
+        'enterprise': 'seviye-enterprise'
+    };
+    return renkler[seviye] || 'bg-gray-100 text-gray-800';
+};
+---
+
+<BasicLayout title="E-Ticaret Paketleri | İş de YETER - Profesyonel Online Mağaza Çözümleri">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content" style="margin-top: 40px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 class="hero-title">
+                    <span style="color: #1F2937;">{heroTitle}</span>
+                </h1>
+                <p style="color: #f3003d; font-size: 1.5rem; font-weight: 600; line-height: 1.6; margin-bottom: 20px;">
+                    {heroSlogan}
+                </p>
+                <p class="hero-subtitle">
+                    {heroDescription}
+                </p>
+                <div class="btn-group">
+                    <a href="/isdeyeter" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        İş de Yeter Hakkında Bilgi Al
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20E-Ticaret%20Paketleri%20hakkında%20danışmanlık%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Ücretsiz Danışmanlık
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- E-Ticaret Paketleri Section -->
+<section class="paketler-section" id="paketler">
+    <div class="container">
+        <div class="section-title">
+            <span>E-TİCARET PAKETLERİ</span>
+            <h2>İhtiyacınıza Uygun Online Mağaza Paketi</h2>
+            <p>Dilerseniz Akıllı Ticaret sistemimiz ile Hem Muhasebe süreçleri hem de..<br>
+                - Stoklarınızı tek bir panelden yönetin -<br>
+                - Tüm pazaryerlerinde aynı anda satış yapın -<br>
+                - Fiziki Mağazalarınızla entegre çalışın -<br>
+                - Barkodlu Satış Yapın -<br>
+                - Demirbaş Takibi yapın -<br>
+                - Personel Yönetimi sağlayın -<br>
+                - Kargo ve ödeme entegrasyonları ile süreci hızlandırın -<br>
+                
+                Başlangıçtan profesyonel seviyeye kadar tüm e-ticaret ihtiyaçlarınız için birlikte çalışabiliriz.</p>
+        </div>
+        
+        <div class="paketler-grid">
+            {eTicaretPaketleri.map((paket) => (
+                <div 
+                    class={`paket-kart relative ${paket.enPopuler ? 'populer-kart' : ''} ${paket.id === 'baslangic' ? 'ucretsiz-kart' : ''}`}
+                    key={paket.id}
+                >
+                    <!-- Ücretsiz veya Popüler etiket -->
+                    {paket.ozelEtiket && (
+                        <div class={`absolute -top-3 left-1/2 transform -translate-x-1/2 px-4 py-1 rounded-full text-white font-bold text-sm ${paket.ozelEtiketRenk}`}>
+                            {paket.ozelEtiket}
+                        </div>
+                    )}
+                    
+                    {paket.enPopuler && !paket.ozelEtiket && (
+                        <div class="populer-badge">
+                            <i class="fas fa-fire"></i> EN POPÜLER
+                        </div>
+                    )}
+                    
+                    <div class="paket-header">
+                        <div class="paket-icon">
+                            <i class={paket.icon}></i>
+                        </div>
+                        <h3 class={paket.textRenk}>{paket.ad}</h3>
+                        <p class="paket-tip">{paket.tip}</p>
+                        <p class="paket-aciklama text-sm mt-2">{paket.aciklama}</p>
+                    </div>
+                    
+                    <!-- Önceki paket bilgisi -->
+                    {paket.oncekiPaketOzellikleri && (
+                        <div class="onceki-paket-bilgi bg-blue-50 border border-blue-200 rounded-lg p-3 mb-4">
+                            <i class="fas fa-check-circle text-blue-500 mr-2"></i>
+                            <span class="text-blue-700 text-sm">{paket.oncekiPaketOzellikleri}</span>
+                        </div>
+                    )}
+                    
+                    <!-- Fiyat bölümü -->
+                    <div class="paket-fiyat">
+                        {paket.fiyatlar.ucretsiz ? (
+                            <>
+                                <div class="liste-fiyat text-gray-500 line-through text-sm">
+                                    Liste Fiyatı: {paket.fiyatlar.liste.toLocaleString('tr-TR')} ₺
+                                </div>
+                                <div class="ucretsiz-fiyat text-4xl font-bold text-gray-800 my-2">
+                                    ÜCRETSİZ
+                                </div>
+                                <div class="fiyat-not text-gray-500 text-sm">
+                                    Normalde yıllık: {paket.fiyatlar.yillik.toLocaleString('tr-TR')}₺
+                                </div>
+                            </>
+                        ) : paket.fiyatlar.indirimli ? (
+                            <>
+                                <div class="eski-fiyat text-gray-500 line-through text-lg">
+                                    {paket.fiyatlar.aylik.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="indirimli-fiyat text-3xl font-bold text-green-600 my-2">
+                                    {paket.fiyatlar.indirimli.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="fiyat-not text-gray-500 text-sm">
+                                    Yıllık ödeme ile: {paket.fiyatlar.yillik.toLocaleString('tr-TR')}₺
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div class="normal-fiyat text-3xl font-bold text-gray-800 my-2">
+                                    {paket.fiyatlar.aylik.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="fiyat-not text-gray-500 text-sm">
+                                    Yıllık ödeme ile: {paket.fiyatlar.yillik.toLocaleString('tr-TR')}₺
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    
+                    <!-- Özellikler -->
+                    <div class="paket-ozellikler">
+                        <ul>
+                            {paket.ozellikler.map((ozellik, index) => (
+                                <li key={index} class="mb-2">
+                                    <i class={`fas fa-check-circle text-green-500 mr-2`}></i>
+                                    <span class="text-gray-700">{ozellik.text}</span>
+                                    {ozellik.seviye && ozellik.seviye !== 'temel' && (
+                                        <span class={`ml-2 px-2 py-1 text-xs rounded-full ${getSeviyeRenk(ozellik.seviye)}`}>
+                                            {ozellik.seviye.toUpperCase()}
+                                        </span>
+                                    )}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    
+                    <!-- Butonlar -->
+                    <div class="paket-butonlar mt-6">
+                        {paket.fiyatlar.ucretsiz ? (
+                            <div class="space-y-2">
+                                
+                                {(
+                                    
+                                    <a 
+                                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(paket.ad + ' - ' + paket.tip)}%20paketi%20hakkında%20bilgi%20almak%20istiyorum`} 
+                                target="_blank"
+                                class={`btn-whatsapp btn ${paket.oncelikliButon.stil} w-full`}
+                            >
+                                <i class="fab fa-whatsapp mr-2"></i>
+                                {paket.oncelikliButon.text}
+                            </a>
+                                )}
+                            </div>
+                        ) : (
+                            <a 
+                                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(paket.ad + ' - ' + paket.tip)}%20paketi%20hakkında%20bilgi%20almak%20istiyorum`} 
+                                target="_blank"
+                                class={`btn-whatsapp btn ${paket.oncelikliButon.stil} w-full`}
+                            >
+                                <i class="fab fa-whatsapp mr-2"></i>
+                                {paket.oncelikliButon.text}
+                            </a>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <!-- Ekstra Bilgi -->
+        <div class="paket-ekstra">
+            <div class="ekstra-kart">
+                <i class="fas fa-shipping-fast"></i>
+                <h4>Tüm E-Ticaret Paketlerinde Standart Özellikler</h4>
+                <div class="ekstra-ozellikler">
+                    <div class="ozellik-grubu">
+                        <h5><i class="fas fa-cart-plus"></i> Satış Özellikleri</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Kredi Kartı / Banka Havalesi</li>
+                            <li><i class="fas fa-check"></i> Sepet ve Ödeme Sayfası</li>
+                            <li><i class="fas fa-check"></i> Sipariş Takip Sistemi</li>
+                        </ul>
+                    </div>
+                    <div class="ozellik-grubu">
+                        <h5><i class="fas fa-chart-line"></i> Yönetim Özellikleri</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> Admin Panel</li>
+                            <li><i class="fas fa-check"></i> Stok Yönetimi</li>
+                            <li><i class="fas fa-check"></i> Müşteri Yönetimi</li>
+                        </ul>
+                    </div>
+                    <div class="ozellik-grubu">
+                        <h5><i class="fas fa-shield-alt"></i> Güvenlik Özellikleri</h5>
+                        <ul>
+                            <li><i class="fas fa-check"></i> SSL Sertifikası</li>
+                            <li><i class="fas fa-check"></i> Güvenli Ödeme</li>
+                            <li><i class="fas fa-check"></i> Veri Yedekleme</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Pazaryeri Entegrasyonları -->
+<section class="entegrasyon-section">
+    <div class="container">
+        <div class="section-title">
+            <span>PAZARYERİ ENTEGRASYONLARI</span>
+            <h2>Pazaryerlerinde Aynı Anda Satış Yapın</h2>
+            <p>Trendyol, Hepsiburada, Amazon ve daha fazlası...</p>
+        </div>
+        
+        <div class="entegrasyon-grid">
+            <div class="entegrasyon-item">
+                <i class="fas fa-store-alt"></i>
+                <h4>Trendyol</h4>
+                <p>Ürünlerinizi Trendyol'da satın</p>
+            </div>
+            <div class="entegrasyon-item">
+                <i class="fas fa-shopping-cart"></i>
+                <h4>Hepsiburada</h4>
+                <p>Türkiye'nin en büyük pazaryerinde yer alın</p>
+            </div>
+            <div class="entegrasyon-item">
+                <i class="fab fa-amazon"></i>
+                <h4>Amazon</h4>
+                <p>Global pazarda satış yapın</p>
+            </div>
+            <div class="entegrasyon-item">
+                <i class="fas fa-truck"></i>
+                <h4>Kargo Entegrasyonları</h4>
+                <p>Aras, Yurtiçi, MNG ve daha fazlası</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Özel E-Ticaret Projeniz mi Var?</h2>
+            <p>Standart paketler dışında özel ihtiyaçlarınız için özelleştirilmiş e-ticaret çözümleri sunuyoruz.</p>
+            <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20özel%20bir%20e-ticaret%20projem%20var,%20danışmanlık%20almak%20istiyorum`} 
+               target="_blank" 
+               class="btn btn-whatsapp btn-large">
+                <i class="fab fa-whatsapp"></i>
+                Özel Proje Teklifi Al
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Paket Kartları */
+    .paketler-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    
+    .paket-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        position: relative;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .ucretsiz-kart {
+        border: 2px dashed #9CA3AF;
+        background: linear-gradient(135deg, #f9fafb, #f3f4f6);
+    }
+    
+    .populer-kart {
+        border: 2px solid #f3003d;
+        transform: scale(1.02);
+        box-shadow: 0 15px 30px rgba(243, 0, 61, 0.1);
+    }
+    
+    .paket-kart:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 20px 40px rgba(0,0,0,0.12);
+    }
+    
+    .populer-kart:hover {
+        transform: translateY(-5px) scale(1.02);
+    }
+    
+    /* Seviye etiketleri */
+    .seviye-profesyonel {
+        background-color: #dbeafe;
+        color: #1e40af;
+    }
+    
+    .seviye-pro-plus {
+        background-color: #f3e8ff;
+        color: #7c3aed;
+    }
+    
+    .seviye-smart {
+        background-color: #dcfce7;
+        color: #166534;
+    }
+    
+    .seviye-premium-pro {
+        background-color: #fef9c3;
+        color: #854d0e;
+    }
+    
+    .seviye-enterprise {
+        background-color: #fee2e2;
+        color: #991b1b;
+    }
+    
+    /* Paketler Bölümü Stilleri */
+    .paketler-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .populer-badge {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        background: linear-gradient(135deg, #10B981, #059669);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        z-index: 1;
+    }
+    
+    .paket-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .paket-icon {
+        font-size: 2.5rem;
+        color: #8B5CF6;
+        margin-bottom: 15px;
+    }
+    
+    .paket-tip {
+        color: #6B7280;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 5px;
+    }
+    
+    .paket-fiyat {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .normal-fiyat {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1F2937;
+    }
+    
+    .indirimli-fiyat {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #10B981;
+    }
+    
+    .ucretsiz-fiyat {
+        font-size: 3rem;
+        font-weight: 700;
+        color: #f3003d;
+        margin: 10px 0;
+    }
+    
+    .liste-fiyat {
+        font-size: 1.1rem;
+        color: #6B7280;
+        text-decoration: line-through;
+        margin-bottom: 10px;
+    }
+    
+    .eski-fiyat {
+        font-size: 1.2rem;
+        color: #9CA3AF;
+        text-decoration: line-through;
+        margin-bottom: 5px;
+    }
+    
+    .fiyat-not {
+        color: #6B7280;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+    
+    .paket-ozellikler ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+    
+    .paket-ozellikler li {
+        padding: 10px 0;
+        color: #4B5563;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .paket-butonlar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    /* Ekstra Özellikler */
+    .paket-ekstra {
+        margin-top: 60px;
+    }
+    
+    .ekstra-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 40px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+    
+    .ekstra-kart i {
+        font-size: 3rem;
+        color: #8B5CF6;
+        margin-bottom: 20px;
+    }
+    
+    .ekstra-ozellikler {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+        text-align: left;
+    }
+    
+    .ozellik-grubu h5 {
+        color: #1F2937;
+        margin-bottom: 15px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .ozellik-grubu ul {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .ozellik-grubu li {
+        padding: 8px 0;
+        color: #4B5563;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    /* Entegrasyon Bölümü */
+    .entegrasyon-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .entegrasyon-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    
+    .entegrasyon-item {
+        background: #f8fafc;
+        border-radius: 12px;
+        padding: 30px;
+        text-align: center;
+        transition: all 0.3s ease;
+    }
+    
+    .entegrasyon-item:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 20px rgba(0,0,0,0.1);
+        background: white;
+    }
+    
+    .entegrasyon-item i {
+        font-size: 3rem;
+        color: #8B5CF6;
+        margin-bottom: 20px;
+    }
+    
+    .entegrasyon-item h4 {
+        color: #1F2937;
+        margin-bottom: 10px;
+    }
+    
+    /* CTA Bölümü */
+    .cta-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #1F2937, #374151);
+        color: white;
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        color: white;
+        margin-bottom: 20px;
+    }
+    
+    .cta-content p {
+        color: #D1D5DB;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    .btn-large {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .paketler-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .paketler-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .paket-kart {
+            padding: 20px;
+        }
+        
+        .normal-fiyat,
+        .indirimli-fiyat,
+        .ucretsiz-fiyat {
+            font-size: 2rem;
+        }
+        
+        .ekstra-ozellikler {
+            grid-template-columns: 1fr;
+        }
+        
+        .entegrasyon-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .entegrasyon-grid {
+            grid-template-columns: 1fr;
+        }
+    }
+</style>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20E-Ticaret%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+</BasicLayout>

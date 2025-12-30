@@ -1,0 +1,809 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const {
+  company,
+  whatsapp,
+  blogUrl,
+  slogan,
+  buttonText,
+  whatsappText
+} = configData;
+
+const heroTitle = "Tamirat Hizmetleri";
+const heroSubtitle = "Evi, ofisini veya herhangi bir mekanı profesyonel ustalarımıza tamir ettirebilirsin. Arıza, tamir, montaj ve kurulum işlemlerini yaptırabilirsin.";
+
+// 12 Hizmet Resimli
+const servicesWithImages = [
+{
+    title: "Beyaz Eşya Tamiri",
+    image: "public/img/tamirat/camasir.jpg",
+    description: "Çamaşır makinesi, bulaşık makinesi, buzdolabı ve kurutma makinesi tamiri. Marka bağımsız servis hizmeti.",
+    icon: "fas fa-washing-machine",
+    link: "beyaz-esya-tamiri-102",
+    color: "from-gray-100 to-gray-300"
+  },
+  {
+    title: "TV Tamiri",
+    image: "public/img/tamirat/tv.jpg",
+    description: "LCD, LED, 4K TV, OLED ve Smart TV tamir bakım hizmetleri. Ekran arızası ve yazılım sorunları çözümü.",
+    icon: "fas fa-tv",
+    link: "tv-tamiri-103",
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    title: "Bilgisayar Tamiri",
+    image: "public/img/tamirat/bilgisayarci.jpg",
+    description: "Masaüstü, laptop ve MacBook tamir hizmetleri. Ekran değişimi, donanım onarımı ve yazılım çözümleri.",
+    icon: "fas fa-laptop",
+    link: "bilgisayar-tamiri-104",
+    color: "from-blue-400 to-blue-500"
+  },
+  {
+    title: "Güvenlik Kamera Sistemleri",
+    image: "public/img/tamirat/kamera.jpg",
+    description: "Güvenlik kamerası kurulumu ve sistemleri. IP kamera, analog kamera ve kayıt sistemleri.",
+    icon: "fas fa-video",
+    link: "guvenlik-kamera-sistemleri-99",
+    color: "from-red-500 to-red-600"
+  },  
+{
+    title: "Alarm Sistemi Kurulumu",
+    image: "public/img/tamirat/alarm.jpg",
+    description: "Ev ve iş yerleri için alarm sistemi kurulumu. Hırsız alarmı, yangın alarmı ve izleme sistemleri. Siren, pır dedektör, izleme sistemi kurulumu.",
+    icon: "fas fa-faucet",
+    link: "su-tesisatcisi-96",
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "Yangın Söndürme Tesisatı",
+    image: "public/img/tamirat/yangin.jpg",
+    description: "Yangın söndürme sistemleri kurulumu ve bakımı. Otomatik yangın söndürme sistemleri ve ekipmanları.Duman dedektör kurulumu.",
+    icon: "fas fa-couch",
+    link: "yangin-sondurme-tesisati-97",
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    title: "Mobilya Sökme ve Montaj",
+    image: "public/img/tamirat/mobilya.jpg",
+    description: "Mobilyaların sökülmesi, taşınması ve tekrar monte edilmesi hizmetleri. Ev ve ofis taşınmalarında profesyonel destek.",
+    icon: "fas fa-snowflake",
+    link: "mobilya-sokme-montaj-98",
+    color: "from-cyan-500 to-cyan-600"
+  },
+  
+  {
+    title: "Oto Tamiri",
+    image: "public/img/tamirat/oto-tamir.jpg",
+    description: "Araç bakım ve onarım hizmetleri. Motor tamiri, fren servisi, yağ değişimi ve lastik hizmetleri.",
+    icon: "fas fa-bolt",
+    link: "oto-tamiri-100",
+    color: "from-yellow-500 to-yellow-600"
+  },
+  {
+    title: "Yol Yardım Hizmeti",
+    image: "public/img/tamirat/yol-yardim.jpg",
+    description: "Araç çekme, akü takviyesi, lastik değişimi ve yakıt ikmali hizmetleri. 7/24 yol yardım desteği.",
+    icon: "fas fa-key",
+    link: "cilingir-101",
+    color: "from-gray-500 to-gray-600"
+  }
+];
+
+// 100 Hizmet Resimsiz
+const servicesTextOnly = [
+  { title: "Arızalı Priz Tamiri", link: "arizali-priz-tamiri" },
+  { title: "Sigorta Kutusu Değişimi", link: "sigorta-kutusu-degisimi" },
+  { title: "Elektrik Hattı Çekme", link: "elektrik-hatti-cekme" },
+  { title: "Avize Montajı", link: "avize-montaji" },
+  { title: "Aplik Montajı", link: "aplik-montaji" },
+  { title: "Spot Lamba Montajı", link: "spot-lamba-montaji" },
+  { title: "Led Aydınlatma", link: "led-aydinlatma" },
+  { title: "Sensörlü Lamba Kurulumu", link: "sensorlu-lamba-kurulumu" },
+  { title: "Yangın Alarm Sistemi", link: "yangin-alarm-sistemi" },
+  { title: "Gaz Dedektörü Kurulumu", link: "gaz-detektoru-kurulumu" },
+  { title: "Tıkalı Lavabo Açma", link: "tikali-lavabo-acma" },
+  { title: "Tıkalı Mutfak Gideri", link: "tikali-mutfak-gideri" },
+  { title: "Tıkalı Tuvalet Açma", link: "tikali-tuvalet-acma" },
+  { title: "Klozet Tamiri", link: "klozet-tamiri" },
+  { title: "Lavabo Tamiri", link: "lavabo-tamiri" },
+  { title: "Duşakabin Tamiri", link: "dusakabin-tamiri" },
+  { title: "Batarya Değişimi", link: "batarya-degisimi" },
+  { title: "Sifon Tamiri", link: "sifon-tamiri" },
+  { title: "Çekvalf Değişimi", link: "cekvalf-degisimi" },
+  { title: "Flex Hortum Değişimi", link: "flex-hortum-degisimi" },
+  { title: "Termosifon Tamiri", link: "termosifon-tamiri" },
+  { title: "Şofben Tamiri", link: "sofben-tamiri" },
+  { title: "Güneş Enerjisi Tamiri", link: "gunes-enerjisi-tamiri" },
+  { title: "Petek Temizliği", link: "petek-temizligi" },
+  { title: "Radyatör Vanası Değişimi", link: "radiator-vanasi-degisimi" },
+  { title: "Doğalgaz Sobası Tamiri", link: "dogalgaz-sobasi-tamiri" },
+  { title: "Ocak Tamiri", link: "ocak-tamiri" },
+  { title: "Fırın Tamiri", link: "firin-tamiri" },
+  { title: "Davlumbaz Tamiri", link: "davlumbaz-tamiri" },
+  { title: "Mikrodalga Tamiri", link: "mikrodalga-tamiri" },
+  { title: "Küçük Ev Aletleri Tamiri", link: "kucuk-ev-aletleri-tamiri" },
+  { title: "Ütü Tamiri", link: "utu-tamiri" },
+  { title: "Saç Kurutma Makinesi Tamiri", link: "sac-kurutma-makinesi-tamiri" },
+  { title: "Vantilatör Tamiri", link: "ventilator-tamiri" },
+  { title: "Klima Tamiri", link: "klima-tamiri" },
+  { title: "Klima Gaz Dolumu", link: "klima-gaz-dolumu" },
+  { title: "Klima Bakımı", link: "klima-bakimi" },
+  { title: "VRF Klima Sistemi", link: "vrf-klima-sistemi" },
+  { title: "Chiller Sistemi", link: "chiller-sistemi" },
+  { title: "Havalandırma Tamiri", link: "havalandirma-tamiri" },
+  { title: "Damper Tamiri", link: "damper-tamiri" },
+  { title: "Fan Coil Tamiri", link: "fan-coil-tamiri" },
+  { title: "Kanal Tipi Klima", link: "kanal-tip-klima" },
+  { title: "Pencere Kolları Değişimi", link: "pencer-kollari-degisimi" },
+  { title: "Pvc Menteşe Tamiri", link: "pvc-mentese-tamiri" },
+  { title: "Pvc Kilit Değişimi", link: "pvc-kilit-degisimi" },
+  { title: "Pvc Cam Değişimi", link: "pvc-cam-degisimi" },
+  { title: "Pvc Conta Değişimi", link: "pvc-conta-degisimi" },
+  { title: "Sürme Sistem Tamiri", link: "surme-sistem-tamiri" },
+  { title: "Kapı Tamiri", link: "kapi-tamiri" },
+  { title: "Kapı Kilit Değişimi", link: "kapi-kilit-degisimi" },
+  { title: "Kapı Menteşe Değişimi", link: "kapi-mentese-degisimi" },
+  { title: "Kapı Kol Değişimi", link: "kapi-kol-degisimi" },
+  { title: "Çekmece Rayı Değişimi", link: "cekmece-rayi-degisimi" },
+  { title: "Dolap Kulp Değişimi", link: "dolap-kulp-degisimi" },
+  { title: "Raf Sistemi Kurulumu", link: "raf-sistemi-kurulumu" },
+  { title: "Kitaplık Montajı", link: "kitaplik-montaji" },
+  { title: "Yemek Masası Montajı", link: "yemek-masasi-montaji" },
+  { title: "Çalışma Masası Montajı", link: "calisma-masasi-montaji" },
+  { title: "Gardırop Montajı", link: "gardrop-montaji" },
+  { title: "Şifonyer Montajı", link: "sifonyer-montaji" },
+  { title: "Komodin Montajı", link: "komodin-montaji" },
+  { title: "TV Ünitesi Montajı", link: "tv-unitesi-montaji" },
+  { title: "Baza Montajı", link: "baza-montaji" },
+  { title: "Yatak Başlığı Montajı", link: "yatak-basligi-montaji" },
+  { title: "Sandalye Tamiri", link: "sandalye-tamiri" },
+  { title: "Koltuk Tamiri", link: "koltuk-tamiri" },
+  { title: "Mobilya Boyama", link: "mobilya-boyama" },
+  { title: "Mobilya Cila", link: "mobilya-cila" },
+  { title: "Ahşap Tamir", link: "ahsap-tamir" },
+  { title: "Laminat Parke Tamiri", link: "laminat-parke-tamiri" },
+  { title: "Marley Döşeme", link: "marley-doseme" },
+  { title: "Halıfleks Döşeme", link: "halifleks-doseme" },
+  { title: "Boya Tahribatsız Kontrol", link: "boya-tahribatsiz-kontrol" },
+  { title: "Sıva Tamiri", link: "siva-tamiri" },
+  { title: "Alçı Tamiri", link: "alci-tamiri" },
+  { title: "Çatlak Tamiri", link: "catlak-tamiri" },
+  { title: "Derz Tamiri", link: "derz-tamiri" },
+  { title: "Fayans Tamiri", link: "fayans-tamiri" },
+  { title: "Seramik Tamiri", link: "seramik-tamiri" },
+  { title: "Mermer Tamiri", link: "mermer-tamiri" },
+  { title: "Granit Tamiri", link: "granit-tamiri" },
+  { title: "Teras Tamiri", link: "teras-tamiri" },
+  { title: "Balkon Tamiri", link: "balkon-tamiri" },
+  { title: "Çatı Tamiri", link: "cati-tamiri" },
+  { title: "Su Yalıtımı", link: "su-yalitimi" },
+  { title: "Isı Yalıtımı", link: "isi-yalitimi" },
+  { title: "Ses Yalıtımı", link: "ses-yalitimi" },
+  { title: "Mantolama Tamiri", link: "mantolama-tamiri" },
+  { title: "Dış Cephe Tamiri", link: "dis-cephe-tamiri" },
+  { title: "İç Cephe Tamiri", link: "ic-cephe-tamiri" },
+  { title: "Duvar Yalıtımı", link: "duvar-yalitimi" },
+  { title: "Bodrum Yalıtımı", link: "bodrum-yalitimi" },
+  { title: "Banyo Yalıtımı", link: "banyo-yalitimi" },
+  { title: "Mutfak Yalıtımı", link: "mutfak-yalitimi" },
+  { title: "Güneş Enerjisi Bakımı", link: "gunes-enerjisi-bakimi" },
+  { title: "Güneş Enerjisi Arıza", link: "gunes-enerjisi-ariza" }
+];
+
+const stats = [
+  { number: "+++", label: "Onlarca Tamamlanan Tamirat", icon: "fas fa-tools" },
+  { number: "150+", label: "Uzman Usta ve Firma", icon: "fas fa-user-cog" },
+  { number: "112", label: "Farklı Hizmet", icon: "fas fa-list" },
+  { number: "%93", label: "Memnuniyet", icon: "fas fa-star" }
+];
+---
+
+<BasicLayout title="Tamirat Hizmetleri | İş de YETER - Profesyonel Tamir Çözümleri">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span style="color: #1F2937;">{heroTitle}</span>
+            </h1>
+            <p class="hero-slogan">{slogan}</p>
+            <p class="hero-subtitle">
+                {heroSubtitle}
+            </p>
+            <div class="btn-group">
+                <a href="#resimli-hizmetler" class="btn btn-primary">
+                    <i class="fas fa-tools"></i>
+                    Popüler Tamiratlar
+                </a>
+                <a href="#diger-hizmetler" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    Diğer Tamirat Hizmetleri
+                </a>
+                <a href={`https://wa.me/${whatsapp}?text=Merhaba,%20Tamirat%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    {whatsappText}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats" id="istatistikler">
+    <div class="container">
+        <div class="grid-stats">
+            {stats.map((stat, index) => (
+                <div class="stat-item" key={index}>
+                    <div class="stat-icon">
+                        <i class={stat.icon}></i>
+                    </div>
+                    <div class="stat-number">{stat.number}</div>
+                    <div class="stat-label">{stat.label}</div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Services with Images Section -->
+<section class="services-with-images" id="resimli-hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>RESİMLİ HİZMETLER</span>
+            <h2>Profesyonel Tamir Çözümleri</h2>
+            <p>Uzman ekiplerimizle tüm tamirat ihtiyaçlarınızı karşılıyoruz</p>
+        </div>
+
+        <div class="services-grid">
+            {servicesWithImages.map((service, index) => (
+                <div class="service-card" key={index}>
+                    <div class="service-image-container">
+                        <img 
+                            src={service.image} 
+                            alt={service.title}
+                            class="service-image"
+                            loading="lazy"
+                        />
+                    </div>
+                    <div class="service-icon">
+                        <i class={service.icon}></i>
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p class="service-description">{service.description}</p>
+                    <a 
+                        href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                        target="_blank"
+                        class="btn btn-service"
+                    >
+                        <i class="fab fa-whatsapp"></i>
+                        {buttonText}
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Text Only Services Section -->
+<section class="services-text-only" id="diger-hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>DİĞER HİZMETLER</span>
+            <h2>Tüm Tamirat İhtiyaçlarınız İçin</h2>
+            <p>Aşağıdaki hizmetlerimizden de yararlanabilirsiniz</p>
+        </div>
+
+        <div class="text-services-grid">
+            {servicesTextOnly.map((service, index) => (
+                <a 
+                    href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                    target="_blank"
+                    class="text-service-item"
+                    key={index}
+                >
+                    <i class="fas fa-check-circle"></i>
+                    <span>{service.title}</span>
+                    <i class="fab fa-whatsapp whatsapp-icon"></i>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsapp}?text=Merhaba,%20Tamirat%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // WhatsApp float buton tıklama efekti
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .text-service-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<style>
+    /* Hero Section */
+    .hero {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+        padding: 80px 0;
+    }
+
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23F59E0B' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 0;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        color: #1F2937;
+    }
+
+    .hero-slogan {
+        font-size: 1.4rem;
+        color: #db4205;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #4B5563;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(245, 158, 11, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(245, 158, 11, 0.5);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(107, 114, 128, 0.5);
+    }
+
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-whatsapp:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-service {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-service:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Stats Section */
+    .stats {
+        padding: 50px 0;
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+    }
+
+    .grid-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+
+    .stat-item {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .stat-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+    }
+
+    /* Section Titles */
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-title span {
+        display: inline-block;
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+        color: #1F2937;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .section-title p {
+        color: #6B7280;
+        font-size: 1.1rem;
+    }
+
+    /* Services with Images */
+    .services-with-images {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .service-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-image-container {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.05);
+    }
+
+    .service-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #F59E0B 0%, #D97706 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -40px auto 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .service-icon i {
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    .service-card h3 {
+        font-size: 1.2rem;
+        color: #1F2937;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .service-description {
+        color: #6B7280;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        min-height: 3em;
+    }
+
+    /* Text Only Services */
+    .services-text-only {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+
+    .text-services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .text-service-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: white;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #374151;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .text-service-item:hover {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .text-service-item i:first-child {
+        color: #F59E0B;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .text-service-item:hover i:first-child {
+        color: white;
+    }
+
+    .whatsapp-icon {
+        margin-left: auto;
+        font-size: 1.1rem;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .text-service-item:hover .whatsapp-icon {
+        opacity: 1;
+    }
+
+    /* WhatsApp Float Button */
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 30px;
+        right: 30px;
+        background-color: #25D366;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 30px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+        background-color: #20BD5A;
+        transform: scale(1.1);
+        box-shadow: 4px 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Animations */
+    .service-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .text-service-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInRight 0.4s ease forwards;
+    }
+
+    @keyframes slideInRight {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-slogan {
+            font-size: 1.1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+
+        .service-image-container {
+            width: 160px;
+            height: 160px;
+        }
+
+        .text-services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .whatsapp-float {
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            bottom: 20px;
+            right: 20px;
+        }
+    }
+</style>
+
+</BasicLayout>

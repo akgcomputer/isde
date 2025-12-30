@@ -1,0 +1,673 @@
+---
+// bayimiz-olun.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+---
+
+<BasicLayout title="Bayilik Hizmeti - İşde Yeter Bayimiz Olun">
+
+<section class="bayilik-page">
+    <div class="container">
+        <!-- Hero Section -->
+        <div class="hero-section">
+            <h1>Bayimiz Olun</h1>
+            <p class="subtitle">{companyName} güvencesiyle kendi işinizin patronu olun</p>
+            
+            <div class="free-tag">
+                <i class="fas fa-check-circle"></i>
+                <span>Bayilik ÜCRETSİZDİR</span>
+            </div>
+        </div>
+
+        <!-- CTA Banner -->
+        <div class="cta-banner">
+            <div class="cta-content">
+                <h3>Hemen Başvurun!</h3>
+                <p>Firmanız var mı? Freelancer mısınız? Fark etmez! {companyName} bayi ağına katılmak için hemen başvurun.</p>
+            </div>
+            <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20bayilik%20başvurusu%20yapmak%20istiyorum`} 
+               class="btn btn-whatsapp" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                Hemen Başvur
+            </a>
+        </div>
+
+        <!-- Avantajlar -->
+        <section class="section">
+            <h2>Bayi Olmanın Avantajları</h2>
+            <div class="advantages-grid">
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-trophy"></i>
+                    </div>
+                    <h4>Marka Gücü</h4>
+                    <p>Sektörde kanıtlanmış güçlü bir marka çatısı altında çalışın</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-chart-line"></i>
+                    </div>
+                    <h4>Hazır İş Modeli</h4>
+                    <p>Oturmuş operasyonel süreçler ve kârlı iş modeli</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-money-bill-wave"></i>
+                    </div>
+                    <h4>Yüksek Kârlılık</h4>
+                    <p>Sürdürülebilir kazanç ve yüksek gelir potansiyeli</p>
+                </div>
+                
+                <div class="advantage-card">
+                    <div class="icon">
+                        <i class="fas fa-bullhorn"></i>
+                    </div>
+                    <h4>Pazarlama Desteği</h4>
+                    <p>Profesyonel reklam ve pazarlama desteği</p>
+                </div>
+                
+                
+            </div>
+        </section>
+
+        <!-- Kimler Bayi Olabilir -->
+        <section class="section section-gray">
+            <h2>Kimler Bayi Olabilir?</h2>
+            <p class="section-description">Aşağıdaki profillere uyuyorsanız, bayi ağımıza katılabilirsiniz:</p>
+            
+            <div class="profile-cards">
+                <div class="profile-card">
+                    <i class="fas fa-user-tie"></i>
+                    <h4>Girişimciler</h4>
+                    <p>Kendi işini kurmak isteyen girişimci ruhlu kişiler</p>
+                </div>
+                
+                <div class="profile-card">
+                    <i class="fas fa-building"></i>
+                    <h4>İşletmeler</h4>
+                    <p>Sektör tecrübesi olan mevcut işletmeler</p>
+                </div>
+                
+                <div class="profile-card">
+                    <i class="fas fa-briefcase"></i>
+                    <h4>Profesyoneller</h4>
+                    <p>Yeni iş fırsatları arayan profesyoneller</p>
+                </div>
+                
+                <div class="profile-card">
+                    <i class="fas fa-rocket"></i>
+                    <h4>Büyümek İsteyenler</h4>
+                    <p>Sürdürülebilir iş modeliyle büyümek isteyenler</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Bayilik Seçenekleri -->
+        <section class="section">
+            <h2>Bayilik Seçenekleri</h2>
+            <p class="section-description">İhtiyacınıza uygun bayi seçeneğini seçin</p>
+            
+            <div class="service-cards">
+                <div class="service-card">
+                    <div class="service-header">
+                        <i class="fas fa-code"></i>
+                        <h4>Yazılım Bayiliği</h4>
+                    </div>
+                    <p>Web tasarım, e-ticaret, SEO ve dijital pazarlama alanlarında bayi olun</p>
+                    <a href={getWhatsAppLink("Yazılım Bayiliği Başvurusu")} class="btn btn-outline" target="_blank">
+                        <i class="fab fa-whatsapp"></i>Başvur
+                    </a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <i class="fas fa-tools"></i>
+                        <h4>Hizmet Bayiliği</h4>
+                    </div>
+                    <p>Temizlik, tadilat, tamirat, nakliyat gibi hizmet sektörlerinde bayi olun</p>
+                    <a href={getWhatsAppLink("Hizmet Bayiliği Başvurusu")} class="btn btn-outline" target="_blank">
+                        <i class="fab fa-whatsapp"></i>Başvur
+                    </a>
+                </div>
+                
+                <div class="service-card">
+                    <div class="service-header">
+                        <i class="fas fa-layer-group"></i>
+                        <h4>Kombine Bayilik</h4>
+                    </div>
+                    <p>Hem hizmet hem de yazılım alanlarında kapsamlı bayi olun</p>
+                    <a href={getWhatsAppLink("Hizmet ve Yazılım Bayiliği Başvurusu")} class="btn btn-outline" target="_blank">
+                        <i class="fab fa-whatsapp"></i>Başvur
+                    </a>
+                </div>
+            </div>
+        </section>
+
+        <!-- Başvuru Süreci -->
+        <section class="section section-gray">
+            <h2>Bayilik Başvuru Süreci</h2>
+            
+            <div class="process-steps">
+                <div class="step">
+                    <div class="step-number">1</div>
+                    <h4>Başvuru Formu</h4>
+                    <p>WhatsApp üzerinden başvurunuzu yapın</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">2</div>
+                    <h4>Ön Değerlendirme</h4>
+                    <p>Başvurunuz ekibimiz tarafından incelenecek</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">3</div>
+                    <h4>Görüşme</h4>
+                    <p>Uygun adaylarla birebir görüşme yapılacak</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">4</div>
+                    <h4>Sözleşme</h4>
+                    <p>Anlaşma sağlanırsa sözleşme imzalanacak</p>
+                </div>
+                
+                <div class="step">
+                    <div class="step-number">5</div>
+                    <h4>Eğitim & Başlangıç</h4>
+                    <p>Eğitimler verilerek süreç başlatılacak</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- Ek Hizmetler -->
+        <section class="section">
+            <h2>Ek Hizmetlerimiz</h2>
+            <div class="tags-container">
+                <a href="#" class="tag">E-Ticaret</a>
+                <a href="#" class="tag">ERP/CRM/Muhasebe</a>
+                <a href="#" class="tag">Web Tasarım</a>
+                <a href="#" class="tag">SEO+Pazarlama</a>
+                <a href="#" class="tag">Hizmet Ver / Usta Ol</a>
+                <a href="#" class="tag">Kurumsal Hizmet</a>
+            </div>
+        </section>
+
+        <!-- İletişim -->
+        <section class="section contact-section">
+            <h2>Hemen İletişime Geçin</h2>
+            <p class="contact-description">Siz de bu güçlü iş modeline katılın, kazançlı bir geleceğe adım atın!</p>
+            
+            <div class="contact-info">
+                <div class="contact-item">
+                    <i class="fab fa-whatsapp"></i>
+                    <div>
+                        <h4>WhatsApp</h4>
+                        <a href={`https://wa.me/${whatsappNumber}`} target="_blank">{whatsappNumber}</a>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fas fa-envelope"></i>
+                    <div>
+                        <h4>E-posta</h4>
+                        <a href="mailto:iletisim@isdeyeter.com">iletisim@isdeyeter.com</a>
+                    </div>
+                </div>
+                
+                <div class="contact-item">
+                    <i class="fab fa-instagram"></i>
+                    <div>
+                        <h4>Instagram</h4>
+                        <a href="https://www.instagram.com/isdeyetercom" target="_blank">@isdeyetercom</a>
+                    </div>
+                </div>
+            </div>
+            
+            <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20bayilik%20başvurusu%20yapmak%20istiyorum`} 
+               class="btn btn-whatsapp-large" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                WhatsApp'tan Hemen Başvur
+            </a>
+        </section>
+    </div>
+</section>
+
+<style is:global>
+    /* Minimal CSS */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #f8f9fa;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* Buttons */
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        justify-content: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 8px;
+        text-decoration: none;
+        font-weight: 600;
+        font-size: 1rem;
+        border: none;
+        cursor: pointer;
+        transition: all 0.3s ease;
+    }
+    
+    .btn-whatsapp {
+        background: #25D366;
+        color: white;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128C7E;
+        transform: translateY(-2px);
+    }
+    
+    .btn-outline {
+        background: transparent;
+        border: 2px solid #25D366;
+        color: #25D366;
+    }
+    
+    .btn-outline:hover {
+        background: #25D366;
+        color: white;
+    }
+    
+    .btn-whatsapp-large {
+        background: #25D366;
+        color: white;
+        padding: 16px 32px;
+        font-size: 1.1rem;
+        margin-top: 20px;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        text-align: center;
+        padding: 60px 20px;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        margin: 20px 0;
+    }
+    
+    .hero-section h1 {
+        font-size: 3rem;
+        margin-bottom: 15px;
+    }
+    
+    .subtitle {
+        font-size: 1.2rem;
+        opacity: 0.9;
+        max-width: 600px;
+        margin: 0 auto 25px;
+    }
+    
+    .free-tag {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: white;
+        color: #25D366;
+        padding: 12px 24px;
+        border-radius: 50px;
+        font-weight: 700;
+        font-size: 1.1rem;
+    }
+    
+    /* CTA Banner */
+    .cta-banner {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        margin: 30px 0;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+    }
+    
+    .cta-banner h3 {
+        color: #333;
+        margin-bottom: 5px;
+    }
+    
+    .cta-banner p {
+        color: #666;
+        max-width: 600px;
+    }
+    
+    /* Sections */
+    .section {
+        padding: 60px 0;
+    }
+    
+    .section-gray {
+        background: #f5f7fa;
+        border-radius: 20px;
+        padding: 60px 20px;
+        margin: 20px -20px;
+    }
+    
+    h2 {
+        font-size: 2.2rem;
+        color: #333;
+        text-align: center;
+        margin-bottom: 20px;
+    }
+    
+    .section-description {
+        text-align: center;
+        color: #666;
+        max-width: 700px;
+        margin: 0 auto 40px;
+        font-size: 1.1rem;
+    }
+    
+    /* Advantages Grid */
+    .advantages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+    
+    .advantage-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+    }
+    
+    .advantage-card:hover {
+        transform: translateY(-5px);
+    }
+    
+    .advantage-card .icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+    
+    .advantage-card .icon i {
+        font-size: 1.8rem;
+        color: white;
+    }
+    
+    .advantage-card h4 {
+        color: #333;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+    
+    /* Profile Cards */
+    .profile-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+    
+    .profile-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .profile-card i {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 20px;
+    }
+    
+    .profile-card h4 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    /* Service Cards */
+    .service-cards {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 25px;
+        margin-top: 40px;
+    }
+    
+    .service-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+    }
+    
+    .service-header {
+        margin-bottom: 20px;
+    }
+    
+    .service-header i {
+        font-size: 2.5rem;
+        color: #667eea;
+        margin-bottom: 15px;
+    }
+    
+    .service-card h4 {
+        color: #333;
+        margin-bottom: 15px;
+    }
+    
+    .service-card p {
+        color: #666;
+        margin-bottom: 25px;
+        flex: 1;
+    }
+    
+    /* Process Steps */
+    .process-steps {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 20px;
+        margin-top: 40px;
+    }
+    
+    .step {
+        background: white;
+        padding: 30px 20px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+    }
+    
+    .step-number {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #667eea, #764ba2);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin: 0 auto 15px;
+    }
+    
+    .step h4 {
+        color: #333;
+        margin-bottom: 10px;
+    }
+    
+    /* Tags */
+    .tags-container {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+    }
+    
+    .tag {
+        background: white;
+        padding: 12px 24px;
+        border-radius: 50px;
+        text-decoration: none;
+        color: #667eea;
+        border: 2px solid #e0e0e0;
+        transition: all 0.3s ease;
+    }
+    
+    .tag:hover {
+        border-color: #667eea;
+        background: #667eea;
+        color: white;
+    }
+    
+    /* Contact Section */
+    .contact-section {
+        text-align: center;
+        background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+        color: white;
+        border-radius: 20px;
+        padding: 60px 20px;
+        margin: 20px -20px;
+    }
+    
+    .contact-section h2 {
+        color: white;
+    }
+    
+    .contact-description {
+        color: rgba(255,255,255,0.9);
+        max-width: 600px;
+        margin: 0 auto 40px;
+    }
+    
+    .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+        max-width: 800px;
+        margin: 40px auto;
+    }
+    
+    .contact-item {
+        background: rgba(255,255,255,0.1);
+        padding: 25px;
+        border-radius: 15px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        text-align: left;
+        backdrop-filter: blur(10px);
+    }
+    
+    .contact-item i {
+        font-size: 2rem;
+        color: white;
+    }
+    
+    .contact-item h4 {
+        color: white;
+        margin-bottom: 5px;
+        font-size: 1rem;
+    }
+    
+    .contact-item a {
+        color: white;
+        text-decoration: none;
+        font-size: 1.1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-section h1 {
+            font-size: 2.2rem;
+        }
+        
+        .cta-banner {
+            flex-direction: column;
+            gap: 20px;
+            text-align: center;
+        }
+        
+        .advantages-grid,
+        .profile-cards,
+        .service-cards,
+        .process-steps,
+        .contact-info {
+            grid-template-columns: 1fr;
+        }
+        
+        h2 {
+            font-size: 1.8rem;
+        }
+        
+        .section,
+        .section-gray {
+            padding: 40px 0;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 15px;
+        }
+        
+        .hero-section {
+            padding: 40px 15px;
+        }
+        
+        .free-tag {
+            font-size: 1rem;
+            padding: 10px 20px;
+        }
+    }
+</style>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</BasicLayout>

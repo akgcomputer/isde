@@ -1,0 +1,103 @@
+{
+  "seoPazarlamaPaketleri": [
+    {
+      "id": "baslangic",
+      "name": "SEO+E-Ticaret Destek",
+      "tip": "Başlangıç Paket",
+      "aciklama": "Girişimciler ve KOBİ'ler için",
+      "ozellikler": [
+        "İlk 1 ay ücretsiz deneme",
+        "Web Sitesi ve SEO çalışması",
+        "Trendyol Takip (Kampanya, Fırsat, BuyBox, Rakip analizi)",
+        "Opsiyonel: Hepsiburada, Amazon, N11, Çiçek Sepeti, Pazarama",
+        "Opsiyonel: Sosyal Medya Çalışması (instagram, youtube, tiktok vs.)"
+      ],
+      "fiyatlar": {
+        "normal": 30000,
+        "indirimli": 15000,
+        "periyod": "aylık"
+      },
+      "popular": false,
+      "icon": "fas fa-rocket"
+    },
+    {
+      "id": "ciro-plus",
+      "name": "SEO+E-Ticaret Destek",
+      "tip": "Ciro Plus Paket",
+      "aciklama": "Ciro arttıran paket",
+      "ozellikler": [
+        "İlk 1 ay ücretsiz deneme",
+        "Web Sitesi ve SEO çalışması",
+        "Seçili 3 Pazaryeri (Kampanya, Fırsat, BuyBox, Rakip analizi)",
+        "Trendyol, Hepsiburada, Amazon, N11, Çiçek Sepeti, Morhipo, Flo, Modanisa, Pazarama, LCW",
+        "Opsiyonel: Sosyal Medya Çalışması (instagram, youtube, tiktok vs.)"
+      ],
+      "fiyatlar": {
+        "normal": 50000,
+        "indirimli": 25000,
+        "periyod": "aylık"
+      },
+      "popular": false,
+      "icon": "fas fa-chart-line"
+    },
+    {
+      "id": "tam-paket",
+      "name": "SEO+E-Ticaret Destek",
+      "tip": "Tam Paket",
+      "aciklama": "Tüm dünyaya açılın",
+      "ozellikler": [
+        "İlk 1 ay ücretsiz deneme",
+        "Web Sitesi ve SEO çalışması",
+        "Seçili 5 Pazaryeri (Kampanya, Fırsat, BuyBox, Rakip analizi)",
+        "E-İhracat (Etsy, Ozon, Amazon Global, AliExpress)",
+        "Trendyol, Hepsiburada, Amazon, N11, Çiçek Sepeti, Morhipo, Flo, Modanisa, Pazarama, LCW",
+        "Opsiyonel: Sosyal Medya Çalışması (instagram, youtube, tiktok vs.)"
+      ],
+      "fiyatlar": {
+        "normal": 100000,
+        "indirimli": 50000,
+        "periyod": "aylık"
+      },
+      "popular": true,
+      "icon": "fas fa-globe"
+    }
+  ],
+  "ekstraOzellikler": [
+    {
+      "baslik": "SEO Hizmetleri",
+      "ozellikler": [
+        "Anahtar Kelime Analizi ve Araştırması",
+        "On-Page SEO Optimizasyonu",
+        "Teknik SEO Denetimi",
+        "Backlink Analizi ve Stratejisi",
+        "İçerik Optimizasyonu",
+        "Local SEO (Yerel Arama Optimizasyonu)"
+      ],
+      "icon": "fas fa-search"
+    },
+    {
+      "baslik": "Pazaryeri Yönetimi",
+      "ozellikler": [
+        "Ürün Listeleme ve Optimizasyonu",
+        "Fiyat ve Stok Takibi",
+        "Rakip Analizi",
+        "Kampanya Yönetimi",
+        "BuyBox Analizi ve Stratejisi",
+        "Müşteri Yorumları Yönetimi"
+      ],
+      "icon": "fas fa-store"
+    },
+    {
+      "baslik": "Sosyal Medya Pazarlama",
+      "ozellikler": [
+        "İçerik Stratejisi ve Planlaması",
+        "Topluluk Yönetimi",
+        "Reklam Yönetimi ve Optimizasyonu",
+        "Etkileşim Analizi",
+        "Influencer İş Birlikleri",
+        "Performans Raporlaması"
+      ],
+      "icon": "fas fa-hashtag"
+    }
+  ]
+}

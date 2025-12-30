@@ -1,0 +1,6 @@
+---
+// src/pages/hizmetler sayfaları
+import RedirectTemplate from '../../components/RedirectTemplate.astro';
+---
+
+<RedirectTemplate />

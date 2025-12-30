@@ -1,0 +1,422 @@
+{
+  "eTicaretPaketleri": [
+    {
+      "id": "baslangic",
+      "ad": "DAİMA-ÖMÜRBOYU",
+      "tip": "Ücretsiz Paket",
+      "aciklama": "E-ticarete ilk adımınızı atın",
+      "ozellikler": [
+        {
+          "text": "100 Adet Ürün Yükleme (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Kredi Kartı ile Ödeme Alma (ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Varyant (Renk-Beden) (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz Sayfa (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz İçerik (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ana Sayfa Tasarımı (ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ek Sayfa Tasarımı(ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Domain(ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Hosting(ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Destek(ücretlidir)",
+          "aktif": true,
+          "seviye": "temel"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 0,
+        "aylik": 0,
+        "indirimli": null,
+        "liste": 0,
+        "ucretsiz": true
+      },
+      
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-seedling",
+      "renk": "from-gray-100 to-gray-200",
+      "textRenk": "text-gray-700",
+      "ozelEtiket": "ÜCRETSİZ",
+      "ozelEtiketRenk": "bg-gray-500"
+    },
+    {
+      "id": "profesyonel",
+      "ad": "Profesyonel E-Ticaret",
+      "tip": "Pro Paket",
+      "aciklama": "Profesyonel e-ticaret başlangıcı",
+      "oncekiPaketOzellikleri": "Başlangıç Paket Özellikleri Dahil",
+      "ozellikler": [
+        
+        {
+          "text": "999 Adet Ürün Yükleme",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Kredi Kartı ile Ödeme Alma",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Varyant (Renk-Beden)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz Sayfa",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz İçerik",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ana Sayfa Tasarımı",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ek Sayfa Tasarımı",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Domain  (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Hosting (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Destek (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "1 Adet Pazaryeri Entegrasyonu (ek ücretlidir)",
+          "aktif": true,
+          "seviye": "profesyonel"
+        },
+        {
+          "text": "1000 Adet Ürün Yükleme (ek ücretlidir)",
+          "aktif": true,
+          "seviye": "profesyonel"
+        },
+        {
+          "text": "E-Ticaret Uyumlu Tasarım",
+          "aktif": true,
+          "seviye": "profesyonel"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 15000,
+        "aylik": 3500,
+        "indirimli": 1500,
+        "liste": 18.000
+      },
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-store",
+      "renk": "from-blue-50 to-blue-100",
+      "textRenk": "text-blue-800",
+      "ozelEtiket": null
+    },
+    {
+      "id": "pro-plus",
+      "ad": "Pro Plus E-Ticaret",
+      "tip": "Pro+ Paket",
+      "aciklama": "İleri seviye e-ticaret çözümü",
+      "oncekiPaketOzellikleri": "Pro Paket Özellikleri Dahil",
+      "ozellikler": [
+       
+        {
+          "text": "9.999 Adet Ürün Yükleme",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Kredi Kartı ile Ödeme Alma",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Varyant (Renk-Beden)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz Sayfa",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Limitsiz İçerik",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ana Sayfa Tasarımı",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Ek Sayfa Tasarımı",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Domain  (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Hosting (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        {
+          "text": "Destek (ücretsizdir)",
+          "aktif": true,
+          "seviye": "temel"
+        },
+        
+        {
+          "text": "1000 Adet Ürün Yükleme (ek ücretlidir)",
+          "aktif": true,
+          "seviye": "profesyonel"
+        },
+        {
+          "text": "E-Ticaret Uyumlu Tasarım",
+          "aktif": true,
+          "seviye": "profesyonel"
+        },
+        {
+          "text": "3 Adet Pazaryeri Entegrasyonu (ek ücretlidir)",
+          "aktif": true,
+          "seviye": "profesyonel"
+        },
+        {
+          "text": "Pazaryeri : Trendyol, Hepsiburada, Amazon",
+          "aktif": true,
+          "seviye": "pro-plus"
+        },
+        {
+          "text": "20 Sayfa Tasarımı",
+          "aktif": true,
+          "seviye": "pro-plus"
+        },
+        {
+          "text": "Gelişmiş Stok Yönetimi",
+          "aktif": true,
+          "seviye": "pro-plus"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 25000,
+        "aylik": 4500,
+        "indirimli": 2500,
+        "liste": 2500
+      },
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-rocket",
+      "renk": "from-purple-50 to-purple-100",
+      "textRenk": "text-purple-800",
+      "ozelEtiket": null
+    },
+    {
+      "id": "smart",
+      "ad": "Premium E-Ticaret",
+      "tip": "Smart Paket",
+      "aciklama": "Akıllı pazaryeri çözümleri",
+      "oncekiPaketOzellikleri": "Pro+ Paket Özelliklerinin Tamamı Dahil",
+      "ozellikler": [
+        {
+          "text": "6 Adet Pazaryeri Entegrasyonu (Trendyol, Hepsiburada, Amazon, N11, Çiçek Sepeti, Pazarama)",
+          "aktif": true,
+          "seviye": "smart"
+        },
+        {
+          "text": "Otomatik Fiyat Güncelleme",
+          "aktif": true,
+          "seviye": "smart"
+        },
+        {
+          "text": "Akıllı Stok Senkronizasyonu",
+          "aktif": true,
+          "seviye": "smart"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 50000,
+        "aylik": 5000,
+        "indirimli": null,
+        "liste": 5000
+      },
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-brain",
+      "renk": "from-green-50 to-green-100",
+      "textRenk": "text-green-800",
+      "ozelEtiket": null
+    },
+    {
+      "id": "premium-pro",
+      "ad": "Premium E-Ticaret",
+      "tip": "Premium Pro",
+      "aciklama": "Profesyonel e-ticaret çözümü",
+      "oncekiPaketOzellikleri": "Pro+ Paket Özelliklerinin Tamamı Dahil",
+      "ozellikler": [
+        {
+          "text": "8 Adet Pazaryeri Entegrasyonu (Trendyol, Hepsiburada, Amazon, N11, Çiçek Sepeti, Morhipo, Flo, Pazarama)",
+          "aktif": true,
+          "seviye": "premium-pro"
+        },
+        {
+          "text": "Özel API Entegrasyonları",
+          "aktif": true,
+          "seviye": "premium-pro"
+        },
+        {
+          "text": "Gelişmiş Raporlama Sistemi",
+          "aktif": true,
+          "seviye": "premium-pro"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 60000,
+        "aylik": 6000,
+        "indirimli": null,
+        "liste": 6000
+      },
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-crown",
+      "renk": "from-yellow-50 to-yellow-100",
+      "textRenk": "text-yellow-800",
+      "ozelEtiket": null
+    },
+    {
+      "id": "enterprise",
+      "ad": "Premium E-Ticaret",
+      "tip": "Enterprise",
+      "aciklama": "Kurumsal e-ticaret ve e-ihracat",
+      "oncekiPaketOzellikleri": "Pro+ Paket Özelliklerinin Tamamı Dahil",
+      "ozellikler": [
+        {
+          "text": "Tüm Pazaryerleri (Trendyol, Hepsiburada, Amazon, N11, Çiçek Sepeti, Morhipo, Flo, Modanisa, Pazarama, LCW)",
+          "aktif": true,
+          "seviye": "enterprise"
+        },
+        {
+          "text": "E-İhracat Entegrasyonları (Etsy, Ozon, Amazon Global, AliExpress)",
+          "aktif": true,
+          "seviye": "enterprise"
+        },
+        {
+          "text": "Çoklu Dil Desteği",
+          "aktif": true,
+          "seviye": "enterprise"
+        },
+        {
+          "text": "Çoklu Para Birimi",
+          "aktif": true,
+          "seviye": "enterprise"
+        },
+        {
+          "text": "Özel Danışmanlık",
+          "aktif": true,
+          "seviye": "enterprise"
+        }
+      ],
+      "fiyatlar": {
+        "yillik": 90000,
+        "aylik": 9000,
+        "indirimli": null,
+        "liste": 9000
+      },
+      "oncelikliButon": {
+        "text": "Bize Ulaş",
+        "link": "whatsapp",
+        "stil": "btn-primary"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": true,
+      "icon": "fas fa-globe",
+      "renk": "from-red-50 to-red-100",
+      "textRenk": "text-red-800",
+      "ozelEtiket": "EN POPÜLER",
+      "ozelEtiketRenk": "bg-red-500"
+    }
+  ]
+}

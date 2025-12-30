@@ -1,0 +1,544 @@
+---
+// src/pages/hizmet-kategorileri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const subdomain = 'http://hizmet-urun.isdeyeter.com';
+const whatsappNumber = configData.whatsapp;
+
+const heroTitle = "İş de yeter Hizmetler";
+const heroSubtitle = "Profesyonel hizmetler için doğru adres";
+---
+
+<BasicLayout>
+  <div class="container mx-auto px-4 py-8">
+    <h1 class="text-3xl md:text-4xl font-bold text-center mb-4">{heroTitle}</h1>
+    <p class="text-center text-gray-600 mb-8">{heroSubtitle}</p>
+    
+    <!-- Ana Hizmetler -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">Hizmet Kategorileri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4">
+        <a href="/psikolog-hizmetleri" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">👩‍🔬</span>
+          <span class="font-medium">Sağlık: Psikolog, diyetisyen</span>
+        </a>
+        <a href="/tadilat" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">🧵</span>
+          <span class="font-medium">Tadilat: Boya, yenileme işleri</span>
+        </a>
+        <a href="/organizasyon" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">💃</span>
+          <span class="font-medium">Organizasyon: Etkinlik planlama</span>
+        </a>
+        <a href="/dijital-isler" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">📲</span>
+          <span class="font-medium">Dijital İşler: Yazılım, tasarım</span>
+        </a>
+        <a href="/temizlik" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">🪣</span>
+          <span class="font-medium">Temizlik: Profesyonel hizmetler</span>
+        </a>
+        <a href="/tamirat" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">⚒️</span>
+          <span class="font-medium">Tamirat: Arıza, onarım</span>
+        </a>
+        <a href="/nakliyat" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">🚚</span>
+          <span class="font-medium">Nakliyat: Hızlı taşımacılık</span>
+        </a>
+        <a href="/ozel-ders" class="flex items-center p-4 bg-white rounded-lg shadow hover:shadow-md transition">
+          <span class="text-2xl mr-3">👩‍💼</span>
+          <span class="font-medium">Özel Ders: Farklı eğitim alanları</span>
+        </a>
+      </div>
+    </section>
+
+    <!-- Dijital İşler -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🌐 Dijital İşler</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">İş de yeter Web Paketleri</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">İş de yeter Muhasebe Paketleri</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">İş de yeter ERP ve CRM Paketleri</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">SEO ile Google'da 1 Numaraya çık</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">Hızlıca Mobil Uyumlu Web Siteni Yaptır</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">E-Ticaret Siteni Yaptır</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🖥️ Web Yazılım</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🌍 Domain & Hosting</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🖥️ Server Kurulumu</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">📝 WordPress</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🛍️ WooCommerce</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🤖 Sanal Asistan</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">🎮 Oyun Geliştirme</a>
+        <a href="/dijital-isler" class="p-3 bg-blue-50 rounded-lg hover:bg-blue-100 transition">📢 Influencer Marketing</a>
+      </div>
+    </section>
+
+    <!-- Sosyal Medya & E-Ticaret -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">📱 Sosyal Medya E-Ticaret</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/dijital-isler" class="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition">📸 Instagram Mağaza Kurulum</a>
+        <a href="/dijital-isler" class="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition">🔍 Google Merchant Center Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-green-50 rounded-lg hover:bg-green-100 transition">📘 Facebook Mağaza Kurulum</a>
+      </div>
+    </section>
+
+    <!-- Pazaryeri Destek -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🛒 Pazaryeri Destek Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition font-semibold">🛒 Trendyol Destek (En popüler)</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition font-semibold">📦 Hepsiburada Destek (En popüler)</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition font-semibold">🛒 N11 Destek (En popüler)</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition font-semibold">🛍️ Amazon Destek (En popüler)</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🌍 İdefix Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 ÇiçekSepeti Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Cimri Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 Akakçe Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Lazımbana Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ FLO Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Farmazon Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 Getir Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Farma Borsa Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ Modanisa Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 N11 PRO Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 e-PTT AVM Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Ecza1 Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ AlesGO Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Buna Değer Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 TeknoSA Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Pazarama Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ Turkcell Pasaj</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Vodafone Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 Trendyol Global</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ İkas Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 Ticimax Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 T-Soft Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ İdeasoft Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 ShopPHP Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛒 Shopify Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 PrestaShop Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">🛍️ Magento Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-purple-50 rounded-lg hover:bg-purple-100 transition">📦 PlatinMarket Destek</a>
+      </div>
+    </section>
+
+    <!-- Yurt Dışı Pazaryeri -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🌍 Yurt Dışı Pazaryeri Destek</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🌍 Amazon Global Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🛒 HepsiGlobal Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">📦 ETSY Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🛍️ Allegro Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">📦 Fruugo Global</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🛒 Ebay Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">📦 AliExpress Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🛍️ Joom Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">📦 Ozon Destek</a>
+        <a href="/dijital-isler" class="p-3 bg-yellow-50 rounded-lg hover:bg-yellow-100 transition">🛒 bol.com Destek</a>
+      </div>
+    </section>
+
+    <!-- Sağlık Hizmetleri -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🧠 Sağlık Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">🧠 Psikolog</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">👶 Pedagog</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">🥗 Diyetisyen</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">💪 Fizyoterapist</a>
+        <a href="/online-psikolog" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">💻 Online Psikolog</a>
+        <a href="/online-psikolog-randevu" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">📅 Online Psikolog Randevu</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">🧘 Pilates</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">👧 Oyun Ablası</a>
+        <a href="/psikolog-hizmetleri" class="p-3 bg-red-50 rounded-lg hover:bg-red-100 transition">🥗 Online Diyetisyen</a>
+      </div>
+    </section>
+
+    <!-- Temizlik Hizmetleri -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🧹 Temizlik Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🏠 Ev Temizliği</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🧹 Boş Ev Temizliği</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🪟 Cam Temizliği</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🏢 Ofis Temizliği</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🐜 Haşere İlaçlama</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🧼 Halı Yıkama</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🛋️ Koltuk Yıkama</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">👔 Kuru Temizleme</a>
+        <a href="/temizlik" class="p-3 bg-teal-50 rounded-lg hover:bg-teal-100 transition">🏘️ Apartman Temizliği</a>
+      </div>
+    </section>
+
+    <!-- Tadilat -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🔨 Tadilat Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🏡 Ev Tadilatı</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🖌️ Boya Badana</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🏢 Ofis Boya Badana</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🧱 Isı Yalıtım ve Mantolama</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🪵 Parke Sistre Cila</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🚿 Banyo Tadilatı</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🍳 Mutfak Tadilatı</a>
+        <a href="/tadilat" class="p-3 bg-orange-50 rounded-lg hover:bg-orange-100 transition">🧱 Fayans Döşeme</a>
+      </div>
+    </section>
+
+    <!-- Nakliyat -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">🚚 Nakliyat Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">🚚 Evden Eve Nakliyat</a>
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">🛣️ Şehirler Arası Nakliyat</a>
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">🌍 Uluslararası Nakliyat</a>
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">🛗 Asansörlü Nakliyat</a>
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">🏢 Büro, Ofis Taşıma</a>
+        <a href="/nakliyat" class="p-3 bg-indigo-50 rounded-lg hover:bg-indigo-100 transition">📦 Depolama Hizmetleri</a>
+      </div>
+    </section>
+
+    <!-- Organizasyon -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">💃 Organizasyon Hizmetleri</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">💍 Düğün Organizasyonu</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🎂 Butik Pasta</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🎷 Bando Takımı</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">👗 Gelinlik Dikimi</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🌺 Kına Organizasyon</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🤡 Palyaço</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🎧 DJ</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🎉 Sünnet Organizasyon</a>
+        <a href="/organizasyon" class="p-3 bg-pink-50 rounded-lg hover:bg-pink-100 transition">🍽️ Catering</a>
+      </div>
+    </section>
+
+    <!-- Özel Ders -->
+    <section class="mb-12">
+      <h2 class="text-2xl font-bold mb-6 text-gray-800">📚 Özel Ders</h2>
+      <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-3">
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">📚 Sınava Hazırlık</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">🎓 YKS Hazırlık</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">📖 LGS Hazırlık</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">🧮 Matematik Dersi</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">🌍 Yabancı Dil</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">🇬🇧 İngilizce Dersi</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">💃 Dans Dersleri</a>
+        <a href="/ozel-ders" class="p-3 bg-amber-50 rounded-lg hover:bg-amber-100 transition">🚗 Direksiyon Dersi</a>
+      </div>
+    </section>
+
+    
+  </div>
+
+  <style>
+  /* Genel Container */
+  .container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 0 1rem;
+  }
+
+  /* Başlık Stilleri */
+  h1 {
+    color: #1a365d;
+    font-weight: 800;
+    margin-bottom: 1rem;
+    text-align: center;
+    font-size: 2.5rem;
+  }
+
+  @media (max-width: 768px) {
+    h1 {
+      font-size: 2rem;
+    }
+  }
+
+  h2 {
+    color: #2d3748;
+    font-weight: 700;
+    margin-bottom: 1.5rem;
+    padding-left: 1rem;
+    border-left: 4px solid #4299e1;
+    position: relative;
+  }
+
+  h2::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    bottom: -4px;
+    width: 30px;
+    height: 2px;
+    background-color: #4299e1;
+  }
+
+  /* Alt Başlık */
+  .text-center {
+    color: #718096;
+    font-size: 1.125rem;
+    line-height: 1.6;
+    max-width: 600px;
+    margin: 0 auto 2rem;
+  }
+
+  /* Grid Sistem */
+  .grid {
+    display: grid;
+    gap: 1rem;
+  }
+
+  .grid-cols-1 {
+    grid-template-columns: repeat(1, 1fr);
+  }
+
+  @media (min-width: 768px) {
+    .grid-cols-2 {
+      grid-template-columns: repeat(2, 1fr);
+    }
+  }
+
+  @media (min-width: 1024px) {
+    .grid-cols-3 {
+      grid-template-columns: repeat(3, 1fr);
+    }
+  }
+
+  /* Bölüm Stilleri */
+  section {
+    margin-bottom: 3rem;
+    padding: 1.5rem;
+    background: linear-gradient(135deg, #ffffff 0%, #f7fafc 100%);
+    border-radius: 12px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+    border: 1px solid #e2e8f0;
+  }
+
+  section:hover {
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.07);
+    transform: translateY(-2px);
+    transition: all 0.3s ease;
+  }
+
+  /* Link Kartları */
+  a {
+    display: flex;
+    align-items: center;
+    padding: 1rem 1.25rem;
+    background: white;
+    border-radius: 10px;
+    text-decoration: none;
+    color: #2d3748;
+    font-weight: 500;
+    border: 1px solid #e2e8f0;
+    transition: all 0.25s cubic-bezier(0.4, 0, 0.2, 1);
+    position: relative;
+    overflow: hidden;
+  }
+
+  a::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 0;
+    width: 4px;
+    height: 100%;
+    background: #4299e1;
+    opacity: 0;
+    transition: opacity 0.3s ease;
+  }
+
+  a:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.1);
+    border-color: #4299e1;
+  }
+
+  a:hover::before {
+    opacity: 1;
+  }
+
+  /* İkon Stilleri */
+  a span:first-child {
+    font-size: 1.5rem;
+    margin-right: 0.75rem;
+    min-width: 32px;
+    text-align: center;
+  }
+
+  /* Renk Temaları - Her Kategori İçin */
+  .bg-blue-50 { background-color: #ebf8ff; }
+  .bg-blue-50:hover { background-color: 000000; }
+
+  .bg-green-50 { background-color: #f0fff4; }
+  .bg-green-50:hover { background-color: 000000; }
+
+  .bg-purple-50 { background-color: #faf5ff; }
+  .bg-purple-50:hover { background-color: 000000; }
+
+  .bg-yellow-50 { background-color: #33332d; }
+  .bg-yellow-50:hover { background-color: 000000; }
+
+  .bg-red-50 { background-color: #fff5f5; }
+  .bg-red-50:hover { background-color: 000000; }
+
+  .bg-teal-50 { background-color: #dd0606; }
+  .bg-teal-50:hover { background-color: 000000; }
+
+  .bg-orange-50 { background-color: #fffaf0; }
+  .bg-orange-50:hover { background-color: 000000; }
+
+  .bg-indigo-50 { background-color: #ebf4ff; }
+  .bg-indigo-50:hover { background-color: #000000; }
+
+  .bg-pink-50 { background-color: #fff5f7; }
+  .bg-pink-50:hover { background-color: 000000; }
+
+  .bg-amber-50 { background-color: #fffbeb; }
+  .bg-amber-50:hover { background-color: 000000; }
+
+  .bg-emerald-50 { background-color: #ecfdf5; }
+  .bg-emerald-50:hover { background-color: 000000; }
+
+  /* Ana Hizmet Kartları */
+  .flex.items-center {
+    padding: 1.25rem 1.5rem;
+    background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+    color: white;
+    border: none;
+  }
+
+  .flex.items-center span:first-child {
+    font-size: 1.75rem;
+    filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.2));
+  }
+
+  .flex.items-center:hover {
+    background: linear-gradient(135deg, #5a67d8 0%, #6b46c1 100%);
+    transform: translateY(-3px) scale(1.02);
+  }
+
+  /* Ana Hizmet Kartları İçin Özel Stil */
+  .flex.items-center .font-medium {
+    font-weight: 600;
+    font-size: 1.1rem;
+    text-shadow: 0 1px 2px rgba(0, 0, 0, 0.1);
+  }
+
+  /* Önemli Linkler (popüler) */
+  .font-semibold {
+    font-weight: 600;
+    position: relative;
+  }
+
+  .font-semibold::after {
+    content: '🔥';
+    position: absolute;
+    right: 10px;
+    top: 50%;
+    transform: translateY(-50%);
+    font-size: 0.875rem;
+  }
+
+  /* Responsive Düzenlemeler */
+  @media (max-width: 640px) {
+    section {
+      padding: 1rem;
+      margin-bottom: 2rem;
+    }
+    
+    h2 {
+      font-size: 1.5rem;
+      padding-left: 0.75rem;
+    }
+    
+    a {
+      padding: 0.875rem 1rem;
+      font-size: 0.9375rem;
+    }
+    
+    a span:first-child {
+      font-size: 1.25rem;
+      margin-right: 0.5rem;
+    }
+  }
+
+  /* Koyu Mod Desteği */
+  @media (prefers-color-scheme: dark) {
+    .container {
+      background-color: #1a202c;
+    }
+    
+    section {
+      background: linear-gradient(135deg, #2d3748 0%, #1a202c 100%);
+      border-color: #4a5568;
+    }
+    
+    h1, h2 {
+      color: #e2e8f0;
+    }
+    
+    .text-center {
+      color: #a0aec0;
+    }
+    
+    a {
+      background-color: #2d3748;
+      border-color: #4a5568;
+      color: #e2e8f0;
+    }
+    
+    /* Koyu modda renk tonları */
+    .bg-blue-50 { background-color: #2a4365; }
+    .bg-green-50 { background-color: #22543d; }
+    .bg-purple-50 { background-color: #44337a; }
+    .bg-red-50 { background-color: #742a2a; }
+    .bg-teal-50 { background-color: #234e52; }
+    .bg-orange-50 { background-color: #7b341e; }
+    .bg-indigo-50 { background-color: #3c366b; }
+    .bg-pink-50 { background-color: #702459; }
+    .bg-amber-50 { background-color: #744210; }
+    .bg-emerald-50 { background-color: #064e3b; }
+  }
+
+  /* Animasyonlar */
+  @keyframes fadeInUp {
+    from {
+      opacity: 0;
+      transform: translateY(20px);
+    }
+    to {
+      opacity: 1;
+      transform: translateY(0);
+    }
+  }
+
+  section {
+    animation: fadeInUp 0.6s ease-out;
+  }
+
+  /* Scrollbar Stili */
+  ::-webkit-scrollbar {
+    width: 8px;
+  }
+
+  ::-webkit-scrollbar-track {
+    background: #f1f1f1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb {
+    background: #4299e1;
+    border-radius: 4px;
+  }
+
+  ::-webkit-scrollbar-thumb:hover {
+    background: #3182ce;
+  }
+</style>
+</BasicLayout>

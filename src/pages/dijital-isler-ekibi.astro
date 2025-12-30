@@ -1,0 +1,1215 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const subdomain = 'http://hizmet-urun.isdeyeter.com';
+const whatsappNumber = configData.whatsapp;
+const companyName = configData.company;
+const buttonText = configData.buttonText;
+const whatsappText = configData.whatsappText;
+
+const heroTitle = "Dijital İşler";
+const heroSubtitle = "İşlerinizi bekletmeden kolayca halletmenizi, aradığınız freelancer veya kurumsal firmayı bulmanızı ve dijitalleşen dünyada geri kalmamanızı sağlar.";
+
+// Ana Dijital Hizmetler
+const mainDigitalServices = [
+  {
+    title: "İnternet Reklamcılığı ile Pazarlamanı Yaptır",
+    description: "İşletmenizin pazarlama ihtiyaçları için internet reklamcılığı hizmeti.",
+    icon: "fas fa-bullhorn",
+    link: "https://isdeyeter.com/internet-reklamciligi/",
+    image: "public/img/dijital-isler/online-uzaktan-dijital-300X300-internet-marketing.png",
+    features: ["Pazarlama Desteği", "Google Ads", "Sosyal Medya Reklamları", "Display Reklamlar"],
+    color: "from-red-500 to-red-600"
+  },
+  {
+    title: "SEO ile Google'da 1 Numaraya çık",
+    description: "Arama Motoru Optimizasyonu (SEO) ile Google arama sonuçlarında üst sıralara çıkma hizmeti.",
+    icon: "fas fa-search",
+    link: "https://isdeyeter.com/seo-hizmeti/",
+    image: "public/img/dijital-isler/online-uzaktan-dijital-300X300-seo.png",
+    features: ["Google Sıralaması", "Organik Trafik", "Anahtar Kelime", "Backlink"],
+    color: "from-green-500 to-green-600"
+  },
+  {
+    title: "Hızlıca Mobil Uyumlu Web Siteni Yaptır",
+    description: "Hızlı ve mobil uyumlu web sitesi yapım hizmeti.",
+    icon: "fas fa-mobile-alt",
+    link: "https://isdeyeter.com/web-sitesi-yapimi/",
+    image: "public/img/dijital-isler/online-uzaktan-dijital-300X300-web-sitesi.png",
+    features: ["Mobil Uyumluluk", "Hızlı Kurulum", "SEO Uyumlu", "Responsive Tasarım"],
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "E-Ticaret Siteni Yaptır, Yönetmek için ekip bul",
+    description: "E-ticaret sitesi kurma ve yönetimi için ekip bulma hizmeti.",
+    icon: "fas fa-shopping-cart",
+    link: "https://isdeyeter.com/e-ticaret-sitesi/",
+    image: "public/img/dijital-isler/e-ticaret-300x300.png",
+    features: ["E-Ticaret Sitesi", "Yönetim Ekibi", "Ürün Yönetimi", "Satış Takibi"],
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    title: "Web Yazılım",
+    description: "Web tabanlı yazılım geliştirme hizmetleri.",
+    icon: "fas fa-code",
+    link: "https://isdeyeter.com/web-yazilim/",
+    image: "public/img/dijital-isler/web-yazilim-300x300.png",
+    features: ["Özel Yazılım", "Web Uygulamaları", "API Entegrasyonu", "Veritabanı"],
+    color: "from-gray-600 to-gray-700"
+  },
+  {
+    title: "Domain & Hosting",
+    description: "Alan adı tescili ve hosting hizmetleri.",
+    icon: "fas fa-server",
+    link: "https://isdeyeter.com/domain-hosting/",
+    image: "public/img/dijital-isler/domain-hosting--300x300.png",
+    features: ["Domain Kayıt", "Hosting Paketleri", "SSL Sertifikası", "E-Posta Hosting"],
+    color: "from-teal-500 to-teal-600"
+  },
+  {
+    title: "Server Kurulumu",
+    description: "Sunucu kurulumu hizmeti.",
+    icon: "fas fa-database",
+    link: "https://isdeyeter.com/server-kurulumu/",
+    image: "public/img/dijital-isler/server-ana-bilgisayar-300X300.jpg",
+    features: ["Sunucu Yönetimi", "Güvenlik", "Yedekleme", "Performans"],
+    color: "from-gray-700 to-gray-800"
+  },
+  {
+    title: "WordPress",
+    description: "WordPress tabanlı web sitesi geliştirme ve destek hizmetleri.",
+    icon: "fab fa-wordpress",
+    link: "https://isdeyeter.com/wordpress/",
+    image: "public/img/dijital-isler/wordpress-300x300.png",
+    features: ["WordPress Kurulumu", "Tema Tasarımı", "Eklenti Geliştirme", "Bakım Hizmeti"],
+    color: "from-blue-600 to-blue-700"
+  },
+  {
+    title: "WooCommerce",
+    description: "WooCommerce tabanlı e-ticaret çözümleri ve destek hizmetleri.",
+    icon: "fas fa-store-alt",
+    link: "https://isdeyeter.com/woocommerce/",
+    image: "public/img/dijital-isler/woocommerce-e-ticaret-wordpress-300x300.png",
+    features: ["WooCommerce Kurulumu", "Ödeme Entegrasyonu", "Ürün Yönetimi", "Kargo Entegrasyonu"],
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Sanal Asistan",
+    description: "Sanal asistanlık hizmetleri.",
+    icon: "fas fa-headset",
+    link: "https://isdeyeter.com/sanal-asistan/",
+    image: "public/img/dijital-isler/egitim-teknolojileri-900x538.png",
+    features: ["İdari Destek", "Müşteri Hizmetleri", "Veri Girişi", "Takip ve Koordinasyon"],
+    color: "from-indigo-500 to-indigo-600"
+  },
+  {
+    title: "Oyun Geliştirme",
+    description: "Oyun geliştirme hizmetleri.",
+    icon: "fas fa-gamepad",
+    link: "https://isdeyeter.com/oyun-gelistirme/",
+    image: "public/img/dijital-isler/game-developer-oyun-yazılımı-300x300.png",
+    features: ["2D/3D Oyun", "Mobil Oyun", "Oyun Tasarımı", "Programlama"],
+    color: "from-green-600 to-green-700"
+  },
+  {
+    title: "Influencer Marketing",
+    description: "Influencer pazarlama hizmetleri.",
+    icon: "fas fa-users",
+    link: "https://isdeyeter.com/influencer-marketing/",
+    image: "public/img/dijital-isler/influencer_marketing-300x300.png",
+    features: ["Influencer Seçimi", "Kampanya Yönetimi", "Marka İşbirlikleri", "Performans Analizi"],
+    color: "from-orange-500 to-orange-600"
+  }
+];
+
+// Sosyal Medya E-Ticaret Hizmetleri
+const socialMediaServices = [
+  {
+    title: "Instagram Mağaza Kurulum ve Destek",
+    description: "Instagram mağazası kurulumu ve destek hizmetleri.",
+    icon: "fab fa-instagram",
+    link: "https://isdeyeter.com/instagram-magaza/",
+    image: "public/img/dijital-isler/instagram-magaza-entegrasyonu.jpg",
+    features: ["Mağaza Kurulumu", "Ürün Listeleme", "Instagram Shop", "Destek"],
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Google Merchant Center Destek",
+    description: "Google Merchant Center için destek hizmetleri.",
+    icon: "fab fa-google",
+    link: "https://isdeyeter.com/google-merchant/",
+    image: "public/img/dijital-isler/google-merchant-entegrasyonu.jpg",
+    features: ["Merchant Kurulumu", "Ürün Feed", "Shopping Ads", "Entegrasyon"],
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "Facebook Mağaza Kurulum ve Destek",
+    description: "Facebook mağazası kurulumu ve destek hizmetleri.",
+    icon: "fab fa-facebook",
+    link: "https://isdeyeter.com/facebook-magaza/",
+    image: "public/img/dijital-isler/facebook-shop-entegrasyonu.jpg",
+    features: ["Facebook Shop", "Ürün Kataloğu", "Instagram Shop", "Destek"],
+    color: "from-blue-700 to-blue-800"
+  }
+];
+
+// Pazaryeri E-Ticaret Platformları
+const marketplaceServices = [
+  { title: "WooCommerce Destek"},
+  { title: "İkas Destek"},
+  { title: "Ticimax Destek" },
+  { title: "T-Soft Destek"},
+  { title: "İdeasoft Destek"},
+  { title: "ShopPHP Destek"},
+  { title: "Shopify Destek"},
+  { title: "PrestaShop Destek"},
+  { title: "Magento Destek"},
+  { title: "PlatinMarket Destek"},
+  { title: "Trendyol Destek"},
+  { title: "Hepsiburada Destek"},
+  { title: "N11 Destek"},
+  { title: "ÇiçekSepeti Destek"},
+  { title: "Amazon Destek"},
+  { title: "Cimri Destek"},
+  { title: "Akakçe Destek"},
+  { title: "Lazımbana Destek"},
+  { title: "FLO Destek"},
+  { title: "Farmazon Destek"},
+  { title: "Getir Destek" },
+  { title: "Farma Borsa Destek" },
+  { title: "Modanisa Destek"},
+  { title: "N11 PRO Destek"},
+  { title: "e-PTT AVM Destek"},
+  { title: "Ecza1 Destek"},
+  { title: "AlesGO Destek"},
+  { title: "Buna Değer Destek" },
+  { title: "TeknoSA Destek"},
+  { title: "Pazarama Destek" },
+  { title: "Turkcell Pasaj"},
+  { title: "Vodafone Destek" },
+  { title: "Trendyol Global" }
+];
+
+// Yurt Dışı Pazaryerleri
+const internationalMarketplace = [
+  { title: "Amazon Global Destek"},
+  { title: "HepsiGlobal Destek" },
+  { title: "ETSY Destek" },
+  { title: "Allegro Destek"},
+  { title: "Fruugo Global" },
+  { title: "Ebay Destek" },
+  { title: "AliExpress Destek" },
+  { title: "Joom Destek" },
+  { title: "Ozon Destek" },
+  { title: "bol.com Destek"}
+];
+
+// Diğer Hizmet Kategorileri
+const otherServices = [
+  { title: "Web Yazılım", category: "Yazılım ve Teknoloji" },
+  { title: "Mobil Uygulamalar", category: "Yazılım ve Teknoloji" },
+  { title: "E-ticaret", category: "Yazılım ve Teknoloji" },
+  { title: "Masaüstü Uygulamalar", category: "Yazılım ve Teknoloji" },
+  { title: "Domain & Hosting Hizmetleri", category: "Yazılım ve Teknoloji" },
+  { title: "Son Kullanıcı Testleri", category: "Yazılım ve Teknoloji" },
+  { title: "Teknolojik Destek", category: "Yazılım ve Teknoloji" },
+  { title: "Websitesi Kurulumu", category: "Yazılım ve Teknoloji" },
+  { title: "Data Analizi & Raporlama", category: "Yazılım ve Teknoloji" },
+  { title: "Web Sitesi Oluşturucular & CMS", category: "Yazılım ve Teknoloji" },
+  { title: "Diğer Yazılım Teknoloji", category: "Yazılım ve Teknoloji" },
+  { title: "WordPress ile E-Ticaret", category: "Yazılım ve Teknoloji" },
+  { title: "WooCommerce ile E-Ticaret", category: "Yazılım ve Teknoloji" },
+  
+  { title: "Sosyal Medya Yönetimi", category: "İnternet Reklamcılığı" },
+  { title: "Web Analytics & İzleme", category: "İnternet Reklamcılığı" },
+  { title: "Diğer İnternet Reklamcılığı", category: "İnternet Reklamcılığı" },
+  { title: "Reklam Yönetimi", category: "İnternet Reklamcılığı" },
+  { title: "Mobil Reklamcılık", category: "İnternet Reklamcılığı" },
+  { title: "Arama Motoru Optimizasyonu (SEO)", category: "İnternet Reklamcılığı" },
+  
+  { title: "Pazar Araştırmaları", category: "İş ve Yönetim" },
+  { title: "Marka Hizmetleri", category: "İş ve Yönetim" },
+  { title: "Sanal Asistanlık", category: "İş ve Yönetim" },
+  { title: "Ürün & Veri Girişi", category: "İş ve Yönetim" },
+  { title: "Excel İşleri", category: "İş ve Yönetim" },
+  { title: "Danışmanlıklar", category: "İş ve Yönetim" },
+  { title: "Satış & Müşteri Bulma", category: "İş ve Yönetim" },
+  { title: "Diğer İş Yönetim", category: "İş ve Yönetim" },
+  
+  { title: "Introlar", category: "Video ve Animasyon" },
+  { title: "Video Reklamlar", category: "Video ve Animasyon" },
+  { title: "Video Prodüksiyon", category: "Video ve Animasyon" },
+  { title: "Oyunculu Tanıtım Videoları", category: "Video ve Animasyon" },
+  { title: "Diğer Video", category: "Video ve Animasyon" },
+  { title: "Animasyon & 3D", category: "Video ve Animasyon" },
+  { title: "Kurgu & Post Prodüksiyon", category: "Video ve Animasyon" },
+  { title: "Yayıncılar İçin Videolar", category: "Video ve Animasyon" },
+  { title: "Özel Günlere Videolar", category: "Video ve Animasyon" },
+  
+  { title: "Seslendirme", category: "Ses ve Müzik" },
+  { title: "Mix & Mastering", category: "Ses ve Müzik" },
+  { title: "Beste & Şarkı Yazarlığı", category: "Ses ve Müzik" },
+  { title: "Jingle & Reklam Müziği", category: "Ses ve Müzik" },
+  { title: "Podcast Düzenleme", category: "Ses ve Müzik" },
+  { title: "Diğer Ses & Müzik", category: "Ses ve Müzik" },
+  
+  { title: "Web Sitesi İçeriği Çeviri", category: "Çeviri" },
+  { title: "Senaryo & Yaratıcı Metin", category: "Çeviri" },
+  { title: "Basın Bülteni", category: "Çeviri" },
+  { title: "CV & Ön Yazı", category: "Çeviri" },
+  { title: "Diğer Yazı & Çeviri", category: "Çeviri" },
+  { title: "Metin Yazarlığı", category: "Çeviri" },
+  { title: "Redaksiyon & Metin Düzenleme", category: "Çeviri" },
+  { title: "Deşifre", category: "Çeviri" },
+  { title: "Marka Adı & Slogan", category: "Çeviri" },
+  { title: "Yorum & İnceleme", category: "Çeviri" },
+  
+  { title: "Logo Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "Reklam & Banner Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "3D Tasarımlar", category: "Grafik ve Tasarım" },
+  { title: "UI/UX Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "İllüstrasyon", category: "Grafik ve Tasarım" },
+  { title: "Fotoğraf & Düzenleme", category: "Grafik ve Tasarım" },
+  { title: "Dövme Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "Kurumsal Kimlik & Kartvizit", category: "Grafik ve Tasarım" },
+  { title: "Davetiye Tasarımları", category: "Grafik ve Tasarım" },
+  { title: "Yayıncılar İçin Tasarımlar", category: "Grafik ve Tasarım" },
+  { title: "Broşür & Katalog Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "Oyun Sanatı", category: "Grafik ve Tasarım" },
+  { title: "Sosyal Medya Tasarımları", category: "Grafik ve Tasarım" },
+  { title: "Ambalaj Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "Storyboard Tasarımı", category: "Grafik ve Tasarım" },
+  { title: "Sunum & Infografik", category: "Grafik ve Tasarım" },
+  { title: "Karikatür & Karakalem", category: "Grafik ve Tasarım" },
+  { title: "Diğer Tasarımlar", category: "Grafik ve Tasarım" }
+];
+
+const stats = [
+  { number: "10.000+", label: "Başarılı Proje", icon: "fas fa-check-circle" },
+  { number: "500+", label: "Mutlu Müşteri", icon: "fas fa-smile" },
+  { number: "15+", label: "Yıllık Deneyim", icon: "fas fa-calendar-alt" },
+  { number: "%150", label: "Ortalama Büyüme", icon: "fas fa-chart-bar" }
+];
+
+const testimonials = [
+  {
+    name: "Ayşe Demir",
+    role: "E-Ticaret Mağaza Sahibi",
+    text: "Dijital pazarlama hizmetleri sayesinde online satışlarımızı 6 ayda 3 katına çıkardık. Profesyonel ekip ve etkili stratejiler için teşekkürler!",
+    avatar: "A"
+  },
+  {
+    name: "Mehmet Kaya",
+    role: "Kurumsal Şirket Genel Müdürü",
+    text: "SEO ve Google Ads kampanyalarımızla sektörümüzde lider konuma geldik. Hedef kitleye doğru ulaşım ve yüksek dönüşüm oranları elde ettik.",
+    avatar: "M"
+  },
+  {
+    name: "Elif Öztürk",
+    role: "Startup Kurucu Ortağı",
+    text: "Sosyal medya pazarlaması ve içerik stratejisi ile marka bilinirliğimizi kısa sürede artırdık. Maliyet etkin çözümler sundukları için tercih ettik.",
+    avatar: "E"
+  }
+];
+
+function getLinkWithSubdomain(originalLink) {
+  if (!originalLink) return '#';
+  const slug = originalLink.replace('/', '');
+  return `${subdomain}/${slug}`;
+}
+
+function getCategoryIcon(category) {
+  const icons = {
+    "Yazılım ve Teknoloji": "fas fa-code",
+    "İnternet Reklamcılığı": "fas fa-bullhorn",
+    "İş ve Yönetim": "fas fa-briefcase",
+    "Video ve Animasyon": "fas fa-video",
+    "Ses ve Müzik": "fas fa-music",
+    "Çeviri": "fas fa-language",
+    "Grafik ve Tasarım": "fas fa-paint-brush"
+  };
+  return icons[category] || "fas fa-cog";
+}
+---
+
+<BasicLayout title="Dijital İşler | Profesyonel Dijital Hizmetler ve Çözümler">
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">{heroTitle}</h1>
+        <p class="hero-subtitle">{heroSubtitle}</p>
+        <div class="btn-group">
+          <a href="#hizmetler" class="btn btn-primary">
+            <i class="fas fa-rocket"></i>
+            Dijital Hizmetler
+          </a>
+          <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20dijital%20işler%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+            <i class="fab fa-whatsapp"></i>
+            {whatsappText}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Main Digital Services Section -->
+  <section class="services" id="hizmetler">
+    <div class="container">
+      <div class="section-title">
+        <span>DİJİTAL HİZMETLER</span>
+        <h2>Dijital Hizmetler</h2>
+        <p>İşletmeniz için en kapsamlı dijital çözümler</p>
+      </div>
+      
+      <div class="grid-services">
+        {mainDigitalServices.map((service, index) => (
+          <div class="service-card" key={index}>
+            <div class="service-image-container">
+              <img 
+              <  src={service.image} 
+                alt={service.title}
+                class="service-image"
+                loading="lazy"
+              />
+            </div>
+            <div class="service-icon">
+              <i class={service.icon}></i>
+            </div>
+            <h3>{service.title}</h3>
+            <p class="service-description">{service.description}</p>
+            <ul class="service-features">
+              {service.features.map((feature, i) => (
+                <li key={i}>
+                  <i class="fas fa-check-circle"></i>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div class="service-buttons">
+              <a 
+                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(service.title)}%20hakkında%20bilgi%20almak%20istiyorum`}
+                target="_blank"
+                class="btn btn-whatsapp-single"
+                title={whatsappText}
+              >
+                <i class="fab fa-whatsapp"></i>
+                {buttonText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Social Media E-Commerce Section -->
+  <section class="services alt-bg" id="sosyal-medya">
+    <div class="container">
+      <div class="section-title">
+        <span>SOSYAL MEDYA E-TİCARET</span>
+        <h2>Sosyal Medya E-Ticaret ve Entegrasyon Hizmetleri</h2>
+        <p>Instagram, Facebook ve Google Merchant Center mağazalarınız</p>
+      </div>
+      
+      <div class="grid-services">
+        {socialMediaServices.map((service, index) => (
+          <div class="service-card" key={index}>
+            <div class="service-image-container">
+              <img 
+                src={service.image} 
+                alt={service.title}
+                class="service-image"
+                loading="lazy"
+              />
+            </div>
+            <div class="service-icon">
+              <i class={service.icon}></i>
+            </div>
+            <h3>{service.title}</h3>
+            <p class="service-description">{service.description}</p>
+            <ul class="service-features">
+              {service.features.map((feature, i) => (
+                <li key={i}>
+                  <i class="fas fa-check-circle"></i>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div class="service-buttons">
+              <a 
+                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(service.title)}%20hakkında%20bilgi%20almak%20istiyorum`}
+                target="_blank"
+                class="btn btn-whatsapp-single"
+                title={whatsappText}
+              >
+                <i class="fab fa-whatsapp"></i>
+                {buttonText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Marketplace Platforms Section -->
+  <section class="services" id="pazaryeri">
+    <div class="container">
+      <div class="section-title">
+        <span>PAZARYERİ PLATFORMLARI</span>
+        <h2>Pazaryeri E-Ticaret ve Entegrasyon Hizmetleri</h2>
+        <p>Tüm yerli pazaryeri platformları için entegrasyon desteği</p>
+      </div>
+      
+      <div class="services-list">
+        {marketplaceServices.map((service, index) => (
+          <div class="service-list-item" key={index}>
+            <i class="fas fa-store"></i>
+            <span class="service-list-title">{service.title}</span>
+            <a 
+              href={getLinkWithSubdomain(service.link)}
+              class="service-list-link"
+              target="_blank"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              {buttonText}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- International Marketplace Section -->
+  <section class="services alt-bg" id="yurtdisi">
+    <div class="container">
+      <div class="section-title">
+        <span>YURTDIŞI PAZARYERLERİ</span>
+        <h2>Yurt Dışı Pazaryeri Destek</h2>
+        <p>Global ticaret için uluslararası pazaryeri entegrasyonları</p>
+      </div>
+      
+      <div class="services-list">
+        {internationalMarketplace.map((service, index) => (
+          <div class="service-list-item international" key={index}>
+            <i class="fas fa-globe"></i>
+            <span class="service-list-title">{service.title}</span>
+            <a 
+              href={getLinkWithSubdomain(service.link)}
+              class="service-list-link"
+              target="_blank"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              {buttonText}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Other Services Section -->
+  <section class="services" id="diger-hizmetler">
+    <div class="container">
+      <div class="section-title">
+        <span>DİĞER HİZMETLER</span>
+        <h2>Tüm Dijital İş Kategorileri</h2>
+        <p>Yüzlerce dijital hizmet kategorisi</p>
+      </div>
+      
+      {Object.entries(
+        otherServices.reduce((acc, service) => {
+          if (!acc[service.category]) acc[service.category] = [];
+          acc[service.category].push(service.title);
+          return acc;
+        }, {})
+      ).map(([category, services]) => (
+        <div class="category-section" key={category}>
+          <div class="category-header">
+            <div class="category-icon">
+              <i class={getCategoryIcon(category)}></i>
+            </div>
+            <h3>{category}</h3>
+          </div>
+          <div class="category-services">
+            {services.map((title, index) => (
+              <div class="category-service-item" key={index}>
+                <i class="fas fa-angle-right"></i>
+                <span>{title}</span>
+              </div>
+            ))}
+          </div>
+        </div>
+      ))}
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats" id="istatistikler">
+    <div class="container">
+      <div class="grid-stats">
+        {stats.map((stat, index) => (
+          <div class="stat-item" key={index}>
+            <div class="stat-icon">
+              <i class={stat.icon}></i>
+            </div>
+            <div class="stat-number">{stat.number}</div>
+            <div class="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="referanslar">
+    <div class="container">
+      <div class="section-title">
+        <span>REFERANSLAR</span>
+        <h2>Müşterilerimiz Ne Diyor?</h2>
+        <p>Binlerce mutlu müşterimizin deneyimlerini keşfedin</p>
+      </div>
+      
+      <div class="grid-testimonials">
+        {testimonials.map((testimonial, index) => (
+          <div class="testimonial-card" key={index}>
+            <div class="testimonial-text">
+              {testimonial.text}
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                {testimonial.avatar}
+              </div>
+              <div>
+                <h4>{testimonial.name}</h4>
+                <p>{testimonial.role}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp Float Button -->
+  <a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${companyName}%20dijital%20işler%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+    title={whatsappText}
+  >
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      const whatsappFloat = document.querySelector('.whatsapp-float');
+      if (whatsappFloat) {
+        whatsappFloat.addEventListener('click', function() {
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 150);
+        });
+      }
+      
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>
+
+<style>
+  /* Service Image Styles */
+  .service-image-container {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .service-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .service-card:hover .service-image {
+    transform: scale(1.05);
+  }
+  
+  /* Service Description */
+  .service-description {
+    color: #6B7280;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Service Buttons */
+  .service-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .btn-whatsapp-single {
+    background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    min-width: 200px;
+  }
+  
+  .btn-whatsapp-single:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.5);
+  }
+  
+  /* Services List */
+  .services-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 15px;
+  }
+  
+  .service-list-item {
+    background: white;
+    padding: 18px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .service-list-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #3B82F6;
+  }
+  
+  .service-list-item.international {
+    background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    border-color: #7dd3fc;
+  }
+  
+  .service-list-item i {
+    color: #3B82F6;
+    font-size: 1.1rem;
+  }
+  
+  .service-list-item.international i {
+    color: #0284c7;
+  }
+  
+  .service-list-title {
+    flex: 1;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .service-list-link {
+    color: #3B82F6;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .service-list-link:hover {
+    color: #2563EB;
+  }
+  
+  /* Category Section */
+  .category-section {
+    margin-bottom: 50px;
+    background: #fff;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .category-header {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+    margin-bottom: 25px;
+    padding-bottom: 15px;
+    border-bottom: 2px solid #f0f0f0;
+  }
+  
+  .category-icon {
+    width: 50px;
+    height: 50px;
+    border-radius: 12px;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+  }
+  
+  .category-icon i {
+    font-size: 1.3rem;
+    color: white;
+  }
+  
+  .category-header h3 {
+    font-size: 1.4rem;
+    color: #1F2937;
+    margin: 0;
+    font-weight: 700;
+  }
+  
+  .category-services {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+    gap: 12px;
+  }
+  
+  .category-service-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    padding: 12px 15px;
+    background: #f8fafc;
+    border-radius: 8px;
+    transition: all 0.3s ease;
+  }
+  
+  .category-service-item:hover {
+    background: #e2e8f0;
+    transform: translateX(5px);
+  }
+  
+  .category-service-item i {
+    color: #3B82F6;
+  }
+  
+  .category-service-item span {
+    color: #4B5563;
+    font-weight: 500;
+  }
+  
+  /* WhatsApp Float Button */
+  .whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .whatsapp-float:hover {
+    background-color: #20BD5A;
+    transform: scale(1.1);
+    box-shadow: 4px 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  
+  /* Hero Styles */
+  .hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 60px 0;
+  }
+  
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    opacity: 0.5;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .hero-content {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #1F2937;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #4B5563;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .btn-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  }
+  
+  .btn-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  
+  .btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+  }
+  
+  /* Services Section */
+  .services {
+    padding: 80px 0;
+    background: #fff;
+  }
+  
+  .services.alt-bg {
+    background: #f8fafc;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .section-title span {
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .section-title h2 {
+    font-size: 2.2rem;
+    color: #1F2937;
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+  
+  .section-title p {
+    color: #6B7280;
+    font-size: 1.1rem;
+  }
+  
+  .grid-services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+  }
+  
+  .service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  .service-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  
+  .service-icon i {
+    font-size: 1.8rem;
+    color: white;
+  }
+  
+  .service-card h3 {
+    font-size: 1.2rem;
+    color: #1F2937;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    text-align: left;
+  }
+  
+  .service-features li {
+    padding: 8px 0;
+    color: #4B5563;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+  }
+  
+  .service-features li i {
+    color: #10B981;
+    width: 20px;
+  }
+  
+  /* Stats Section */
+  .stats {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  }
+  
+  .grid-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .stat-item {
+    padding: 20px;
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+  }
+  
+  .stat-icon i {
+    font-size: 1.5rem;
+    color: white;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 5px;
+  }
+  
+  .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+  }
+  
+  /* Testimonials Section */
+  .testimonials {
+    padding: 80px 0;
+    background: #f8fafc;
+  }
+  
+  .grid-testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .testimonial-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .testimonial-text {
+    color: #4B5563;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    font-style: italic;
+  }
+  
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  .testimonial-author h4 {
+    color: #1F2937;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .testimonial-author p {
+    color: #6B7280;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .grid-services {
+      grid-template-columns: 1fr;
+    }
+    
+    .service-image-container {
+      width: 100%;
+      height: 250px;
+    }
+    
+    .services-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .service-list-item {
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+    }
+    
+    .service-list-link {
+      margin-top: 5px;
+    }
+    
+    .whatsapp-float {
+      width: 50px;
+      height: 50px;
+      font-size: 25px;
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    .hero {
+      min-height: 60vh;
+    }
+    
+    .category-section {
+      padding: 20px;
+    }
+    
+    .category-services {
+      grid-template-columns: 1fr;
+    }
+  }
+</style>

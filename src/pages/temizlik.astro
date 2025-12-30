@@ -1,0 +1,757 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const {
+  company,
+  whatsapp,
+  blogUrl,
+  slogan,
+  buttonText,
+  whatsappText
+} = configData;
+
+const heroTitle = "Temizlik Hizmetleri";
+const heroSubtitle = "Profesyonel temizlik şirketleri ile evinizi, ofisinizi ve yaşam alanlarınızı tertemiz yapın. Kaliteli hizmet, uygun fiyat ve memnuniyet garantisi.";
+
+// Görseli olan 12 temizlik hizmeti
+const servicesWithImages = [
+  {
+    title: "Ev Temizliği",
+    image: "public/img/temizlik/Ev-Temizligi.jpg",
+    description: "Evlerin tüm odaları için profesyonel temizlik hizmeti. Zemin, mobilya, cam, mutfak ve banyo temizliği.",
+    icon: "fas fa-home",
+    link: "ev-temizligi-64",
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "Ofis Temizliği",
+    image: "public/img/temizlik/ofis-temizligi.jpg",
+    description: "İşyerleri ve ofislerin temizliği. Zemin, masa, sandalye, cam ve mutfak temizliği.",
+    icon: "fas fa-building",
+    link: "ofis-temizligi-65",
+    color: "from-gray-500 to-gray-600"
+  },
+  {
+    title: "İnşaat Sonrası Temizlik",
+    image: "public/img/temizlik/insaat-sonrasi-temzlik.jpg",
+    description: "İnşaat sonrası bina içi ve dışı temizlik. Boya, macun kalıntıları ve inşaat artıklarının giderilmesi.",
+    icon: "fas fa-hard-hat",
+    link: "insaat-sonrasi-temizlik-66",
+    color: "from-orange-500 to-orange-600"
+  },
+  {
+    title: "Cam Temizliği",
+    image: "public/img/temizlik/cam-temizligi.jpg",
+    description: "Cam yüzeylerin iç ve dış temizliği. Camlar, çerçeveler ve pervazların temizliği.",
+    icon: "fas fa-window-maximize",
+    link: "cam-temizligi-67",
+    color: "from-cyan-500 to-cyan-600"
+  },
+  {
+    title: "Halı Yıkama",
+    image: "public/img/temizlik/hali-yikama.jpg",
+    description: "Halı ve kilim yıkama hizmeti. Derin temizlik, leke çıkarma ve dezenfeksiyon.",
+    icon: "fas fa-layer-group",
+    link: "hali-yikama-68",
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    title: "Koltuk Yıkama",
+    image: "public/img/temizlik/koltuk-yikama.webp",
+    description: "Koltuk ve döşeme temizliği. Derin temizlik, leke çıkarma ve koku giderici işlemler.",
+    icon: "fas fa-couch",
+    link: "koltuk-yikama-69",
+    color: "from-red-500 to-red-600"
+  },
+  {
+    title: "Yatak Yıkama",
+    image: "public/img/temizlik/yatak-yikama.jpg",
+    description: "Yatak ve yastık temizliği. Akarlardan arındırma, derin temizlik ve dezenfeksiyon.",
+    icon: "fas fa-bed",
+    link: "yatak-yikama-70",
+    color: "from-teal-500 to-teal-600"
+  },
+  {
+    title: "Villa Temizliği",
+    image: "public/img/temizlik/villa-temizligi.jpg",
+    description: "Villa ve residence temizliği. Geniş alanlar, bahçe ve havuz çevresi temizliği.",
+    icon: "fas fa-house-user",
+    link: "villa-temizligi-71",
+    color: "from-green-500 to-green-600"
+  },
+  {
+    title: "Kuru Temizleme",
+    image: "public/img/temizlik/kuru-temizleme.jpg",
+    description: "Kuru temizleme hizmeti. Derin temizlik, leke çıkarma ve dezenfeksiyon.",
+    icon: "fas fa-store",
+    link: "dukkan-magaza-temizligi-72",
+    color: "from-indigo-500 to-indigo-600"
+  },
+  {
+    title: "Yerinde Araç Yıkama",
+    image: "public/img/temizlik/yerinde-arac-yikama.jpg",
+    description: "Araç iç ve dış temizliği. Detaylı yıkama, cilalandırma ve iç mekan temizliği.",
+    icon: "fas fa-car",
+    link: "arac-yikama-73",
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Apartman Temizliği",
+    image: "public/img/temizlik/apartman-temizlik.jpg",
+    description: "Apartman ortak alanlarının temizliği. Merdiven, koridor, asansör ve bahçe temizliği",
+    icon: "fas fa-pump-soap",
+    link: "yerinde-yikama-74",
+    color: "from-yellow-500 to-yellow-600"
+  },
+  {
+    title: "Evde Ütü Hizmeti",
+    image: "public/img/temizlik/utu.jpg",
+    description: "Kıyafetlerin profesyonel ütülenmesi ve paketlenmesi, yerinde/evde teslimat hizmeti.",
+    icon: "fas fa-box",
+    link: "buzdolabi-temizligi-75",
+    color: "from-blue-400 to-blue-500"
+  }
+];
+
+// Sadece yazı olan 36 temizlik hizmeti
+const servicesTextOnly = [
+  { title: "Hizmetçi Temizlik", link: "hizmetci-temizlik" },
+  { title: "Günlük Ev Temizliği", link: "gunluk-ev-temizligi" },
+  { title: "Haftalık Ev Temizliği", link: "haftalik-ev-temizligi" },
+  { title: "Aylık Ev Temizliği", link: "aylik-ev-temizligi" },
+  { title: "Yazlık Ev Temizliği", link: "yazlik-ev-temizligi" },
+  { title: "Beyaz Eşya Temizliği", link: "beyaz-esya-temizligi" },
+  { title: "Çamaşır Makinesi Temizliği", link: "camasir-makinesi-temizligi" },
+  { title: "Bulaşık Makinesi Temizliği", link: "bulasik-makinesi-temizligi" },
+  { title: "Fırın Temizliği", link: "firin-temizligi" },
+  { title: "Mikrodalga Temizliği", link: "mikrodalga-temizligi" },
+  { title: "Aspiratör Temizliği", link: "aspirator-temizligi" },
+  { title: "Tezgah Temizliği", link: "tezgah-temizligi" },
+  { title: "Duşakabin Temizliği", link: "dusakabin-temizligi" },
+  { title: "Klozet Temizliği", link: "klozet-temizligi" },
+  { title: "Lavabo Temizliği", link: "lavabo-temizligi" },
+  { title: "Fayans Temizliği", link: "fayans-temizligi" },
+  { title: "Derz Temizliği", link: "derz-temizligi" },
+  { title: "Ahşap Zemin Temizliği", link: "ahsap-zemin-temizligi" },
+  { title: "Mermer Parlatma", link: "mermer-parlatma" },
+  { title: "Granit Temizliği", link: "granit-temizligi" },
+  { title: "Laminant Parke Temizliği", link: "laminant-parke-temizligi" },
+  { title: "PVC Temizliği", link: "pvc-temizligi" },
+  { title: "Perde Yıkama", link: "perde-yikama" },
+  { title: "Stor Perde Temizliği", link: "stor-perde-temizligi" },
+  { title: "Tül Perde Temizliği", link: "tul-perde-temizligi" },
+  { title: "Jaluzi Temizliği", link: "jaluzi-temizligi" },
+  { title: "Salon Temizliği", link: "salon-temizligi" },
+  { title: "Mutfak Temizliği", link: "mutfak-temizligi" },
+  { title: "Banyo Temizliği", link: "banyo-temizligi" },
+  { title: "Yatak Odası Temizliği", link: "yatak-odasi-temizligi" },
+  { title: "Çocuk Odası Temizliği", link: "cocuk-odasi-temizligi" },
+  { title: "Balkon Temizliği", link: "balkon-temizligi" },
+  { title: "Garaj Temizliği", link: "garaj-temizligi" },
+  { title: "Bodrum Temizliği", link: "bodrum-temizligi" },
+  { title: "Çatı Temizliği", link: "cati-temizligi" },
+  { title: "Dış Cephe Temizliği", link: "dis-cephe-temizligi" },
+  { title: "Bahçe Temizliği", link: "bahce-temizligi" }
+];
+
+const stats = [
+  { number: "+++", label: "Onlarca Temiz Ev ve İş Yeri", icon: "fas fa-building" },
+  { number: "100+", label: "Profesyonel Ekip", icon: "fas fa-users" },
+  { number: "48", label: "Farklı Hizmet", icon: "fas fa-broom" },
+  { number: "%89", label: "Memnuniyet", icon: "fas fa-star" }
+];
+---
+
+<BasicLayout title="Temizlik Hizmetleri | İş de YETER - Ev ve Ofis Temizliği">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span style="color: #1F2937;">{heroTitle}</span>
+            </h1>
+            <p class="hero-slogan">{slogan}</p>
+            <p class="hero-subtitle">
+                {heroSubtitle}
+            </p>
+            <div class="btn-group">
+                <a href="#hizmetler" class="btn btn-primary">
+                    <i class="fas fa-broom"></i>
+                    Hizmetleri Keşfet
+                </a>
+                <a href={`https://wa.me/${whatsapp}?text=Merhaba,%20Temizlik%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    {whatsappText}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats" id="istatistikler">
+    <div class="container">
+        <div class="grid-stats">
+            {stats.map((stat, index) => (
+                <div class="stat-item" key={index}>
+                    <div class="stat-icon">
+                        <i class={stat.icon}></i>
+                    </div>
+                    <div class="stat-number">{stat.number}</div>
+                    <div class="stat-label">{stat.label}</div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Services with Images Section -->
+<section class="services-with-images" id="hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>RESİMLİ HİZMETLER</span>
+            <h2>Profesyonel Temizlik Çözümleri</h2>
+            <p>Uzman ekiplerimizle evinizi ve iş yerinizi tertemiz yapalım</p>
+        </div>
+
+        <div class="services-grid">
+            {servicesWithImages.map((service, index) => (
+                <div class="service-card" key={index}>
+                    <div class="service-image-container">
+                        <img 
+                            src={service.image} 
+                            alt={service.title}
+                            class="service-image"
+                            loading="lazy"
+                        />
+                    </div>
+                    <div class="service-icon">
+                        <i class={service.icon}></i>
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p class="service-description">{service.description}</p>
+                    <a 
+                        href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                        target="_blank"
+                        class="btn btn-service"
+                    >
+                        <i class="fab fa-whatsapp"></i>
+                        {buttonText}
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Text Only Services Section -->
+<section class="services-text-only" id="diger-hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>DİĞER HİZMETLER</span>
+            <h2>Tüm Temizlik İhtiyaçlarınız İçin</h2>
+            <p>Aşağıdaki hizmetlerimizden de yararlanabilirsiniz</p>
+        </div>
+
+        <div class="text-services-grid">
+            {servicesTextOnly.map((service, index) => (
+                <a 
+                    href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                    target="_blank"
+                    class="text-service-item"
+                    key={index}
+                >
+                    <i class="fas fa-check-circle"></i>
+                    <span>{service.title}</span>
+                    <i class="fab fa-whatsapp whatsapp-icon"></i>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsapp}?text=Merhaba,%20Temizlik%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // WhatsApp float buton tıklama efekti
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .text-service-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<style>
+    /* Hero Section */
+    .hero {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        padding: 80px 0;
+    }
+
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%2300BCD4' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 0;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        color: #1F2937;
+    }
+
+    .hero-slogan {
+        font-size: 1.4rem;
+        color: #db4205;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #4B5563;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+    }
+
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-whatsapp:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-service {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-service:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Stats Section */
+    .stats {
+        padding: 50px 0;
+        background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+    }
+
+    .grid-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+
+    .stat-item {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .stat-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+    }
+
+    /* Section Titles */
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-title span {
+        display: inline-block;
+        background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+        color: #1F2937;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .section-title p {
+        color: #6B7280;
+        font-size: 1.1rem;
+    }
+
+    /* Services with Images */
+    .services-with-images {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .service-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-image-container {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.05);
+    }
+
+    .service-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #00BCD4 0%, #0097A7 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -40px auto 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .service-icon i {
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    .service-card h3 {
+        font-size: 1.2rem;
+        color: #1F2937;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .service-description {
+        color: #6B7280;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        min-height: 3em;
+    }
+
+    /* Text Only Services */
+    .services-text-only {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+
+    .text-services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .text-service-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: white;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #374151;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .text-service-item:hover {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .text-service-item i:first-child {
+        color: #00BCD4;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .text-service-item:hover i:first-child {
+        color: white;
+    }
+
+    .whatsapp-icon {
+        margin-left: auto;
+        font-size: 1.1rem;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .text-service-item:hover .whatsapp-icon {
+        opacity: 1;
+    }
+
+    /* WhatsApp Float Button */
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 30px;
+        right: 30px;
+        background-color: #25D366;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 30px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+        background-color: #20BD5A;
+        transform: scale(1.1);
+        box-shadow: 4px 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Animations */
+    .service-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .text-service-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInRight 0.4s ease forwards;
+    }
+
+    @keyframes slideInRight {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-slogan {
+            font-size: 1.1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+
+        .service-image-container {
+            width: 160px;
+            height: 160px;
+        }
+
+        .text-services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .whatsapp-float {
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            bottom: 20px;
+            right: 20px;
+        }
+    }
+</style>
+
+</BasicLayout>

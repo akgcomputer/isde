@@ -1,0 +1,1293 @@
+---
+// cpanel-hosting.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "cPanel Hosting - Profesyonel Linux Hosting Çözümleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="cpanel-hosting-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">cPanel <span class="highlight">Hosting</span></h1>
+          <p class="hero-subtitle" style="color:#e5e903">Dünyanın en çok kullanılan hosting platformu ile LiteSpeed'in hızı birleşiyor!</p>
+          <p class="hero-description">
+            cPanel hosting yönetim paneli ile hızlı, kullanıcı dostu arayüzü ve yılların getirdiği tecrübe ile size en iyi deneyimi sunmaktayız.
+          </p>
+          <div class="hero-actions">
+            <a href="#hosting-plans" class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              Hosting Paketlerini İncele
+            </a>
+            <a href="#similar-services" class="btn secondary-btn">
+              <span class="btn-icon">📦</span>
+              Benzer Hizmetler
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="cpanel-animation">
+            <div class="server-icon">🖥️</div>
+            <div class="speed-line"></div>
+            <div class="panel-icon">📊</div>
+            <div class="speed-line"></div>
+            <div class="rocket-icon">🚀</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Similar Services Section -->
+    <section id="similar-services" class="similar-services-section">
+      <div class="container">
+        <h2 class="section-title">Benzer Hizmetler</h2>
+        <div class="services-grid">
+          <a href={getWhatsAppLink("Linux Hosting")} class="service-card">
+            <div class="service-icon">🐧</div>
+            <h3>Linux Hosting</h3>
+            <p>Stabil Linux altyapısı ile profesyonel hosting</p>
+          </a>
+          <a href={getWhatsAppLink("Premium Hosting")} class="service-card">
+            <div class="service-icon">⭐</div>
+            <h3>Premium Hosting</h3>
+            <p>Gelişmiş özelliklerle premium hosting deneyimi</p>
+          </a>
+          <a href={getWhatsAppLink("Reseller Hosting")} class="service-card">
+            <div class="service-icon">🏢</div>
+            <h3>Reseller Hosting</h3>
+            <p>Hosting satışı yapmak isteyenler için ideal</p>
+          </a>
+          <a href={getWhatsAppLink("CloudLinux Hosting")} class="service-card">
+            <div class="service-icon">☁️</div>
+            <h3>CloudLinux Hosting</h3>
+            <p>CloudLinux teknolojisi ile güvenli hosting</p>
+          </a>
+          <a href={getWhatsAppLink("LiteSpeed Hosting")} class="service-card">
+            <div class="service-icon">⚡</div>
+            <h3>LiteSpeed Hosting</h3>
+            <p>LiteSpeed teknolojisi ile yüksek performans</p>
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hosting Plans Section -->
+    <section id="hosting-plans" class="hosting-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">cPanel Hosting Paketleri</h2>
+          <p class="section-subtitle">İhtiyacınıza uygun en iyi hosting çözümünü seçin</p>
+        </div>
+
+        <div class="plans-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="cpanel">cPanel Hosting</button>
+            <button class="tab-btn" data-tab="linux">Linux Hosting</button>
+          </div>
+
+          <!-- cPanel Plans -->
+          <div class="tab-content active" id="cpanel-tab">
+            <div class="plans-grid">
+              <!-- Başlangıç Planı -->
+              <div class="plan-card">
+                <div class="plan-badge">Başlangıç</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">cPanel BAŞLANGIÇ</h3>
+                  <div class="plan-popular">Popüler</div>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">✅</span> 1 Adet Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> 5GB SSD Disk</li>
+                    <li><span class="feature-icon">✅</span> 50GB Trafik</li>
+                    <li><span class="feature-icon">✅</span> 1 Core CPU / 1 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> 5 Adet MySQL</li>
+                    <li><span class="feature-icon">✅</span> 5 Adet Subdomain</li>
+                    <li><span class="feature-icon">✅</span> 5 Adet Parked Domain</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("cPanel Başlangıç Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+
+              <!-- Pro Planı -->
+              <div class="plan-card featured">
+                <div class="plan-badge">Pro</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">cPanel PRO</h3>
+                  <div class="plan-popular">En Çok Tercih Edilen</div>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">✅</span> 5 Adet Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> 20GB SSD Disk</li>
+                    <li><span class="feature-icon">✅</span> 100GB Trafik</li>
+                    <li><span class="feature-icon">✅</span> 2 Core CPU / 2 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz MySQL</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Subdomain</li>
+                    <li><span class="feature-icon">✅</span> 10 Adet Parked Domain</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("cPanel Pro Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+
+              <!-- Limitsiz Plan -->
+              <div class="plan-card">
+                <div class="plan-badge">Limitsiz</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">cPanel LİMİTSİZ</h3>
+                  <div class="plan-popular">Kurumsal</div>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">✅</span> Limitsiz Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz SSD Disk</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                    <li><span class="feature-icon">✅</span> 4 Core CPU / 4 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> Sınırsız MySQL</li>
+                    <li><span class="feature-icon">✅</span> Sınırsız Subdomain</li>
+                    <li><span class="feature-icon">✅</span> 10 Adet Parked Domain</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("cPanel Limitsiz Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Linux Plans -->
+          <div class="tab-content" id="linux-tab">
+            <div class="plans-grid">
+              <!-- Linux Başlangıç -->
+              <div class="plan-card">
+                <div class="plan-badge">Başlangıç</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">Linux Başlangıç</h3>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">🎁</span> Ücretsiz .TR Domain</li>
+                    <li><span class="feature-icon">✅</span> 2 Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> 5 GB SSD Disk Alanı</li>
+                    <li><span class="feature-icon">✅</span> Enterprise NVMe Disk</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                    <li><span class="feature-icon">✅</span> 25 E-posta Hesabı</li>
+                    <li><span class="feature-icon">✅</span> 1 Core CPU / 1 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> 5 MySQL Veritabanı</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("Linux Başlangıç Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+
+              <!-- Linux Plus -->
+              <div class="plan-card">
+                <div class="plan-badge">Plus</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">Linux Plus</h3>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">🎁</span> Ücretsiz .TR Domain</li>
+                    <li><span class="feature-icon">✅</span> 4 Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> 10 GB SSD Disk Alanı</li>
+                    <li><span class="feature-icon">✅</span> Enterprise NVMe Disk</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                    <li><span class="feature-icon">✅</span> 50 E-posta Hesabı</li>
+                    <li><span class="feature-icon">✅</span> 2 Core CPU / 2 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> 10 MySQL Veritabanı</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("Linux Plus Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+
+              <!-- Linux Avantaj -->
+              <div class="plan-card featured">
+                <div class="plan-badge">Avantaj</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">Linux Avantaj</h3>
+                  <div class="plan-popular">En İyi Değer</div>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">🎁</span> Ücretsiz .TR Domain</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz SSD Disk Alanı</li>
+                    <li><span class="feature-icon">✅</span> Enterprise NVMe Disk</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz E-posta Hesabı</li>
+                    <li><span class="feature-icon">✅</span> 2 Core CPU / 2 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> 20 MySQL Veritabanı</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("Linux Avantaj Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+
+              <!-- Linux Limitsiz -->
+              <div class="plan-card">
+                <div class="plan-badge">Limitsiz</div>
+                <div class="plan-header">
+                  <h3 class="plan-title">Linux Limitsiz</h3>
+                  <div class="plan-popular">Premium</div>
+                </div>
+                <div class="plan-features">
+                  <ul>
+                    <li><span class="feature-icon">🎁</span> Ücretsiz .TR Domain</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Site Barındırma</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz SSD Disk Alanı</li>
+                    <li><span class="feature-icon">✅</span> Enterprise NVMe Disk</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz E-posta Hesabı</li>
+                    <li><span class="feature-icon">✅</span> 4 Core CPU / 4 GB RAM</li>
+                    <li><span class="feature-icon">✅</span> Limitsiz MySQL Veritabanı</li>
+                  </ul>
+                </div>
+                <div class="plan-footer">
+                  <a href={getWhatsAppLink("Linux Limitsiz Hosting")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detaylar
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Features Section -->
+    <section class="common-features-section">
+      <div class="container">
+        <h2 class="section-title">Ortak Özellikler</h2>
+        <p class="section-subtitle">Tüm hosting paketlerimizde standart olarak sunulan özellikler</p>
+        
+        <div class="features-grid">
+          <div class="feature-item">
+            <div class="feature-icon">🇹🇷</div>
+            <h3>Türkçe Kontrol Paneli</h3>
+            <p>Tam Türkçe arayüz ile kolay yönetim</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">☁️</div>
+            <h3>CloudLinux</h3>
+            <p>Stabil ve güvenli CloudLinux altyapısı</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3>LiteSpeed / LSCache</h3>
+            <p>Yüksek performans için LiteSpeed teknolojisi</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h3>CageFS</h3>
+            <p>Gelişmiş güvenlik ve izolasyon</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔧</div>
+            <h3>PHP Selector</h3>
+            <p>İstediğiniz PHP sürümünü seçebilme</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <h3>SAS-SSD/NVMe Flash Disk</h3>
+            <p>Yüksek hızlı disk teknolojisi</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📝</div>
+            <h3>%100 WordPress Uyumluluğu</h3>
+            <p>WordPress için optimize edilmiş altyapı</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📦</div>
+            <h3>Hazır Scriptler</h3>
+            <p>Otomatik kurulum için hazır scriptler</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📁</div>
+            <h3>Dosya Yöneticisi</h3>
+            <p>Web tabanlı dosya yönetimi</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🗄️</div>
+            <h3>PhpMyAdmin</h3>
+            <p>Veritabanı yönetimi için PhpMyAdmin</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⏱️</div>
+            <h3>%99 Uptime Garantisi</h3>
+            <p>Kesintisiz hizmet garantisi</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <h3>Haftalık Yedekleme</h3>
+            <p>Otomatik haftalık yedekleme</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h3>Antispam ve Antivirüs</h3>
+            <p>Gelişmiş spam ve virüs koruması</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <h3>Site İstatistikleri</h3>
+            <p>Detaylı site istatistikleri</p>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">👨‍💻</div>
+            <h3>7/24 Destek</h3>
+            <p>7 gün 24 saat teknik destek</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Quality Section -->
+    <section class="support-quality-section">
+      <div class="container">
+        <div class="support-content">
+          <div class="support-text">
+            <h2 class="section-title">Hizmet Kalitesi = Destek Kalitesi</h2>
+            <p class="support-description">
+              Teknik Destek Ekibimiz değişmez 6 kurala sahiptir:
+            </p>
+            <div class="support-principles">
+              <div class="principle">
+                <span class="principle-icon">🤝</span>
+                <span>Empati Kurmak</span>
+              </div>
+              <div class="principle">
+                <span class="principle-icon">💡</span>
+                <span>Yenilikçi Olmak</span>
+              </div>
+              <div class="principle">
+                <span class="principle-icon">💭</span>
+                <span>Fikir Üretmek</span>
+              </div>
+              <div class="principle">
+                <span class="principle-icon">🔍</span>
+                <span>Araştırma Yapmak</span>
+              </div>
+              <div class="principle">
+                <span class="principle-icon">🎯</span>
+                <span>Dikkatli Çalışmak</span>
+              </div>
+              <div class="principle">
+                <span class="principle-icon">⚡</span>
+                <span>Çözümü Hızlandırmak</span>
+              </div>
+            </div>
+            <p class="support-note">
+              Müşterilerimizin mutlu ve memnun çalışması, bizim en öncelikli politikalarımızdan biridir. 
+              7 gün 24 saat Destek Merkezi üzerinden sorunların tespiti için yardım alabileceğiniz sistem destek uzmanlarımız bulunur.
+            </p>
+          </div>
+          <div class="support-illustration">
+            <div class="support-animation">
+              <div class="support-icon">👨‍💼</div>
+              <div class="chat-bubble">Nasıl yardımcı olabilirim?</div>
+              <div class="support-icon">👩‍💻</div>
+              <div class="chat-bubble">Sorununuz çözüldü! ✅</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology-section">
+      <div class="container">
+        <div class="tech-grid">
+          <!-- LiteSpeed Technology -->
+          <div class="tech-card">
+            <div class="tech-icon">⚡</div>
+            <div class="tech-content">
+              <h3>LiteSpeed Web Server</h3>
+              <p>
+                Linux Hosting için üretilmiş yeni nesil web sunucu teknolojisi olarak da bilinir ve 
+                PHP'nin Apache'ye göre 5 kat daha hızlı çalışmasını sağlar. CloudLinux işletim sistemiyle 
+                tam uyumludur. Geliştirdiğimiz eklentilerle birlikte Symlink, DOS Attack dahil yüzlerce 
+                ekstra güvenlik kalkanına sahip olursunuz.
+              </p>
+            </div>
+          </div>
+
+          <!-- World Class Panels -->
+          <div class="tech-card">
+            <div class="tech-icon">🌍</div>
+            <div class="tech-content">
+              <h3>Dünyanın En İyileri Hizmetinizde</h3>
+              <p>
+                Linux platform için cPanel, Windows platform için Plesk Panel sunulmaktadır. 
+                Tamamı Türkçe Arayüz, PHP Sürüm Değiştirme, Mobil Tarayıcı Desteği, Antispam Yönetimi, 
+                Ücretsiz SSL Modülü, Dosya Yöneticisi, Detaylı İstatistik Raporu, ModSecurity Yöneticisi, 
+                FTP Hesapları, Tek Tuşla WordPress Kurulumu, Yedek Yöneticisi gibi onlarca özelliğe ve 
+                yeniliğe sahiptir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VDS Section -->
+    <section class="vds-section">
+      <div class="container">
+        <div class="vds-content">
+          <div class="vds-text">
+            <h2 class="section-title">Daha Yüksek Kapasite İçin</h2>
+            <p class="vds-description">
+              Hosting paketlerimiz size yetmiyor mu? Daha yüksek performans ve kaynak için NVMe VDS 
+              Sunucu paketlerimizi inceleyin.
+            </p>
+            <a href={getWhatsAppLink("NVMe VDS Sunucu")} class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              VDS Sunucu Paketleri Hakkında Bilgi Al
+            </a>
+          </div>
+          <div class="vds-illustration">
+            <div class="vds-icon">💻</div>
+            <div class="vds-arrow">➡️</div>
+            <div class="vds-icon">🖥️</div>
+            <div class="vds-arrow">➡️</div>
+            <div class="vds-icon">☁️</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">cPanel Hosting ile Tanışın</h2>
+          <p class="cta-description">
+            Profesyonel ekibimiz size en uygun hosting çözümünü sunmak için hazır. 
+            Hemen iletişime geçin ve ihtiyacınıza özel teklif alın!
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("cPanel Hosting Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="/iletisim" class="btn primary-btn large">
+              <span class="btn-icon">📞</span>
+              Bizi Arayın
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #7c3aed;
+      --accent-color: #f59e0b;
+      --success-color: #10b981;
+      --dark-color: #1f2937;
+      --light-color: #f8fafc;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .cpanel-hosting-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(45deg, var(--accent-color), #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      margin-bottom: 1.5rem;
+      opacity: 0.95;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      line-height: 1.7;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: white;
+      color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .secondary-btn:hover {
+      background: white;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .cpanel-animation {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .server-icon, .panel-icon, .rocket-icon {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .server-icon { animation-delay: 0s; }
+    .panel-icon { animation-delay: 0.5s; }
+    .rocket-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .speed-line {
+      width: 40px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      border-radius: 4px;
+      animation: flow 2s infinite;
+    }
+
+    @keyframes flow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Similar Services */
+    .similar-services-section {
+      padding: 4rem 1rem;
+      background: var(--light-color);
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      text-align: center;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      text-align: center;
+      max-width: 600px;
+      margin: 0 auto 3rem;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      text-decoration: none;
+      color: var(--text-color);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .service-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .service-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .service-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .service-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Hosting Plans */
+    .hosting-plans-section {
+      padding: 6rem 1rem;
+    }
+
+    .plans-tabs {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+    }
+
+    .plan-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+      position: relative;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .plan-card.featured {
+      border: 3px solid var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .plan-badge {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 1rem;
+    }
+
+    .plan-header {
+      text-align: center;
+      margin-bottom: 2rem;
+    }
+
+    .plan-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-popular {
+      display: inline-block;
+      padding: 0.3rem 1rem;
+      background: var(--accent-color);
+      color: white;
+      border-radius: 15px;
+      font-size: 0.8rem;
+      font-weight: 600;
+    }
+
+    .plan-features {
+      flex: 1;
+      margin-bottom: 2rem;
+    }
+
+    .plan-features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .plan-features li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-icon {
+      color: var(--success-color);
+      font-size: 1.1rem;
+      flex-shrink: 0;
+    }
+
+    /* Common Features */
+    .common-features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      background: white;
+      border-radius: 10px;
+      padding: 1.5rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-item .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-item h3 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .feature-item p {
+      font-size: 0.9rem;
+      color: var(--text-light);
+      line-height: 1.4;
+    }
+
+    /* Support Quality */
+    .support-quality-section {
+      padding: 6rem 1rem;
+    }
+
+    .support-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .support-description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      color: var(--dark-color);
+    }
+
+    .support-principles {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .principle {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      padding: 1rem;
+      background: white;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .principle:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .principle-icon {
+      font-size: 2rem;
+      margin-bottom: 0.5rem;
+    }
+
+    .principle span:last-child {
+      font-weight: 600;
+      color: var(--dark-color);
+      text-align: center;
+    }
+
+    .support-note {
+      color: var(--text-light);
+      line-height: 1.7;
+      font-size: 1rem;
+    }
+
+    .support-illustration {
+      display: flex;
+      justify-content: center;
+    }
+
+    .support-animation {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      align-items: center;
+    }
+
+    .support-icon {
+      font-size: 3rem;
+      animation: bounce 2s infinite;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    .chat-bubble {
+      background: var(--primary-color);
+      color: white;
+      padding: 1rem;
+      border-radius: 15px;
+      position: relative;
+      font-size: 0.9rem;
+      animation: fadeInOut 4s infinite;
+    }
+
+    .chat-bubble:first-child {
+      animation-delay: 0s;
+    }
+
+    .chat-bubble:last-child {
+      animation-delay: 2s;
+    }
+
+    @keyframes fadeInOut {
+      0%, 100% { opacity: 0; }
+      50% { opacity: 1; }
+    }
+
+    /* Technology Section */
+    .technology-section {
+      padding: 6rem 1rem;
+      background: var(--light-color);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tech-card {
+      display: flex;
+      gap: 2rem;
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tech-icon {
+      font-size: 3rem;
+      flex-shrink: 0;
+    }
+
+    .tech-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+
+    .tech-content p {
+      color: var(--text-light);
+      line-height: 1.7;
+    }
+
+    /* VDS Section */
+    .vds-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+    }
+
+    .vds-content {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+      gap: 4rem;
+    }
+
+    .vds-text {
+      flex: 1;
+    }
+
+    .vds-text .section-title {
+      background: linear-gradient(45deg, var(--accent-color), #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+    }
+
+    .vds-description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .vds-illustration {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .vds-icon {
+      font-size: 2.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .vds-arrow {
+      font-size: 1.5rem;
+      opacity: 0.7;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--dark-color);
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: var(--text-light);
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container,
+      .support-content,
+      .vds-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-subtitle {
+        font-size: 1.2rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .plan-card.featured {
+        transform: none;
+      }
+
+      .plan-card.featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tech-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .support-principles {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .services-grid,
+      .features-grid,
+      .support-principles {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          // Show corresponding content
+          const tabId = btn.getAttribute('data-tab');
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+      });
+
+      // WhatsApp redirect for service cards
+      const serviceCards = document.querySelectorAll('.service-card');
+      serviceCards.forEach(card => {
+        card.addEventListener('click', function(e) {
+          e.preventDefault();
+          const serviceName = this.querySelector('h3').textContent;
+          window.location.href = `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceName)}%20hakkında%20bilgi%20almak%20istiyorum`;
+        });
+      });
+    });
+  </script>
+</BasicLayout>

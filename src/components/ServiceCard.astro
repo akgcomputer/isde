@@ -1,0 +1,95 @@
+---
+// src/components/ServiceCard.astro
+// Service Card Component
+export interface Props {
+    title: string;
+    description: string;
+    icon: string;
+    features: string[];
+    href?: string;
+    delay?: number;
+}
+
+const { 
+    title, 
+    description, 
+    icon, 
+    features, 
+    href = "#", 
+    delay = 0 
+} = Astro.props;
+
+
+
+const { service } = Astro.props;
+const whatsappMessage = `Merhaba, ${service.whatsappText} hakkında bilgi almak istiyorum`;
+const encodedMessage = encodeURIComponent(whatsappMessage);
+---
+
+<div class="service-card" style={`animation-delay: ${delay}ms`}>
+    <div class="service-icon">
+        <Fragment set:html={icon} />
+    </div>
+    <h3>{title}</h3>
+    <p>{description}</p>
+    <ul class="service-features">
+        {features.map((feature) => (
+            <li>{feature}</li>
+        ))}
+    </ul>
+    <a href={href} class="btn-outline">Detaylı Bilgi</a>
+</div>
+
+
+
+
+
+
+
+<div class="service-card">
+  <div class="service-image-container">
+    <img 
+      src={service.image} 
+      alt={service.title}
+      class="service-image"
+      loading="lazy"
+    />
+  </div>
+  <div class="service-icon">
+    <i class={service.icon}></i>
+  </div>
+  <h3>{service.title}</h3>
+  <p style="color: #6B7280; line-height: 1.6; margin-bottom: 20px;">
+    {service.description}
+  </p>
+  {service.features && (
+    <ul class="service-features">
+      {service.features.map((feature, i) => (
+        <li key={i}>
+          <i class="fas fa-check-circle"></i>
+          {feature}
+        </li>
+      ))}
+    </ul>
+  )}
+  <div style="display: flex; gap: 10px; margin-top: 20px;">
+    <a 
+      href={service.link} 
+      class="btn btn-primary" 
+      style="flex: 1; text-align: center;"
+      target="_blank"
+    >
+      <i class="fas fa-file-alt"></i>
+      TEKLİF AL
+    </a>
+    <a 
+      href={`https://wa.me/${whatsappNumber}?text=${encodedMessage}`} 
+      target="_blank" 
+      class="btn btn-whatsapp"
+      style="flex: 1; text-align: center;"
+    >
+      <i class="fab fa-whatsapp"></i>
+      SORU SOR
+    </a>
+  </div>
+</div>

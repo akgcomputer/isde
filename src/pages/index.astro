@@ -1,0 +1,521 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+
+import configData from './data/config.json'; 
+
+// Config değerlerini al
+const whatsappNumber = configData.whatsapp;
+
+
+const services = [
+  {
+    title: "Hizmet Eşleştirme",
+    description: "Hizmet platform ile 150+ kategoride doğrulanmış profesyonellerle ihtiyacınızı eşleştirin.",
+    icon: "fas fa-handshake",
+    features: ["Anında Teklif Sistemi", "Onlarca Doğrulanmış Sağlayıcı", "7/24 Destek", "Güvenli Ödeme"],
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "Global Şirket Kurulumu",
+    description: "Şirket kurulum hizmet ile ABD, İngiltere ve Estonya'da şirket kurulumu ve vergi çözümleri.",
+    icon: "fas fa-globe",
+    features: ["ABD LLC (7 gün)", "Vergi Danışmanlığı", "Banka Hesabı Açılışı", "Fatura API"],
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    title: "İş Yazılımları",
+    description: "Bulut muhasebe ve e-ticaret entegrasyonları ile işinizi dijitalleştirin.",
+    icon: "fas fa-laptop-code",
+    features: ["Bulut Muhasebe", "E-ticaret Entegrasyonu", "CRM Çözümleri", "22 Banka API"],
+    color: "from-green-500 to-green-600"
+  }
+];
+
+const stats = [
+  { number: "+++", label: "Onlarca Mutlu Müşteri", icon: "fas fa-users" },
+  { number: "150+", label: "Profesyonel Partner", icon: "fas fa-handshake" },
+  { number: "8", label: "Farklı Ülke", icon: "fas fa-globe" },
+  { number: "%89", label: "Memnuniyet", icon: "fas fa-star" }
+];
+
+const testimonials = [
+  {
+    name: "Ahmet Yılmaz",
+    role: "Girişimci - Teknoloji Sektörü",
+    text: "ABD'de şirket kurma sürecimde çok destek oldular. Profesyonel ekibi ve hızlı çözümleri ile işimizi büyüttük.",
+    avatar: "A"
+  },
+  {
+    name: "Zeynep Ayhan",
+    role: "E-ticaret Girişimcisi",
+    text: "Bulut muhasebe sistemine geçişimiz mükemmel oldu. E-ticaret entegrasyonları ile satışlarımız %300 arttı.",
+    avatar: "Z"
+  },
+  {
+    name: "Mehmet Özkan",
+    role: "İnşaat Firması Sahibi",
+    text: "Hizmet eşleştirme platformu sayesinde güvenilir taşeronlar buluyoruz. Projelerimiz zamanında tamamlanıyor.",
+    avatar: "M"
+  }
+];
+---
+
+<BasicLayout title="İş De Yeter | İşinizi Büyüten Tüm Çözümler">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <!-- Üstteki 3 Ana Buton -->
+        <div class="quick-nav">
+            <a href="#usta-bul" class="quick-nav-btn usta-bul">
+                <div class="btn-icon">
+                    <i class="fas fa-tools"></i>
+                </div>
+                <span>Usta Bul</span>
+            </a>
+            
+            <a href="#sirket-kur" class="quick-nav-btn sirket-kur">
+                <div class="btn-icon">
+                    <i class="fas fa-globe"></i>
+                </div>
+                <span>Şirket Kur</span>
+            </a>
+            
+            <a href="#dijitallesin" class="quick-nav-btn dijitallesin">
+                <div class="btn-icon">
+                    <i class="fas fa-laptop-code"></i>
+                </div>
+                <span>Dijitalleşin</span>
+            </a>
+        </div>
+
+        <!-- 3 Ana Bölüm -->
+        <div class="hero-sections">
+            <!-- Ana Hero Content -->
+            <div class="hero-content" style="margin-top: 40px;">
+                <div style="max-width: 700px; margin: 0 auto;">
+                    <h1 class="hero-title">
+                        <span style="color: #1F2937;">İşinizi Büyüten</span><br>
+                        <span style="color: #3B82F6;">Tüm Çözümler Tek Platform!</span>
+                    </h1>
+                    <p class="hero-subtitle">
+                        İş de Yeter hizmet platformu ister ev ister ofis için usta ara ister Türkiye'de veya farklı ülkelerde şirket kurulumu hizmeti al, 
+                        İstersen de bulut muhasebe çözümlerinden yararlan. Onlarca müşteriye güvenen ulaşabi.
+                    </p>
+                    <div class="btn-group">
+                        <a href="#hizmetler" class="btn btn-primary">
+                            <i class="fas fa-rocket"></i>
+                            Hemen Başlayın
+                        </a>
+                        <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20İş%20De%20Yeter%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                            <i class="fab fa-whatsapp"></i>
+                            WhatsApp'tan Sor
+                        </a>
+                    </div>
+                </div>
+            </div>
+
+            <!-- 1. Usta Bul Bölümü -->
+            <div class="hero-section usta-bul-section" id="usta-bul">
+                <h2 class="section-title-inline">
+                    <i class="fas fa-tools section-title-icon" style="color: #10B981;"></i>
+                    Usta Bul
+                </h2>
+                <p class="section-slogan slogan-green">
+                    İhtiyacın olan ustaya/hizmete ulaş, bekleyen işlerini kolayca hallet
+                </p>
+                
+                <!-- Etiket Bulutu -->
+                <div class="tag-cloud">
+                    <a href=`https://wa.me/${whatsappNumber}?text=Boş%20Ev%20Temizliği%20hakkında%20bilgi%20almak%20istiyorum` target="_blank" class="tag tag-info">
+                        <i class="fas fa-search tag-icon"></i>
+                        Boş Ev Temizliği
+                    </a>
+
+
+                    <a href={`https://wa.me/${whatsappNumber}?text=Boyacı%20(Boya%20Badana%20Ustası)%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-search tag-icon"></i>
+                        Boyacı (Boya Badana Ustası)
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Kombi%20Servisi%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-danger">
+                        <i class="fas fa-search tag-icon"></i>
+                        Kombi Servisi
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Direksiyon%20Dersi%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-search tag-icon"></i>
+                        Direksiyon Dersi
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Duvar%20Dekorasyonu%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-search tag-icon"></i>
+                        Duvar Dekorasyonu
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Elektrikçi%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-search tag-icon"></i>
+                        Elektrikçi
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Ev%20Temizliği%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-search tag-icon"></i>
+                        Ev Temizliği
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Klima%20Montaj%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-search tag-icon"></i>
+                        Klima Montaj
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Klima%20Servisi%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-danger">
+                        <i class="fas fa-search tag-icon"></i>
+                        Klima Servisi
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Mutfak%20Dekorasyon%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-search tag-icon"></i>
+                        Mutfak Dekorasyon
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Nakliye%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-danger">
+                        <i class="fas fa-search tag-icon"></i>
+                        Nakliye
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Psikolog%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-search tag-icon"></i>
+                        Psikolog
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Tadilat%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-danger">
+                        <i class="fas fa-search tag-icon"></i>
+                        Tadilat
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Su%20Tesisatçısı%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-search tag-icon"></i>
+                        Su Tesisatçısı
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Parke%20Döşeme%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-info">
+                        <i class="fas fa-search tag-icon"></i>
+                        Parke Döşeme
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Wifi%20Ağı%20Kurulumu%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-info">
+                        <i class="fas fa-search tag-icon"></i>
+                        Wifi Ağı Kurulumu
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Diyetisyen%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-search tag-icon"></i>
+                        Diyetisyen
+                    </a>
+                    <!-- Diğer etiketler de bu şekilde class ekleyerek düzenlenebilir -->
+                </div>
+
+                    <div style="text-align: center; margin-top: 30px;">
+                    <a href="/hizmet-kategorileri" class="btn btn-primary" style="min-width: 150px;">
+                        <i class="fas fa-arrow-right"></i>
+                        Diğer Hizmetler
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- 2. Şirket Kur Bölümü -->
+            <div class="hero-section sirket-kur-section" id="sirket-kur">
+                <h2 class="section-title-inline">
+                    <i class="fas fa-globe section-title-icon" style="color: #3B82F6;"></i>
+                    Şirket Kur
+                </h2>
+                <p class="section-slogan slogan-blue">
+                    Şirketinizi Kurun, Yönetin ve Globale Açılın
+                </p>
+                
+                <!-- Etiket Bulutu -->
+                <div class="tag-cloud">
+                    <!-- Türkiye -->
+                     <a href={`https://wa.me/${whatsappNumber}?text=Hibe%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-hand-holding-usd tag-icon"></i> Hibe
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Şirket%20Kuruluşu%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-building tag-icon" style="color: #3B82F6;"></i>Şirket Kuruluşu
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Şahıs%20Şirketi%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-user-tie tag-icon" style="color: #3B82F6;"></i>Şahıs Şirketi
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Limited%20Şirket%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-landmark tag-icon" style="color: #3B82F6;"></i>Limited Şirket
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Vergi%20Beyanı%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-file-invoice tag-icon" style="color: #3B82F6;"></i>Vergi Beyanı
+                    </a>
+                    
+                    <!-- Teşvikler -->
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=KOSGEB%20Girişimcilik%20Desteği%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-graduation-cap tag-icon"></i> KOSGEB Girişimcilik Desteği
+                    </a>
+                    
+                    <!-- ABD -->
+                    <a href={`https://wa.me/${whatsappNumber}?text=Amerika'da%20şirket%20kur%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-danger">
+                        <i class="fas fa-flag-usa tag-icon"></i> Amerika'da şirket kur
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=ABD%20LLC%20Şirket%20Kuruluşu%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        <i class="fas fa-file-contract tag-icon" style="color: #EF4444;"></i>ABD LLC Şirket Kuruluşu
+                    </a>
+                    
+                    <!-- Avrupa -->
+                    <a href={`https://wa.me/${whatsappNumber}?text=Avrupa%20Birliği%20Ülkelerinde%20Şirket%20Kur%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-info">
+                        <i class="fas fa-flag-eu tag-icon"></i> Avrupa Birliği Ülkelerinde Şirket Kur
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=🇬🇧%20İngiltere'de%20Şirket%20Kur%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag">
+                        İngiltere'de Şirket Kur
+                    </a>
+                    
+                    <!-- Orta Doğu -->
+                    <a href={`https://wa.me/${whatsappNumber}?text=🇦🇪%20Birleşik%20Arap%20Emirlikleri'nde%20(Dubai,%20Abu%20Dabi)%20Şirket%20Kur%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        Birleşik Arap Emirlikleri'nde (Dubai, Abu Dabi) Şirket Kur
+                    </a>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="/sirket-kur" class="btn btn-primary" style="min-width: 150px;">
+                        <i class="fas fa-arrow-right"></i>
+                        Diğer Hizmetler
+                    </a>
+                </div>
+
+            </div>
+
+            <!-- 3. Dijitalleşin Bölümü -->
+            <div class="hero-section dijitallesin-section" id="dijitallesin">
+                <h2 class="section-title-inline">
+                    <i class="fas fa-laptop-code section-title-icon" style="color: #8B5CF6;"></i>
+                    Dijitalleşin
+                </h2>
+                <p class="section-slogan slogan-purple">
+                    Muhasebeni ticaretini yönet, dijital dünyada büyü
+                </p>
+                
+                <!-- Yazılım Etiket Bulutu -->
+                <div class="tag-cloud">
+                    <a href={`https://wa.me/${whatsappNumber}?text=SEO%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-primary">
+                        <i class="fas fa-search tag-icon"></i> SEO Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Pazarlama%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-pink">
+                        <i class="fas fa-bullhorn tag-icon"></i> Pazarlama Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Mağazacılık%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-warning">
+                        <i class="fas fa-store tag-icon"></i> Mağazacılık Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Erp%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-success">
+                        <i class="fas fa-cogs tag-icon"></i> Erp Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Crm%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-info">
+                        <i class="fas fa-users tag-icon"></i> Crm Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Muhasebe%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-indigo">
+                        <i class="fas fa-calculator tag-icon"></i> Muhasebe Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=E-Ticaret%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-orange">
+                        <i class="fas fa-shopping-cart tag-icon"></i> E-Ticaret Paketleri
+                    </a>
+                    
+                    <a href={`https://wa.me/${whatsappNumber}?text=Web%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="tag tag-primary">
+                        <i class="fas fa-globe tag-icon"></i> Web Paketleri
+                    </a>
+                </div>
+
+                <div style="text-align: center; margin-top: 30px;">
+                    <a href="/dijital-isler" class="btn btn-primary" style="min-width: 150px;">
+                        <i class="fas fa-arrow-right"></i>
+                        Diğer Hizmetler
+                    </a>
+                </div>
+
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Services Section -->
+<section class="services" id="hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>HİZMETLERİMİZ</span>
+            <h2>Size Özel Çözümler Sunuyoruz</h2>
+            <p>İşletmenizin ihtiyaçlarına göre özelleştirilmiş profesyonel hizmetler</p>
+        </div>
+        
+        <div class="grid-services">
+            {services.map((service, index) => (
+                <div class="service-card" key={index}>
+                    <div class="service-icon">
+                        <i class={service.icon}></i>
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p style="color: #6B7280; line-height: 1.6; margin-bottom: 20px;">
+                        {service.description}
+                    </p>
+                    <ul class="service-features">
+                        {service.features.map((feature, i) => (
+                            <li key={i}>
+                                <i class="fas fa-check-circle"></i>
+                                {feature}
+                            </li>
+                        ))}
+                    </ul>
+                    <a href="#iletisim" class="btn btn-primary" style="display: inline-block; margin-top: 20px;">
+                        Teklif Alın
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats" id="neden-biz">
+    <div class="container">
+        <div class="grid-stats">
+            {stats.map((stat, index) => (
+                <div class="stat-item" key={index}>
+                    <div class="stat-icon">
+                        <i class={stat.icon}></i>
+                    </div>
+                    <div class="stat-number">{stat.number}</div>
+                    <div class="stat-label">{stat.label}</div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Testimonials -->
+<section class="testimonials" id="referanslar">
+    <div class="container">
+        <div class="section-title">
+            <span>REFERANSLAR</span>
+            <h2>Müşterilerimiz Ne Diyor?</h2>
+            <p>Binlerce mutlu müşterimizin deneyimlerini keşfedin</p>
+        </div>
+        
+        <div class="grid-testimonials">
+            {testimonials.map((testimonial, index) => (
+                <div class="testimonial-card" key={index}>
+                    <div class="testimonial-text">
+                        {testimonial.text}
+                    </div>
+                    <div class="testimonial-author">
+                        <div class="author-avatar">
+                            {testimonial.avatar}
+                        </div>
+                        <div>
+                            <h4 style="margin: 0 0 4px 0;">{testimonial.name}</h4>
+                            <p style="color: #db4205; margin: 0;">{testimonial.role}</p>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- JavaScript  -->
+<script>
+    // Üstteki 3 ana buton için tıklama işlevi
+    document.addEventListener('DOMContentLoaded', function() {
+        const quickNavBtns = document.querySelectorAll('.quick-nav-btn');
+        const heroSections = document.querySelectorAll('.hero-section');
+        
+        quickNavBtns.forEach(btn => {
+            btn.addEventListener('click', function(e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href').substring(1);
+                
+                // Tüm bölümleri gizle
+                heroSections.forEach(section => {
+                    section.style.display = 'none';
+                });
+                
+                // Hedef bölümü göster
+                const targetSection = document.getElementById(targetId);
+                if (targetSection) {
+                    targetSection.style.display = 'block';
+                }
+                
+                // Butonlara aktif stil ekle
+                quickNavBtns.forEach(b => {
+                    b.style.transform = 'translateY(0)';
+                    b.style.boxShadow = b === this ? 
+                        '0 12px 25px rgba(0,0,0,0.2)' : 
+                        '0 6px 20px rgba(0,0,0,0.15)';
+                });
+                
+                this.style.transform = 'translateY(-5px)';
+                
+                // Bölüme smooth scroll
+                if (targetSection) {
+                    targetSection.scrollIntoView({ 
+                        behavior: 'smooth', 
+                        block: 'start'
+                    });
+                }
+            });
+        });
+        
+        // SADECE TAG-CLOUD İÇİNDEKİ ETİKETLER için hover efekti
+        const tagClouds = document.querySelectorAll('.tag-cloud');
+        tagClouds.forEach(tagCloud => {
+            const tags = tagCloud.querySelectorAll('.tag');
+            
+            tags.forEach(tag => {
+                tag.addEventListener('mouseenter', function() {
+                    this.style.transform = 'translateY(-3px)';
+                    this.style.boxShadow = '0 6px 20px rgba(0,0,0,0.15)';
+                });
+                
+                tag.addEventListener('mouseleave', function() {
+                    this.style.transform = 'translateY(0)';
+                    this.style.boxShadow = '0 3px 10px rgba(0,0,0,0.08)';
+                });
+                
+                // SADECE tag-cloud içindeki etiketler için tıklama efekti
+                tag.addEventListener('click', function(e) {
+                    // WhatsApp linklerinin normal çalışmasına izin ver
+                    if (this.getAttribute('href').includes('wa.me')) {
+                        // Sadece hafif bir animasyon yap
+                        this.style.transform = 'scale(0.95)';
+                        setTimeout(() => {
+                            this.style.transform = 'scale(1)';
+                        }, 150);
+                        
+                        // Sayfanın kaymasını engelle
+                        e.stopPropagation();
+                    }
+                });
+            });
+        });
+        
+        // İlk bölümü göster (Usta Bul)
+        const firstSection = document.getElementById('usta-bul');
+        if (firstSection) {
+            firstSection.style.display = 'block';
+        }
+        
+        // Scroll olayını yönet - sağdaki etiketler için
+        let lastScrollTop = 0;
+        window.addEventListener('scroll', function() {
+            const st = window.pageYOffset || document.documentElement.scrollTop;
+            
+            // Sadece tag-cloud içindeki etiketler için hover reset
+            if (Math.abs(st - lastScrollTop) > 50) {
+                document.querySelectorAll('.tag-cloud .tag').forEach(tag => {
+                    tag.style.transform = 'translateY(0)';
+                    tag.style.boxShadow = '0 3px 10px rgba(0,0,0,0.08)';
+                });
+                lastScrollTop = st <= 0 ? 0 : st;
+            }
+        }, false);
+    });
+</script>
+
+
+
+
+</BasicLayout>

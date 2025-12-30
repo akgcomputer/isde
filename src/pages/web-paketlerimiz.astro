@@ -1,0 +1,1450 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const subdomain = 'http://hizmet-urun.isdeyeter.com';
+const whatsappNumber = configData.whatsapp;
+const companyName = configData.company;
+const slogan = configData.slogan;
+const buttonText = configData.buttonText;
+const whatsappText = configData.whatsappText;
+
+const heroTitle = "Dijital Pazarlama Hizmetleri";
+const heroSubtitle = "İşletmenizi dijital dünyada büyütmek için kapsamlı dijital pazarlama çözümleri sunuyoruz. SEO, sosyal medya yönetimi, Google Ads reklamları, içerik pazarlaması ve daha birçok hizmet ile markanızı doğru kitlelere ulaştırın.";
+
+const servicesWithImages = [
+  {
+    title: "SEO Hizmeti ile Google'da Bir Numara Olun",
+    description: "Arama motoru optimizasyonu hizmetlerimiz ile web sitenizi Google aramalarında üst sıralara taşıyoruz. Organik trafik ve kalıcı sonuçlar için profesyonel SEO desteği.",
+    icon: "fas fa-search",
+    link: "https://isdeyeter.com/ana-dijital-isler-seo-hizmeti-alarak-web-sitenizi-google-aramalarinda-bir-numara-yapin/",
+    image: "public/img/dijital-pazarlama/seo-hizmeti.png",
+    features: ["On-Page SEO", "Off-Page SEO", "Teknik SEO", "Anahtar Kelime Analizi"],
+    color: "from-green-500 to-green-600"
+  },
+  {
+    title: "Google Ads Reklam Yönetimi",
+    description: "Google'da hedefli reklamlar vererek potansiyel müşterilerinize doğrudan ulaşın. Performans odaklı Google Ads yönetimi ile yatırım getirinizi maksimize edin.",
+    icon: "fab fa-google",
+    link: "https://isdeyeter.com/google-ads-reklam-yonetimi/",
+    image: "public/img/dijital-pazarlama/google-ads.png",
+    features: ["Arama Reklamları", "Display Reklamlar", "Video Reklamları", "Alışveriş Reklamları"],
+    color: "from-blue-500 to-blue-600"
+  },
+  {
+    title: "Sosyal Medya Yönetimi",
+    description: "Sosyal medya hesaplarınızı profesyonel ekibimizle yönetin. İçerik stratejisi, paylaşım planlaması ve etkileşim artırma hizmetleri ile takipçi kitlenizi büyütün.",
+    icon: "fab fa-instagram",
+    link: "https://isdeyeter.com/sosyal-medya-yonetimi/",
+    image: "public/img/dijital-pazarlama/sosyal-medya-yonetimi.png",
+    features: ["İçerik Üretimi", "Hesap Yönetimi", "Etkileşim Artırma", "Raporlama"],
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Instagram Pazarlama",
+    description: "Instagram hesabınızı profesyonel şekilde yönetirken, içerik planlaması, etkileşim analizi ve müşteri iletişimini tek platformda otomatikleştirin.",
+    icon: "fab fa-instagram",
+    link: "https://isdeyeter.com/instagram-pazarlama/",
+    image: "public/img/dijital-pazarlama/instagram-pazarlama.png",
+    features: ["İçerik Planlama", "Reels Çekimi", "Hikaye Yönetimi", "DM Otomasyonu"],
+    color: "from-purple-500 to-pink-500"
+  },
+  {
+    title: "Facebook Reklamları",
+    description: "Facebook ve Instagram'da hedefli reklamlar vererek milyonlarca potansiyel müşteriye ulaşın. Düşük maliyetle yüksek dönüşüm elde edin.",
+    icon: "fab fa-facebook",
+    link: "https://isdeyeter.com/facebook-reklamlari/",
+    image: "public/img/dijital-pazarlama/facebook-reklamlari.png",
+    features: ["A/B Testleri", "Hedef Kitle Analizi", "Dönüşüm Takibi", "ROI Optimizasyonu"],
+    color: "from-blue-600 to-blue-800"
+  },
+  {
+    title: "TikTok Pazarlama",
+    description: "Genç kitlelere ulaşmak için TikTok'ta etkili içerik stratejileri oluşturun. Viral potansiyeli olan içeriklerle marka bilinirliğinizi artırın.",
+    icon: "fab fa-tiktok",
+    link: "https://isdeyeter.com/tiktok-pazarlama/",
+    image: "public/img/dijital-pazarlama/tiktok-pazarlama.png",
+    features: ["Trend Analizi", "Hashtag Stratejisi", "Influencer İşbirlikleri", "Performans Raporlama"],
+    color: "from-black to-gray-800"
+  },
+  {
+    title: "LinkedIn Pazarlama",
+    description: "B2B iş dünyasında LinkedIn ile markanızı konumlandırın. Kurumsal imaj ve lead generation için profesyonel LinkedIn stratejileri.",
+    icon: "fab fa-linkedin",
+    link: "https://isdeyeter.com/linkedin-pazarlama/",
+    image: "public/img/dijital-pazarlama/linkedin-pazarlama.png",
+    features: ["Şirket Sayfası Yönetimi", "LinkedIn Ads", "İçerik Stratejisi", "Network Genişletme"],
+    color: "from-blue-700 to-blue-900"
+  },
+  {
+    title: "YouTube Pazarlama",
+    description: "YouTube'da video içerik stratejileri ile markanızı öne çıkarın. Video prodüksiyonu, kanal yönetimi ve reklam stratejileri.",
+    icon: "fab fa-youtube",
+    link: "https://isdeyeter.com/youtube-pazarlama/",
+    image: "public/img/dijital-pazarlama/youtube-pazarlama.png",
+    features: ["Video Prodüksiyonu", "Kanal Optimizasyonu", "YouTube Ads", "Abonelik Artırma"],
+    color: "from-red-600 to-red-700"
+  },
+  {
+    title: "Twitter/X Pazarlama",
+    description: "Twitter'da anlık iletişim ve trend takibi ile markanızı gündemde tutun. Etkili tweet stratejileri ve müşteri etkileşimi.",
+    icon: "fab fa-twitter",
+    link: "https://isdeyeter.com/twitter-pazarlama/",
+    image: "public/img/dijital-pazarlama/twitter-pazarlama.png",
+    features: ["Tweet Stratejisi", "Trend Takibi", "Müşteri Hizmetleri", "Analitik Raporlama"],
+    color: "from-blue-400 to-blue-500"
+  },
+  {
+    title: "Pinterest Pazarlama",
+    description: "Pinterest'te görsel odaklı pazarlama stratejileri ile ürünlerinizi keşfettirin. Pin optimizasyonu ve board stratejileri.",
+    icon: "fab fa-pinterest",
+    link: "https://isdeyeter.com/pinterest-pazarlama/",
+    image: "public/img/dijital-pazarlama/pinterest-pazarlama.png",
+    features: ["Pin Tasarımı", "Board Stratejisi", "Pinterest SEO", "Traffic Artırma"],
+    color: "from-red-500 to-red-600"
+  },
+  {
+    title: "E-posta Pazarlama",
+    description: "E-posta pazarlama kampanyaları ile müşterilerinizle sürekli iletişimde kalın. Otomatik yanıtlar, newsletter ve drip kampanyaları.",
+    icon: "fas fa-envelope",
+    link: "https://isdeyeter.com/eposta-pazarlama/",
+    image: "public/img/dijital-pazarlama/eposta-pazarlama.png",
+    features: ["Newsletter Tasarımı", "Otomasyon", "Segmentasyon", "A/B Testleri"],
+    color: "from-yellow-500 to-yellow-600"
+  },
+  {
+    title: "İçerik Pazarlaması",
+    description: "Değerli ve paylaşılabilir içerikler üreterek hedef kitlenizi çekin ve bağlılık oluşturun. Blog yazıları, infografikler ve e-kitaplar.",
+    icon: "fas fa-pen-fancy",
+    link: "https://isdeyeter.com/icerik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/icerik-pazarlamasi.png",
+    features: ["Blog Yazıları", "İnfografik Tasarımı", "E-Kitap Yazımı", "Vaka Çalışmaları"],
+    color: "from-indigo-500 to-indigo-600"
+  },
+  {
+    title: "Influencer Pazarlaması",
+    description: "Sektörünüzle uyumlu influencer'larla işbirliği yaparak marka bilinirliğinizi artırın. Doğru influencer seçimi ve kampanya yönetimi.",
+    icon: "fas fa-users",
+    link: "https://isdeyeter.com/influencer-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/influencer-pazarlamasi.png",
+    features: ["Influencer Seçimi", "Kampanya Yönetimi", "Performans Takibi", "Negosyasyon"],
+    color: "from-orange-500 to-orange-600"
+  },
+  {
+    title: "Mobil Pazarlama",
+    description: "Mobil uygulamalar ve mobil uyumlu reklamlarla mobil kullanıcılara ulaşın. App install kampanyaları ve mobil optimizasyon.",
+    icon: "fas fa-mobile-alt",
+    link: "https://isdeyeter.com/mobil-pazarlama/",
+    image: "public/img/dijital-pazarlama/mobil-pazarlama.png",
+    features: ["App Install Ads", "Mobil Web Optimizasyonu", "Push Bildirimleri", "In-App Reklamlar"],
+    color: "from-teal-500 to-teal-600"
+  },
+  {
+    title: "Video Pazarlama",
+    description: "Video içeriklerle marka hikayenizi anlatın. Tanıtım videoları, animasyonlar ve sosyal medya videoları üretimi.",
+    icon: "fas fa-video",
+    link: "https://isdeyeter.com/video-pazarlama/",
+    image: "public/img/dijital-pazarlama/video-pazarlama.png",
+    features: ["Tanıtım Videosu", "Animasyon", "Drone Çekimleri", "Video Edit"],
+    color: "from-purple-600 to-purple-700"
+  },
+  {
+    title: "Yerel SEO",
+    description: "Bölgenizdeki müşterilere ulaşmak için yerel arama optimizasyonu yapın. Google İşletme Profili yönetimi ve yerel listelemeler.",
+    icon: "fas fa-map-marker-alt",
+    link: "https://isdeyeter.com/yerel-seo/",
+    image: "public/img/dijital-pazarlama/yerel-seo.png",
+    features: ["Google İşletme Profili", "Yerel Dizinler", "Harita Optimizasyonu", "Yorum Yönetimi"],
+    color: "from-green-600 to-green-700"
+  },
+  {
+    title: "E-Ticaret Pazarlaması",
+    description: "Online mağazanız için özel pazarlama stratejileri geliştirin. Ürün listeleme reklamları, remarketing ve dönüşüm optimizasyonu.",
+    icon: "fas fa-shopping-cart",
+    link: "https://isdeyeter.com/eticaret-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/eticaret-pazarlamasi.png",
+    features: ["Ürün Reklamları", "Remarketing", "Sepet Terk", "Dönüşüm Oranı"],
+    color: "from-pink-600 to-pink-700"
+  },
+  {
+    title: "B2B Dijital Pazarlama",
+    description: "İşletmeler arası pazarda etkili dijital pazarlama stratejileri. Lead generation ve B2B satış döngüsü optimizasyonu.",
+    icon: "fas fa-briefcase",
+    link: "https://isdeyeter.com/b2b-dijital-pazarlama/",
+    image: "public/img/dijital-pazarlama/b2b-pazarlama.png",
+    features: ["Lead Generation", "Account-Based Marketing", "LinkedIn Ads", "Webinar Düzenleme"],
+    color: "from-blue-800 to-blue-900"
+  },
+  {
+    title: "Dijital PR ve Medya İlişkileri",
+    description: "Gazeteciler ve medya kuruluşlarıyla ilişkiler kurarak markanızın haber değeri taşımasını sağlayın. Basın bültenleri ve medya kapsamı.",
+    icon: "fas fa-newspaper",
+    link: "https://isdeyeter.com/dijital-pr/",
+    image: "public/img/dijital-pazarlama/dijital-pr.png",
+    features: ["Basın Bülteni", "Gazeteci İlişkileri", "Kriz Yönetimi", "Medya Kapsamı"],
+    color: "from-gray-600 to-gray-700"
+  },
+  {
+    title: "Affiliate Pazarlama",
+    description: "Satış ortağı programları ile markanızın satış ağını genişletin. Affiliate network yönetimi ve performans takibi.",
+    icon: "fas fa-handshake",
+    link: "https://isdeyeter.com/affiliate-pazarlama/",
+    image: "public/img/dijital-pazarlama/affiliate-pazarlama.png",
+    features: ["Program Kurulumu", "Affiliate Seçimi", "Komisyon Yönetimi", "Performans Analizi"],
+    color: "from-cyan-500 to-cyan-600"
+  },
+  {
+    title: "Web Analitik",
+    description: "Web sitenizin performansını detaylı analizlerle takip edin. Google Analytics, veri yorumlama ve stratejik öneriler.",
+    icon: "fas fa-chart-line",
+    link: "https://isdeyeter.com/web-analitik/",
+    image: "public/img/dijital-pazarlama/web-analitik.png",
+    features: ["Google Analytics", "KPI Takibi", "A/B Testleri", "Raporlama"],
+    color: "from-orange-600 to-orange-700"
+  },
+  {
+    title: "Conversion Rate Optimization",
+    description: "Web sitenizin dönüşüm oranlarını artırmak için A/B testleri ve kullanıcı deneyimi optimizasyonları yapın.",
+    icon: "fas fa-tachometer-alt",
+    link: "https://isdeyeter.com/cro/",
+    image: "public/img/dijital-pazarlama/cro.png",
+    features: ["A/B Testleri", "Heatmap Analizi", "Kullanıcı Yolculuğu", "Form Optimizasyonu"],
+    color: "from-red-500 to-red-700"
+  },
+  {
+    title: "Chatbot ve Müşteri Desteği",
+    description: "Yapay zeka destekli chatbotlar ile 7/24 müşteri desteği sağlayın. Otomatik yanıtlar ve müşteri memnuniyeti artışı.",
+    icon: "fas fa-comments",
+    link: "https://isdeyeter.com/chatbot-pazarlama/",
+    image: "public/img/dijital-pazarlama/chatbot.png",
+    features: ["AI Chatbot", "Canlı Destek", "Otomatik Yanıtlar", "Entegrasyonlar"],
+    color: "from-violet-500 to-violet-600"
+  },
+  {
+    title: "Podcast Pazarlaması",
+    description: "Podcast'lerde marka hikayenizi anlatın. Sponsorluk, kendi podcast'inizi oluşturma ve audio pazarlama stratejileri.",
+    icon: "fas fa-microphone",
+    link: "https://isdeyeter.com/podcast-pazarlama/",
+    image: "public/img/dijital-pazarlama/podcast-pazarlama.png",
+    features: ["Podcast Sponsorluğu", "Kendini Yayınlama", "Audio İçerik", "Dinleyici Analizi"],
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    title: "Web3 ve Metaverse Pazarlaması",
+    description: "Geleceğin pazarlama kanallarında öne çıkın. NFT kampanyaları, metaverse etkinlikleri ve blockchain pazarlaması.",
+    icon: "fas fa-cube",
+    link: "https://isdeyeter.com/web3-pazarlama/",
+    image: "public/img/dijital-pazarlama/web3-pazarlama.png",
+    features: ["NFT Kampanyaları", "Metaverse Etkinlikleri", "Blockchain PR", "Crypto Influencer"],
+    color: "from-indigo-700 to-indigo-800"
+  },
+  {
+    title: "Remarketing Kampanyaları",
+    description: "Web sitenizi ziyaret eden kullanıcılara yeniden ulaşın. Akıllı remarketing listeleri ve kişiselleştirilmiş reklamlar.",
+    icon: "fas fa-retweet",
+    link: "https://isdeyeter.com/remarketing/",
+    image: "public/img/dijital-pazarlama/remarketing.png",
+    features: ["Dynamic Remarketing", "Remarketing Listesi", "Kişiselleştirilmiş Reklamlar", "Dönüşüm Takibi"],
+    color: "from-rose-500 to-rose-600"
+  },
+  {
+    title: "Programatik Reklamcılık",
+    description: "Otomatik reklam satın alma ile hedef kitlenize daha verimli ulaşın. Programatik platformlar ve gerçek zamanlı teklif verme.",
+    icon: "fas fa-robot",
+    link: "https://isdeyeter.com/programatik-reklamcilik/",
+    image: "public/img/dijital-pazarlama/programatik.png",
+    features: ["RTB", "DSP Entegrasyonu", "Hedefleme", "Performans Optimizasyonu"],
+    color: "from-slate-500 to-slate-600"
+  },
+  {
+    title: "Native Reklamcılık",
+    description: "İçerik uyumlu native reklamlarla kullanıcı deneyimini bozmadan pazarlama yapın. Taboola, Outbrain ve benzeri platformlar.",
+    icon: "fas fa-newspaper",
+    link: "https://isdeyeter.com/native-reklamcilik/",
+    image: "public/img/dijital-pazarlama/native-reklam.png",
+    features: ["İçerik Önerileri", "Taboola", "Outbrain", "Performans Raporlama"],
+    color: "from-stone-500 to-stone-600"
+  },
+  {
+    title: "Oyun İçi Reklamcılık",
+    description: "Mobil oyunlarda reklam vererek oyun severlere ulaşın. Playable ads, rewarded videos ve interaktif reklamlar.",
+    icon: "fas fa-gamepad",
+    link: "https://isdeyeter.com/oyunici-reklamcilik/",
+    image: "public/img/dijital-pazarlama/oyunici-reklam.png",
+    features: ["Playable Ads", "Rewarded Videos", "Interstitial", "Oyun Analitikleri"],
+    color: "from-emerald-500 to-emerald-600"
+  },
+  {
+    title: "Sohbet Pazarlaması (WhatsApp Business)",
+    description: "WhatsApp Business üzerinden doğrudan müşteri iletişimi kurun. Otomatik yanıtlar, broadcast mesajları ve müşteri desteği.",
+    icon: "fab fa-whatsapp",
+    link: "https://isdeyeter.com/whatsapp-pazarlama/",
+    image: "public/img/dijital-pazarlama/whatsapp-pazarlama.png",
+    features: ["WhatsApp Business", "Broadcast Mesajları", "Otomatik Yanıtlar", "Müşteri Listesi"],
+    color: "from-green-400 to-green-500"
+  },
+  {
+    title: "Telegram Pazarlaması",
+    description: "Telegram kanalları ve botları ile hedef kitlenize ulaşın. Topluluk oluşturma ve anlık iletişim avantajları.",
+    icon: "fab fa-telegram",
+    link: "https://isdeyeter.com/telegram-pazarlama/",
+    image: "public/img/dijital-pazarlama/telegram-pazarlama.png",
+    features: ["Kanal Yönetimi", "Bot Geliştirme", "Topluluk Oluşturma", "Broadcast"],
+    color: "from-blue-500 to-cyan-400"
+  },
+  {
+    title: "Discord Pazarlaması",
+    description: "Discord sunucuları ile topluluk oluşturun ve marka sadakati geliştirin. Özel sunucular ve topluluk yönetimi.",
+    icon: "fab fa-discord",
+    link: "https://isdeyeter.com/discord-pazarlama/",
+    image: "public/img/dijital-pazarlama/discord-pazarlama.png",
+    features: ["Sunucu Kurulumu", "Topluluk Yönetimi", "Etkinlik Düzenleme", "Rol Sistemleri"],
+    color: "from-indigo-500 to-indigo-600"
+  },
+  {
+    title: "Sanal Etkinlik Pazarlaması",
+    description: "Webinarlar, sanal fuarlar ve online etkinlikler ile hedef kitlenizle etkileşime geçin. Sanal etkinlik organizasyonu.",
+    icon: "fas fa-video",
+    link: "https://isdeyeter.com/sanal-etkinlik/",
+    image: "public/img/dijital-pazarlama/sanal-etkinlik.png",
+    features: ["Webinar Düzenleme", "Sanal Fuar", "Online Konferans", "Etkinlik Pazarlaması"],
+    color: "from-fuchsia-500 to-fuchsia-600"
+  },
+  {
+    title: "Online Basın Odası",
+    description: "Gazeteciler ve medya için dijital basın odası oluşturun. Basın bültenleri, yüksek çözünürlüklü görseller ve medya iletişimi.",
+    icon: "fas fa-building",
+    link: "https://isdeyeter.com/basin-odasi/",
+    image: "public/img/dijital-pazarlama/basin-odasi.png",
+    features: ["Dijital Basın Odası", "Basın Bültenleri", "Yüksek Çözünürlüklü Görseller", "Medya İletişimi"],
+    color: "from-slate-600 to-slate-700"
+  },
+  {
+    title: "Müşteri Sadakat Programları",
+    description: "Dijital müşteri sadakat programları ile tekrar satışları artırın. Puan sistemleri, özel indirimler ve VIP deneyimler.",
+    icon: "fas fa-star",
+    link: "https://isdeyeter.com/sadakat-programi/",
+    image: "public/img/dijital-pazarlama/sadakat-programi.png",
+    features: ["Puan Sistemi", "Seviye Bazlı Ödüller", "Referans Programı", "CRM Entegrasyonu"],
+    color: "from-amber-400 to-amber-500"
+  },
+  {
+    title: "Dijital Marka Stratejisi",
+    description: "Marka kimliğinizi dijital dünyada konumlandırın. Marka stratejisi, ton ve ses belirleme, görsel kimlik uyumu.",
+    icon: "fas fa-lightbulb",
+    link: "https://isdeyeter.com/marka-stratejisi/",
+    image: "public/img/dijital-pazarlama/marka-stratejisi.png",
+    features: ["Marka Konumlandırma", "Ton ve Ses", "Görsel Kimlik", "Hikaye Anlatımı"],
+    color: "from-rose-600 to-rose-700"
+  },
+  {
+    title: "Rakip Analizi",
+    description: "Rakiplerinizin dijital pazarlama stratejilerini analiz edin. Karşılaştırmalı analiz ve fırsat belirleme.",
+    icon: "fas fa-chess",
+    link: "https://isdeyeter.com/rakip-analizi/",
+    image: "public/img/dijital-pazarlama/rakip-analizi.png",
+    features: ["SWOT Analizi", "Pazar Payı", "Strateji Karşılaştırma", "Fırsat Belirleme"],
+    color: "from-zinc-500 to-zinc-600"
+  },
+  {
+    title: "Pazar Araştırması",
+    description: "Dijital pazarlama stratejilerinizi veriye dayalı pazar araştırmalarıyla destekleyin. Tüketici davranışları ve trend analizi.",
+    icon: "fas fa-search",
+    link: "https://isdeyeter.com/pazar-arastirmasi/",
+    image: "public/img/dijital-pazarlama/pazar-arastirmasi.png",
+    features: ["Anketler", "Focus Group", "Trend Analizi", "Tüketici Davranışı"],
+    color: "from-teal-600 to-teal-700"
+  },
+  {
+    title: "Dijital Reklam kreatif Tasarımı",
+    description: "Dikkat çekici reklam görselleri ve videoları tasarlayın. Banner, video ve sosyal medya kreatifleri.",
+    icon: "fas fa-paint-brush",
+    link: "https://isdeyeter.com/kreatif-tasarim/",
+    image: "public/img/dijital-pazarlama/kreatif-tasarim.png",
+    features: ["Banner Tasarımı", "Video kreatif", "Sosyal Medya Grafikleri", "HTML5 Reklamlar"],
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Çevrimiçi İtibar Yönetimi",
+    description: "Marka itibarınızı dijital dünyada koruyun. Sosyal dinleme, yorum yönetimi ve kriz iletişimi.",
+    icon: "fas fa-shield-alt",
+    link: "https://isdeyeter.com/itibar-yonetimi/",
+    image: "public/img/dijital-pazarlama/itibar-yonetimi.png",
+    features: ["Sosyal Dinleme", "Yorum Yönetimi", "Kriz İletişimi", "Sentiment Analizi"],
+    color: "from-lime-600 to-lime-700"
+  },
+  {
+    title: "Çevrimiçi Etkinlik Bileti Satışı Pazarlaması",
+    description: "Etkinliklerinizi dijital kanallarla tanıtın ve bilet satışlarını artırın. Etkinlik pazarlaması ve ticket platformları.",
+    icon: "fas fa-ticket-alt",
+    link: "https://isdeyeter.com/etkinlik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/etkinlik-pazarlamasi.png",
+    features: ["Etkinlik Sayfası", "Ticket Platformları", "Early Bird Kampanyaları", "Influencer Promosyonları"],
+    color: "from-cyan-600 to-cyan-700"
+  },
+  {
+    title: "Eğitim ve Kurs Pazarlaması",
+    description: "Online eğitim platformunuzu veya kurslarınızı dijital pazarlama ile tanıtın. Öğrenci edinme ve kurs satışı stratejileri.",
+    icon: "fas fa-graduation-cap",
+    link: "https://isdeyeter.com/kurs-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/kurs-pazarlamasi.png",
+    features: ["LMS Pazarlaması", "Webinar Dönüşümü", "İçerik Pazarlaması", "Referral Programı"],
+    color: "from-blue-600 to-blue-700"
+  },
+  {
+    title: "Sağlık Sektörü Dijital Pazarlaması",
+    description: "Sağlık kuruluşları ve profesyoneller için özel dijital pazarlama çözümleri. HIPAA uyumlu ve etik pazarlama.",
+    icon: "fas fa-heartbeat",
+    link: "https://isdeyeter.com/saglik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/saglik-pazarlamasi.png",
+    features: ["Doktor SEO", "Randevu Optimizasyonu", "Hasta Yorumları", "Telemedikal Tanıtımı"],
+    color: "from-red-600 to-red-700"
+  },
+  {
+    title: "Emlak Sektörü Dijital Pazarlaması",
+    description: "Emlak ofisleri ve gayrimenkul uzmanları için dijital pazarlama. Emlak listeleme optimizasyonu ve virtual tour pazarlaması.",
+    icon: "fas fa-home",
+    link: "https://isdeyeter.com/emlak-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/emlak-pazarlamasi.png",
+    features: ["Emlak SEO", "Virtual Tour", "Listeleme Pazarlaması", "Lead Generation"],
+    color: "from-teal-500 to-teal-600"
+  },
+  {
+    title: "Otel ve Turizm Dijital Pazarlaması",
+    description: "Oteller ve turizm işletmeleri için dijital pazarlama stratejileri. Booking pazarlaması ve destinasyon tanıtımı.",
+    icon: "fas fa-hotel",
+    link: "https://isdeyeter.com/turizm-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/turizm-pazarlamasi.png",
+    features: ["OTA Optimizasyonu", "Review Yönetimi", "Paket Satışlar", "Sezon Kampanyaları"],
+    color: "from-sky-500 to-sky-600"
+  },
+  {
+    title: "Yiyecek ve İçecek Sektörü Pazarlaması",
+    description: "Restoranlar ve yiyecek işletmeleri için dijital pazarlama. Online sipariş pazarlaması ve yerel SEO.",
+    icon: "fas fa-utensils",
+    link: "https://isdeyeter.com/yiyecek-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/yeme-icme-pazarlama.png",
+    features: ["Yerel SEO", "Food Delivery Platformları", "Sosyal Medya", "Yorum Yönetimi"],
+    color: "from-orange-500 to-orange-600"
+  },
+  {
+    title: "Moda ve Giyim Sektörü Pazarlaması",
+    description: "Moda markaları ve giyim işletmeleri için dijital pazarlama. Influencer moda pazarlaması ve e-ticaret optimizasyonu.",
+    icon: "fas fa-tshirt",
+    link: "https://isdeyeter.com/moda-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/moda-pazarlamasi.png",
+    features: ["Influencer İşbirlikleri", "Sezon Kampanyaları", "Lookbook Pazarlaması", "E-Ticaret SEO"],
+    color: "from-fuchsia-600 to-fuchsia-700"
+  },
+  {
+    title: "Otomotiv Sektörü Dijital Pazarlaması",
+    description: "Otomotiv bayileri ve sektör oyuncuları için dijital pazarlama. Araç listeleme ve test sürüşü kampanyaları.",
+    icon: "fas fa-car",
+    link: "https://isdeyeter.com/otomotiv-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/otomotiv-pazarlama.png",
+    features: ["Araç Listeleme", "Test Sürüşü Kampanyaları", "Finansman Ortaklıkları", "Sıfır ve İkinci El"],
+    color: "from-gray-700 to-gray-800"
+  },
+  {
+    title: "Finans ve Sigorta Dijital Pazarlaması",
+    description: "Finansal hizmetler ve sigorta şirketleri için dijital pazarlama. Ürün karşılaştırma ve güven inşa etme.",
+    icon: "fas fa-money-bill-wave",
+    link: "https://isdeyeter.com/finans-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/finans-pazarlama.png",
+    features: ["Ürün Karşılaştırma", "Calculator Tool", "Content Marketing", "Trust Building"],
+    color: "from-emerald-600 to-emerald-700"
+  },
+  {
+    title: "Hukuk Sektörü Dijital Pazarlaması",
+    description: "Avukatlar ve hukuk büroları için dijital pazarlama. Uzmanlık alanı pazarlaması ve güvenilirlik oluşturma.",
+    icon: "fas fa-gavel",
+    link: "https://isdeyeter.com/hukuk-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/hukuk-pazarlamasi.png",
+    features: ["Uzmanlık Alanı", "Case Studies", "Avukat SEO", "Güvenilirlik"],
+    color: "from-slate-700 to-slate-800"
+  },
+  {
+    title: "Eğitim Kurumları Dijital Pazarlaması",
+    description: "Okullar, üniversiteler ve eğitim kurumları için dijital pazarlama. Öğrenci edinme ve kurumsal imaj.",
+    icon: "fas fa-school",
+    link: "https://isdeyeter.com/egitim-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/egitim-pazarlamasi.png",
+    features: ["Kurumsal Kimlik", "Öğrenci Edinme", "Alumni Programları", "Akademik SEO"],
+    color: "from-violet-600 to-violet-700"
+  },
+  {
+    title: "Gayrimenkul Geliştirme Projesi Pazarlaması",
+    description: "Konut ve ticari gayrimenkul projeleri için dijital pazarlama. 360° tur, ön satış kampanyaları ve yatırımcı ilişkileri.",
+    icon: "fas fa-building",
+    link: "https://isdeyeter.com/gayrimenkul-gelistirme/",
+    image: "public/img/dijital-pazarlama/gayrimenkul-gelistirme.png",
+    features: ["360° Tur", "Ön Satış", "Yatırımcı İlişkileri", "Proje Lansmanı"],
+    color: "from-stone-600 to-stone-700"
+  },
+  {
+    title: "Yazılım ve Teknoloji Şirketi Pazarlaması",
+    description: "Yazılım ve teknoloji şirketleri için B2B dijital pazarlama. SaaS pazarlaması ve teknik içerik stratejileri.",
+    icon: "fas fa-code",
+    link: "https://isdeyeter.com/teknoloji-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/teknoloji-pazarlama.png",
+    features: ["SaaS Pazarlaması", "Teknik İçerik", "Developer Relations", "Trial Conversion"],
+    color: "from-cyan-700 to-cyan-800"
+  },
+  {
+    title: "Kar amacı gütmeyen kuruluşlar için dijital pazarlama",
+    description: "Sivil toplum kuruluşları ve kar amacı gütmeyenler için dijital pazarlama. Bağış kampanyaları ve savunuculuk.",
+    icon: "fas fa-hands-helping",
+    link: "https://isdeyeter.com/sgk-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/stk-pazarlamasi.png",
+    features: ["Bağış Kampanyaları", "Gönüllü Edinme", "Savunuculuk", "Topluluk Oluşturma"],
+    color: "from-rose-500 to-rose-600"
+  },
+  {
+    title: "Hükümet ve Kamu Kurumları Dijital Pazarlaması",
+    description: "Kamu kurumları için vatandaş iletişimi ve hizmet tanıtımı. Dijital vatandaş erişimi ve bilgilendirme kampanyaları.",
+    icon: "fas fa-landmark",
+    link: "https://isdeyeter.com/kamu-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/kamu-pazarlamasi.png",
+    features: ["Vatandaş İletişimi", "Hizmet Tanıtımı", "Crisis Comm", "E-Devlet Entegrasyonu"],
+    color: "from-blue-900 to-blue-950"
+  },
+  {
+    title: "Perakende Sektörü Dijital Pazarlaması",
+    description: "Perakende mağazaları ve zincirleri için dijital pazarlama. Çok kanallı perakende ve mağaza trafiği artırma.",
+    icon: "fas fa-store",
+    link: "https://isdeyeter.com/perakende-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/perakende-pazarlama.png",
+    features: ["Omnichannel", "Mağaza Trafiği", "Loyalty Program", "Click & Collect"],
+    color: "from-orange-500 to-orange-700"
+  },
+  {
+    title: "Üretim ve Sanayi Sektörü Pazarlaması",
+    description: "Üretim şirketleri ve sanayi için dijital pazarlama. B2B lead generation ve endüstriyel içerik pazarlaması.",
+    icon: "fas fa-industry",
+    link: "https://isdeyeter.com/sanayi-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/sanayi-pazarlama.png",
+    features: ["B2B Lead Gen", "Endüstriyel İçerik", "Trade Show", "Teklif Yönetimi"],
+    color: "from-gray-600 to-gray-700"
+  },
+  {
+    title: "Müzik ve Eğlence Sektörü Pazarlaması",
+    description: "Müzisyenler, sanatçılar ve eğlence sektörü için dijital pazarlama. Hayran kitlesi oluşturma ve etkinlik tanıtımı.",
+    icon: "fas fa-music",
+    link: "https://isdeyeter.com/muzik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/muzik-pazarlama.png",
+    features: ["Fan Engagement", "Etkinlik Tanıtımı", "Dijital Yayın", "Merchandise Satışı"],
+    color: "from-purple-500 to-purple-700"
+  },
+  {
+    title: "Spor ve Fitness Sektörü Pazarlaması",
+    description: "Spor salonları, fitness markaları ve sporcular için dijital pazarlama. Üyelik satışı ve marka elçisi programları.",
+    icon: "fas fa-dumbbell",
+    link: "https://isdeyeter.com/spor-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/spor-pazarlama.png",
+    features: ["Üyelik Satışı", "Marka Elçileri", "Online Dersler", "Sporcu Sponsorluğu"],
+    color: "from-green-500 to-green-600"
+  },
+  {
+    title: "Kozmetik ve Güzellik Sektörü Pazarlaması",
+    description: "Kozmetik markaları ve güzellik salonları için dijital pazarlama. Before-after içerikleri ve influencer pazarlaması.",
+    icon: "fas fa-spa",
+    link: "https://isdeyeter.com/kozmetik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/kozmetik-pazarlama.png",
+    features: ["Before-After", "Influencer", "E-Commerce", "Güzellik Blog"],
+    color: "from-pink-400 to-pink-500"
+  },
+  {
+    title: "Ev ve Yaşam Sektörü Pazarlaması",
+    description: "Mobilya, dekorasyon ve ev ürünleri için dijital pazarlama. İç mekan görselleştirme ve yaşam tarzı içerikleri.",
+    icon: "fas fa-couch",
+    link: "https://isdeyeter.com/ev-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/ev-pazarlama.png",
+    features: ["İç Mekan", "Lifestyle İçerik", "Room Planner", "E-Commerce SEO"],
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    title: "Bebek ve Çocuk Ürünleri Pazarlaması",
+    description: "Bebek ve çocuk ürünleri için dijital pazarlama. Ebeveynlere yönelik içerik ve güven oluşturma.",
+    icon: "fas fa-baby",
+    link: "https://isdeyeter.com/bebek-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/bebek-pazarlama.png",
+    features: ["Ebeveyn İçeriği", "Güvenlik Vurgusu", "Sezonluk Kampanyalar", "Toy Retail"],
+    color: "from-yellow-400 to-yellow-500"
+  },
+  {
+    title: "Pet Shop ve Hayvan Ürünleri Pazarlaması",
+    description: "Evcil hayvan ürünleri için dijital pazarlama. Evcil hayvan sahiplerine yönelik içerik ve topluluk oluşturma.",
+    icon: "fas fa-paw",
+    link: "https://isdeyeter.com/pet-shop-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/pet-pazarlama.png",
+    features: ["Pet Community", "Content Marketing", "Pet Influencer", "Subscription Box"],
+    color: "from-orange-400 to-orange-500"
+  },
+  {
+    title: "Kitap ve Yayıncılık Sektörü Pazarlaması",
+    description: "Kitaplar ve yayıncılık için dijital pazarlama. Yazar tanıtımı ve kitap lansmanı stratejileri.",
+    icon: "fas fa-book",
+    link: "https://isdeyeter.com/yayincilik-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/kitap-pazarlama.png",
+    features: ["Yazar Tanıtımı", "Kitap Lansmanı", "Book Tour", "Okuyucu Topluluğu"],
+    color: "from-amber-600 to-amber-700"
+  },
+  {
+    title: "Yenilenebilir Enerji ve Çevre Sektörü Pazarlaması",
+    description: "Enerji şirketleri ve çevre sektörü için dijital pazarlama. Sürdürülebilirlik iletişimi ve yeşil pazarlama.",
+    icon: "fas fa-leaf",
+    link: "https://isdeyeter.com/enerji-pazarlamasi/",
+    image: "public/img/dijital-pazarlama/enerji-pazarlama.png",
+    features: ["Sürdürülebilirlik", "Yeşil Pazarlama", "B2B Enerji", "Tüketici Eğitimi"],
+    color: "from-green-600 to-green-700"
+  },
+  {
+    title: "Otomobil Satış Sonrası Hizmetler Pazarlaması",
+    description: "Otomobil yedek parça ve satış sonrası hizmetler için dijital pazarlama. Müşteri sadakati ve servis randevusu.",
+    icon: "fas fa-tools",
+    link: "https://isdeyeter.com/oto-sonras-pazarlama/",
+    image: "public/img/dijital-pazarlama/oto-sonras-pazarlama.png",
+    features: ["Servis Randevusu", "Yedek Parça E-Ticaret", "Müşteri Sadakati", "Garanti Hatırlatma"],
+    color: "from-gray-600 to-gray-700"
+  }
+];
+
+const servicesWithoutImages = [
+  { title: "Google Arama Ağı Reklamları", link: "https://isdeyeter.com/google-arama-reklamlari/" },
+  { title: "Google Görüntülü Reklam Ağı", link: "https://isdeyeter.com/google-display-ads/" },
+  { title: "Google Shopping Reklamları", link: "https://isdeyeter.com/google-shopping-reklamlari/" },
+  { title: "Google Video Reklamları", link: "https://isdeyeter.com/google-video-reklamlari/" },
+  { title: "Google Discovery Reklamları", link: "https://isdeyeter.com/google-discovery-ads/" },
+  { title: "Google Performance Max", link: "https://isdeyeter.com/google-performance-max/" },
+  { title: "Facebook Feed Reklamları", link: "https://isdeyeter.com/facebook-feed-ads/" },
+  { title: "Facebook Story Reklamları", link: "https://isdeyeter.com/facebook-story-ads/" },
+  { title: "Facebook Reels Reklamları", link: "https://isdeyeter.com/facebook-reels-ads/" },
+  { title: "Instagram Feed Reklamları", link: "https://isdeyeter.com/instagram-feed-ads/" },
+  { title: "Instagram Story Reklamları", link: "https://isdeyeter.com/instagram-story-ads/" },
+  { title: "Instagram Reels Reklamları", link: "https://isdeyeter.com/instagram-reels-ads/" },
+  { title: "Instagram Shop Reklamları", link: "https://isdeyeter.com/instagram-shop-ads/" },
+  { title: "TikTok Feed Reklamları", link: "https://isdeyeter.com/tiktok-feed-ads/" },
+  { title: "TikTok TopView Reklamları", link: "https://isdeyeter.com/tiktok-topview/" },
+  { title: "TikTok Spark Reklamları", link: "https://isdeyeter.com/tiktok-spark-ads/" },
+  { title: "LinkedIn Sponsored Content", link: "https://isdeyeter.com/linkedin-sponsored/" },
+  { title: "LinkedIn Message Ads", link: "https://isdeyeter.com/linkedin-message-ads/" },
+  { title: "LinkedIn Text Ads", link: "https://isdeyeter.com/linkedin-text-ads/" },
+  { title: "Twitter Promoted Tweets", link: "https://isdeyeter.com/promoted-tweets/" },
+  { title: "Twitter Promoted Trends", link: "https://isdeyeter.com/promoted-trends/" },
+  { title: "YouTube TrueView Reklamları", link: "https://isdeyeter.com/youtube-trueview/" },
+  { title: "YouTube Bumper Reklamları", link: "https://isdeyeter.com/youtube-bumper/" },
+  { title: "YouTube Masthead Reklamları", link: "https://isdeyeter.com/youtube-masthead/" },
+  { title: "Pinterest Promoted Pins", link: "https://isdeyeter.com/promoted-pins/" },
+  { title: "Pinterest Shopping Ads", link: "https://isdeyeter.com/pinterest-shopping/" },
+  { title: "Snapchat Snap Ads", link: "https://isdeyeter.com/snapchat-snap-ads/" },
+  { title: "Snapchat Story Ads", link: "https://isdeyeter.com/snapchat-story-ads/" },
+  { title: "Microsoft/Bing Reklamları", link: "https://isdeyeter.com/bing-ads/" },
+  { title: "Yandex Direct Reklamları", link: "https://isdeyeter.com/yandex-direct/" },
+  { title: "Yandex Display Reklamları", link: "https://isdeyeter.com/yandex-display/" },
+  { title: "Organic SEO Stratejisi", link: "https://isdeyeter.com/organic-seo/" },
+  { title: "Local Business SEO", link: "https://isdeyeter.com/local-business-seo/" },
+  { title: "E-commerce SEO", link: "https://isdeyeter.com/ecommerce-seo/" },
+  { title: "International SEO", link: "https://isdeyeter.com/international-seo/" },
+  { title: "Enterprise SEO", link: "https://isdeyeter.com/enterprise-seo/" },
+  { title: "Mobile SEO Optimizasyonu", link: "https://isdeyeter.com/mobile-seo/" },
+  { title: "Voice Search SEO", link: "https://isdeyeter.com/voice-search-seo/" },
+  { title: "Semantic SEO", link: "https://isdeyeter.com/semantic-seo/" },
+  { title: "E-A-T SEO Optimizasyonu", link: "https://isdeyeter.com/eat-seo/" },
+  { title: "Core Web Vitals Optimizasyonu", link: "https://isdeyeter.com/core-web-vitals/" },
+  { title: "Schema Markup Uygulaması", link: "https://isdeyeter.com/schema-markup/" },
+  { title: "Backlink Analizi", link: "https://isdeyeter.com/backlink-analizi/" },
+  { title: "Link Building Stratejisi", link: "https://isdeyeter.com/link-building/" },
+  { title: "Content Cluster Stratejisi", link: "https://isdeyeter.com/content-cluster/" },
+  { title: "Topic Cluster Oluşturma", link: "https://isdeyeter.com/topic-cluster/" },
+  { title: "Silo Yapısı Tasarımı", link: "https://isdeyeter.com/silo-structure/" },
+  { title: "Internal Linking Stratejisi", link: "https://isdeyeter.com/internal-linking/" },
+  { title: "URL Yapısı Optimizasyonu", link: "https://isdeyeter.com/url-optimization/" },
+  { title: "Meta Tag Optimizasyonu", link: "https://isdeyeter.com/meta-tag-optimization/" },
+  { title: "Heading Tag Stratejisi", link: "https://isdeyeter.com/heading-tag-strategy/" },
+  { title: "Image Alt Text Optimizasyonu", link: "https://isdeyeter.com/image-alt-optimization/" },
+  { title: "Canonical Tag Uygulaması", link: "https://isdeyeter.com/canonical-tags/" },
+  { title: "Robots.txt Yönetimi", link: "https://isdeyeter.com/robots-txt/" },
+  { title: "XML Sitemap Oluşturma", link: "https://isdeyeter.com/xml-sitemap/" },
+  { title: "301 Yönlendirme Stratejisi", link: "https://isdeyeter.com/301-redirects/" },
+  { title: "Hreflang Etiket Yönetimi", link: "https://isdeyeter.com/hreflang-tags/" },
+  { title: "AMP Sayfa Geliştirme", link: "https://isdeyeter.com/amp-development/" },
+  { title: "Sayfa Hızı Optimizasyonu", link: "https://isdeyeter.com/page-speed/" },
+  { title: "Minification ve Compression", link: "https://isdeyeter.com/minification/" },
+  { title: "CDN Entegrasyonu", link: "https://isdeyeter.com/cdn-integration/" },
+  { title: "Caching Stratejileri", link: "https://isdeyeter.com/caching-strategies/" },
+  { title: "Lazy Loading Uygulaması", link: "https://isdeyeter.com/lazy-loading/" },
+  { title: "Image Optimization", link: "https://isdeyeter.com/image-optimization/" },
+  { title: "Video Sıkıştırma", link: "https://isdeyeter.com/video-compression/" },
+  { title: "JavaScript SEO", link: "https://isdeyeter.com/javascript-seo/" },
+  { title: "React SEO Optimizasyonu", link: "https://isdeyeter.com/react-seo/" },
+  { title: "Angular SEO", link: "https://isdeyeter.com/angular-seo/" },
+  { title: "Vue.js SEO", link: "https://isdeyeter.com/vuejs-seo/" },
+  { title: "Shopify SEO", link: "https://isdeyeter.com/shopify-seo/" },
+  { title: "WooCommerce SEO", link: "https://isdeyeter.com/woocommerce-seo/" },
+  { title: "WordPress SEO", link: "https://isdeyeter.com/wordpress-seo/" },
+  { title: "Squarespace SEO", link: "https://isdeyeter.com/squarespace-seo/" },
+  { title: "Wix SEO", link: "https://isdeyeter.com/wix-seo/" },
+  { title: "Webflow SEO", link: "https://isdeyeter.com/webflow-seo/" },
+  { title: "PrestaShop SEO", link: "https://isdeyeter.com/prestashop-seo/" },
+  { title: "Magento SEO", link: "https://isdeyeter.com/magento-seo/" },
+  { title: "BigCommerce SEO", link: "https://isdeyeter.com/bigcommerce-seo/" },
+  { title: "Sitecore SEO", link: "https://isdeyeter.com/sitecore-seo/" },
+  { title: "Drupal SEO", link: "https://isdeyeter.com/drupal-seo/" },
+  { title: "Joomla SEO", link: "https://isdeyeter.com/joomla-seo/" },
+  { title: "Ghost CMS SEO", link: "https://isdeyeter.com/ghost-seo/" },
+  { title: "Contentful SEO", link: "https://isdeyeter.com/contentful-seo/" },
+  { title: "Strapi SEO", link: "https://isdeyeter.com/strapi-seo/" },
+  { title: "Sanity CMS SEO", link: "https://isdeyeter.com/sanity-seo/" },
+  { title: "Headless CMS SEO", link: "https://isdeyeter.com/headless-cms-seo/" },
+  { title: "AMP Sayfa Tasarımı", link: "https://isdeyeter.com/amp-tasarim/" },
+  { title: "Progressive Web App SEO", link: "https://isdeyeter.com/pwa-seo/" },
+  { title: "Core Web Vitals İyileştirme", link: "https://isdeyeter.com/core-web-vitals-iyilestirme/" },
+  { title: "Largest Contentful Paint", link: "https://isdeyeter.com/lcp-optimization/" },
+  { title: "First Input Delay", link: "https://isdeyeter.com/fid-optimization/" },
+  { title: "Cumulative Layout Shift", link: "https://isdeyeter.com/cls-optimization/" },
+  { title: "Total Blocking Time", link: "https://isdeyeter.com/tbt-optimization/" },
+  { title: "Interaction to Next Paint", link: "https://isdeyeter.com/inp-optimization/" },
+  { title: "JavaScript Bundle Optimization", link: "https://isdeyeter.com/js-bundle/" },
+  { title: "Critical CSS Uygulaması", link: "https://isdeyeter.com/critical-css/" },
+  { title: "Font Loading Optimizasyonu", link: "https://isdeyeter.com/font-loading/" },
+  { title: "HTTP/2 Entegrasyonu", link: "https://isdeyeter.com/http2/" },
+  { title: "HTTP/3 Uygulaması", link: "https://isdeyeter.com/http3/" },
+  { title: "Brotli Sıkıştırma", link: "https://isdeyeter.com/brotli/" },
+  { title: "Gzip Sıkıştırma", link: "https://isdeyeter.com/gzip/" },
+  { title: "Prefetch ve Preload", link: "https://isdeyeter.com/prefetch-preload/" },
+  { title: "Service Worker Kullanımı", link: "https://isdeyeter.com/service-worker/" },
+  { title: "PWA Manifest Dosyası", link: "https://isdeyeter.com/pwa-manifest/" },
+  { title: "IndexedDB Optimizasyonu", link: "https://isdeyeter.com/indexeddb/" }
+];
+
+const stats = [
+  { number: "10.000+", label: "Başarılı Proje", icon: "fas fa-check-circle" },
+  { number: "500+", label: "Mutlu Müşteri", icon: "fas fa-smile" },
+  { number: "15+", label: "Yıllık Deneyim", icon: "fas fa-calendar-alt" },
+  { number: "%150", label: "Ortalama Büyüme", icon: "fas fa-chart-bar" }
+];
+
+const testimonials = [
+  {
+    name: "Ayşe Demir",
+    role: "E-Ticaret Mağaza Sahibi",
+    text: "Dijital pazarlama hizmetleri sayesinde online satışlarımızı 6 ayda 3 katına çıkardık. Profesyonel ekip ve etkili stratejiler için teşekkürler!",
+    avatar: "A"
+  },
+  {
+    name: "Mehmet Kaya",
+    role: "Kurumsal Şirket Genel Müdürü",
+    text: "SEO ve Google Ads kampanyalarımızla sektörümüzde lider konuma geldik. Hedef kitleye doğru ulaşım ve yüksek dönüşüm oranları elde ettik.",
+    avatar: "M"
+  },
+  {
+    name: "Elif Öztürk",
+    role: "Startup Kurucu Ortağı",
+    text: "Sosyal medya pazarlaması ve içerik stratejisi ile marka bilinirliğimizi kısa sürede artırdık. Maliyet etkin çözümler sundukları için tercih ettik.",
+    avatar: "E"
+  }
+];
+
+function getLinkWithSubdomain(originalLink) {
+  if (!originalLink) return '#';
+  const slug = originalLink.replace('https://isdeyeter.com/', '');
+  return `${subdomain}/${slug}`;
+}
+---
+
+<BasicLayout title="Dijital Pazarlama Hizmetleri | Profesyonel Online Pazarlama Çözümleri">
+  <!-- Hero Section -->
+  <section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+      <div class="hero-content">
+        <h1 class="hero-title">{heroTitle}</h1>
+        <p class="hero-subtitle">{heroSubtitle}</p>
+        <div class="btn-group">
+          <a href="#hizmetler" class="btn btn-primary">
+            <i class="fas fa-rocket"></i>
+            Hizmetlerimiz
+          </a>
+          <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20dijital%20pazarlama%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+            <i class="fab fa-whatsapp"></i>
+            {whatsappText}
+          </a>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- Services with Images Section -->
+  <section class="services" id="hizmetler">
+    <div class="container">
+      <div class="section-title">
+        <span>DİJİTAL PAZARLAMA</span>
+        <h2>Kapsamlı Dijital Pazarlama Çözümleri</h2>
+        <p>İşletmenizi dijital dünyada büyütmek için uzman ekibimizle yanınızdayız</p>
+      </div>
+      
+      <div class="grid-services">
+        {servicesWithImages.map((service, index) => (
+          <div class="service-card" key={index}>
+            <div class="service-image-container">
+              <img 
+                src={service.image} 
+                alt={service.title}
+                class="service-image"
+                loading="lazy"
+              />
+            </div>
+            <div class="service-icon">
+              <i class={service.icon}></i>
+            </div>
+            <h3>{service.title}</h3>
+            <p class="service-description">{service.description}</p>
+            <ul class="service-features">
+              {service.features.map((feature, i) => (
+                <li key={i}>
+                  <i class="fas fa-check-circle"></i>
+                  {feature}
+                </li>
+              ))}
+            </ul>
+            <div class="service-buttons">
+              <a 
+                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(service.title)}%20hakkında%20bilgi%20almak%20istiyorum`}
+                target="_blank"
+                class="btn btn-whatsapp-single"
+                title={whatsappText}
+              >
+                <i class="fab fa-whatsapp"></i>
+                {buttonText}
+              </a>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Services without Images Section -->
+  <section class="services text-only-services" id="diger-hizmetler">
+    <div class="container">
+      <div class="section-title">
+        <span>DETAYLI HİZMETLER</span>
+        <h2>Diğer Dijital Pazarlama Hizmetleri</h2>
+        <p>İhtiyacınıza özel yüzlerce dijital pazarlama hizmeti</p>
+      </div>
+      
+      <div class="services-list">
+        {servicesWithoutImages.map((service, index) => (
+          <div class="service-list-item" key={index}>
+            <i class="fas fa-angle-right"></i>
+            <span class="service-list-title">{service.title}</span>
+            <a 
+              href={getLinkWithSubdomain(service.link)}
+              class="service-list-link"
+              target="_blank"
+            >
+              <i class="fas fa-external-link-alt"></i>
+              {buttonText}
+            </a>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Stats Section -->
+  <section class="stats" id="istatistikler">
+    <div class="container">
+      <div class="grid-stats">
+        {stats.map((stat, index) => (
+          <div class="stat-item" key={index}>
+            <div class="stat-icon">
+              <i class={stat.icon}></i>
+            </div>
+            <div class="stat-number">{stat.number}</div>
+            <div class="stat-label">{stat.label}</div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- Testimonials -->
+  <section class="testimonials" id="referanslar">
+    <div class="container">
+      <div class="section-title">
+        <span>REFERANSLAR</span>
+        <h2>Müşterilerimiz Ne Diyor?</h2>
+        <p>Binlerce mutlu müşterimizin deneyimlerini keşfedin</p>
+      </div>
+      
+      <div class="grid-testimonials">
+        {testimonials.map((testimonial, index) => (
+          <div class="testimonial-card" key={index}>
+            <div class="testimonial-text">
+              {testimonial.text}
+            </div>
+            <div class="testimonial-author">
+              <div class="author-avatar">
+                {testimonial.avatar}
+              </div>
+              <div>
+                <h4>{testimonial.name}</h4>
+                <p>{testimonial.role}</p>
+              </div>
+            </div>
+          </div>
+        ))}
+      </div>
+    </div>
+  </section>
+
+  <!-- WhatsApp Float Button -->
+  <a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${companyName}%20dijital%20pazarlama%20hizmetleriniz%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+    title={whatsappText}
+  >
+    <i class="fab fa-whatsapp"></i>
+  </a>
+
+  <!-- JavaScript -->
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // WhatsApp float button click effect
+      const whatsappFloat = document.querySelector('.whatsapp-float');
+      if (whatsappFloat) {
+        whatsappFloat.addEventListener('click', function() {
+          this.style.transform = 'scale(0.95)';
+          setTimeout(() => {
+            this.style.transform = 'scale(1)';
+          }, 150);
+        });
+      }
+      
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          const target = document.querySelector(this.getAttribute('href'));
+          if (target) {
+            target.scrollIntoView({
+              behavior: 'smooth',
+              block: 'start'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>
+
+<style>
+  /* Service Image Styles */
+  .service-image-container {
+    width: 300px;
+    height: 300px;
+    margin: 0 auto 20px;
+    border-radius: 12px;
+    overflow: hidden;
+    box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+  }
+  
+  .service-image {
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+    transition: transform 0.3s ease;
+  }
+  
+  .service-card:hover .service-image {
+    transform: scale(1.05);
+  }
+  
+  /* Service Description */
+  .service-description {
+    color: #6B7280;
+    font-size: 0.95rem;
+    line-height: 1.6;
+    margin-bottom: 15px;
+    display: -webkit-box;
+    -webkit-line-clamp: 3;
+    -webkit-box-orient: vertical;
+    overflow: hidden;
+  }
+  
+  /* Service Buttons */
+  .service-buttons {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    flex-wrap: wrap;
+    margin-top: 20px;
+  }
+  
+  .btn-whatsapp-small {
+    background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+    color: white;
+    padding: 12px 20px;
+    border-radius: 10px;
+    font-weight: 600;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+  }
+  
+  .btn-whatsapp-single {
+    background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+    color: white;
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    min-width: 200px;
+  }
+  
+  .btn-whatsapp-small:hover,
+  .btn-whatsapp-single:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+  }
+  
+  /* Text-Only Services */
+  .text-only-services {
+    background: #f8fafc;
+  }
+  
+  .services-list {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+    gap: 15px;
+  }
+  
+  .service-list-item {
+    background: white;
+    padding: 18px 20px;
+    border-radius: 10px;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+    transition: all 0.3s ease;
+    border: 1px solid #e5e7eb;
+  }
+  
+  .service-list-item:hover {
+    transform: translateX(5px);
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    border-color: #3B82F6;
+  }
+  
+  .service-list-item i {
+    color: #3B82F6;
+    font-size: 1.1rem;
+  }
+  
+  .service-list-title {
+    flex: 1;
+    font-weight: 500;
+    color: #374151;
+  }
+  
+  .service-list-link {
+    color: #3B82F6;
+    text-decoration: none;
+    font-size: 0.9rem;
+    font-weight: 600;
+    display: flex;
+    align-items: center;
+    gap: 5px;
+    transition: all 0.3s ease;
+  }
+  
+  .service-list-link:hover {
+    color: #2563EB;
+  }
+  
+  /* WhatsApp Float Button */
+  .whatsapp-float {
+    position: fixed;
+    width: 60px;
+    height: 60px;
+    bottom: 30px;
+    right: 30px;
+    background-color: #25D366;
+    color: #FFF;
+    border-radius: 50px;
+    text-align: center;
+    font-size: 30px;
+    box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+    z-index: 1000;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    transition: all 0.3s ease;
+    text-decoration: none;
+  }
+  
+  .whatsapp-float:hover {
+    background-color: #20BD5A;
+    transform: scale(1.1);
+    box-shadow: 4px 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  
+  /* Hero Styles */
+  .hero {
+    min-height: 70vh;
+    display: flex;
+    align-items: center;
+    position: relative;
+    overflow: hidden;
+    background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    padding: 60px 0;
+  }
+  
+  .hero-bg {
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    bottom: 0;
+    background-image: url('data:image/svg+xml,%3Csvg width="60" height="60" viewBox="0 0 60 60" xmlns="http://www.w3.org/2000/svg"%3E%3Cg fill="none" fill-rule="evenodd"%3E%3Cg fill="%239C92AC" fill-opacity="0.05"%3E%3Cpath d="M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z"/%3E%3C/g%3E%3C/g%3E%3C/svg%3E');
+    opacity: 0.5;
+  }
+  
+  .container {
+    width: 90%;
+    max-width: 1400px;
+    margin: 0 auto;
+    padding: 0 20px;
+    position: relative;
+    z-index: 1;
+  }
+  
+  .hero-content {
+    text-align: center;
+    padding: 40px 0;
+  }
+  
+  .hero-title {
+    font-size: 3rem;
+    font-weight: 800;
+    line-height: 1.2;
+    margin-bottom: 20px;
+    color: #1F2937;
+  }
+  
+  .hero-subtitle {
+    font-size: 1.25rem;
+    color: #4B5563;
+    margin-bottom: 30px;
+    line-height: 1.7;
+    max-width: 800px;
+    margin-left: auto;
+    margin-right: auto;
+  }
+  
+  .btn-group {
+    display: flex;
+    gap: 15px;
+    justify-content: center;
+    flex-wrap: wrap;
+  }
+  
+  .btn {
+    padding: 14px 28px;
+    border-radius: 10px;
+    font-weight: 600;
+    font-size: 1rem;
+    text-decoration: none;
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    transition: all 0.3s ease;
+    cursor: pointer;
+    border: none;
+  }
+  
+  .btn-primary {
+    background: linear-gradient(135deg, #3B82F6 0%, #2563EB 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.4);
+  }
+  
+  .btn-primary:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(59, 130, 246, 0.5);
+  }
+  
+  .btn-whatsapp {
+    background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+    color: white;
+    box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+  }
+  
+  .btn-whatsapp:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+  }
+  
+  /* Services Section */
+  .services {
+    padding: 80px 0;
+    background: #fff;
+  }
+  
+  .section-title {
+    text-align: center;
+    margin-bottom: 50px;
+  }
+  
+  .section-title span {
+    display: inline-block;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    color: white;
+    padding: 8px 20px;
+    border-radius: 30px;
+    font-size: 0.9rem;
+    font-weight: 600;
+    margin-bottom: 15px;
+    text-transform: uppercase;
+    letter-spacing: 1px;
+  }
+  
+  .section-title h2 {
+    font-size: 2.2rem;
+    color: #1F2937;
+    margin-bottom: 15px;
+    font-weight: 800;
+  }
+  
+  .section-title p {
+    color: #6B7280;
+    font-size: 1.1rem;
+  }
+  
+  .grid-services {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+    gap: 30px;
+  }
+  
+  .service-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    text-align: center;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+    transition: all 0.3s ease;
+    border: 1px solid #f0f0f0;
+  }
+  
+  .service-card:hover {
+    transform: translateY(-10px);
+    box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+  }
+  
+  .service-icon {
+    width: 70px;
+    height: 70px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 20px;
+  }
+  
+  .service-icon i {
+    font-size: 1.8rem;
+    color: white;
+  }
+  
+  .service-card h3 {
+    font-size: 1.2rem;
+    color: #1F2937;
+    margin-bottom: 15px;
+    font-weight: 700;
+  }
+  
+  .service-features {
+    list-style: none;
+    padding: 0;
+    margin: 0 0 20px 0;
+    text-align: left;
+  }
+  
+  .service-features li {
+    padding: 8px 0;
+    color: #4B5563;
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    font-size: 0.95rem;
+  }
+  
+  .service-features li i {
+    color: #10B981;
+    width: 20px;
+  }
+  
+  /* Stats Section */
+  .stats {
+    padding: 60px 0;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+  }
+  
+  .grid-stats {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+    gap: 30px;
+    text-align: center;
+  }
+  
+  .stat-item {
+    padding: 20px;
+  }
+  
+  .stat-icon {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: rgba(255, 255, 255, 0.2);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    margin: 0 auto 15px;
+  }
+  
+  .stat-icon i {
+    font-size: 1.5rem;
+    color: white;
+  }
+  
+  .stat-number {
+    font-size: 2.5rem;
+    font-weight: 800;
+    color: white;
+    margin-bottom: 5px;
+  }
+  
+  .stat-label {
+    color: rgba(255, 255, 255, 0.9);
+    font-size: 1rem;
+  }
+  
+  /* Testimonials Section */
+  .testimonials {
+    padding: 80px 0;
+    background: #f8fafc;
+  }
+  
+  .grid-testimonials {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+    gap: 30px;
+  }
+  
+  .testimonial-card {
+    background: white;
+    border-radius: 16px;
+    padding: 30px;
+    box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+  }
+  
+  .testimonial-text {
+    color: #4B5563;
+    font-size: 1rem;
+    line-height: 1.7;
+    margin-bottom: 25px;
+    font-style: italic;
+  }
+  
+  .testimonial-author {
+    display: flex;
+    align-items: center;
+    gap: 15px;
+  }
+  
+  .author-avatar {
+    width: 50px;
+    height: 50px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #3B82F6 0%, #8B5CF6 100%);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    color: white;
+    font-weight: 700;
+    font-size: 1.2rem;
+  }
+  
+  .testimonial-author h4 {
+    color: #1F2937;
+    font-size: 1rem;
+    margin: 0;
+  }
+  
+  .testimonial-author p {
+    color: #6B7280;
+    font-size: 0.9rem;
+    margin: 0;
+  }
+  
+  /* Responsive */
+  @media (max-width: 768px) {
+    .hero-title {
+      font-size: 2rem;
+    }
+    
+    .hero-subtitle {
+      font-size: 1rem;
+    }
+    
+    .grid-services {
+      grid-template-columns: 1fr;
+    }
+    
+    .service-image-container {
+      width: 100%;
+      height: 250px;
+    }
+    
+    .services-list {
+      grid-template-columns: 1fr;
+    }
+    
+    .service-list-item {
+      flex-direction: column;
+      text-align: center;
+      gap: 10px;
+    }
+    
+    .service-list-link {
+      margin-top: 5px;
+    }
+    
+    .whatsapp-float {
+      width: 50px;
+      height: 50px;
+      font-size: 25px;
+      bottom: 20px;
+      right: 20px;
+    }
+    
+    .hero {
+      min-height: 60vh;
+    }
+  }
+</style>

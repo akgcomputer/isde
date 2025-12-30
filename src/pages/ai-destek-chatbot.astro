@@ -1,0 +1,1305 @@
+---
+// src/pages/ai-destek-chatbot.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "AI Destek Sistemi - Yapay Zeka ve Canlı Destek Çözümleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="ai-support-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="ai-text">Yapay Zeka</span>
+            <span class="support-text">Destek Sistemi</span>
+          </h1>
+          <p class="hero-subtitle">MÜŞTERİ DENEYİM PLATFORMU</p>
+          <p class="hero-description">
+            Müşteri sorularının %70'ine kadarını insan müdahalesine gerek kalmadan yanıtlayın.
+            Daha fazla potansiyel müşteriye ulaşın, üstün müşteri desteği sağlayın ve 
+            yapay zeka destekli çözümümüz ile gelirinizi artırın.
+          </p>
+          <div class="hero-features">
+            <div class="feature">🤖 Hızlı Teklif Al</div>
+            <div class="feature">⚡ Canlı Destek Sistemi</div>
+            <div class="feature">📱 Instagram Entegrasyonu</div>
+            <div class="feature">💬 Chatbot Sistemi</div>
+            <div class="feature">🔄 Otomasyon Sistemi</div>
+            <div class="feature">🧠 Yapay Zeka (ChatGPT)</div>
+          </div>
+          <div class="hero-actions">
+            <a href="#features" class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              Özellikleri İncele
+            </a>
+            <a href="#integration" class="btn secondary-btn">
+              <span class="btn-icon">🔗</span>
+              Entegrasyonlar
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="ai-animation">
+            <div class="brain-icon">🧠</div>
+            <div class="data-flow"></div>
+            <div class="chat-icon">💬</div>
+            <div class="data-flow"></div>
+            <div class="support-icon">👨‍💼</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trusted Brands -->
+    <section class="brands-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Güvenilen Markalar</h2>
+          <p class="section-subtitle">Dünya çapında 4.000'den fazla işletme tarafından güvenilmektedir</p>
+        </div>
+        
+        <div class="brands-grid">
+          <div class="brand">🏥 Sağlık Sektörü</div>
+          <div class="brand">🏦 Bankacılık</div>
+          <div class="brand">🏢 Sigortacılık</div>
+          <div class="brand">🏨 Turizm</div>
+          <div class="brand">📦 Lojistik</div>
+          <div class="brand">🛒 E-ticaret</div>
+          <div class="brand">🎓 Eğitim</div>
+          <div class="brand">🏭 Üretim</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Platform Introduction -->
+    <section class="platform-section">
+      <div class="container">
+        <div class="platform-content">
+          <div class="platform-text">
+            <h2 class="section-title">AI Destek: İletişimde Yeni Bir Dönem</h2>
+            <p class="platform-description">
+              AI Destek Sistemi, işletmelere müşterileriyle daha verimli ve etkili iletişim kurma imkanı sunar.
+              Platform, tüm iletişim kanallarını tek bir panelde birleştirerek süreçlerinizi optimize eder.
+              Yapay zeka destekli chatbotlar, müşteri taleplerine hızlı ve doğru yanıtlar sunarak memnuniyeti artırır.
+            </p>
+            <p class="platform-description">
+              Mobil uyumluluk sayesinde iletişiminizi her yerden yönetebilirsiniz. AI Destek, iş süreçlerinizi 
+              hızlandırırken güvenliği de ön planda tutar ve farklı sektörlerden lider markalar tarafından tercih edilir.
+            </p>
+            <a href={getWhatsAppLink("AI Destek Sistemi Demo")} class="btn primary-btn">
+              <span class="btn-icon">🎯</span>
+              Demo Talep Et
+            </a>
+          </div>
+          <div class="platform-illustration">
+            <div class="dashboard-preview">
+              <div class="screen-header">
+                <div class="dot red"></div>
+                <div class="dot yellow"></div>
+                <div class="dot green"></div>
+              </div>
+              <div class="screen-content">
+                <div class="chat-window">
+                  <div class="message ai">Merhaba! Size nasıl yardımcı olabilirim?</div>
+                  <div class="message user">Fiyat bilgisi almak istiyorum</div>
+                  <div class="message ai">Hangi ürün/hizmet için fiyat bilgisi almak istersiniz?</div>
+                  <div class="message user">AI Destek Sistemi için</div>
+                  <div class="typing">AI yazıyor...</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Multi-Channel Integration -->
+    <section id="integration" class="integration-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Tüm İletişim Kanallarınız Tek Platformda</h2>
+          <p class="section-subtitle">WhatsApp, Instagram, Facebook Messenger, Telegram ve daha fazlası</p>
+        </div>
+
+        <div class="channels-grid">
+          <div class="channel-card">
+            <div class="channel-icon">💚</div>
+            <h3>WhatsApp Business</h3>
+            <p>API entegrasyonu ile profesyonel WhatsApp yönetimi</p>
+          </div>
+          <div class="channel-card">
+            <div class="channel-icon">📸</div>
+            <h3>Instagram</h3>
+            <p>Direct mesajlarını tek panelden yönetin</p>
+          </div>
+          <div class="channel-card">
+            <div class="channel-icon">💙</div>
+            <h3>Facebook Messenger</h3>
+            <p>Facebook mesajlarınızı merkezileştirin</p>
+          </div>
+          <div class="channel-card">
+            <div class="channel-icon">✉️</div>
+            <h3>Gmail Entegrasyonu</h3>
+            <p>E-postalarınızı chatbot ile yönetin</p>
+          </div>
+          <div class="channel-card">
+            <div class="channel-icon">📱</div>
+            <h3>Telegram</h3>
+            <p>Telegram mesajlarınızı entegre edin</p>
+          </div>
+          <div class="channel-card">
+            <div class="channel-icon">🌐</div>
+            <h3>Web Sitesi Chat</h3>
+            <p>Web sitenize AI destekli chat ekleyin</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Features -->
+    <section id="features" class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Akıllı ve Otomatik Sistem</h2>
+          <p class="section-subtitle">Yapay zeka ile desteklenen kapsamlı özellikler</p>
+        </div>
+
+        <div class="features-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="support">Canlı Destek</button>
+            <button class="tab-btn" data-tab="ai">Yapay Zeka</button>
+            <button class="tab-btn" data-tab="automation">Otomasyon</button>
+            <button class="tab-btn" data-tab="analytics">Analitik</button>
+          </div>
+
+          <!-- Canlı Destek Tab -->
+          <div class="tab-content active" id="support-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">📞</div>
+                <h4>Canlı Destek</h4>
+                <p>Anlık müşteri desteği ve yönlendirme</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📹</div>
+                <h4>Görüntülü Arama</h4>
+                <p>Entegre görüntülü görüşme özellikleri</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">👥</div>
+                <h4>Takım İçi Görüşme</h4>
+                <p>Ekip içi iş birliği ve koordinasyon</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📋</div>
+                <h4>Hazır İçerik</h4>
+                <p>Önceden hazırlanmış yanıt şablonları</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Yapay Zeka Tab -->
+          <div class="tab-content" id="ai-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">🤖</div>
+                <h4>Chatbot Sistemi</h4>
+                <p>24/7 çalışan akıllı chatbotlar</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🧠</div>
+                <h4>Süper Asistan</h4>
+                <p>Gelişmiş AI asistanı ile destek</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🔤</div>
+                <h4>Dil Çeviri</h4>
+                <p>Otomatik dil çeviri desteği</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">💡</div>
+                <h4>Akıllı Yanıt</h4>
+                <p>Bağlamı anlayan akıllı yanıtlar</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Otomasyon Tab -->
+          <div class="tab-content" id="automation-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">🔄</div>
+                <h4>Otomasyon Sistemi</h4>
+                <p>İş akışlarını otomatikleştirme</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📨</div>
+                <h4>Toplu Mesaj</h4>
+                <p>Toplu mesaj gönderimi ve yönetimi</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">✅</div>
+                <h4>Görev Yönetimi</h4>
+                <p>Otomatik görev atama ve takip</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">⏰</div>
+                <h4>Zamanlama</h4>
+                <p>Mesaj ve görev zamanlama</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- Analitik Tab -->
+          <div class="tab-content" id="analytics-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">📊</div>
+                <h4>Raporlama</h4>
+                <p>Detaylı performans raporları</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📈</div>
+                <h4>Analitik</h4>
+                <p>Müşteri davranışı analizleri</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🎯</div>
+                <h4>Performans Takip</h4>
+                <p>Ekip ve sistem performans metrikleri</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📱</div>
+                <h4>Mobil Raporlama</h4>
+                <p>Mobil cihazlardan raporlara erişim</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Benefits Section -->
+    <section class="benefits-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">İşletmenize Katacağı Değerler</h2>
+          <p class="section-subtitle">AI Destek Sistemi ile elde edeceğiniz avantajlar</p>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-number">%70</div>
+            <h3>Otomatik Yanıt</h3>
+            <p>Müşteri sorularının %70'ine insan müdahalesi olmadan yanıt</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-number">24/7</div>
+            <h3>Kesintisiz Destek</h3>
+            <p>7 gün 24 saat kesintisiz müşteri desteği</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-number">%80</div>
+            <h3>Memnuniyet Artışı</h3>
+            <p>Müşteri memnuniyetinde %80'e varan artış</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-number">3X</div>
+            <h3>Verimlilik</h3>
+            <p>Ekip verimliliğinde 3 kata varan artış</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mobile Management -->
+    <section class="mobile-section">
+      <div class="container">
+        <div class="mobile-content">
+          <div class="mobile-text">
+            <h2 class="section-title">İşletmenizi Her Yerden Yönetin!</h2>
+            <p class="mobile-description">
+              İşinizi dilediğiniz yerden yönetin, müşterilerinize anında ulaşın ve süreçlerinizi hızlandırın.
+              Mobil uygulamalarımız ile her an her yerden kontrol sizde.
+            </p>
+            <div class="app-buttons">
+              <a href={getWhatsAppLink("AI Destek Mobil Uygulama")} class="app-button ios">
+                <span class="app-icon">📱</span>
+                <div class="app-info">
+                  <span class="app-store">App Store'dan</span>
+                  <span class="app-text">İndirin</span>
+                </div>
+              </a>
+              <a href={getWhatsAppLink("AI Destek Mobil Uygulama")} class="app-button android">
+                <span class="app-icon">📱</span>
+                <div class="app-info">
+                  <span class="app-store">Google Play'den</span>
+                  <span class="app-text">İndirin</span>
+                </div>
+              </a>
+            </div>
+          </div>
+          <div class="mobile-illustration">
+            <div class="phone-mockup">
+              <div class="phone-screen">
+                <div class="mobile-chat">
+                  <div class="mobile-header">
+                    <div class="contact">AI Destek Merkezi</div>
+                  </div>
+                  <div class="mobile-messages">
+                    <div class="msg ai">Size nasıl yardımcı olabilirim?</div>
+                    <div class="msg user">Siparişim nerede?</div>
+                    <div class="msg ai">Siparişiniz kargoya verildi. Takip no: AB123456</div>
+                  </div>
+                  <div class="mobile-input">
+                    <span>Mesaj yaz...</span>
+                  </div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integration Stack -->
+    <section class="stack-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Teknoloji Yığınına Entegre Edin</h2>
+          <p class="section-subtitle">Mevcut sistemlerinizle sorunsuz entegrasyon</p>
+        </div>
+
+        <div class="stack-grid">
+          <div class="stack-item">
+            <div class="stack-icon">🔌</div>
+            <h3>API Entegrasyonu</h3>
+            <p>REST API ile mevcut sistemlerinize entegre edin</p>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">⚡</div>
+            <h3>Webhook Desteği</h3>
+            <p>Gerçek zamanlı veri akışı için webhook entegrasyonu</p>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">🔄</div>
+            <h3>CRM Entegrasyonu</h3>
+            <p>Popüler CRM sistemleri ile senkronizasyon</p>
+          </div>
+          <div class="stack-item">
+            <div class="stack-icon">📊</div>
+            <h3>Analitik Entegrasyonu</h3>
+            <p>Google Analytics ve diğer analitik araçları</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+          <p class="section-subtitle">AI Destek Sistemi hakkında merak edilenler</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>AI Destek Sistemi Nedir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>AI Destek Sistemi, yapay zeka destekli canlı destek ve chatbot çözümleri sunan kapsamlı bir müşteri deneyim platformudur. Tüm iletişim kanallarınızı tek bir panelde birleştirir.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Özellikleri Nelerdir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Canlı destek, AI chatbot, çoklu kanal entegrasyonu, otomasyon, raporlama, mobil yönetim, görüntülü arama, takım yönetimi ve daha birçok özellik sunmaktadır.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Nasıl Entegre Edebilirim?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>API entegrasyonu, web sitesi eklentisi, sosyal medya bağlantıları ve mevcut CRM sisteminizle entegrasyon seçenekleri sunuyoruz. Teknik ekibimiz entegrasyon sürecinde size destek olur.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">AI Destek Sistemi ile Tanışın</h2>
+          <p class="cta-description">
+            Müşteri iletişiminizi yapay zeka gücüyle dönüştürün. Daha fazla müşteriye, daha hızlı 
+            ve daha etkili şekilde ulaşın. Uzman ekibimiz size özel çözümler sunmak için hazır.
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("AI Destek Sistemi Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">🤖</span>
+              WhatsApp'tan Teklif Al
+            </a>
+            <a href={getWhatsAppLink("AI Destek Demo Talebi")} class="btn secondary-btn large">
+              <span class="btn-icon">🎯</span>
+              Demo Talep Et
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --ai-purple: #8b5cf6;
+      --dark-purple: #7c3aed;
+      --light-purple: #c4b5fd;
+      --ai-teal: #14b8a6;
+      --dark-bg: #0f172a;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --ai-gradient: linear-gradient(45deg, #8b5cf6, #14b8a6);
+    }
+
+    .ai-support-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .ai-text {
+      color: var(--ai-purple);
+      display: block;
+    }
+
+    .support-text {
+      color: white;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--light-purple);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature {
+      background: rgba(139, 92, 246, 0.2);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+      color: white;
+      text-align: center;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--ai-gradient);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      filter: brightness(1.1);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--ai-purple);
+    }
+
+    .secondary-btn:hover {
+      background: var(--ai-purple);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ai-animation {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .brain-icon, .chat-icon, .support-icon {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .brain-icon { animation-delay: 0s; }
+    .chat-icon { animation-delay: 0.5s; }
+    .support-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .data-flow {
+      width: 30px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--ai-teal), transparent);
+      border-radius: 4px;
+      animation: flow 2s infinite;
+    }
+
+    @keyframes flow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Brands Section */
+    .brands-section {
+      padding: 4rem 1rem;
+      background: #f8fafc;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--ai-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .brands-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .brand {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-color);
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .brand:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      background: var(--ai-purple);
+      color: white;
+    }
+
+    /* Platform Section */
+    .platform-section {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .platform-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .platform-description {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      line-height: 1.7;
+    }
+
+    .dashboard-preview {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow-lg);
+      border: 1px solid var(--border-color);
+    }
+
+    .screen-header {
+      background: #f1f5f9;
+      padding: 1rem;
+      display: flex;
+      gap: 0.5rem;
+    }
+
+    .dot {
+      width: 12px;
+      height: 12px;
+      border-radius: 50%;
+    }
+
+    .dot.red { background: #ef4444; }
+    .dot.yellow { background: #f59e0b; }
+    .dot.green { background: #10b981; }
+
+    .screen-content {
+      padding: 1.5rem;
+    }
+
+    .chat-window {
+      background: #f8fafc;
+      border-radius: 10px;
+      padding: 1.5rem;
+    }
+
+    .message {
+      background: white;
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      max-width: 80%;
+      box-shadow: var(--shadow);
+    }
+
+    .message.ai {
+      background: var(--ai-purple);
+      color: white;
+      align-self: flex-start;
+    }
+
+    .message.user {
+      background: #e5e7eb;
+      margin-left: auto;
+    }
+
+    .typing {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      font-style: italic;
+    }
+
+    /* Integration Section */
+    .integration-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+    }
+
+    .channels-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .channel-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .channel-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+      border-color: var(--ai-purple);
+    }
+
+    .channel-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+    }
+
+    .channel-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .channel-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .features-tabs {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-color);
+    }
+
+    .tab-btn.active {
+      background: var(--ai-gradient);
+      color: white;
+      border-color: transparent;
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--ai-purple);
+      color: var(--ai-purple);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+    }
+
+    .tab-feature {
+      text-align: center;
+      padding: 2rem;
+      background: #f8fafc;
+      border-radius: 15px;
+      transition: all 0.3s ease;
+    }
+
+    .tab-feature:hover {
+      transform: translateY(-5px);
+      background: white;
+      box-shadow: var(--shadow);
+    }
+
+    .tab-feature p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Benefits Section */
+.benefits-section {
+  padding: 6rem 1rem;
+  background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+  color: white;
+}
+
+.benefits-section .section-title,
+.benefits-section .section-subtitle {
+  color: white;
+  -webkit-text-fill-color: white;
+  background: none;
+}
+
+.benefits-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.benefit-card {
+  background: rgba(255, 255, 255, 0.1);
+  backdrop-filter: blur(10px);
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  border: 1px solid rgba(255, 255, 255, 0.2);
+  transition: all 0.3s ease;
+}
+
+.benefit-card:hover {
+  transform: translateY(-5px);
+  background: rgba(139, 92, 246, 0.2);
+  border-color: var(--ai-purple);
+}
+
+.benefit-number {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--ai-teal);
+  margin-bottom: 1rem;
+}
+
+.benefit-card h3 {
+  font-size: 1.3rem;
+  margin-bottom: 0.5rem;
+  color: white;
+}
+
+.benefit-card p {
+  color: #cbd5e1;
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* Mobile Section */
+.mobile-section {
+  padding: 6rem 1rem;
+  background: white;
+}
+
+.mobile-content {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 4rem;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.mobile-description {
+  color: var(--text-light);
+  margin-bottom: 2rem;
+  line-height: 1.7;
+}
+
+.app-buttons {
+  display: flex;
+  gap: 1rem;
+  flex-wrap: wrap;
+}
+
+.app-button {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 1rem 1.5rem;
+  border-radius: 10px;
+  text-decoration: none;
+  background: #1f2937;
+  color: white;
+  transition: all 0.3s ease;
+  flex: 1;
+  min-width: 200px;
+}
+
+.app-button:hover {
+  transform: translateY(-2px);
+  box-shadow: var(--shadow);
+}
+
+.app-button.ios {
+  background: #000;
+}
+
+.app-button.android {
+  background: #3ddc84;
+  color: #000;
+}
+
+.app-icon {
+  font-size: 2rem;
+}
+
+.app-info {
+  display: flex;
+  flex-direction: column;
+}
+
+.app-store {
+  font-size: 0.8rem;
+  opacity: 0.8;
+}
+
+.app-text {
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.phone-mockup {
+  width: 280px;
+  height: 560px;
+  background: #1f2937;
+  border-radius: 40px;
+  margin: 0 auto;
+  position: relative;
+  box-shadow: var(--shadow-lg);
+  border: 8px solid #000;
+}
+
+.phone-screen {
+  position: absolute;
+  top: 20px;
+  left: 10px;
+  right: 10px;
+  bottom: 20px;
+  background: white;
+  border-radius: 30px;
+  overflow: hidden;
+}
+
+.mobile-chat {
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobile-header {
+  background: var(--ai-purple);
+  color: white;
+  padding: 1rem;
+  text-align: center;
+  font-weight: 600;
+}
+
+.mobile-messages {
+  flex: 1;
+  padding: 1rem;
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  overflow-y: auto;
+}
+
+.msg {
+  padding: 0.8rem;
+  border-radius: 15px;
+  max-width: 80%;
+  font-size: 0.9rem;
+}
+
+.msg.ai {
+  background: #f1f5f9;
+  align-self: flex-start;
+}
+
+.msg.user {
+  background: var(--ai-purple);
+  color: white;
+  align-self: flex-end;
+}
+
+.mobile-input {
+  padding: 1rem;
+  border-top: 1px solid var(--border-color);
+  color: var(--text-light);
+  font-size: 0.9rem;
+}
+
+/* Stack Section */
+.stack-section {
+  padding: 6rem 1rem;
+  background: #f8fafc;
+}
+
+.stack-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+  gap: 2rem;
+  max-width: 1000px;
+  margin: 0 auto;
+}
+
+.stack-item {
+  background: white;
+  border-radius: 15px;
+  padding: 2rem;
+  text-align: center;
+  box-shadow: var(--shadow);
+  transition: all 0.3s ease;
+}
+
+.stack-item:hover {
+  transform: translateY(-5px);
+  box-shadow: var(--shadow-lg);
+}
+
+.stack-icon {
+  font-size: 3rem;
+  margin-bottom: 1rem;
+  color: var(--ai-purple);
+}
+
+.stack-item h3 {
+  font-size: 1.3rem;
+  margin-bottom: 1rem;
+  color: var(--text-color);
+}
+
+.stack-item p {
+  color: var(--text-light);
+  font-size: 0.9rem;
+  line-height: 1.5;
+}
+
+/* FAQ Section */
+.faq-section {
+  padding: 6rem 1rem;
+  background: white;
+}
+
+.faq-list {
+  max-width: 800px;
+  margin: 0 auto;
+}
+
+.faq-item {
+  border-bottom: 1px solid var(--border-color);
+  margin-bottom: 1rem;
+}
+
+.faq-question {
+  padding: 1.5rem 0;
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  cursor: pointer;
+}
+
+.faq-question h3 {
+  font-size: 1.2rem;
+  color: var(--text-color);
+  margin: 0;
+}
+
+.faq-toggle {
+  font-size: 1.5rem;
+  color: var(--ai-purple);
+  transition: transform 0.3s ease;
+}
+
+.faq-item.active .faq-toggle {
+  transform: rotate(45deg);
+}
+
+.faq-answer {
+  padding-bottom: 1.5rem;
+  display: none;
+}
+
+.faq-item.active .faq-answer {
+  display: block;
+}
+
+.faq-answer p {
+  color: var(--text-light);
+  line-height: 1.6;
+}
+
+/* CTA Section */
+.cta-section {
+  padding: 6rem 1rem;
+  background: linear-gradient(135deg, var(--ai-purple) 0%, var(--ai-teal) 100%);
+  color: white;
+  text-align: center;
+}
+
+.cta-title {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.cta-description {
+  font-size: 1.2rem;
+  max-width: 600px;
+  margin: 0 auto 2rem;
+  color: rgba(255, 255, 255, 0.9);
+  line-height: 1.6;
+}
+
+.cta-buttons {
+  display: flex;
+  gap: 1rem;
+  justify-content: center;
+  flex-wrap: wrap;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .hero-section .container,
+  .platform-content,
+  .mobile-content {
+    grid-template-columns: 1fr;
+    gap: 2rem;
+  }
+
+  .hero-title {
+    font-size: 2.5rem;
+  }
+
+  .hero-actions {
+    flex-direction: column;
+  }
+
+  .btn {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .app-buttons {
+    flex-direction: column;
+  }
+
+  .tabs {
+    flex-direction: column;
+  }
+
+  .tab-btn {
+    width: 100%;
+  }
+
+  .benefits-grid,
+  .channels-grid,
+  .stack-grid,
+  .brands-grid {
+    grid-template-columns: 1fr;
+  }
+}
+  </style>
+</BasicLayout>

@@ -1,0 +1,980 @@
+---
+// /src/pages/neden-bulut-muhasebe-yazilimi.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const whatsappNumber = configData.whatsapp;
+
+const heroTitle = "Neden Bulut Muhasebe Yazılımı?";
+const heroSlogan = "İşinizi Bulut Gücüyle Dönüştürün";
+const heroDescription = "Geleneksel muhasebe sistemlerinin ötesine geçin. İşletmenizin tüm finansal süreçlerini tek platformda, her yerden yönetin.";
+
+const ozellikler = [
+  {
+    icon: "fas fa-cloud",
+    title: "Bulut Tabanlı",
+    description: "İnternet olan her yerden, her cihazdan 7/24 erişim"
+  },
+  {
+    icon: "fas fa-bolt",
+    title: "Kurulumsuz",
+    description: "Teknik kurulum gerekmez, anında kullanıma başlayın"
+  },
+  {
+    icon: "fas fa-sync-alt",
+    title: "Gerçek Zamanlı",
+    description: "Anlık veri güncellemeleri ile güncel kalın"
+  },
+  {
+    icon: "fas fa-shield-alt",
+    title: "Güvenli",
+    description: "Bankaların kullandığı güvenlik standartlarında"
+  }
+];
+
+const avantajlar = [
+  {
+    title: "Maliyet Tasarrufu",
+    items: [
+      "Sunucu ve bakım maliyetleri yok",
+      "Güncelleme ücreti ödemezsiniz",
+      "Personel eğitim maliyeti minimum"
+    ]
+  },
+  {
+    title: "Verimlilik Artışı",
+    items: [
+      "Manuel işlemler %70 azalır",
+      "Hata oranlarını minimize edin",
+      "Raporlama süreleri kısalır"
+    ]
+  },
+  {
+    title: "Esneklik",
+    items: [
+      "İstediğiniz yerden çalışın",
+      "Kullanıcı sayısını kolayca artırın",
+      "Entegrasyonlarla büyüyün"
+    ]
+  }
+];
+
+const karsilastirma = {
+  baslik: "Bulut vs Geleneksel Muhasebe",
+  bulut: [
+    "✓ İnternet erişimi yeterli",
+    "✓ Otomatik güncellemeler",
+    "✓ Sınırsız kullanıcı desteği",
+    "✓ Düşük başlangıç maliyeti",
+    "✓ 7/24 erişilebilirlik"
+  ],
+  geleneksel: [
+    "✗ Sunucu kurulumu gerekli",
+    "✗ Manuel güncellemeler",
+    "✗ Lisans başına ücret",
+    "✗ Yüksek yatırım maliyeti",
+    "✗ Lokasyon bağımlılığı"
+  ]
+};
+
+const kullaniciYorumlari = [
+  {
+    name: "Ahmet Y.",
+    role: "Perakende İşletme Sahibi",
+    comment: "3 şubemizi tek panelden yönetiyoruz. İşlerimiz %40 hızlandı.",
+    rating: 5
+  },
+  {
+    name: "Zeynep K.",
+    role: "E-Ticaret Girişimcisi",
+    comment: "Pazaryeri entegrasyonları hayat kurtardı. Her şey otomatik!",
+    rating: 5
+  },
+  {
+    name: "Mehmet T.",
+    role: "Muhasebe Müdürü",
+    comment: "Raporlama süremiz 2 günden 2 saate düştü. İnanılmaz!",
+    rating: 5
+  }
+];
+---
+
+<BasicLayout title="Neden Bulut Muhasebe Yazılımı? | İş de YETER - Bulut Tabanlı Çözümler">
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">{heroTitle}</h1>
+            <p class="hero-slogan">{heroSlogan}</p>
+            <p class="hero-description">{heroDescription}</p>
+            <div class="hero-buttons">
+                <a href="#avantajlar" class="btn btn-primary">
+                    <i class="fas fa-arrow-down"></i>
+                    Avantajları Keşfet
+                </a>
+                <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20bulut%20muhasebe%20yazılımı%20hakkında%20bilgi%20almak%20istiyorum`} 
+                   target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    Ücretsiz Danışmanlık
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Özellikler Grid -->
+<section class="ozellikler-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Bulut Muhasebenin Temel Özellikleri</h2>
+            <p>Modern iş dünyasının gerektirdiği tüm özellikler tek platformda</p>
+        </div>
+        
+        <div class="ozellikler-grid">
+            {ozellikler.map((ozellik, index) => (
+                <div class="ozellik-kart" key={index}>
+                    <div class="ozellik-icon">
+                        <i class={ozellik.icon}></i>
+                    </div>
+                    <h3>{ozellik.title}</h3>
+                    <p>{ozellik.description}</p>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Avantajlar Section -->
+<section class="avantajlar-section" id="avantajlar">
+    <div class="container">
+        <div class="section-header">
+            <h2>Bulut Muhasebenin Avantajları</h2>
+            <p>İşletmenize sağlayacağı somut faydalar</p>
+        </div>
+        
+        <div class="avantajlar-grid">
+            {avantajlar.map((avantaj, index) => (
+                <div class="avantaj-kart" key={index}>
+                    <h3>{avantaj.title}</h3>
+                    <ul class="avantaj-list">
+                        {avantaj.items.map((item, i) => (
+                            <li key={i}>
+                                <i class="fas fa-check-circle"></i>
+                                {item}
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Karşılaştırma Section -->
+<section class="karsilastirma-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>{karsilastirma.baslik}</h2>
+            <p>Hangisi işletmeniz için daha uygun?</p>
+        </div>
+        
+        <div class="karsilastirma-grid">
+            <div class="karsilastirma-kart bulut-kart">
+                <div class="kart-header">
+                    <i class="fas fa-cloud"></i>
+                    <h3>Bulut Muhasebe</h3>
+                </div>
+                <ul class="ozellik-list">
+                    {karsilastirma.bulut.map((ozellik, index) => (
+                        <li key={index}>{ozellik}</li>
+                    ))}
+                </ul>
+                <div class="kart-footer">
+                    <span class="oneri-tag">ÖNERİLEN</span>
+                </div>
+            </div>
+            
+            <div class="karsilastirma-kart geleneksel-kart">
+                <div class="kart-header">
+                    <i class="fas fa-desktop"></i>
+                    <h3>Geleneksel Muhasebe</h3>
+                </div>
+                <ul class="ozellik-list">
+                    {karsilastirma.geleneksel.map((ozellik, index) => (
+                        <li key={index}>{ozellik}</li>
+                    ))}
+                </ul>
+                <div class="kart-footer">
+                    <span class="uyari-tag">ESKİ TEKNOLOJİ</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Kullanıcı Yorumları -->
+<section class="yorumlar-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Kullanıcılarımız Ne Diyor?</h2>
+            <p>Bulut muhasebe sistemimizi kullanan işletmelerin deneyimleri</p>
+        </div>
+        
+        <div class="yorumlar-grid">
+            {kullaniciYorumlari.map((yorum, index) => (
+                <div class="yorum-kart" key={index}>
+                    <div class="yorum-icerik">
+                        "{yorum.comment}"
+                    </div>
+                    <div class="yorum-footer">
+                        <div class="yorumcu-info">
+                            <div class="yorumcu-avatar">
+                                {yorum.name.charAt(0)}
+                            </div>
+                            <div>
+                                <h4>{yorum.name}</h4>
+                                <p>{yorum.role}</p>
+                            </div>
+                        </div>
+                        <div class="yorum-rating">
+                            {Array.from({length: yorum.rating}).map((_, i) => (
+                                <i class="fas fa-star" key={i}></i>
+                            ))}
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- SSS Section -->
+<section class="sss-section">
+    <div class="container">
+        <div class="section-header">
+            <h2><i class="fas fa-question-circle"></i> Sıkça Sorulan Sorular</h2>
+            <p>En çok merak edilen sorular ve cevapları</p>
+        </div>
+        
+        <div class="sss-grid">
+            <!-- Genel & Teknik -->
+            <div class="sss-kategori">
+                <h3><i class="fas fa-cogs"></i> Genel & Teknik</h3>
+                <div class="sss-item">
+                    <h4 class="sss-soru">Bulut muhasebe yazılımı nedir?</h4>
+                    <p class="sss-cevap">İnternet üzerinden erişilen, fiziksel sunucu gerektirmeyen, tüm muhasebe işlemlerinizi uzaktan yönetebileceğiniz modern bir yazılım çözümüdür.</p>
+                </div>
+                <div class="sss-item">
+                    <h4 class="sss-soru">Verilerim nerede saklanıyor?</h4>
+                    <p class="sss-cevap">Verileriniz ISO 27001 sertifikalı güvenli veri merkezlerinde, 256-bit şifreleme ile saklanır. Düzenli yedeklemeler alınır.</p>
+                </div>
+            </div>
+            
+            <!-- Fiyatlandırma -->
+            <div class="sss-kategori">
+                <h3><i class="fas fa-tags"></i> Fiyatlandırma & Paketler</h3>
+                <div class="sss-item">
+                    <h4 class="sss-soru">Başlangıç maliyeti nedir?</h4>
+                    <p class="sss-cevap">Sıfır başlangıç maliyeti! Sunucu, lisans veya kurulum ücreti ödemezsiniz. Sadece aylık/yıllık abonelik ücreti ödersiniz.</p>
+                </div>
+                <div class="sss-item">
+                    <h4 class="sss-soru">Kullanıcı sınırı var mı?</h4>
+                    <p class="sss-cevap">Hayır, kullanıcı sınırı yok. Paketinize göre sınırsız kullanıcı ekleyebilir, her kullanıcıya farklı yetkiler tanımlayabilirsiniz.</p>
+                </div>
+            </div>
+            
+            <!-- Entegrasyonlar -->
+            <div class="sss-kategori">
+                <h3><i class="fas fa-plug"></i> Entegrasyonlar</h3>
+                <div class="sss-item">
+                    <h4 class="sss-soru">Hangi bankalarla entegre?</h4>
+                    <p class="sss-cevap">Tüm Türk bankaları ile tam entegre çalışır. Banka hareketleriniz otomatik olarak sisteminize aktarılır.</p>
+                </div>
+                <div class="sss-item">
+                    <h4 class="sss-soru">E-fatura entegrasyonu var mı?</h4>
+                    <p class="sss-cevap">Evet, tam entegre e-fatura ve e-arşiv çözümleri sunuyoruz. Faturalarınız otomatik olarak müşterilerinize ulaşır.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-final">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Bulut Muhasebeye Geçmeye Hazır mısınız?</h2>
+            <p>İşletmenizi modern teknoloji ile güçlendirin, zamandan ve maliyetten tasarruf edin.</p>
+            <div class="cta-buttons">
+                <a href="/muhasebe-paketleri" class="btn btn-primary btn-lg">
+                    <i class="fas fa-box-open"></i>
+                    Paketleri İncele
+                </a>
+                <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20bulut%20muhasebe%20yazılımına%20geçmek%20istiyorum,%20yardımcı%20olur%20musunuz?`} 
+                   target="_blank" class="btn btn-whatsapp btn-lg">
+                    <i class="fab fa-whatsapp"></i>
+                    Demo Talep Et
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        padding: 100px 0;
+        text-align: center;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%230ea5e9' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        color: #0ea5e9;
+        margin-bottom: 1rem;
+        font-weight: 800;
+    }
+    
+    .hero-slogan {
+        font-size: 1.8rem;
+        color: #1e40af;
+        margin-bottom: 1.5rem;
+        font-weight: 600;
+    }
+    
+    .hero-description {
+        font-size: 1.2rem;
+        color: #4b5563;
+        line-height: 1.6;
+        margin-bottom: 2.5rem;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Section Header */
+    .section-header {
+        text-align: center;
+        margin-bottom: 3rem;
+    }
+    
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #1e40af;
+        margin-bottom: 1rem;
+        font-weight: 700;
+    }
+    
+    .section-header p {
+        color: #6b7280;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    /* Özellikler Section */
+    .ozellikler-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .ozellikler-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 2rem;
+    }
+    
+    .ozellik-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        text-align: center;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .ozellik-kart:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(14, 165, 233, 0.15);
+        border-color: #0ea5e9;
+    }
+    
+    .ozellik-icon {
+        font-size: 3rem;
+        color: #0ea5e9;
+        margin-bottom: 1.5rem;
+    }
+    
+    .ozellik-kart h3 {
+        color: #1e40af;
+        margin-bottom: 1rem;
+        font-weight: 600;
+    }
+    
+    .ozellik-kart p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+    
+    /* Avantajlar Section */
+    .avantajlar-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .avantajlar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+    }
+    
+    .avantaj-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+    }
+    
+    .avantaj-kart h3 {
+        color: #0ea5e9;
+        margin-bottom: 1.5rem;
+        font-size: 1.5rem;
+        font-weight: 600;
+        border-bottom: 2px solid #0ea5e9;
+        padding-bottom: 0.5rem;
+        display: inline-block;
+    }
+    
+    .avantaj-list {
+        list-style: none;
+        padding: 0;
+    }
+    
+    .avantaj-list li {
+        padding: 0.5rem 0;
+        color: #4b5563;
+        display: flex;
+        align-items: flex-start;
+        gap: 0.75rem;
+    }
+    
+    .avantaj-list i {
+        color: #10b981;
+        margin-top: 0.25rem;
+        flex-shrink: 0;
+    }
+    
+    /* Karşılaştırma Section */
+    .karsilastirma-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .karsilastirma-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .karsilastirma-kart {
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    }
+    
+    .bulut-kart {
+        border: 3px solid #0ea5e9;
+    }
+    
+    .geleneksel-kart {
+        border: 3px solid #9ca3af;
+    }
+    
+    .kart-header {
+        padding: 1.5rem;
+        text-align: center;
+        background: #f8fafc;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .bulut-kart .kart-header {
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+    }
+    
+    .geleneksel-kart .kart-header {
+        background: linear-gradient(135deg, #f3f4f6, #e5e7eb);
+    }
+    
+    .kart-header i {
+        font-size: 2.5rem;
+        margin-bottom: 1rem;
+    }
+    
+    .bulut-kart .kart-header i {
+        color: #0ea5e9;
+    }
+    
+    .geleneksel-kart .kart-header i {
+        color: #6b7280;
+    }
+    
+    .kart-header h3 {
+        margin: 0;
+        font-size: 1.5rem;
+    }
+    
+    .bulut-kart .kart-header h3 {
+        color: #0ea5e9;
+    }
+    
+    .geleneksel-kart .kart-header h3 {
+        color: #6b7280;
+    }
+    
+    .ozellik-list {
+        list-style: none;
+        padding: 1.5rem;
+        margin: 0;
+    }
+    
+    .ozellik-list li {
+        padding: 0.75rem 0;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .ozellik-list li:last-child {
+        border-bottom: none;
+    }
+    
+    .bulut-kart .ozellik-list li {
+        color: #1e40af;
+    }
+    
+    .geleneksel-kart .ozellik-list li {
+        color: #6b7280;
+    }
+    
+    .kart-footer {
+        padding: 1rem;
+        text-align: center;
+        border-top: 1px solid #e5e7eb;
+        background: #f8fafc;
+    }
+    
+    .oneri-tag {
+        background: #10b981;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    .uyari-tag {
+        background: #ef4444;
+        color: white;
+        padding: 0.5rem 1rem;
+        border-radius: 20px;
+        font-weight: 600;
+        font-size: 0.9rem;
+    }
+    
+    /* Yorumlar Section */
+    .yorumlar-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .yorumlar-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .yorum-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 2rem;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        display: flex;
+        flex-direction: column;
+    }
+    
+    .yorum-icerik {
+        font-size: 1.1rem;
+        color: #4b5563;
+        line-height: 1.6;
+        margin-bottom: 1.5rem;
+        font-style: italic;
+        flex-grow: 1;
+    }
+    
+    .yorum-footer {
+        border-top: 1px solid #e5e7eb;
+        padding-top: 1.5rem;
+    }
+    
+    .yorumcu-info {
+        display: flex;
+        align-items: center;
+        gap: 1rem;
+        margin-bottom: 1rem;
+    }
+    
+    .yorumcu-avatar {
+        width: 50px;
+        height: 50px;
+        background: linear-gradient(135deg, #0ea5e9, #3b82f6);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        font-size: 1.2rem;
+    }
+    
+    .yorumcu-info h4 {
+        margin: 0;
+        color: #1e40af;
+    }
+    
+    .yorumcu-info p {
+        margin: 0.25rem 0 0 0;
+        color: #6b7280;
+        font-size: 0.9rem;
+    }
+    
+    .yorum-rating {
+        color: #f59e0b;
+    }
+    
+    /* SSS Section */
+    .sss-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    .sss-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+        gap: 2rem;
+        max-width: 1000px;
+        margin: 0 auto;
+    }
+    
+    .sss-kategori {
+        background: #f8fafc;
+        border-radius: 15px;
+        padding: 2rem;
+    }
+    
+    .sss-kategori h3 {
+        color: #0ea5e9;
+        margin-bottom: 1.5rem;
+        font-size: 1.3rem;
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+    }
+    
+    .sss-item {
+        margin-bottom: 1.5rem;
+        padding-bottom: 1.5rem;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .sss-item:last-child {
+        margin-bottom: 0;
+        padding-bottom: 0;
+        border-bottom: none;
+    }
+    
+    .sss-soru {
+        color: #1e40af;
+        margin-bottom: 0.75rem;
+        font-size: 1.1rem;
+        cursor: pointer;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+    }
+    
+    .sss-soru::after {
+        content: "+";
+        font-size: 1.5rem;
+        color: #0ea5e9;
+    }
+    
+    .sss-cevap {
+        color: #4b5563;
+        line-height: 1.6;
+        display: none;
+    }
+    
+    .sss-item.active .sss-cevap {
+        display: block;
+    }
+    
+    /* CTA Final */
+    .cta-final {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #1e40af, #0ea5e9);
+        color: white;
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 1.5rem;
+    }
+    
+    .cta-content p {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 2rem;
+        line-height: 1.6;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Butonlar */
+    .btn {
+        display: inline-block;
+        padding: 0.75rem 1.5rem;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        background: #0ea5e9;
+        color: white;
+    }
+    
+    .btn-primary:hover {
+        background: #0284c7;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(14, 165, 233, 0.3);
+    }
+    
+    .btn-whatsapp {
+        background: #25d366;
+        color: white;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128c7e;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+    
+    .btn-lg {
+        padding: 1rem 2rem;
+        font-size: 1.1rem;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero {
+            padding: 60px 0;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-slogan {
+            font-size: 1.5rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .ozellikler-section,
+        .avantajlar-section,
+        .karsilastirma-section,
+        .yorumlar-section,
+        .sss-section,
+        .cta-final {
+            padding: 60px 0;
+        }
+        
+        .hero-buttons,
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .karsilastirma-grid,
+        .sss-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .yorumlar-grid {
+            grid-template-columns: 1fr;
+            gap: 1.5rem;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .ozellikler-grid,
+        .avantajlar-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .ozellik-kart,
+        .avantaj-kart,
+        .yorum-kart,
+        .sss-kategori {
+            padding: 1.5rem;
+        }
+        
+        .cta-content h2 {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<!-- JavaScript for FAQ Toggle -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // SSS sorularını aç/kapa
+        const sssSorular = document.querySelectorAll('.sss-soru');
+        
+        sssSorular.forEach(soru => {
+            soru.addEventListener('click', function() {
+                const cevap = this.nextElementSibling;
+                const item = this.parentElement;
+                
+                // Eğer bu cevap zaten açıksa kapat
+                if (item.classList.contains('active')) {
+                    item.classList.remove('active');
+                    this.textContent = this.textContent.replace('−', '+');
+                } else {
+                    // Diğer tüm cevapları kapat
+                    sssSorular.forEach(s => {
+                        s.parentElement.classList.remove('active');
+                        s.textContent = s.textContent.replace('−', '+');
+                    });
+                    
+                    // Bu cevabı aç
+                    item.classList.add('active');
+                    this.textContent = this.textContent.replace('+', '−');
+                }
+            });
+        });
+        
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20bulut%20muhasebe%20yazılımı%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<style>
+    .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #25d366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        text-decoration: none;
+    }
+    
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .whatsapp-float {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+</BasicLayout>

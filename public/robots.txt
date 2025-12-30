@@ -1,0 +1,33 @@
+// public/robots.txt
+User-agent: *
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+Disallow: /api/
+
+# Site haritaları
+Sitemap: https://isdeyeter.com/sitemap.xml
+Sitemap: https://isdeyeter.com/sitemap.rss
+
+# Crawl hızı
+Crawl-delay: 1
+
+# Arama motorları için ek ayarlar
+User-agent: Googlebot
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+
+User-agent: Bingbot
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+
+User-agent: Yandex
+Allow: /
+Disallow: /private/
+Disallow: /admin/
+
+# Botlar
+User-agent: GPTBot
+Disallow: /

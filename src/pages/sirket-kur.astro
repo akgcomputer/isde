@@ -1,0 +1,1415 @@
+---
+// src/pages/sirket-kur.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import config from './data/config.json';
+import sirketKurData from './data/sirket-kur.json';
+
+const { sirketKurPaketleri, hizmetKategorileri, ekHizmetler, ulkeler, iletisim } = sirketKurData;
+
+const pageTitle = "Şirket Kurma Hizmetleri | Profesyonel Şirket Kuruluş Danışmanlığı";
+const pageDescription = "İş De Yeter ile kolay ve hızlı şekilde şirket kurun. Limited, Anonim ve Şahıs şirketi kuruluşu, sanal ofis, muhasebe çözümleri ve uluslararası pazaryeri danışmanlığı. 0₺ başlangıç paketi ile hemen başlayın!";
+const canonicalUrl = "https://isdeyeter.com/sirket-kur";
+
+const whatsappMessage = encodeURIComponent("Merhaba, şirket kurma hizmetleri hakkında bilgi almak istiyorum.");
+const whatsappUrl = `https://wa.me/${config.whatsapp}?text=${whatsappMessage}`;
+---
+
+<BasicLayout 
+  title={pageTitle}
+  description={pageDescription}
+  canonical={canonicalUrl}
+>
+  <!-- Şirket Kur Özel CSS ile -->
+  <div class="sk-page">
+    <!-- Hero Section -->
+    <section class="sk-hero">
+      <div class="sk-container">
+        <div class="sk-hero-content">
+          <div class="sk-hero-badge">
+            <span class="sk-hero-icon">🚀</span>
+            <span class="sk-hero-text">Türkiye'nin Lider Şirket Kuruluş Platformu</span>
+          </div>
+          
+          <h1 class="sk-hero-title">
+            Şirketinizi <span class="sk-hero-highlight">Kolayca</span> Kurun, 
+            <span class="sk-gradient-text">İşinizi Büyütün</span>
+          </h1>
+          
+          <p class="sk-hero-description">
+            İşlerini Bekletme, Kolayca Hallet!
+
+
+          </p>
+          
+          <div class="sk-hero-buttons">
+            <a href={whatsappUrl} target="_blank" class="sk-btn-primary">
+              <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+                <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+              </svg>
+              {config.whatsappText}
+            </a>
+            
+          </div>
+          
+          <div class="sk-hero-stats">
+            <div class="sk-stat">
+              <svg class="sk-stat-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>Onlarca Şirket Kuruldu</span>
+            </div>
+            <div class="sk-stat">
+              <svg class="sk-stat-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>%97 Başarı Oranı</span>
+            </div>
+            <div class="sk-stat">
+              <svg class="sk-stat-icon" fill="currentColor" viewBox="0 0 20 20">
+                <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+              </svg>
+              <span>7/24 Destek Sitemi</span>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Trust Section -->
+    <section class="sk-trust">
+      <div class="sk-container">
+        <div class="sk-trust-grid">
+          <div class="sk-trust-item">
+            <div class="sk-trust-icon">🏆</div>
+            <h3 class="sk-trust-number">10+ Yıl</h3>
+            <p class="sk-trust-text">Sektör Deneyimi</p>
+          </div>
+          <div class="sk-trust-item">
+            <div class="sk-trust-icon">👥</div>
+            <h3 class="sk-trust-number">50.000+</h3>
+            <p class="sk-trust-text">Mutlu Müşteri</p>
+          </div>
+          <div class="sk-trust-item">
+            <div class="sk-trust-icon">🌍</div>
+            <h3 class="sk-trust-number">60+</h3>
+            <p class="sk-trust-text">Ülkede Hizmet</p>
+          </div>
+          <div class="sk-trust-item">
+            <div class="sk-trust-icon">⭐</div>
+            <h3 class="sk-trust-number">4.9/5</h3>
+            <p class="sk-trust-text">Müşteri Puanı</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Pricing Packages Section -->
+    <section class="sk-pricing">
+      <div class="sk-container">
+        <div class="sk-section-header">
+          <span class="sk-section-badge sk-badge-blue">💼 Şirket Kurma Paketleri</span>
+          <h2 class="sk-section-title">
+            İhtiyacınıza Uygun <span class="sk-gradient-text">Paketi Seçin</span>
+          </h2>
+          <p class="sk-section-description">
+            Girişimcilik yolculuğunuzda size en uygun şirket kuruluş paketini seçin. 
+            Her paket, işinizi büyütmek için tasarlanmış kapsamlı hizmetler içerir.
+          </p>
+        </div>
+        
+        <div class="sk-pricing-grid">
+          {sirketKurPaketleri.map((paket) => (
+            <div class={`sk-pricing-card ${paket.vurgulanan ? 'sk-pricing-highlight' : ''} ${paket.enPopuler ? 'sk-pricing-popular' : ''}`}>
+              {paket.ozelEtiket && (
+                <div class="sk-pricing-badge" style={`background: ${paket.id === 'ucretsiz' ? 'linear-gradient(to right, #10b981, #059669)' : paket.id === 'limited' ? 'linear-gradient(to right, #3b82f6, #8b5cf6, #ec4899)' : 'linear-gradient(to right, #f59e0b, #ef4444)'}`}>
+                  {paket.ozelEtiket}
+                </div>
+              )}
+              
+              <div class="sk-pricing-header">
+                <div class="sk-pricing-icon">{paket.icon}</div>
+                <div>
+                  <h3 class="sk-pricing-name">{paket.ad}</h3>
+                  <p class="sk-pricing-type">{paket.tip}</p>
+                </div>
+              </div>
+              
+              <p class="sk-pricing-description">{paket.aciklama}</p>
+              
+              <div class="sk-pricing-price">
+                <span class="sk-price-current">{paket.fiyat}</span>
+                {paket.periyot && <span class="sk-price-period">{paket.periyot}</span>}
+                {paket.oncekiFiyat && (
+                  <span class="sk-price-old">{paket.oncekiFiyat}</span>
+                )}
+              </div>
+              
+              <div class="sk-pricing-features">
+                {paket.ozellikler.map((ozellik) => (
+                  <div class={`sk-feature-item ${ozellik.vurgulu ? 'sk-feature-highlight' : ''}`}>
+                    <svg class={`sk-feature-icon ${ozellik.aktif ? 'sk-icon-active' : 'sk-icon-inactive'}`} fill="currentColor" viewBox="0 0 20 20">
+                      {ozellik.aktif ? (
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      ) : (
+                        <path fill-rule="evenodd" d="M4.293 4.293a1 1 0 011.414 0L10 8.586l4.293-4.293a1 1 0 111.414 1.414L11.414 10l4.293 4.293a1 1 0 01-1.414 1.414L10 11.414l-4.293 4.293a1 1 0 01-1.414-1.414L8.586 10 4.293 5.707a1 1 0 010-1.414z" clip-rule="evenodd"/>
+                      )}
+                    </svg>
+                    <div>
+                      <span class={`${ozellik.vurgulu ? 'sk-feature-text-bold' : 'sk-feature-text'}`}>{ozellik.text}</span>
+                      {ozellik.detay && (
+                        <p class="sk-feature-detail">{ozellik.detay}</p>
+                      )}
+                    </div>
+                  </div>
+                ))}
+              </div>
+              
+              <div class="sk-pricing-action">
+                {paket.oncelikliButon && (
+                  <a 
+                    href={paket.oncelikliButon.link === 'whatsapp' ? whatsappUrl : paket.oncelikliButon.link}
+                    target={paket.oncelikliButon.link === 'whatsapp' ? '_blank' : '_self'}
+                    class={`sk-pricing-button ${paket.oncelikliButon.stil === 'btn-gradient-free' ? 'sk-btn-free' : paket.oncelikliButon.stil === 'btn-gradient-premium' ? 'sk-btn-premium' : 'sk-btn-global'}`}
+                  >
+                    {paket.oncelikliButon.text}
+                  </a>
+                )}
+              </div>
+              
+              <div class="sk-pricing-flag">
+                <span>{paket.bayrak[0]}</span>
+                <span>{paket.bayrak[1]}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Service Categories Section -->
+    <section class="sk-services">
+      <div class="sk-container">
+        <div class="sk-section-header">
+          <span class="sk-section-badge sk-badge-green">✨ Kapsamlı Hizmetler</span>
+          <h2 class="sk-section-title">
+            Şirketiniz İçin <span class="sk-gradient-text">Tüm Hizmetler</span>
+          </h2>
+          <p class="sk-section-description">
+            Şirket kuruluşundan uluslararası pazarlara açılıma kadar tüm iş süreçlerinizde 
+            yanınızdayız. Profesyonel ekibimizle hayallerinizdeki işe kavuşmanız için çalışıyoruz.
+          </p>
+        </div>
+        
+        <div class="sk-services-grid">
+          {hizmetKategorileri.map((kategori) => (
+            <div class="sk-service-card">
+              <div class="sk-service-header">
+                <div class="sk-service-icon">{kategori.ikon}</div>
+                <h3 class="sk-service-title">{kategori.baslik}</h3>
+              </div>
+              <ul class="sk-service-list">
+                {kategori.hizmetler.map((hizmet) => (
+                  <li class="sk-service-item">
+                    <svg class="sk-service-check" fill="currentColor" viewBox="0 0 20 20">
+                      <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                    </svg>
+                    {hizmet}
+                  </li>
+                ))}
+              </ul>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Services Section -->
+    <section class="sk-additional">
+      <div class="sk-container">
+        <div class="sk-section-header">
+          <span class="sk-section-badge sk-badge-purple">🚀 Ek Hizmetler</span>
+          <h2 class="sk-section-title">
+            İşinizi Büyüten <span class="sk-gradient-text">Çözümler</span>
+          </h2>
+          <p class="sk-section-description">
+            Şirket kuruluşunun yanı sıra marka tescilinden pazaryeri entegrasyonuna, 
+            hibe danışmanlığından uluslararası iş geliştirmeye kadar geniş hizmet yelpazemizle 
+            işinizi büyütmenin tüm yollarını sunuyoruz.
+          </p>
+        </div>
+        
+        <div class="sk-additional-grid">
+          {ekHizmetler.map((hizmet) => (
+            <div class="sk-additional-card">
+              <div class="sk-additional-content">
+                <h3 class="sk-additional-title">{hizmet.baslik}</h3>
+                <p class="sk-additional-description">{hizmet.aciklama}</p>
+                <ul class="sk-additional-list">
+                  {hizmet.maddeler.map((madde) => (
+                    <li class="sk-additional-item">
+                      <svg class="sk-additional-check" fill="currentColor" viewBox="0 0 20 20">
+                        <path fill-rule="evenodd" d="M16.707 5.293a1 1 0 010 1.414l-8 8a1 1 0 01-1.414 0l-4-4a1 1 0 011.414-1.414L8 12.586l7.293-7.293a1 1 0 011.414 0z" clip-rule="evenodd"/>
+                      </svg>
+                      {madde}
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Coverage Section -->
+    <section class="sk-global">
+      <div class="sk-container">
+        <div class="sk-section-header">
+          <span class="sk-section-badge sk-badge-global">🌍 Global Erişim</span>
+          <h2 class="sk-section-title sk-global-title">
+            Dünya Genelinde <span class="sk-global-highlight">Ofis Ağı</span>
+          </h2>
+          <p class="sk-section-description sk-global-description">
+            60'tan fazla ülkede prestijli ofis adresleri ve sanal ofis hizmetlerimizle 
+            işinizi global pazarlara taşıyın. Hiçbir ek maliyet olmadan uluslararası 
+            varlık oluşturun.
+          </p>
+        </div>
+        
+        <div class="sk-countries">
+          {Object.entries(ulkeler).map(([bolge, ulkeListesi]) => (
+            <div class="sk-region">
+              <h3 class="sk-region-title">{bolge.toUpperCase()}</h3>
+              <div class="sk-countries-grid">
+                {ulkeListesi.map((ulke) => (
+                  <div class="sk-country-item">
+                    <span class="sk-country-flag">{ulke.split(' ')[0]}</span>
+                    <span class="sk-country-name">{ulke.split(' ').slice(1).join(' ')}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us Section -->
+    <section class="sk-why">
+      <div class="sk-container">
+        <div class="sk-why-content">
+          <div class="sk-why-left">
+            <span class="sk-section-badge sk-badge-orange">💡 Neden Biz?</span>
+            <h2 class="sk-why-title">
+              Binlerce Girişimci <span class="sk-gradient-text">Neden Bizi Tercih Ediyor?</span>
+            </h2>
+            <p class="sk-why-description">
+              İş De Yeter olarak, girişimcilerin şirket kurma süreçlerini 
+              kolaylaştırmak ve işlerini büyütmelerine yardımcı olmak için 
+              buradayız. 10 yılı aşkın deneyimimizle Türkiye'nin en kapsamlı 
+              şirket kuruluş platformuyuz.
+            </p>
+            
+            <div class="sk-features">
+              <div class="sk-feature">
+                <div class="sk-feature-icon">⚡</div>
+                <div>
+                  <h4 class="sk-feature-title">Hızlı ve Kolay Süreç</h4>
+                  <p class="sk-feature-text">Online başvuru ile dakikalar içinde şirketinizi kurun, fiziksel ziyaret gerektirmeden tüm işlemleri tamamlayın.</p>
+                </div>
+              </div>
+              
+              <div class="sk-feature">
+                <div class="sk-feature-icon">💰</div>
+                <div>
+                  <h4 class="sk-feature-title">Uygun Fiyat Garantisi</h4>
+                  <p class="sk-feature-text">Piyasanın en rekabetçi fiyatlarıyla kaliteli hizmet alın. Gizli maliyet yok, sürpriz yok.</p>
+                </div>
+              </div>
+              
+              <div class="sk-feature">
+                <div class="sk-feature-icon">🎯</div>
+                <div>
+                  <h4 class="sk-feature-title">Uzman Danışmanlık</h4>
+                  <p class="sk-feature-text">Deneyimli mal müşavirleri ve iş danışmanlarından kişiselleştirilmiş destek alın.</p>
+                </div>
+              </div>
+              
+              <div class="sk-feature">
+                <div class="sk-feature-icon">🛡️</div>
+                <div>
+                  <h4 class="sk-feature-title">Güvenli ve Yasal</h4>
+                  <p class="sk-feature-text">Tüm süreçler yasal mevzuata uygun şekilde yürütülür, belgeleriniz güvence altındadır.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+          
+          <div class="sk-why-right">
+            <div class="sk-stats-card">
+              <div class="sk-stats-header">
+                <div class="sk-stats-icon">📊</div>
+                <h3 class="sk-stats-title">2024 Yılı Başarı Raporu</h3>
+              </div>
+              
+              <div class="sk-stats-grid">
+                <div class="sk-stat-box">
+                  <div class="sk-stat-number">5.000+</div>
+                  <div class="sk-stat-label">Yeni Şirket</div>
+                </div>
+                <div class="sk-stat-box">
+                  <div class="sk-stat-number">%95</div>
+                  <div class="sk-stat-label">KOSGEB Başarısı</div>
+                </div>
+                <div class="sk-stat-box">
+                  <div class="sk-stat-number">50+</div>
+                  <div class="sk-stat-label">Pazaryeri</div>
+                </div>
+                <div class="sk-stat-box">
+                  <div class="sk-stat-number">7/24</div>
+                  <div class="sk-stat-label">Canlı Destek</div>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="sk-cta">
+      <div class="sk-container">
+        <span class="sk-cta-badge">🎯 Hemen Başlayın</span>
+        
+        <h2 class="sk-cta-title">
+          Hayallerinizdeki İşe <span class="sk-cta-highlight">Bugün Başlayın!</span>
+        </h2>
+        
+        <p class="sk-cta-description">
+          {iletisim.baslik}
+          <br />
+          <span class="sk-cta-subtitle">{iletisim.altBaslik}</span>
+        </p>
+        
+        <div class="sk-cta-buttons">
+          <a href={whatsappUrl} target="_blank" class="sk-cta-primary">
+            <svg width="24" height="24" viewBox="0 0 24 24" fill="currentColor">
+              <path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L.057 24l6.305-1.654a11.882 11.882 0 005.683 1.448h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>
+            </svg>
+            WhatsApp ile İletişime Geç
+          </a>
+          
+        </div>
+        
+        <div class="sk-cta-features">
+          <div class="sk-cta-feature">
+            <svg class="sk-cta-feature-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Ücretsiz Ön Analiz</span>
+          </div>
+          <div class="sk-cta-feature">
+            <svg class="sk-cta-feature-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>Rezerve Edilmiş Randevu</span>
+          </div>
+          <div class="sk-cta-feature">
+            <svg class="sk-cta-feature-icon" fill="currentColor" viewBox="0 0 20 20">
+              <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd"/>
+            </svg>
+            <span>7/24 Canlı Destek</span>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style>
+    /* ===== ŞİRKET KUR ÖZEL STİLLERİ ===== */
+    /* CSS çakışmasını önlemek için tüm class'lar 'sk-' prefix ile */
+    
+    .sk-page {
+      font-family: 'Inter', sans-serif;
+    }
+    
+    /* Container */
+    .sk-container {
+      width: 100%;
+      max-width: 1280px;
+      margin: 0 auto;
+      padding: 0 20px;
+    }
+    
+    /* Gradient Text */
+    .sk-gradient-text {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      background-clip: text;
+    }
+    
+    /* ===== HERO SECTION ===== */
+    .sk-hero {
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a5f 50%, #0f172a 100%);
+      color: white;
+      position: relative;
+      overflow: hidden;
+      padding: 100px 0;
+    }
+    
+    .sk-hero::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 20% 50%, rgba(59, 130, 246, 0.1) 0%, transparent 50%),
+                  radial-gradient(circle at 80% 20%, rgba(139, 92, 246, 0.1) 0%, transparent 50%);
+    }
+    
+    .sk-hero-content {
+      position: relative;
+      z-index: 1;
+      text-align: center;
+      max-width: 1024px;
+      margin: 0 auto;
+    }
+    
+    .sk-hero-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 10px;
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      padding: 10px 20px;
+      border-radius: 50px;
+      margin-bottom: 40px;
+    }
+    
+    .sk-hero-icon {
+      font-size: 24px;
+    }
+    
+    .sk-hero-text {
+      font-size: 14px;
+      font-weight: 500;
+    }
+    
+    .sk-hero-title {
+      font-size: 48px;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .sk-hero-title {
+        font-size: 32px;
+      }
+    }
+    
+    .sk-hero-highlight {
+      color: #60a5fa;
+    }
+    
+    .sk-hero-description {
+      font-size: 20px;
+      color: #dbeafe;
+      margin-bottom: 40px;
+      max-width: 768px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    @media (max-width: 768px) {
+      .sk-hero-description {
+        font-size: 18px;
+      }
+    }
+    
+    .sk-hero-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 60px;
+    }
+    
+    @media (min-width: 640px) {
+      .sk-hero-buttons {
+        flex-direction: row;
+      }
+    }
+    
+    .sk-btn-primary {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-btn-primary:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-btn-secondary {
+      background: rgba(255, 255, 255, 0.1);
+      border: 1px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 16px 32px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .sk-btn-secondary:hover {
+      background: rgba(255, 255, 255, 0.2);
+    }
+    
+    .sk-hero-stats {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+    }
+    
+    .sk-stat {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #93c5fd;
+    }
+    
+    .sk-stat-icon {
+      width: 20px;
+      height: 20px;
+      color: #10b981;
+    }
+    
+    /* ===== TRUST SECTION ===== */
+    .sk-trust {
+      background-color: white;
+      padding: 64px 0;
+    }
+    
+    .sk-trust-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 32px;
+      text-align: center;
+    }
+    
+    @media (min-width: 768px) {
+      .sk-trust-grid {
+        grid-template-columns: repeat(4, 1fr);
+      }
+    }
+    
+    .sk-trust-item {
+      padding: 24px;
+    }
+    
+    .sk-trust-icon {
+      width: 64px;
+      height: 64px;
+      background-color: #dbeafe;
+      border-radius: 16px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 24px;
+      margin: 0 auto 16px;
+    }
+    
+    .sk-trust-number {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    
+    .sk-trust-text {
+      color: #64748b;
+    }
+    
+    /* ===== SECTION STYLES ===== */
+    .sk-section-header {
+      text-align: center;
+      margin-bottom: 64px;
+    }
+    
+    .sk-section-badge {
+      display: inline-block;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 16px;
+    }
+    
+    .sk-badge-blue {
+      background-color: #dbeafe;
+      color: #1d4ed8;
+    }
+    
+    .sk-badge-green {
+      background-color: #d1fae5;
+      color: #047857;
+    }
+    
+    .sk-badge-purple {
+      background-color: #f3e8ff;
+      color: #7c3aed;
+    }
+    
+    .sk-badge-global {
+      background-color: rgba(255, 255, 255, 0.1);
+      color: #93c5fd;
+      backdrop-filter: blur(8px);
+    }
+    
+    .sk-badge-orange {
+      background-color: #fed7aa;
+      color: #ea580c;
+    }
+    
+    .sk-section-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+    
+    @media (max-width: 768px) {
+      .sk-section-title {
+        font-size: 28px;
+      }
+    }
+    
+    .sk-section-description {
+      font-size: 20px;
+      color: #64748b;
+      max-width: 768px;
+      margin: 0 auto;
+    }
+    
+    /* ===== PRICING SECTION ===== */
+    .sk-pricing {
+      padding: 80px 0;
+      background: linear-gradient(to bottom, white, #eff6ff);
+    }
+    
+    .sk-pricing-grid {
+      display: grid;
+      gap: 32px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 1024px) {
+      .sk-pricing-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .sk-pricing-card {
+      background-color: white;
+      border-radius: 24px;
+      overflow: hidden;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+    
+    .sk-pricing-card:hover {
+      transform: translateY(-8px);
+      box-shadow: 0 25px 50px -12px rgba(0, 0, 0, 0.25);
+    }
+    
+    .sk-pricing-highlight {
+      transform: translateY(-16px);
+    }
+    
+    .sk-pricing-popular {
+      border: 2px solid #3b82f6;
+    }
+    
+    .sk-pricing-badge {
+      color: white;
+      text-align: center;
+      padding: 8px;
+      font-size: 14px;
+      font-weight: 700;
+    }
+    
+    .sk-pricing-header {
+      padding: 32px 32px 16px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+    }
+    
+    .sk-pricing-icon {
+      font-size: 48px;
+      filter: drop-shadow(0 4px 6px rgba(0, 0, 0, 0.1));
+    }
+    
+    .sk-pricing-name {
+      font-size: 24px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    
+    .sk-pricing-type {
+      color: #64748b;
+      font-size: 14px;
+    }
+    
+    .sk-pricing-description {
+      padding: 0 32px;
+      color: #475569;
+      margin-bottom: 24px;
+    }
+    
+    .sk-pricing-price {
+      padding: 0 32px;
+      margin-bottom: 32px;
+      display: flex;
+      align-items: baseline;
+    }
+    
+    .sk-price-current {
+      font-size: 40px;
+      font-weight: 800;
+      color: #1e293b;
+    }
+    
+    .sk-price-period {
+      color: #64748b;
+      margin-left: 4px;
+    }
+    
+    .sk-price-old {
+      font-size: 20px;
+      color: #94a3b8;
+      text-decoration: line-through;
+      margin-left: 12px;
+    }
+    
+    .sk-pricing-features {
+      padding: 0 32px;
+      margin-bottom: 32px;
+    }
+    
+    .sk-feature-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 12px;
+      margin-bottom: 16px;
+    }
+    
+    .sk-feature-icon {
+      width: 20px;
+      height: 20px;
+      flex-shrink: 0;
+      margin-top: 4px;
+    }
+    
+    .sk-icon-active {
+      color: #10b981;
+    }
+    
+    .sk-icon-inactive {
+      color: #cbd5e1;
+    }
+    
+    .sk-feature-text-bold {
+      font-weight: 600;
+      color: #1e293b;
+    }
+    
+    .sk-feature-text {
+      color: #475569;
+    }
+    
+    .sk-feature-detail {
+      font-size: 12px;
+      color: #64748b;
+      margin-top: 4px;
+      margin-left: 4px;
+    }
+    
+    .sk-pricing-action {
+      padding: 0 32px;
+      margin-bottom: 24px;
+    }
+    
+    .sk-pricing-button {
+      display: block;
+      width: 100%;
+      padding: 16px;
+      border-radius: 12px;
+      font-weight: 700;
+      text-decoration: none;
+      text-align: center;
+      transition: all 0.3s ease;
+      color: white;
+    }
+    
+    .sk-btn-free {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+    }
+    
+    .sk-btn-free:hover {
+      background: linear-gradient(135deg, #059669 0%, #047857 100%);
+      transform: scale(1.05);
+    }
+    
+    .sk-btn-premium {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+    }
+    
+    .sk-btn-premium:hover {
+      transform: scale(1.05);
+    }
+    
+    .sk-btn-global {
+      background: linear-gradient(135deg, #f59e0b 0%, #ef4444 100%);
+    }
+    
+    .sk-btn-global:hover {
+      background: linear-gradient(135deg, #ef4444 0%, #dc2626 100%);
+      transform: scale(1.05);
+    }
+    
+    .sk-pricing-flag {
+      padding: 0 32px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      color: #64748b;
+      font-size: 14px;
+    }
+    
+    /* ===== SERVICES SECTION ===== */
+    .sk-services {
+      padding: 80px 0;
+      background-color: white;
+    }
+    
+    .sk-services-grid {
+      display: grid;
+      gap: 32px;
+      max-width: 1152px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 768px) {
+      .sk-services-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .sk-service-card {
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .sk-service-card:nth-child(1) {
+      background: linear-gradient(135deg, #ecfdf5 0%, #d1fae5 100%);
+    }
+    
+    .sk-service-card:nth-child(2) {
+      background: linear-gradient(135deg, #eff6ff 0%, #dbeafe 50%, #e0e7ff 100%);
+    }
+    
+    .sk-service-card:nth-child(3) {
+      background: linear-gradient(135deg, #fffbeb 0%, #fef3c7 100%);
+    }
+    
+    .sk-service-card:nth-child(4) {
+      background: linear-gradient(135deg, #fef3c7 0%, #fde68a 100%);
+    }
+    
+    .sk-service-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-service-header {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      margin-bottom: 24px;
+    }
+    
+    .sk-service-icon {
+      font-size: 32px;
+    }
+    
+    .sk-service-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+    }
+    
+    .sk-service-list {
+      list-style: none;
+    }
+    
+    .sk-service-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 12px;
+      color: #475569;
+    }
+    
+    .sk-service-check {
+      width: 20px;
+      height: 20px;
+      color: #3b82f6;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    /* ===== ADDITIONAL SERVICES ===== */
+    .sk-additional {
+      padding: 80px 0;
+      background: linear-gradient(to bottom, #eff6ff, #e0e7ff);
+    }
+    
+    .sk-additional-grid {
+      display: grid;
+      gap: 32px;
+      max-width: 1152px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 768px) {
+      .sk-additional-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    .sk-additional-card {
+      border-radius: 16px;
+      padding: 32px;
+      box-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      transition: all 0.3s ease;
+    }
+    
+    .sk-additional-card:nth-child(1) {
+      background: linear-gradient(135deg, #dbeafe 0%, #e0e7ff 100%);
+    }
+    
+    .sk-additional-card:nth-child(2) {
+      background: linear-gradient(135deg, #f3e8ff 0%, #f5d0fe 100%);
+    }
+    
+    .sk-additional-card:nth-child(3) {
+      background: linear-gradient(135deg, #d1fae5 0%, #a7f3d0 100%);
+    }
+    
+    .sk-additional-card:hover {
+      transform: translateY(-4px);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-additional-title {
+      font-size: 20px;
+      font-weight: 700;
+      color: #1e293b;
+      margin-bottom: 8px;
+    }
+    
+    .sk-additional-description {
+      color: #64748b;
+      margin-bottom: 16px;
+    }
+    
+    .sk-additional-list {
+      list-style: none;
+    }
+    
+    .sk-additional-item {
+      display: flex;
+      align-items: flex-start;
+      gap: 8px;
+      margin-bottom: 8px;
+      color: #475569;
+    }
+    
+    .sk-additional-check {
+      width: 20px;
+      height: 20px;
+      color: #3b82f6;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    
+    /* ===== GLOBAL SECTION ===== */
+    .sk-global {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #0f172a 0%, #1e3a8a 50%, #0f172a 100%);
+      color: white;
+    }
+    
+    .sk-global-title {
+      color: white;
+    }
+    
+    .sk-global-highlight {
+      color: #22d3ee;
+    }
+    
+    .sk-global-description {
+      color: #cbd5e1;
+    }
+    
+    .sk-countries {
+      max-width: 1152px;
+      margin: 0 auto;
+    }
+    
+    .sk-region {
+      margin-bottom: 32px;
+    }
+    
+    .sk-region-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #22d3ee;
+      margin-bottom: 16px;
+      text-transform: uppercase;
+    }
+    
+    .sk-countries-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 12px;
+    }
+    
+    @media (min-width: 768px) {
+      .sk-countries-grid {
+        grid-template-columns: repeat(3, 1fr);
+      }
+    }
+    
+    @media (min-width: 1024px) {
+      .sk-countries-grid {
+        grid-template-columns: repeat(6, 1fr);
+      }
+    }
+    
+    .sk-country-item {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 8px;
+    }
+    
+    .sk-country-flag {
+      font-size: 20px;
+    }
+    
+    .sk-country-name {
+      color: #e2e8f0;
+      font-size: 14px;
+    }
+    
+    /* ===== WHY SECTION ===== */
+    .sk-why {
+      padding: 80px 0;
+      background-color: white;
+    }
+    
+    .sk-why-content {
+      display: grid;
+      gap: 64px;
+      max-width: 1120px;
+      margin: 0 auto;
+    }
+    
+    @media (min-width: 1024px) {
+      .sk-why-content {
+        grid-template-columns: repeat(2, 1fr);
+      }
+    }
+    
+    .sk-why-title {
+      font-size: 36px;
+      font-weight: 800;
+      color: #1e293b;
+      margin-bottom: 16px;
+    }
+    
+    .sk-why-description {
+      font-size: 18px;
+      color: #64748b;
+      margin-bottom: 32px;
+    }
+    
+    .sk-features {
+      display: grid;
+      gap: 24px;
+    }
+    
+    .sk-feature {
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+    }
+    
+    .sk-feature .sk-feature-icon {
+      width: 48px;
+      height: 48px;
+      background-color: #dbeafe;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      flex-shrink: 0;
+    }
+    
+    .sk-feature-title {
+      font-size: 18px;
+      font-weight: 600;
+      color: #1e293b;
+      margin-bottom: 4px;
+    }
+    
+    .sk-feature-text {
+      color: #64748b;
+    }
+    
+    .sk-stats-card {
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 100%);
+      border-radius: 24px;
+      padding: 32px;
+      color: white;
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-stats-header {
+      text-align: center;
+      margin-bottom: 32px;
+    }
+    
+    .sk-stats-icon {
+      font-size: 48px;
+      margin-bottom: 16px;
+    }
+    
+    .sk-stats-title {
+      font-size: 24px;
+      font-weight: 700;
+    }
+    
+    .sk-stats-grid {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr);
+      gap: 16px;
+    }
+    
+    .sk-stat-box {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(8px);
+      border-radius: 16px;
+      padding: 16px;
+      text-align: center;
+    }
+    
+    .sk-stat-number {
+      font-size: 24px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+    
+    .sk-stat-label {
+      font-size: 14px;
+      color: #dbeafe;
+    }
+    
+    /* ===== CTA SECTION ===== */
+    .sk-cta {
+      padding: 80px 0;
+      background: linear-gradient(135deg, #3b82f6 0%, #8b5cf6 50%, #ec4899 100%);
+      color: white;
+      text-align: center;
+    }
+    
+    .sk-cta-badge {
+      display: inline-block;
+      background: rgba(255, 255, 255, 0.2);
+      backdrop-filter: blur(8px);
+      color: white;
+      padding: 8px 16px;
+      border-radius: 50px;
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 24px;
+    }
+    
+    .sk-cta-title {
+      font-size: 40px;
+      font-weight: 800;
+      margin-bottom: 24px;
+    }
+    
+    @media (max-width: 768px) {
+      .sk-cta-title {
+        font-size: 32px;
+      }
+    }
+    
+    .sk-cta-highlight {
+      color: #fef3c7;
+    }
+    
+    .sk-cta-description {
+      font-size: 20px;
+      color: #dbeafe;
+      margin-bottom: 40px;
+      max-width: 768px;
+      margin-left: auto;
+      margin-right: auto;
+    }
+    
+    .sk-cta-subtitle {
+      font-size: 16px;
+      color: #93c5fd;
+    }
+    
+    .sk-cta-buttons {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+      justify-content: center;
+      margin-bottom: 48px;
+    }
+    
+    @media (min-width: 640px) {
+      .sk-cta-buttons {
+        flex-direction: row;
+      }
+    }
+    
+    .sk-cta-primary {
+      background-color: white;
+      color: #7c3aed;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .sk-cta-primary:hover {
+      transform: scale(1.05);
+      box-shadow: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+    
+    .sk-cta-secondary {
+      background-color: rgba(255, 255, 255, 0.1);
+      border: 2px solid rgba(255, 255, 255, 0.3);
+      color: white;
+      padding: 16px 40px;
+      border-radius: 50px;
+      font-weight: 700;
+      font-size: 18px;
+      text-decoration: none;
+      display: inline-flex;
+      align-items: center;
+      justify-content: center;
+      gap: 12px;
+      transition: all 0.3s ease;
+    }
+    
+    .sk-cta-secondary:hover {
+      background-color: rgba(255, 255, 255, 0.2);
+    }
+    
+    .sk-cta-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 32px;
+    }
+    
+    .sk-cta-feature {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      font-size: 14px;
+      color: #cbd5e1;
+    }
+    
+    .sk-cta-feature-icon {
+      width: 20px;
+      height: 20px;
+      color: #10b981;
+    }
+    
+    /* Responsive Düzenlemeler */
+    @media (max-width: 640px) {
+      .sk-hero {
+        padding: 60px 0;
+      }
+      
+      .sk-section-title {
+        font-size: 24px;
+      }
+      
+      .sk-section-description {
+        font-size: 16px;
+      }
+      
+      .sk-pricing-grid,
+      .sk-services-grid,
+      .sk-additional-grid,
+      .sk-why-content {
+        grid-template-columns: 1fr;
+      }
+      
+      .sk-trust-grid {
+        grid-template-columns: 1fr;
+      }
+      
+      .sk-countries-grid {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</BasicLayout>

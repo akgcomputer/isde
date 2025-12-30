@@ -1,0 +1,971 @@
+---
+// Configuration
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const siteName = "İşde Yeter";
+const baseUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = "WhatsApp ile İletişime Geç";
+const buttonText = "Randevu al";
+const pageTitle = "Online Psikolog Randevusu - Profesyonel Danışmanlık Hizmetleri";
+const pageDescription = "Profesyonel psikolog randevusu alın. Online ve yüz yüze danışmanlık hizmetleri, çift terapisi, ergen psikolojisi ve daha birçok uzmanlık alanı.";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+// Resimli uzmanlar (21 uzman)
+const expertServices = [
+  {
+    title: "Dr. Psikolog Ayşe Yılmaz",
+    description: "Klinik psikoloji ve anksiyete bozuklukları uzmanı. 15 yıllık deneyim ile bireysel terapi seansları sunmaktadır.",
+    category: "Klinik Psikolog",
+    image: "/img/psikolog/aysye-yilmaz.jpg",
+    order: 1
+  },
+  {
+    title: "Psikolog Mehmet Kara",
+    description: "Çift ve ilişki terapisi uzmanı. Evlilik danışmanlığı ve iletişim problemleri konusunda uzmanlaşmıştır.",
+    category: "Çift Terapisti",
+    image: "/img/psikolog/mehmet-kara.jpg",
+    order: 2
+  },
+  {
+    title: "Uzm. Psikolog Elif Demir",
+    description: "Ergen psikolojisi ve aile danışmanlığı uzmanı. Gençlerin gelişimsel süreçlerine destek sağlamaktadır.",
+    category: "Ergen Psikoloğu",
+    image: "/img/psikolog/elif-demir.jpg",
+    order: 3
+  },
+  {
+    title: "Dr. Psikolog Ali Şahin",
+    description: "Travma ve PTSD uzmanı. EMDR terapisi sertifikasına sahip, travma sonrası iyileşme süreçlerinde çalışmaktadır.",
+    category: "Travma Uzmanı",
+    image: "/img/psikolog/ali-sahin.jpg",
+    order: 4
+  },
+  {
+    title: "Psikolog Zeynep Arslan",
+    description: "Sosyal anksiyete ve fobiler konusunda uzman. Bilişsel davranışçı terapi yöntemlerini uygulamaktadır.",
+    category: "Sosyal Anksiyete",
+    image: "/img/psikolog/zeynep-arslan.jpg",
+    order: 5
+  },
+  {
+    title: "Uzm. Psikolog Mustafa Özkan",
+    description: "Depresyon ve duygudurum bozuklukları uzmanı. Farmakoterapi kombinasyonu ile tedavi sunmaktadır.",
+    category: "Depresyon Uzmanı",
+    image: "/img/psikolog/mustafa-ozkan.jpg",
+    order: 6
+  },
+  {
+    title: "Psikolog Fatma Çelik",
+    description: "Obsesif kompulsif bozukluk (OKB) uzmanı. Maruz bırakma ve tepki önleme tekniklerinde deneyimlidir.",
+    category: "OKB Uzmanı",
+    image: "/img/psikolog/fatma-celik.jpg",
+    order: 7
+  },
+  {
+    title: "Dr. Psikolog Emel Yıldız",
+    description: "Sınav kaygısı ve performans psikolojisi uzmanı. Öğrenciler ve sporcular için özel programlar sunmaktadır.",
+    category: "Performans Psikoloğu",
+    image: "/img/psikolog/emel-yildiz.jpg",
+    order: 8
+  },
+  {
+    title: "Psikolog Sema Polat",
+    description: "Yeme bozuklukları uzmanı. Anorexia, bulimia ve aşırı yeme problemleri konusunda uzmanlaşmıştır.",
+    category: "Yeme Bozuklukları",
+    image: "/img/psikolog/sema-polat.jpg",
+    order: 9
+  },
+  {
+    title: "Uzm. Psikolog Hale Mutlu",
+    description: "Bağımlılık danışmanlığı uzmanı. Madde bağımlılığı ve davranışsal bağımlılıklar konusunda çalışmaktadır.",
+    category: "Bağımlılık Danışmanı",
+    image: "/img/psikolog/hale-mutlu.jpg",
+    order: 10
+  },
+  {
+    title: "Psikolog Derya Koç",
+    description: "Öfke kontrolü ve stres yönetimi uzmanı. Duygusal düzenleme becerileri eğitimi vermektedir.",
+    category: "Stres Yönetimi",
+    image: "/img/psikolog/bos-kadin.jpg",
+    order: 11
+  },
+  {
+    title: "Dr. Psikolog Berrak Aksu",
+    description: "Çocuk psikolojisi uzmanı. Oyun terapisi ve çocuk değerlendirme testleri konusunda uzmandır.",
+    category: "Çocuk Psikoloğu",
+    image: "/img/psikolog/berrak-aksu.jpg",
+    order: 12
+  },
+  {
+    title: "Psikolog Nazlı Ersoy",
+    description: "Bireysel gelişim ve öz-değer çalışmaları uzmanı. Koçluk yaklaşımı ile kişisel gelişim desteklemektedir.",
+    category: "Gelişim Psikoloğu",
+    image: "/img/psikolog/nazli-ersoy.jpg",
+    order: 13
+  },
+  {
+    title: "Uzm. Psikolog Serpil Gül",
+    description: "İş yeri psikolojisi ve tükenmişlik sendromu uzmanı. Kurumsal danışmanlık ve koçluk hizmetleri sunmaktadır.",
+    category: "Kurumsal Psikolog",
+    image: "/img/psikolog/serpil-gul.jpg",
+    order: 14
+  },
+  {
+    title: "Psikolog Ayhan Türk",
+    description: "Panik bozukluk ve agorafobi uzmanı. Nefes çalışmaları ve relaksasyon teknikleri konusunda eğitimlidir.",
+    category: "Panik Bozukluk",
+    image: "/img/psikolog/bos-erkek.jpg",
+    order: 15
+  }
+];
+
+// Resimsiz uzmanlar (Diğer Uzmanlarımız bölümü)
+const otherExperts = [
+  {
+    title: "Psikolog Selin Kaya",
+    category: "Sosyal Hizmet Uzmanı"
+  },
+  {
+    title: "Dr. Psikolog Tolga Aktaş",
+    category: "Foransik Psikolog"
+  },
+  {
+    title: "Uzm. Psikolog Ece Yavuz",
+    category: "Rehberlik Uzmanı"
+  },
+  {
+    title: "Psikolog Buse Koçak",
+    category: "Oyun Terapisti"
+  },
+  {
+    title: "Dr. Psikolog Oğuzhan Çetin",
+    category: "Spor Psikoloğu"
+  },
+  {
+    title: "Psikolog İlknur Karaca",
+    category: "Meditasyon Terapisti"
+  },
+  {
+    title: "Uzm. Psikolog Sinan Öz",
+    category: "Hipnoterapist"
+  },
+  {
+    title: "Psikolog Ebru Çevik",
+    category: "Sanat Terapisti"
+  },
+  {
+    title: "Dr. Psikolog Mert Şentürk",
+    category: "Kriz Müdahale Uzmanı"
+  },
+  {
+    title: "Psikolog Ayça Güneş",
+    category: "EMDR Terapisti"
+  },
+  {
+    title: "Uzm. Psikolog Kerem Albayrak",
+    category: "Şema Terapisti"
+  },
+  {
+    title: "Psikolog Deniz Bora",
+    category: "DBT Terapisti"
+  },
+  {
+    title: "Dr. Psikolog Can Öz",
+    category: "Pozitif Psikolog"
+  },
+  {
+    title: "Psikolog Damla Su",
+    category: "Mindfulness Uzmanı"
+  },
+  {
+    title: "Uzm. Psikolog Erdem Taş",
+    category: "Bilişsel Terapist"
+  },
+  {
+    title: "Psikolog Sude Işık",
+    category: "Aile Terapisti"
+  },
+  {
+    title: "Dr. Psikolog Fırat Doğan",
+    category: "Sağlık Psikoloğu"
+  },
+  {
+    title: "Psikolog Ceyda Öner",
+    category: "Grup Terapisti"
+  },
+  {
+    title: "Uzm. Psikolog Orhan Poyraz",
+    category: "Geriatrik Psikolog"
+  },
+  {
+    title: "Psikolog Begüm Yıldırım",
+    category: "LGBTQ+ Danışmanı"
+  },
+  {
+    title: "Dr. Psikolog Berk Çelikk",
+    category: "Adli Psikolog"
+  },
+  {
+    title: "Psikolog Esra Aksoy",
+    category: "Motivasyon Koçu"
+  },
+  {
+    title: "Uzm. Psikolog Şahin Güney",
+    category: "Rehberlik Psikoloğu"
+  },
+  {
+    title: "Psikolog Pınar Dinç",
+    category: "Çocuk Gelişim Uzmanı"
+  },
+  {
+    title: "Dr. Psikolog Çağrı Bayram",
+    category: "Ruh Sağlığı Uzmanı"
+  }
+];
+
+// Sıralı uzmanları kartlar için hazırla
+const sortedExperts = expertServices.sort((a, b) => a.order - b.order);
+---
+
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content={pageDescription}>
+    <meta name="keywords" content="psikolog randevusu, online psikolog, psikoloji danışmanlık, terapi, mental sağlık">
+    <title>{pageTitle} | {siteName}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 60px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+            opacity: 0.5;
+        }
+
+        header h1 {
+            font-size: 2.8rem;
+            margin-bottom: 15px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: white;
+            padding: 50px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .hero-content {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 40px;
+            align-items: center;
+        }
+
+        .hero-text h2 {
+            font-size: 2rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 12px 15px;
+            background: #f8f9fa;
+            border-radius: 8px;
+            transition: transform 0.3s ease;
+        }
+
+        .hero-feature:hover {
+            transform: translateX(5px);
+        }
+
+        .hero-feature i {
+            color: #4CAF50;
+            font-size: 1.2rem;
+        }
+
+        .hero-feature span {
+            font-size: 0.95rem;
+            color: #444;
+        }
+
+        .hero-stats {
+            display: grid;
+            grid-template-columns: repeat(3, 1fr);
+            gap: 20px;
+        }
+
+        .stat-card {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 30px 20px;
+            border-radius: 15px;
+            text-align: center;
+            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.2);
+            transition: transform 0.3s ease;
+        }
+
+        .stat-card:hover {
+            transform: translateY(-5px);
+        }
+
+        .stat-card i {
+            font-size: 2.5rem;
+            margin-bottom: 15px;
+            opacity: 0.9;
+        }
+
+        .stat-card h3 {
+            font-size: 2rem;
+            margin-bottom: 5px;
+        }
+
+        .stat-card p {
+            font-size: 0.9rem;
+            opacity: 0.85;
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #4CAF50;
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 15px auto 0;
+        }
+
+        /* Expert Cards Grid */
+        .experts-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+            padding: 0 0 60px;
+        }
+
+        .expert-card {
+            background: white;
+            border-radius: 20px;
+            overflow: hidden;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+            transition: all 0.4s ease;
+            position: relative;
+        }
+
+        .expert-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 40px rgba(0,0,0,0.15);
+        }
+
+        .expert-image {
+            height: 280px;
+            overflow: hidden;
+            position: relative;
+        }
+
+        .expert-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+            transition: transform 0.5s ease;
+        }
+
+        .expert-card:hover .expert-image img {
+            transform: scale(1.1);
+        }
+
+        .expert-category {
+            position: absolute;
+            top: 15px;
+            right: 15px;
+            background: #4CAF50;
+            color: white;
+            padding: 6px 14px;
+            border-radius: 20px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        .expert-content {
+            padding: 25px;
+        }
+
+        .expert-content h3 {
+            font-size: 1.25rem;
+            color: #1a237e;
+            margin-bottom: 8px;
+        }
+
+        .expert-content p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 20px;
+            line-height: 1.6;
+        }
+
+        .expert-footer {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .expert-rating {
+            display: flex;
+            align-items: center;
+            gap: 5px;
+        }
+
+        .expert-rating i {
+            color: #FFC107;
+            font-size: 0.9rem;
+        }
+
+        .expert-rating span {
+            color: #666;
+            font-size: 0.85rem;
+        }
+
+        /* Buttons */
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 12px 24px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 0.95rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .btn-whatsapp i {
+            font-size: 1.2rem;
+        }
+
+        /* Other Experts Section */
+        .other-experts-section {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .other-experts-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+            padding-bottom: 40px;
+        }
+
+        .other-expert-item {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+            padding: 20px;
+            background: #f8f9fa;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .other-expert-item:hover {
+            background: #fff;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+        }
+
+        .expert-info {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+        }
+
+        .expert-avatar {
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.1rem;
+        }
+
+        .expert-details h4 {
+            font-size: 1rem;
+            color: #1a237e;
+            margin-bottom: 3px;
+        }
+
+        .expert-details span {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cta-section::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cta-content {
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.2rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 1.1rem;
+            opacity: 0.9;
+            margin-bottom: 30px;
+        }
+
+        .btn-whatsapp-large {
+            background: #25D366;
+            color: white;
+            padding: 18px 40px;
+            font-size: 1.1rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-whatsapp-large:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1a237e;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 25px 20px;
+            max-height: 500px;
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+        }
+
+        footer p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        footer a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-content {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-stats {
+                grid-template-columns: 1fr;
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .experts-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-features {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h2 {
+                font-size: 1.6rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Profesyonel Psikolog Randevusu</h1>
+            <p>Uzman psikologlarımızla güvenli ve gizli ortamda terapi seansları alın. Online ve yüz yüze danışmanlık seçenekleriyle mental sağlığınızı koruyun.</p>
+        </div>
+    </header>
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-content">
+                <div class="hero-text">
+                    <h2>Psikolojik Destek Hizmetlerimiz</h2>
+                    <p>Mental sağlığınız bizim için önemli. Deneyimli ve uzman psikolog kadromuzla size en iyi hizmeti sunmak için buradayız. Hem online hem de yüz yüze seans seçeneklerimiz mevcuttur.</p>
+                    <p>Her yaş grubu ve ihtiyaca özel terapi programları hazırlıyor, size özel çözümler sunuyoruz.</p>
+                    <div class="hero-features">
+                        <div class="hero-feature">
+                            <i class="fas fa-video"></i>
+                            <span>Online Terapi Seansları</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-user-md"></i>
+                            <span>Uzman Klinik Psikologlar</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-shield-alt"></i>
+                            <span>%100 Gizlilik Garantisi</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-calendar-check"></i>
+                            <span>Esnek Randevu Saatleri</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-stats">
+                    <div class="stat-card">
+                        <i class="fas fa-users"></i>
+                        <h3>25+</h3>
+                        <p>Uzman Psikolog</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-smile"></i>
+                        <h3>Onlarca</h3>
+                        <p>Mutlu Danışan</p>
+                    </div>
+                    <div class="stat-card">
+                        <i class="fas fa-star"></i>
+                        <h3>4.9</h3>
+                        <p>Ortalama Puan</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="experts-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Uzman Psikologlarımız</h2>
+                <p>Deneyimli ve uzman psikolog kadromuzla tanışın. Her biri kendi alanında uzmanlaşmış, sertifikalı ve deneyimli profesyonellerden oluşmaktadır.</p>
+            </div>
+            <div class="experts-grid">
+                {sortedExperts.map((expert) => (
+                    <div class="expert-card">
+                        <div class="expert-image">
+                            <img src={expert.image} alt={expert.title} loading="lazy" onerror="this.src='/img/default-psychologist.jpg'" />
+                            <span class="expert-category">{expert.category}</span>
+                        </div>
+                        <div class="expert-content">
+                            <h3>{expert.title}</h3>
+                            <p>{expert.description}</p>
+                            <div class="expert-footer">
+                                <div class="expert-rating">
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <i class="fas fa-star"></i>
+                                    <span>(5.0)</span>
+                                </div>
+                                <a href={getWhatsAppLink(expert.title)} class="btn btn-whatsapp" target="_blank">
+                                    <i class="fab fa-whatsapp"></i>
+                                    {buttonText}
+                                </a>
+                            </div>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="other-experts-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Diğer Uzmanlarımız</h2>
+                <p>Geniş uzman kadromuzun geri kalan üyeleri de sizlere profesyonel danışmanlık hizmetleri sunmaktadır.</p>
+            </div>
+            <div class="other-experts-list">
+                {otherExperts.map((expert) => (
+                    <div class="other-expert-item">
+                        <div class="expert-info">
+                            <div class="expert-avatar">
+                                {expert.title.split(' ').slice(-1)[0].charAt(0)}
+                            </div>
+                            <div class="expert-details">
+                                <h4>{expert.title}</h4>
+                                <span>{expert.category}</span>
+                            </div>
+                        </div>
+                        <a href={getWhatsAppLink(expert.title)} class="btn btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            {buttonText}
+                        </a>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Mental Sağlığınız İçin İlk Adımı Atın</h2>
+                <p>Profesyonel destek almak hiç bu kadar kolay olmamıştı. Hemen WhatsApp üzerinden randevu alın, yolculuğunuza başlayın.</p>
+                <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20psikolog%20randevusu%20almak%20istiyorum`} class="btn btn-whatsapp-large" target="_blank">
+                    <i class="fab fa-whatsapp"></i>
+                    Hemen Randevu Al
+                </a>
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sıkça Sorulan Sorular</h2>
+                <p>Psikolog randevusu hakkında merak ettiğiniz soruların cevapları</p>
+            </div>
+            <div class="faq-container">
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Online psikolog randevusu nasıl alabilirim?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        WhatsApp üzerinden istediğiniz uzmanı seçip randevu talebinde bulunabilirsiniz. Size en kısa sürede dönüş yapılacak ve online seans için uygun tarih ve saat belirlenecektir. Seanslar video görüşme şeklinde gerçekleşmektedir.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Seanslar ne kadar sürüyor?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Standart bireysel terapi seansları ortalama 50-60 dakika sürmektedir. İlk değerlendirme seansı yaklaşık 90 dakika sürebilir. Çift terapisi seansları ise 75-90 dakika arasında değişmektedir.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Gizlilik güvencesi var mı?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Kesinlikle. Tüm seanslar tamamen gizli tutulmaktadır. Psikologlarımız mesleki etik kurallarına ve gizlilik ilkelerine sıkı sıkıya bağlıdır. Hiçbir bilgi üçüncü taraflarla paylaşılmamaktadır.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        İlk seans öncesi hazırlık yapmalı mıyım?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Özel bir hazırlık yapmanıza gerek yoktur. Rahat olduğunuz bir ortamda bulunmanız ve açık olmanız yeterlidir. İlk seans genellikle tanışma ve ihtiyaçlarınızı belirleme amaçlı geçmektedir.
+                    </div>
+                </div>
+                <div class="faq-item">
+                    <div class="faq-question">
+                        Randevumu iptal edebilir miyim?
+                        <i class="fas fa-chevron-down"></i>
+                    </div>
+                    <div class="faq-answer">
+                        Evet, randevunuzu seans başlamadan en az 24 saat önce iptal edebilir veya yeniden planlayabilirsiniz. WhatsApp üzerinden psikologunuzla iletişime geçmeniz yeterlidir.
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+
+   
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

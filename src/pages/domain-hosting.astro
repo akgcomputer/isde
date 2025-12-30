@@ -1,0 +1,1474 @@
+---
+// domain-hosting.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "Domain ve Hosting Hizmetleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="domain-hosting-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">Profesyonel <span class="highlight">Domain</span> ve <span class="highlight">Hosting</span> Çözümleri</h1>
+          <p class="hero-description">
+            Dünyanın en çok kullanılan hosting platformu ile LiteSpeed'in hızı birleşiyor! 
+            cPanel hosting yönetim paneli ile hızlı, kullanıcı dostu arayüzü ve yılların getirdiği tecrübe ile size en iyi deneyimi sunuyoruz.
+          </p>
+          <div class="hero-buttons">
+            <a href="#hosting-plans" class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              Hosting Paketlerini İncele
+            </a>
+            <a href="#domain-search" class="btn secondary-btn">
+              <span class="btn-icon">🔍</span>
+              Domain Uzantısı Beğenin
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="server-animation">
+            <div class="server-icon">🖥️</div>
+            <div class="data-flow"></div>
+            <div class="globe-icon">🌐</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Hosting Plans Section -->
+    <section id="hosting-plans" class="hosting-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">cPanel Hosting Paketleri</h2>
+          <p class="section-subtitle">İhtiyacınıza uygun hosting çözümlerimizi keşfedin</p>
+        </div>
+        
+        <div class="plans-grid">
+          <!-- Başlangıç Planı -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <h3 class="plan-title">cPanel BAŞLANGIÇ</h3>
+              <div class="plan-badge">Popüler</div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><span class="feature-icon">✅</span> 1 Adet Site Barındırma</li>
+                <li><span class="feature-icon">✅</span> 5GB SSD Disk</li>
+                <li><span class="feature-icon">✅</span> 50GB Trafik</li>
+                <li><span class="feature-icon">✅</span> 1 Core CPU / 1 GB RAM</li>
+                <li><span class="feature-icon">✅</span> 5 Adet MySQL</li>
+                <li><span class="feature-icon">✅</span> 5 Adet Subdomain</li>
+                <li><span class="feature-icon">✅</span> 5 Adet Parked Domain</li>
+              </ul>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("cPanel Başlangıç Hosting")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyatlar ve Detaylar
+              </a>
+            </div>
+          </div>
+
+          <!-- Pro Planı -->
+          <div class="plan-card featured">
+            <div class="plan-header">
+              <h3 class="plan-title">cPanel PRO</h3>
+              <div class="plan-badge">En Çok Tercih Edilen</div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><span class="feature-icon">✅</span> 5 Adet Site Barındırma</li>
+                <li><span class="feature-icon">✅</span> 20GB SSD Disk</li>
+                <li><span class="feature-icon">✅</span> 100GB Trafik</li>
+                <li><span class="feature-icon">✅</span> 2 Core CPU / 2 GB RAM</li>
+                <li><span class="feature-icon">✅</span> Limitsiz MySQL</li>
+                <li><span class="feature-icon">✅</span> Limitsiz Subdomain</li>
+                <li><span class="feature-icon">✅</span> 10 Adet Parked Domain</li>
+              </ul>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("cPanel Pro Hosting")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyat ve Detaylar
+              </a>
+            </div>
+          </div>
+
+          <!-- Limitsiz Plan -->
+          <div class="plan-card">
+            <div class="plan-header">
+              <h3 class="plan-title">cPanel LİMİTSİZ</h3>
+              <div class="plan-badge">Kurumsal</div>
+            </div>
+            <div class="plan-features">
+              <ul>
+                <li><span class="feature-icon">✅</span> Limitsiz Site Barındırma</li>
+                <li><span class="feature-icon">✅</span> Limitsiz SSD Disk</li>
+                <li><span class="feature-icon">✅</span> Limitsiz Trafik</li>
+                <li><span class="feature-icon">✅</span> 4 Core CPU / 4 GB RAM</li>
+                <li><span class="feature-icon">✅</span> Sınırsız MySQL</li>
+                <li><span class="feature-icon">✅</span> Sınırsız Subdomain</li>
+                <li><span class="feature-icon">✅</span> 10 Adet Parked Domain</li>
+              </ul>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("cPanel Limitsiz Hosting")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyatlar ve Detaylar
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Features -->
+    <section class="common-features-section">
+      <div class="container">
+        <h2 class="section-title">Hosting Paketlerinin Ortak Özellikleri</h2>
+        <div class="features-grid">
+          
+          
+          <div class="feature-item">
+            <div class="feature-icon">🚀</div>
+            <h3>Müthiş Hızlı</h3>
+          </div>
+            <div class="feature-item">
+            <div class="feature-icon">🌐</div>
+            <h3>Türkçe Kontrol Paneli</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⚡</div>
+            <h3>CloudLinux</h3>
+          </div>
+          <div class="feature-item">
+          <div class="feature-icon">🚀</div>
+            <h3>LiteSpeed / LSCache</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h3>CageFS</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔧</div>
+            <h3>PHP Selector</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <h3>SAS-SSD/Nvme Flash Disk</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📝</div>
+            <h3>%100 WordPress Uyumluluğu</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📦</div>
+            <h3>Hazır Scriptler</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📁</div>
+            <h3>Dosya Yöneticisi</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🗄️</div>
+            <h3>PhpMyAdmin</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">⏱️</div>
+            <h3>%99 Uptime Garantisi</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <h3>Haftalık Yedekleme</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🛡️</div>
+            <h3>Antispam ve Antivirüs Filtreleme</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📊</div>
+            <h3>Site İstatistikleri</h3>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">👨‍💻</div>
+            <h3>7/24 Destek</h3>
+          </div>
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- Domain Section -->
+    <section id="domain-search" class="domain-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Alan Adı (Domain) Hizmetleri</h2>
+          <p class="section-subtitle">Yeni bir domain alabilir yada alan adınız bize transfer ederek hızlı hizmetlerimizden yararlanırsınız!</p>
+        </div>
+
+        
+          <p class="domain-note">Örneğin İş de yeter için: isdeyeter.com <br>siz de almak istediğiniz isim ile ilgili uzantı belirlemelisiniz, <br>sirketadiniz.com, sirketadiniz.com.tr gibi..</p>
+        
+
+        <div class="domain-tlds">
+          <h3 class="tlds-title">Popüler Domain Uzantıları</h3>
+          <div class="tlds-grid">
+            <div class="tld-item">
+              <span class="tld-name">.com</span>
+              <span class="tld-desc">Dünyanın en popüler uzantısı</span>
+            </div>
+            
+
+            <div class="tld-item">
+  <span class="tld-name">.com.tr</span>
+  <span class="tld-desc">Türkiye'de ticari faaliyetler için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.net.tr</span>
+  <span class="tld-desc">Ağ ve iletişim hizmetleri için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.com</span>
+  <span class="tld-desc">Küresel ticari web siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.net</span>
+  <span class="tld-desc">Network ve teknoloji projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tr</span>
+  <span class="tld-desc">Türkiye kökenli genel kullanım</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.org.tr</span>
+  <span class="tld-desc">Türk sivil toplum kuruluşları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.gen.tr</span>
+  <span class="tld-desc">Genel amaçlı Türkiye alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.web.tr</span>
+  <span class="tld-desc">Kişisel veya ticari web siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.info.tr</span>
+  <span class="tld-desc">Bilgi içerikli Türkçe siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tv.tr</span>
+  <span class="tld-desc">Türk medya ve yayın platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.biz.tr</span>
+  <span class="tld-desc">Türkiye'de işletme sahipleri için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.av.tr</span>
+  <span class="tld-desc">Avukatlık ve hukuk ofisleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.dr.tr</span>
+  <span class="tld-desc">Doktorlar ve sağlık kuruluşları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bbs.tr</span>
+  <span class="tld-desc">Topluluk ve forum siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.k12.tr</span>
+  <span class="tld-desc">Okul ve eğitim kurumları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.name.tr</span>
+  <span class="tld-desc">Kişisel isim alan adları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tel.tr</span>
+  <span class="tld-desc">İletişim ve rehber bilgileri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bel.tr</span>
+  <span class="tld-desc">Belediyelere özel alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.gov.tr</span>
+  <span class="tld-desc">Resmi kurum ve bakanlıklar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.edu.tr</span>
+  <span class="tld-desc">Eğitim kurumları ve üniversiteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.pol.tr</span>
+  <span class="tld-desc">Emniyet ve güvenlik kurumları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.org</span>
+  <span class="tld-desc">Kâr amacı gütmeyen kuruluşlar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.biz</span>
+  <span class="tld-desc">Küresel ticari faaliyetler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.co</span>
+  <span class="tld-desc">Şirketler ve girişimler için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.pro</span>
+  <span class="tld-desc">Profesyonel hizmet sağlayıcılar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.cloud</span>
+  <span class="tld-desc">Bulut tabanlı hizmetler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.info</span>
+  <span class="tld-desc">Bilgi odaklı içerik siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.black</span>
+  <span class="tld-desc">Lüks ve stil odaklı markalar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.me</span>
+  <span class="tld-desc">Kişisel blog ve portfolyolar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.kim</span>
+  <span class="tld-desc">Kişisel veya kimlik temalı siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.link</span>
+  <span class="tld-desc">Bağlantı ve paylaşım platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.party</span>
+  <span class="tld-desc">Etkinlik ve eğlence siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.top</span>
+  <span class="tld-desc">Sıralama ve liste odaklı içerikler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.pw</span>
+  <span class="tld-desc">Kişisel web siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.red</span>
+  <span class="tld-desc">Dinamik ve dikkat çekici projeler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.site</span>
+  <span class="tld-desc">Her tür web sitesi için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.website</span>
+  <span class="tld-desc">Genel amaçlı web projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.name</span>
+  <span class="tld-desc">Bireysel isim ve kimlik alan adları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.mobi</span>
+  <span class="tld-desc">Mobil uyumlu web siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.cafe</span>
+  <span class="tld-desc">Kafe, yemek ve sosyal mekanlar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.work</span>
+  <span class="tld-desc">Profesyonel ve iş odaklı siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.in</span>
+  <span class="tld-desc">Bireysel ve konum temalı alan adları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.cc</span>
+  <span class="tld-desc">Küresel ve kısa alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ai</span>
+  <span class="tld-desc">Yapay zeka ve teknoloji projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tv</span>
+  <span class="tld-desc">Medya ve video içerik platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ca</span>
+  <span class="tld-desc">Kanada kökenli web siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.club</span>
+  <span class="tld-desc">Topluluk ve üyelik siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.cooking</span>
+  <span class="tld-desc">Yemek ve mutfak içerikleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.dance</span>
+  <span class="tld-desc">Dans ve performans sanatları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.futbol</span>
+  <span class="tld-desc">Futbol ve spor kulüpleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.co.com</span>
+  <span class="tld-desc">Alternatif ticari alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.global</span>
+  <span class="tld-desc">Uluslararası faaliyet gösteren markalar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.hosting</span>
+  <span class="tld-desc">Barındırma ve sunucu hizmetleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.photo</span>
+  <span class="tld-desc">Fotoğrafçılar ve görsel portfolyolar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tel</span>
+  <span class="tld-desc">Kişisel iletişim bilgileri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bar</span>
+  <span class="tld-desc">Bar, gece kulübü ve eğlence mekanları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.audio</span>
+  <span class="tld-desc">Müzik ve ses içerik platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.hiphop</span>
+  <span class="tld-desc">Hip hop kültürü ve sanatçılar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.fashion</span>
+  <span class="tld-desc">Moda ve stil markaları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.la</span>
+  <span class="tld-desc">Los Angeles veya stil temalı siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.market</span>
+  <span class="tld-desc">Çevrimiçi alışveriş ve pazarlar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.moda</span>
+  <span class="tld-desc">Türkçe moda ve stil içerikleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tech</span>
+  <span class="tld-desc">Teknoloji ve startup projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ws</span>
+  <span class="tld-desc">Web sitesi ve kısa alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.agency</span>
+  <span class="tld-desc">Danışmanlık ve ajans siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.dental</span>
+  <span class="tld-desc">Diş hekimliği ve klinikler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.email</span>
+  <span class="tld-desc">E-posta ve iletişim hizmetleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.tours</span>
+  <span class="tld-desc">Seyahat ve turizm şirketleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.media</span>
+  <span class="tld-desc">Basın, yayın ve medya kuruluşları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bike</span>
+  <span class="tld-desc">Bisiklet ve aktif yaşam siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.guru</span>
+  <span class="tld-desc">Uzmanlık ve bilgi paylaşımı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.house</span>
+  <span class="tld-desc">Emlak ve konut projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.digital</span>
+  <span class="tld-desc">Dijital pazarlama ve içerik</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.life</span>
+  <span class="tld-desc">Hayat tarzı ve kişisel gelişim</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.plus</span>
+  <span class="tld-desc">Ekstra özellikli web projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.one</span>
+  <span class="tld-desc">Bireysel ve minimalist siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.works</span>
+  <span class="tld-desc">Portfolyo ve iş örnekleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.wiki</span>
+  <span class="tld-desc">Topluluk bilgi paylaşımı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.game</span>
+  <span class="tld-desc">Oyun geliştirme ve platformlar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.video</span>
+  <span class="tld-desc">Video içerik ve akış siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.xyz</span>
+  <span class="tld-desc">Çok amaçlı ve yenilikçi projeler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.coffee</span>
+  <span class="tld-desc">Kafe ve kahve kültür siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.yoga</span>
+  <span class="tld-desc">Yoga ve wellness platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.art</span>
+  <span class="tld-desc">Sanatçılar ve yaratıcı projeler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.best</span>
+  <span class="tld-desc">En iyi içerik ve hizmetler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bid</span>
+  <span class="tld-desc">Açık artırma ve teklif siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.blog</span>
+  <span class="tld-desc">Blog ve içerik paylaşımı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.casa</span>
+  <span class="tld-desc">Ev, mülk ve yaşam siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.click</span>
+  <span class="tld-desc">Dijital kampanya ve bağlantılar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.company</span>
+  <span class="tld-desc">Şirket ve kurumsal siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.cool</span>
+  <span class="tld-desc">Eğlenceli ve yenilikçi projeler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.download</span>
+  <span class="tld-desc">Dosya ve içerik indirme siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.fun</span>
+  <span class="tld-desc">Eğlence ve hafif içerikler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.live</span>
+  <span class="tld-desc">Canlı yayın ve etkinlikler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.online</span>
+  <span class="tld-desc">Çevrimiçi hizmet ve mağazalar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.press</span>
+  <span class="tld-desc">Basın ve yayın kuruluşları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.vip</span>
+  <span class="tld-desc">Özel ve lüks hizmetler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.app</span>
+  <span class="tld-desc">Mobil uygulama siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ec</span>
+  <span class="tld-desc">Ekvador kökenli veya e-ticaret</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.uk</span>
+  <span class="tld-desc">Birleşik Krallık kökenli siteler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.world</span>
+  <span class="tld-desc">Küresel topluluk ve içerikler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.bio</span>
+  <span class="tld-desc">Biyografi ve kişisel kimlik</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.capital</span>
+  <span class="tld-desc">Finans ve yatırım şirketleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.chat</span>
+  <span class="tld-desc">Sohbet ve iletişim platformları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.fans</span>
+  <span class="tld-desc">Hayran toplulukları ve sosyal kulüpler</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.fm</span>
+  <span class="tld-desc">Radyo ve ses yayınları</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.host</span>
+  <span class="tld-desc">Barındırma ve sunucu çözümleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ltd</span>
+  <span class="tld-desc">Limited şirketler için</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.sc</span>
+  <span class="tld-desc">Seyşeller kökenli alan adı</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.style</span>
+  <span class="tld-desc">Moda, tasarım ve estetik</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.vc</span>
+  <span class="tld-desc">Venture capital ve yatırımcılar</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.io</span>
+  <span class="tld-desc">Teknoloji ve startup projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.rest</span>
+  <span class="tld-desc">Restoran ve yemek siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.restaurant</span>
+  <span class="tld-desc">Yemek ve misafirperverlik</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.shop</span>
+  <span class="tld-desc">E-ticaret ve alışveriş siteleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.finance</span>
+  <span class="tld-desc">Finansal hizmet ve danışmanlık</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.store</span>
+  <span class="tld-desc">Çevrimiçi mağaza çözümleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.games</span>
+  <span class="tld-desc">Oyun ve interaktif eğlence</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.film</span>
+  <span class="tld-desc">Sinema ve video üretim şirketleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.ist</span>
+  <span class="tld-desc">İstanbul temalı web projeleri</span>
+</div>
+<div class="tld-item">
+  <span class="tld-name">.group</span>
+  <span class="tld-desc">Topluluk ve iş birlikleri</span>
+</div>
+
+          </div>
+          <div class="tlds-action">
+            <a href={getWhatsAppLink("Domain Kayıt ve Transfer")} class="btn whatsapp-btn">
+              <span class="btn-icon">💬</span>
+              Tüm Domain Uzantıları ve Fiyatlar İçin WhatsApp
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="advanced-features-section">
+      <div class="container">
+        <h2 class="section-title">Neden Bizi Tercih Etmelisiniz?</h2>
+        
+        <div class="features-list">
+          <div class="feature-card">
+            <div class="feature-card-icon">🎯</div>
+            <div class="feature-card-content">
+              <h3>Lider Hosting Panelleri</h3>
+              <p>Hosting alanında lider cPanel ve Plesk panel altyapıları kullanarak size; kullanıcı dostu, hızlı ve stabil bir hosting deneyimi sunuyoruz.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-icon">⚡</div>
+            <div class="feature-card-content">
+              <h3>En Güncel Sunucu Teknolojisi</h3>
+              <p>En güncel sunucu teknolojileri ile en hızlı hosting deneyimini sunuyoruz. Blade Serverlar, güncel Storage altyapıları ile sürekli güncel kalmaktayız.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-icon">🛡️</div>
+            <div class="feature-card-content">
+              <h3>Tam Güvenlik</h3>
+              <p>Tüm sunucularımız üst seviye donanımsal ve yazılımsal güvenlik önlemleri alınmış güncel sürümleri ile hizmet vermektedir.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-icon">🚀</div>
+            <div class="feature-card-content">
+              <h3>Jetsitem'i Keşfedin (Ücretsiz)</h3>
+              <p>Kolay ve hızlı website hazırlama aracı Jetsitem ile uzman olmanıza gerek yok. 170+ hazır yeni nesil tema ile işinize uygun web sitesini kolayca kurabilirsiniz.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-icon">📦</div>
+            <div class="feature-card-content">
+              <h3>WordPress, Joomla ve Yüzlerce Hazır Script</h3>
+              <p>Blog açmak ya da içerik yönetimi yapmak istiyorsanız, hazır sistemler ile ücretsiz ve zahmetsizce bunu yapabilirsiniz.</p>
+            </div>
+          </div>
+
+          <div class="feature-card">
+            <div class="feature-card-icon">📧</div>
+            <div class="feature-card-content">
+              <h3>AntiSpam & AntiVirus</h3>
+              <p>Tüm eposta hesaplarınız yüksek spam ve antivirüs filtreleme yeteneğine sahip olan sunucularımız üzerinden geçirilmektedir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+        
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Linux ve Windows Hosting Hizmetleri Arasındaki Farklar Nedir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Hosting paketi seçimi yaparken ihtiyacınıza göre bir platform seçmelisiniz. Asp/Asp.Net için Windows Plesk Panel, PHP için ise cPanel veya Linux Plesk Panel platformalarını seçebilirsiniz.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Limitsiz Hosting Kullanım Kuralları Nedir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Limitsiz disk ve trafik kaynakları, rahat bir hosting deneyimi sağlamak için tasarlanmıştır. Bu anlamda depolama alanını ve bant genişliği sınırlandırılmamaktadır.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Hangi PHP sürümlerini kullanabilirim?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>PHP 5.x den PHP 8.x e kadar tüm PHP sürümlerini kullanabilirsiniz. cPanel ve Linux Hosting hizmetlerimiz %100 PHP uyumluluğu için tasarlanmıştır.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">Hosting ve Domain Hizmetlerimizle Tanışın</h2>
+          <p class="cta-description">
+            Profesyonel ekibimiz size en uygun çözümü sunmak için hazır. Hemen iletişime geçin!
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("Genel Hosting ve Domain Bilgisi")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Bilgi Al
+            </a>
+            <a href="tel:+902162100888" class="btn secondary-btn large">
+              <span class="btn-icon">📞</span>
+              Bizi Arayın
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #7c3aed;
+      --accent-color: #f59e0b;
+      --success-color: #10b981;
+      --dark-color: #1f2937;
+      --light-color: #f8fafc;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .domain-hosting-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-title .highlight {
+      background: linear-gradient(45deg, var(--accent-color), #fbbf24);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .hero-description {
+      font-size: 1.2rem;
+      line-height: 1.6;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .hero-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Buton Stilleri */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: white;
+      color: var(--primary-color);
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid white;
+    }
+
+    .secondary-btn:hover {
+      background: white;
+      color: var(--primary-color);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .server-animation {
+      position: relative;
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .server-icon, .globe-icon {
+      font-size: 4rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .server-icon { animation-delay: 0s; }
+    .globe-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .data-flow {
+      width: 100px;
+      height: 10px;
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      border-radius: 10px;
+      animation: flow 2s infinite;
+    }
+
+    @keyframes flow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Section Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Hosting Plans */
+    .hosting-plans-section {
+      padding: 6rem 1rem;
+      background: var(--light-color);
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .plan-card {
+      background: white;
+      border-radius: 20px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .plan-card.featured {
+      border: 3px solid var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .plan-header {
+      text-align: center;
+      margin-bottom: 2rem;
+      position: relative;
+    }
+
+    .plan-title {
+      font-size: 1.8rem;
+      font-weight: 700;
+      color: var(--dark-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .plan-badge {
+      display: inline-block;
+      padding: 0.5rem 1rem;
+      background: linear-gradient(45deg, var(--accent-color), #fbbf24);
+      color: white;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+
+    .plan-features {
+      flex: 1;
+      margin-bottom: 2rem;
+    }
+
+    .plan-features ul {
+      list-style: none;
+      padding: 0;
+    }
+
+    .plan-features li {
+      padding: 0.5rem 0;
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+    }
+
+    .feature-icon {
+      color: var(--success-color);
+      font-size: 1.2rem;
+    }
+
+    /* Common Features */
+    .common-features-section {
+      padding: 6rem 1rem;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .feature-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .feature-item .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+    }
+
+    .feature-item h3 {
+      font-size: 1.1rem;
+      color: var(--text-color);
+    }
+
+    /* Domain Section */
+    .domain-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+    }
+
+    .domain-search-box {
+      max-width: 600px;
+      margin: 0 auto 4rem;
+    }
+
+    .search-container {
+      display: flex;
+      gap: 1rem;
+      margin-bottom: 1rem;
+    }
+
+    .domain-input {
+      flex: 1;
+      padding: 1rem 1.5rem;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1.1rem;
+      outline: none;
+      transition: border-color 0.3s ease;
+    }
+
+    .domain-input:focus {
+      border-color: var(--primary-color);
+    }
+
+    .search-btn {
+      padding: 1rem 2rem;
+      background: var(--primary-color);
+      color: white;
+      border: none;
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .search-btn:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+    }
+
+    .domain-note {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    .domain-tlds {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .tlds-title {
+      text-align: center;
+      font-size: 1.8rem;
+      margin-bottom: 2rem;
+      color: var(--dark-color);
+    }
+
+    .tlds-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(150px, 1fr));
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .tld-item {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .tld-item:hover {
+      transform: translateY(-5px);
+    }
+
+    .tld-name {
+      display: block;
+      font-size: 1.5rem;
+      font-weight: 700;
+      color: var(--primary-color);
+      margin-bottom: 0.5rem;
+    }
+
+    .tld-desc {
+      font-size: 0.9rem;
+      color: var(--text-light);
+    }
+
+    .tlds-action {
+      text-align: center;
+    }
+
+    /* Advanced Features */
+    .advanced-features-section {
+      padding: 6rem 1rem;
+    }
+
+    .features-list {
+      max-width: 1000px;
+      margin: 0 auto;
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .feature-card {
+      display: flex;
+      gap: 1.5rem;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-card-icon {
+      font-size: 2.5rem;
+      flex-shrink: 0;
+    }
+
+    .feature-card-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .feature-card-content p {
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 6rem 1rem;
+      background: var(--light-color);
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: white;
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+    }
+
+    .faq-question {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-question h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: var(--dark-color);
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--primary-color);
+    }
+
+    .faq-answer {
+      padding: 0 2rem 1.5rem;
+      border-top: 1px solid var(--border-color);
+      display: none;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .plan-card.featured {
+        transform: none;
+      }
+
+      .plan-card.featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .search-container {
+        flex-direction: column;
+      }
+
+      .domain-input, .search-btn {
+        width: 100%;
+      }
+
+      .feature-card {
+        flex-direction: column;
+        text-align: center;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+  </style>
+
+  <script>
+    // FAQ Toggle Functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close other open items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+
+      // Domain search functionality
+      const domainInput = document.querySelector('.domain-input');
+      const searchBtn = document.querySelector('.search-btn');
+      
+      searchBtn.addEventListener('click', () => {
+        if (domainInput.value.trim()) {
+          window.location.href = `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(domainInput.value.trim())}%20domain%20adı%20hakkında%20bilgi%20almak%20istiyorum`;
+        }
+      });
+      
+      domainInput.addEventListener('keypress', (e) => {
+        if (e.key === 'Enter') {
+          searchBtn.click();
+        }
+      });
+    });
+  </script>
+</BasicLayout>

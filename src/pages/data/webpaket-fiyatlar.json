@@ -1,0 +1,105 @@
+{
+  "webPaketleri": [
+    {
+      "id": "baslangic",
+      "ad": "DAİMA-ÖMÜRBOYU",
+      "tip": "Ücretsiz Paket",
+      "ozellikler": [
+        "Limitsiz Sayfa (ücretsizdir)",
+        "Limitsiz İçerik (ücretsizdir)",
+        "Ana Sayfa Tasarımı (ücretli)",
+        "10 Adet Sayfa Tasarımı (ücretli)",
+        "E-Ticaret Uyumlu (ücretli)",
+        "E-İhracat Uyumlu (ücretli)",
+        "Pazaryeri Uyumlu (ücretli)",
+        "Muhasebe Sistemi (ücretli)",
+        "1 Adet Domain(.tr) (ücretli)",
+        "1 Adet Hosting (ücretli)",
+        "Destek (ücretli)"
+      ],
+      "fiyatlar": {
+        "yillik": 0,
+        "aylik": 0,
+        "indirimli": null,
+        "liste": 10000
+      },
+      "oncelikliButon": {
+        "text": "Bilgi Alın",
+        "link": "whatsapp",
+        "stil": "btn btn-whatsapp btn-large"
+      },
+      "ikincilButon": {
+        "text": "Ücretsiz Başla",
+        "link": "/kayit",
+        "stil": "btn-secondary"
+      },
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-rocket"
+    },
+    {
+      "id": "professional",
+      "ad": "Professional Web Paket",
+      "tip": "Pro Paket",
+      "ozellikler": [
+        "Limitsiz Sayfa",
+        "Limitsiz İçerik",
+        "Ana Sayfa Tasarımı",
+        "10 Adet Sayfa Tasarımı",
+        "E-Ticaret Uyumlu",
+        "E-İhracat Uyumlu",
+        "Pazaryeri Uyumlu",
+        "Muhasebe Sistemi ile Uyumlu",
+        "1 Adet Domain(.tr)",
+        "1 Adet Hosting"
+      ],
+      "fiyatlar": {
+        "yillik": 12000,
+        "aylik": 2500,
+        "indirimli": 1000,
+        "liste": 2500
+      },
+      "oncelikliButon": {
+        "text": "Bilgi Alın",
+        "link": "whatsapp",
+        "stil": "btn-whatsapp"
+      },
+      "ikincilButon": null,
+      "vurgulanan": true,
+      "enPopuler": true,
+      "icon": "fas fa-crown"
+    },
+    {
+      "id": "pro-plus",
+      "ad": "Pro Plus Web Paket",
+      "tip": "Pro+ Paket",
+      "ozellikler": [
+        "Limitsiz Sayfa",
+        "Limitsiz İçerik",
+        "Ana Sayfa Tasarımı",
+        "20 Adet Sayfa Tasarımı",
+        "E-Ticaret Uyumlu",
+        "E-İhracat Uyumlu",
+        "Pazaryeri Uyumlu",
+        "Muhasebe Sistemi ile Uyumlu",
+        "1 Adet Domain(.tr)",
+        "1 Adet Hosting"
+      ],
+      "fiyatlar": {
+        "yillik": 40000,
+        "aylik": 4500,
+        "indirimli": null,
+        "liste": 4500
+      },
+      "oncelikliButon": {
+        "text": "Bilgi Alın",
+        "link": "whatsapp",
+        "stil": "btn-whatsapp"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "fas fa-star"
+    }
+  ]
+}

@@ -1,0 +1,1412 @@
+---
+// src/pages/sunucu-kiralama.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "Sunucu Kiralama - Profesyonel Server Çözümleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="server-rental-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="fire-text">Kiralık</span>
+            <span class="server-text">Sunucu</span>
+          </h1>
+          <p class="hero-subtitle">EN İYİ FİYAT/PERFORMANS GARANTİLİ ÇÖZÜMLER</p>
+          <div class="features-badge">
+            <span class="feature">⚡ Intel İşlemci Mimarisi</span>
+            <span class="feature">🚀 Ücretsiz Anında Kurulum</span>
+            <span class="feature">💾 SSD Platform</span>
+          </div>
+          <p class="hero-description">
+            Kurumsal ihtiyaçlarınız için yüksek performanslı sunucu kiralama çözümlerimizle 
+            işinizi bir üst seviyeye taşıyın. Tam kontrol, güvenlik ve stabilite bir arada.
+          </p>
+          <div class="hero-actions">
+            <a href="#server-plans" class="btn primary-btn">
+              <span class="btn-icon">🔥</span>
+              Sunucu Paketlerini İncele
+            </a>
+            <a href="#vps-plans" class="btn secondary-btn">
+              <span class="btn-icon">☁️</span>
+              Cloud Server Paketleri
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="server-animation">
+            <div class="server-rack">🗄️</div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+            <div class="flame"></div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Server Rental Plans -->
+    <section id="server-plans" class="server-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sunucu Kiralama Paketleri</h2>
+          <p class="section-subtitle">İhtiyacınıza göre özelleştirilmiş profesyonel sunucu çözümleri</p>
+        </div>
+
+        <div class="server-cards">
+          <!-- Cloud Server -->
+          <div class="server-card">
+            <div class="server-badge">
+              <span class="badge-text">Cloud Server</span>
+              <span class="badge-tag">Popüler</span>
+            </div>
+            <div class="server-specs">
+              <div class="spec-item">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-details">
+                  <strong>1 Core İşlemci</strong>
+                  <small>Yüksek performans CPU</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💾</span>
+                <div class="spec-details">
+                  <strong>1 GB RAM</strong>
+                  <small>Hızlı erişim belleği</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💿</span>
+                <div class="spec-details">
+                  <strong>20 GB SSD Disk</strong>
+                  <small>Yüksek hızlı SSD depolama</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-details">
+                  <strong>100 MBit Bağlantı</strong>
+                  <small>Yüksek bant genişliği</small>
+                </div>
+              </div>
+            </div>
+            <div class="server-footer">
+              <a href={getWhatsAppLink("Cloud Server Kiralama")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          <!-- VDS Server -->
+          <div class="server-card featured">
+            <div class="server-badge">
+              <span class="badge-text">VDS Server</span>
+              <span class="badge-tag">Özel Fırsat</span>
+            </div>
+            <div class="server-specs">
+              <div class="spec-item">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-details">
+                  <strong>4 vCPU Core</strong>
+                  <small>Çoklu işlemci desteği</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💾</span>
+                <div class="spec-details">
+                  <strong>8 GB RAM</strong>
+                  <small>Geniş bellek kapasitesi</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💿</span>
+                <div class="spec-details">
+                  <strong>200 GB SSD Disk</strong>
+                  <small>Büyük depolama alanı</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-details">
+                  <strong>100 MBit Bağlantı</strong>
+                  <small>Sınırsız trafik</small>
+                </div>
+              </div>
+            </div>
+            <div class="server-footer">
+              <a href={getWhatsAppLink("VDS Server Kiralama")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          <!-- Dedicated Server -->
+          <div class="server-card">
+            <div class="server-badge">
+              <span class="badge-text">Dedicated Server</span>
+              <span class="badge-tag">Kurumsal</span>
+            </div>
+            <div class="server-specs">
+              <div class="spec-item">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-details">
+                  <strong>Intel Xeon E5-2620v3 6-Core</strong>
+                  <small>Profesyonel işlemci</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💾</span>
+                <div class="spec-details">
+                  <strong>32 GB DDR4 RAM</strong>
+                  <small>Yüksek kapasiteli bellek</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">💿</span>
+                <div class="spec-details">
+                  <strong>2 x 480 GB SSD Disk</strong>
+                  <small>RAID desteği</small>
+                </div>
+              </div>
+              <div class="spec-item">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-details">
+                  <strong>1 Gbit Bağlantı</strong>
+                  <small>10.000 GB Trafik</small>
+                </div>
+              </div>
+            </div>
+            <div class="server-footer">
+              <a href={getWhatsAppLink("Dedicated Server Kiralama")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          
+        </div>
+      </div>
+    </section>
+
+    <!-- Server Advantages -->
+    <section class="advantages-section">
+      <div class="container">
+        <h2 class="section-title">Sunucu Üstün Avantajları</h2>
+        <p class="section-subtitle" style="color: #89ff02;">Her ihtiyaca cevap veren üstün sunucu altyapısı</p>
+
+        <div class="advantages-grid">
+          <div class="advantage-card">
+            <div class="advantage-icon">🔧</div>
+            <h3>Garantili Donanım</h3>
+            <p>Muhtemel donanım arızalarını ücretsiz garantili donanımlarla en kısa sürede çözüyoruz</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🎮</div>
+            <h3>Tam Kontrol</h3>
+            <p>Müşteri paneli üzerinden yeniden başlatma, IP KVM, yedekleme ve yeniden kurulum</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">📶</div>
+            <h3>100 Mbit Bant Genişliği</h3>
+            <p>Her zaman ödediğinizin karşılığını alabileceğiniz gerçek 100Mbit bant genişliği</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🔄</div>
+            <h3>Yedekli Network Altyapısı</h3>
+            <p>Yedekli network erişimi ile uzun süreli kesintiler işinizi etkilemez</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">⏱️</div>
+            <h3>Uptime Garantisi</h3>
+            <p>%99.99 Network Uptime ve %99.80 Donanım Uptime garantisi</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">🎁</div>
+            <h3>Ücretsiz Hizmetler</h3>
+            <p>DDoS koruma, servis izleme, yeniden kurulum, kontrol paneli gibi hizmetler ücretsiz</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">👨‍💼</div>
+            <h3>Sunucu Yönetimi Desteği</h3>
+            <p>Sunucu yapılandırma ve yönetiminde temel konularda uzman destek</p>
+          </div>
+          <div class="advantage-card">
+            <div class="advantage-icon">⚡</div>
+            <h3>Anında Kurulum</h3>
+            <p>Sunucunuz siparişinizden sonra 30-90 dakika içinde teslim edilir</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- VPS Cloud Server Section -->
+    <section id="vps-plans" class="vps-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Cloud VPS Server Paketleri</h2>
+          <p class="section-subtitle">Tek tıkla, dakikalar içinde %100 SSD bulut sunucusuna sahip olun</p>
+        </div>
+
+        <div class="vps-features">
+          <div class="vps-feature">🎁 Ücretsiz İlk 3 Ay Plesk Panel</div>
+          <div class="vps-feature">🪟 Ücretsiz İlk 3 Ay Windows Lisans</div>
+          <div class="vps-feature">🛡️ Ücretsiz DDoS Koruması</div>
+          <div class="vps-feature">🚀 Yüksek Performans</div>
+        </div>
+
+        <div class="vps-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="mini">Mini Paketler</button>
+            <button class="tab-btn" data-tab="medium">Orta Paketler</button>
+            <button class="tab-btn" data-tab="pro">Pro Paketler</button>
+          </div>
+
+          <!-- Mini Plans -->
+          <div class="tab-content active" id="mini-tab">
+            <div class="vps-grid">
+              <div class="vps-card">
+                <div class="vps-badge">Mini</div>
+                <div class="vps-specs">
+                  <div class="spec">1 Core vCPU</div>
+                  <div class="spec">1 GB RAM</div>
+                  <div class="spec">20 GB SSD Disk</div>
+                  <div class="spec">Ücretsiz Yedekleme</div>
+                  <div class="spec">Ücretsiz Snapshot</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Mini Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <div class="vps-card">
+                <div class="vps-badge">Small</div>
+                <div class="vps-specs">
+                  <div class="spec">1 Core vCPU</div>
+                  <div class="spec">2 GB RAM</div>
+                  <div class="spec">40 GB SSD Disk</div>
+                  <div class="spec">Ücretsiz Yedekleme</div>
+                  <div class="spec">Ücretsiz Snapshot</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Small Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Medium Plans -->
+          <div class="tab-content" id="medium-tab">
+            <div class="vps-grid">
+              <div class="vps-card">
+                <div class="vps-badge">Medium</div>
+                <div class="vps-specs">
+                  <div class="spec">2 Core vCPU</div>
+                  <div class="spec">4 GB RAM</div>
+                  <div class="spec">60 GB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Medium Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <div class="vps-card featured">
+                <div class="vps-badge">Large</div>
+                <div class="vps-specs">
+                  <div class="spec">2 Core vCPU</div>
+                  <div class="spec">6 GB RAM</div>
+                  <div class="spec">100 GB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Large Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Pro Plans -->
+          <div class="tab-content" id="pro-tab">
+            <div class="vps-grid">
+              <div class="vps-card">
+                <div class="vps-badge">Pro</div>
+                <div class="vps-specs">
+                  <div class="spec">4 Core vCPU</div>
+                  <div class="spec">8 GB RAM</div>
+                  <div class="spec">200 GB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Pro Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <div class="vps-card">
+                <div class="vps-badge">Pro+</div>
+                <div class="vps-specs">
+                  <div class="spec">4 Core vCPU</div>
+                  <div class="spec">12 GB RAM</div>
+                  <div class="spec">300 GB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Pro+ Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <div class="vps-card">
+                <div class="vps-badge">Ultra</div>
+                <div class="vps-specs">
+                  <div class="spec">8 Core vCPU</div>
+                  <div class="spec">32 GB RAM</div>
+                  <div class="spec">600 GB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Ultra Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <div class="vps-card">
+                <div class="vps-badge">Ultra+</div>
+                <div class="vps-specs">
+                  <div class="spec">16 Core vCPU</div>
+                  <div class="spec">64 GB RAM</div>
+                  <div class="spec">1 TB SSD Disk</div>
+                  <div class="spec">Özel Fırsat</div>
+                </div>
+                <div class="vps-footer">
+                  <a href={getWhatsAppLink("VPS Ultra+ Paket")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sunucu İle Neler Yapabilirsiniz?</h2>
+          <p class="section-subtitle">Yüksek kaynak ve trafik çözümleri ile sınırlarınızı zorlayın</p>
+        </div>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-icon">🌐</div>
+            <div class="feature-content">
+              <h3>Yüksek Trafikli Web Siteleri</h3>
+              <p>Yüksek kaynak ve trafik gerektiren web sitelerini barındırabilirsiniz</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">📱</div>
+            <div class="feature-content">
+              <h3>Web Tabanlı Uygulamalar</h3>
+              <p>Web tabanlı uygulamaları sunucunuzda çalıştırabilirsiniz</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔬</div>
+            <div class="feature-content">
+              <h3>Sistem Testleri</h3>
+              <p>İşletim sistemi, yazılım ve uygulama testleri yapabilirsiniz</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-content">
+              <h3>VPN Sunucusu</h3>
+              <p>VPN sunucusu olarak yapılandırarak kullanabilirsiniz</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">💾</div>
+            <div class="feature-content">
+              <h3>Bulut Depolama</h3>
+              <p>Yedekleme ve bulut tabanlı depolama için kullanabilirsiniz</p>
+            </div>
+          </div>
+          <div class="feature-item">
+            <div class="feature-icon">🎮</div>
+            <div class="feature-content">
+              <h3>Oyun Sunucusu</h3>
+              <p>Oyun sunucusu olarak kullanabilirsiniz</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Common Features -->
+    <section class="common-features-section">
+      <div class="container">
+        <h2 class="section-title">Ortak Sunulan Özellikler</h2>
+        <p class="section-subtitle">Tüm sunucu paketlerimizde standart olarak sunulan özellikler</p>
+        
+        <div class="common-features">
+          <div class="common-feature">
+            <div class="feature-icon">🔢</div>
+            <h3>1 Adet IP Adresi</h3>
+          </div>
+          <div class="common-feature">
+            <div class="feature-icon">💾</div>
+            <h3>Ücretsiz Yedekleme</h3>
+          </div>
+          <div class="common-feature">
+            <div class="feature-icon">🛡️</div>
+            <h3>7/24 DDoS Koruması</h3>
+          </div>
+          <div class="common-feature">
+            <div class="feature-icon">⏱️</div>
+            <h3>%99.9 Uptime Oranı</h3>
+          </div>
+          <div class="common-feature">
+            <div class="feature-icon">🎮</div>
+            <h3>Kolay Yönetim Paneli</h3>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+        
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Sunucu (Server) Nedir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Sunucu, herhangi bir network üzerinde yer alan bir programı ya da bilgiyi farklı kullanıcılara, sistemlere paylaştıran, dağıtan donanım veya yazılıma verilen isimdir. Kiralık sunucuların Paylaşımlı (shared), Sanal (virtual), Dedike (Dedicated) gibi farklı türleri bulunmaktadır.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Sunucu kurulumu nasıl gerçekleşmektedir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Sunucunuz siparişinizden sonra 30-90 dakika içerisinde teslim edilir. Süreci müşteri panelinizden anlık olarak izleyebilirsiniz. Tek tıkla kurulum ile anında aktif hale gelir.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Sunucu yönetimi konusunda destek veriyor musunuz?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>Destek uzmanlarımız, sunucu yapılandırma ve yönetimindeki temel konularda size destek olmaktadır. 7/24 destek hattımız ile her zaman yardıma hazırız.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">Sunucu Kiralama İle Tanışın</h2>
+          <p class="cta-description">
+            Profesyonel ekibimiz size en uygun sunucu çözümünü sunmak için hazır. 
+            Hemen iletişime geçin ve özel teklif alın!
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("Sunucu Kiralama Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="tel:+902162100888" class="btn secondary-btn large">
+              <span class="btn-icon">📞</span>
+              Ücretsiz Danışmanlık
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --fire-red: #dc2626;
+      --dark-red: #991b1b;
+      --light-red: #fecaca;
+      --dark-bg: #0f172a;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --flame-gradient: linear-gradient(45deg, #dc2626, #f97316, #f59e0b);
+    }
+
+    .server-rental-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .fire-text {
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+      animation: fireGlow 2s infinite;
+    }
+
+    .server-text {
+      color: white;
+      display: block;
+    }
+
+    @keyframes fireGlow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.8; }
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--light-red);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .features-badge {
+      display: flex;
+      flex-direction: column;
+      gap: 0.5rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: rgba(220, 38, 38, 0.2);
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-size: 0.9rem;
+      width: fit-content;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--flame-gradient);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      filter: brightness(1.1);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--fire-red);
+    }
+
+    .secondary-btn:hover {
+      background: var(--fire-red);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .server-animation {
+      position: relative;
+    }
+
+    .server-rack {
+      font-size: 6rem;
+      animation: serverFloat 3s ease-in-out infinite;
+    }
+
+    @keyframes serverFloat {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .flame {
+      position: absolute;
+      width: 20px;
+      height: 40px;
+      background: var(--flame-gradient);
+      border-radius: 50% 50% 20% 20%;
+      opacity: 0.8;
+      animation: flameFlicker 1s infinite;
+    }
+
+    .flame:nth-child(2) {
+      left: -20px;
+      bottom: 30px;
+      animation-delay: 0.2s;
+    }
+
+    .flame:nth-child(3) {
+      left: 10px;
+      bottom: 20px;
+      animation-delay: 0.4s;
+    }
+
+    .flame:nth-child(4) {
+      left: 40px;
+      bottom: 40px;
+      animation-delay: 0.6s;
+    }
+
+    @keyframes flameFlicker {
+      0%, 100% { 
+        transform: scaleY(1) translateY(0);
+        opacity: 0.8;
+      }
+      50% { 
+        transform: scaleY(1.2) translateY(-10px);
+        opacity: 1;
+      }
+    }
+
+    /* Section Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Server Plans */
+    .server-plans-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .server-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .server-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .server-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .server-card.featured {
+      border: 3px solid var(--fire-red);
+      transform: scale(1.05);
+    }
+
+    .server-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .server-badge {
+      background: var(--flame-gradient);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+      position: relative;
+    }
+
+    .badge-text {
+      font-size: 1.5rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .badge-tag {
+      font-size: 0.8rem;
+      background: rgba(255, 255, 255, 0.3);
+      padding: 0.2rem 0.8rem;
+      border-radius: 10px;
+    }
+
+    .server-specs {
+      padding: 2rem;
+    }
+
+    .spec-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .spec-item:last-child {
+      border-bottom: none;
+    }
+
+    .spec-icon {
+      font-size: 1.5rem;
+      color: var(--fire-red);
+      flex-shrink: 0;
+    }
+
+    .spec-details {
+      flex: 1;
+    }
+
+    .spec-details strong {
+      display: block;
+      color: var(--text-color);
+      margin-bottom: 0.2rem;
+    }
+
+    .spec-details small {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .server-footer {
+      padding: 0 2rem 2rem;
+    }
+
+    /* Advantages Section */
+    .advantages-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+    }
+
+    .advantages-section .section-title {
+      background: var(--flame-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .advantages-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .advantage-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .advantage-card:hover {
+      transform: translateY(-5px);
+      background: rgba(220, 38, 38, 0.1);
+      border-color: var(--fire-red);
+    }
+
+    .advantage-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      color: var(--fire-red);
+    }
+
+    .advantage-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .advantage-card p {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* VPS Section */
+    .vps-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .vps-features {
+      display: flex;
+      flex-wrap: wrap;
+      justify-content: center;
+      gap: 1rem;
+      margin: 2rem 0 3rem;
+    }
+
+    .vps-feature {
+      background: white;
+      color: var(--fire-red);
+      padding: 0.8rem 1.5rem;
+      border-radius: 25px;
+      font-weight: 600;
+      box-shadow: var(--shadow);
+      border: 2px solid var(--light-red);
+    }
+
+    .vps-tabs {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-color);
+    }
+
+    .tab-btn.active {
+      background: var(--flame-gradient);
+      color: white;
+      border-color: transparent;
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--fire-red);
+      color: var(--fire-red);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .vps-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .vps-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      text-align: center;
+      position: relative;
+    }
+
+    .vps-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .vps-card.featured {
+      border: 3px solid var(--fire-red);
+      transform: scale(1.05);
+    }
+
+    .vps-card.featured:hover {
+      transform: scale(1.05) translateY(-5px);
+    }
+
+    .vps-badge {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: var(--flame-gradient);
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .vps-specs {
+      margin: 2rem 0;
+    }
+
+    .spec {
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+      color: var(--text-color);
+      font-weight: 500;
+    }
+
+    .spec:last-child {
+      border-bottom: none;
+      color: var(--fire-red);
+      font-weight: 600;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+    }
+
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+    }
+
+    .feature-icon {
+      font-size: 2rem;
+      color: var(--fire-red);
+      flex-shrink: 0;
+    }
+
+    .feature-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .feature-content p {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Common Features */
+    .common-features-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .common-features {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .common-feature {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .common-feature:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .common-feature .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+      margin: 0 auto 1rem;
+    }
+
+    .common-feature h3 {
+      font-size: 1.1rem;
+      color: var(--text-color);
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      border: 1px solid rgba(220, 38, 38, 0.2);
+    }
+
+    .faq-question {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-question h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: white;
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--fire-red);
+      transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+      padding: 0 2rem 1.5rem;
+      border-top: 1px solid rgba(220, 38, 38, 0.2);
+      display: none;
+      color: #cbd5e1;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: var(--flame-gradient);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .server-cards,
+      .vps-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .server-card.featured,
+      .vps-card.featured {
+        transform: none;
+      }
+
+      .server-card.featured:hover,
+      .vps-card.featured:hover {
+        transform: translateY(-5px);
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .vps-features {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .features-list {
+        grid-template-columns: 1fr;
+      }
+
+      .common-features {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .common-features {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .spec-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          // Show corresponding content
+          const tabId = btn.getAttribute('data-tab');
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+      });
+
+      // FAQ Toggle Functionality
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close other open items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

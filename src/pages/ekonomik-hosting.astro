@@ -1,0 +1,1559 @@
+---
+// src/pages/ekonomik-hosting.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "Ekonomik Hosting - En İyi Başlangıç Paketleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="economic-hosting-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="economy-text">Ekonomik</span>
+            <span class="hosting-text">Hosting</span>
+          </h1>
+          <p class="hero-subtitle">EN İYİ BAŞLANGIÇ PAKETLERİ</p>
+          <div class="location-badge">
+            <span class="location-icon">📍</span>
+            <span>Lokasyon: İstanbul-TR</span>
+          </div>
+          <p class="hero-description">
+            Bütçenize uygun, yüksek performanslı hosting çözümlerimizle web dünyasına adım atın.
+            Küçük ve orta ölçekli web siteleri için ideal ekonomik paketler.
+          </p>
+          <div class="hero-actions">
+            <a href="#hosting-plans" class="btn primary-btn">
+              <span class="btn-icon">💰</span>
+              Ekonomik Paketleri İncele
+            </a>
+            <a href="#unlimited-plans" class="btn secondary-btn">
+              <span class="btn-icon">🚀</span>
+              Limitsiz Paketler
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="money-animation">
+            <div class="coin">🪙</div>
+            <div class="coin">🪙</div>
+            <div class="coin">🪙</div>
+            <div class="server-icon">🖥️</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Mini Hosting Plans -->
+    <section id="hosting-plans" class="mini-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Ekonomik Mini Paketler</h2>
+          <p class="section-subtitle">Küçük web siteleri ve kişisel projeler için ideal başlangıç paketleri</p>
+        </div>
+
+        <div class="plans-grid">
+          <!-- Mini 1 -->
+          <div class="plan-card mini-card">
+            <div class="plan-badge">
+              <span class="badge-text">Mini 1</span>
+              <span class="badge-subtext">En Ekonomik</span>
+            </div>
+            <div class="plan-content">
+              <div class="plan-features">
+                <div class="feature-item">
+                  <span class="feature-icon">💾</span>
+                  <div class="feature-text">
+                    <strong>256 MB SSD Disk Alanı</strong>
+                    <small>Enterprise NVMe Disk</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📈</span>
+                  <div class="feature-text">
+                    <strong>5 GB Aylık Trafik</strong>
+                    <small>Yeterli başlangıç trafiği</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🌐</span>
+                  <div class="feature-text">
+                    <strong>1 Site Barındırma</strong>
+                    <small>Tek web sitesi</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📧</span>
+                  <div class="feature-text">
+                    <strong>1 E-posta Hesabı</strong>
+                    <small>Profesyonel e-posta</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">⚡</span>
+                  <div class="feature-text">
+                    <strong>1/2 Core (%50) CPU</strong>
+                    <small>512 MB RAM</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🔗</span>
+                  <div class="feature-text">
+                    <strong>1 Subdomain</strong>
+                    <small>1 MySQL Veritabanı</small>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-footer">
+                <a href={getWhatsAppLink("Mini 1 Ekonomik Hosting")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mini 2 -->
+          <div class="plan-card mini-card featured">
+            <div class="plan-badge">
+              <span class="badge-text">Mini 2</span>
+              <span class="badge-subtext">En Popüler</span>
+            </div>
+            <div class="plan-content">
+              <div class="plan-features">
+                <div class="feature-item">
+                  <span class="feature-icon">💾</span>
+                  <div class="feature-text">
+                    <strong>512 MB SSD Disk Alanı</strong>
+                    <small>Enterprise NVMe Disk</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📈</span>
+                  <div class="feature-text">
+                    <strong>15 GB Aylık Trafik</strong>
+                    <small>Orta seviye trafik</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🌐</span>
+                  <div class="feature-text">
+                    <strong>1 Site Barındırma</strong>
+                    <small>Tek web sitesi</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📧</span>
+                  <div class="feature-text">
+                    <strong>5 E-posta Hesabı</strong>
+                    <small>5 profesyonel e-posta</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">⚡</span>
+                  <div class="feature-text">
+                    <strong>1/2 Core (%50) CPU</strong>
+                    <small>512 MB RAM</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🔗</span>
+                  <div class="feature-text">
+                    <strong>1 Subdomain</strong>
+                    <small>1 MySQL Veritabanı</small>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-footer">
+                <a href={getWhatsAppLink("Mini 2 Ekonomik Hosting")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+
+          <!-- Mini 3 -->
+          <div class="plan-card mini-card">
+            <div class="plan-badge">
+              <span class="badge-text">Mini 3</span>
+              <span class="badge-subtext">En Verimli</span>
+            </div>
+            <div class="plan-content">
+              <div class="plan-features">
+                <div class="feature-item">
+                  <span class="feature-icon">💾</span>
+                  <div class="feature-text">
+                    <strong>1024 MB SSD Disk Alanı</strong>
+                    <small>Enterprise NVMe Disk</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📈</span>
+                  <div class="feature-text">
+                    <strong>25 GB Aylık Trafik</strong>
+                    <small>Yüksek trafik</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🌐</span>
+                  <div class="feature-text">
+                    <strong>1 Site Barındırma</strong>
+                    <small>Tek web sitesi</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">📧</span>
+                  <div class="feature-text">
+                    <strong>10 E-posta Hesabı</strong>
+                    <small>10 profesyonel e-posta</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">⚡</span>
+                  <div class="feature-text">
+                    <strong>1/2 Core (%50) CPU</strong>
+                    <small>512 MB RAM</small>
+                  </div>
+                </div>
+                <div class="feature-item">
+                  <span class="feature-icon">🔗</span>
+                  <div class="feature-text">
+                    <strong>3 Subdomain</strong>
+                    <small>3 MySQL Veritabanı</small>
+                  </div>
+                </div>
+              </div>
+              <div class="plan-footer">
+                <a href={getWhatsAppLink("Mini 3 Ekonomik Hosting")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <div class="plan-note">
+          <p class="note-text">
+            <span class="note-icon">💡</span>
+            Ekonomik paketlerimiz, kişisel bloglar, portfolyo siteleri ve küçük işletmeler için ideal başlangıç çözümleridir.
+          </p>
+        </div>
+      </div>
+    </section>
+
+    <!-- Unlimited Hosting Section -->
+    <section id="unlimited-plans" class="unlimited-section">
+      <div class="container">
+        <div class="unlimited-content">
+          <div class="unlimited-text">
+            <h2 class="section-title">Daha Yüksek Kapasiteye İhtiyacınız Var Mı?</h2>
+            <p class="unlimited-description">
+              Ekonomik paketler size yetmiyor mu? Daha fazla kaynak ve limitsiz özellikler için 
+              Limitsiz Hosting paketlerimizi keşfedin.
+            </p>
+            <a href={getWhatsAppLink("Limitsiz Hosting Paketleri")} class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              Limitsiz Hosting Paketleri Hakkında Bilgi Al
+            </a>
+          </div>
+          <div class="unlimited-illustration">
+            <div class="upgrade-animation">
+              <div class="mini-server">📱</div>
+              <div class="arrow">⬆️</div>
+              <div class="unlimited-server">🖥️</div>
+              <div class="arrow">⬆️</div>
+              <div class="cloud-server">☁️</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Support Quality Section -->
+    <section class="support-quality-section">
+      <div class="container">
+        <h2 class="section-title">Hizmet Kalitesi = Destek Kalitesi</h2>
+        <div class="support-content">
+          <div class="support-text">
+            <p class="support-description">
+              Teknik Destek Ekibimiz değişmez 6 kurala sahiptir:
+            </p>
+            <div class="support-principles">
+              <div class="principle">
+                <div class="principle-icon">🤝</div>
+                <h4>Empati Kurmak</h4>
+                <p>Müşterilerimizi anlamak için çaba gösteririz</p>
+              </div>
+              <div class="principle">
+                <div class="principle-icon">💡</div>
+                <h4>Yenilikçi Olmak</h4>
+                <p>Sürekli gelişim ve yenilik peşindeyiz</p>
+              </div>
+              <div class="principle">
+                <div class="principle-icon">💭</div>
+                <h4>Fikir Üretmek</h4>
+                <p>Yaratıcı çözümler için fikir üretiriz</p>
+              </div>
+              <div class="principle">
+                <div class="principle-icon">🔍</div>
+                <h4>Araştırma Yapmak</h4>
+                <p>Detaylı araştırma ile en iyi çözümü buluruz</p>
+              </div>
+              <div class="principle">
+                <div class="principle-icon">🎯</div>
+                <h4>Dikkatli Çalışmak</h4>
+                <p>Her detaya özen göstererek çalışırız</p>
+              </div>
+              <div class="principle">
+                <div class="principle-icon">⚡</div>
+                <h4>Çözümü Hızlandırmak</h4>
+                <p>Hızlı ve etkili çözümler sunarız</p>
+              </div>
+            </div>
+            <p class="support-note">
+              Müşterilerimizin mutlu ve memnun çalışması, bizim en öncelikli politikalarımızdan biridir. 
+              7 gün 24 saat Destek Merkezi üzerinden sorunların tespiti için yardım alabileceğiniz sistem destek uzmanlarımız bulunur.
+            </p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Technology Section -->
+    <section class="technology-section">
+      <div class="container">
+        <div class="tech-grid">
+          <!-- LiteSpeed Technology -->
+          <div class="tech-card">
+            <div class="tech-header">
+              <div class="tech-icon">⚡</div>
+              <h3>LiteSpeed Web Server</h3>
+            </div>
+            <div class="tech-content">
+              <p>
+                Linux Hosting için üretilmiş yeni nesil web sunucu teknolojisi olarak da bilinir ve 
+                PHP'nin Apache'ye göre 5 kat daha hızlı çalışmasını sağlar. CloudLinux işletim sistemiyle 
+                tam uyumludur. Geliştirdiğimiz eklentilerle birlikte Symlink, DOS Attack dahil yüzlerce 
+                ekstra güvenlik kalkanına sahip olursunuz.
+              </p>
+            </div>
+          </div>
+
+          <!-- World Class Panels -->
+          <div class="tech-card">
+            <div class="tech-header">
+              <div class="tech-icon">🌍</div>
+              <h3>Dünyanın En İyileri Hizmetinizde</h3>
+            </div>
+            <div class="tech-content">
+              <p>
+                Linux platform için cPanel, Windows platform için Plesk Panel sunulmaktadır. 
+                Tamamı Türkçe Arayüz, PHP Sürüm Değiştirme, Mobil Tarayıcı Desteği, Antispam Yönetimi, 
+                Ücretsiz SSL Modülü, Dosya Yöneticisi, Detaylı İstatistik Raporu, ModSecurity Yöneticisi, 
+                FTP Hesapları, Tek Tuşla WordPress Kurulumu, Yedek Yöneticisi gibi onlarca özelliğe ve 
+                yeniliğe sahihtir.
+              </p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Advanced Hosting Plans (Natro-inspired) -->
+    <section class="advanced-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">İleri Seviye Hosting Paketleri</h2>
+          <p class="section-subtitle">Büyüyen işletmeniz için profesyonel çözümler</p>
+        </div>
+
+        <div class="advanced-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="standard">Standart Paketler</button>
+            <button class="tab-btn" data-tab="unlimited">Sınırsız Paketler</button>
+          </div>
+
+          <!-- Standard Plans -->
+          <div class="tab-content active" id="standard-tab">
+            <div class="advanced-grid">
+              <!-- Başlangıç -->
+              <div class="advanced-card">
+                <div class="card-badge">Başlangıç</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">1</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">10 GB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">500 GB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">10 Adet</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">1024 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">1 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">1 Adet</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Başlangıç Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <!-- Süper Başlangıç -->
+              <div class="advanced-card featured">
+                <div class="card-badge">Süper Başlangıç</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">1</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">50 GB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">50 Adet</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">1024 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">1 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">5 Adet</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Süper Başlangıç Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <!-- Web Expert -->
+              <div class="advanced-card">
+                <div class="card-badge">Web Expert</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">3</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">30 Adet</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">1024 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">1 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MsSQL:</span>
+                    <span class="feature-value">1 Adet</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Web Expert Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Unlimited Plans -->
+          <div class="tab-content" id="unlimited-tab">
+            <div class="advanced-grid">
+              <!-- Sınırsız -->
+              <div class="advanced-card">
+                <div class="card-badge">Sınırsız</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">1024 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">1 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Sınırsız Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <!-- Sınırsız Pro -->
+              <div class="advanced-card featured">
+                <div class="card-badge">Sınırsız Pro</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">2048 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">2 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MsSQL:</span>
+                    <span class="feature-value">10 Adet</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Sınırsız Pro Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+
+              <!-- Sınırsız Xtreme -->
+              <div class="advanced-card">
+                <div class="card-badge">Sınırsız Xtreme</div>
+                <div class="card-features">
+                  <div class="feature">
+                    <span class="feature-label">Web Sitesi:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Disk Alanı:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">Trafik:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">E-Posta:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">RAM:</span>
+                    <span class="feature-value">2 x 4096 MB</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">CPU:</span>
+                    <span class="feature-value">2 x 4 Core</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MySQL:</span>
+                    <span class="feature-value">Sınırsız</span>
+                  </div>
+                  <div class="feature">
+                    <span class="feature-label">MsSQL:</span>
+                    <span class="feature-value">10 Adet</span>
+                  </div>
+                </div>
+                <div class="card-footer">
+                  <a href={getWhatsAppLink("Sınırsız Xtreme Hosting Paketi")} class="btn whatsapp-btn full-width">
+                    <span class="btn-icon">💬</span>
+                    Fiyatlar ve Detay
+                  </a>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Features Section -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Ekonomik Paketlerdeki Ortak Özellikler</h2>
+          <p class="section-subtitle">Tüm ekonomik hosting paketlerimizde standart olarak sunulan özellikler</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-box">
+            <div class="feature-icon">🎯</div>
+            <h3>cPanel / Plesk</h3>
+            <p>Profesyonel kontrol paneli ile kolay yönetim</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">🛡️</div>
+            <h3>7/24 İzleme</h3>
+            <p>Sürekli izleme ve DDos koruması</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">📦</div>
+            <h3>Otomatik Kurulum</h3>
+            <p>Tek tıkla yüzlerce uygulama kurulumu</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">⏱️</div>
+            <h3>%99.9 Uptime</h3>
+            <p>Yüksek erişilebilirlik garantisi</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">🚀</div>
+            <h3>LiteSpeed</h3>
+            <p>Yüksek performanslı web sunucusu</p>
+          </div>
+          <div class="feature-box">
+            <div class="feature-icon">💾</div>
+            <h3>NVMe Disk</h3>
+            <p>Enterprise seviye hızlı disk teknolojisi</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">Ekonomik Hosting ile Başlayın</h2>
+          <p class="cta-description">
+            Web dünyasına ekonomik bir başlangıç yapın. Uzman ekibimiz size en uygun paketi önermek için hazır.
+            Hemen iletişime geçin ve özel teklif alın!
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("Ekonomik Hosting Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="tel:+902162100888" class="btn secondary-btn large">
+              <span class="btn-icon">📞</span>
+              Ücretsiz Danışmanlık İçin Arayın
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --primary-color: #10b981;
+      --secondary-color: #059669;
+      --accent-color: #f59e0b;
+      --economy-color: #f97316;
+      --dark-color: #1f2937;
+      --light-color: #f8fafc;
+      --text-color: #333;
+      --text-light: #666;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .economic-hosting-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .economy-text {
+      color: var(--economy-color);
+      display: block;
+    }
+
+    .hosting-text {
+      color: var(--primary-color);
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 1rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .location-badge {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      background: white;
+      padding: 0.5rem 1rem;
+      border-radius: 20px;
+      font-weight: 600;
+      color: var(--dark-color);
+      margin-bottom: 1.5rem;
+      box-shadow: var(--shadow);
+    }
+
+    .location-icon {
+      color: var(--economy-color);
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: var(--text-light);
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      background: var(--secondary-color);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .secondary-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .money-animation {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      position: relative;
+    }
+
+    .coin {
+      font-size: 2rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .coin:nth-child(1) { animation-delay: 0s; }
+    .coin:nth-child(2) { animation-delay: 0.5s; }
+    .coin:nth-child(3) { animation-delay: 1s; }
+
+    .server-icon {
+      font-size: 4rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33% { transform: translateY(-10px) rotate(10deg); }
+      66% { transform: translateY(-5px) rotate(-10deg); }
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-10px); }
+    }
+
+    /* Section Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--economy-color), var(--primary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Mini Plans */
+    .mini-plans-section {
+      padding: 6rem 1rem;
+      background: var(--light-color);
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .plan-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .plan-card.featured {
+      border: 3px solid var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .plan-badge {
+      background: linear-gradient(45deg, var(--economy-color), #fb923c);
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .badge-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .badge-subtext {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .plan-content {
+      padding: 2rem;
+    }
+
+    .plan-features {
+      margin-bottom: 2rem;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .feature-item:last-child {
+      border-bottom: none;
+    }
+
+    .feature-icon {
+      font-size: 1.5rem;
+      color: var(--primary-color);
+      flex-shrink: 0;
+    }
+
+    .feature-text {
+      flex: 1;
+    }
+
+    .feature-text strong {
+      display: block;
+      color: var(--dark-color);
+      margin-bottom: 0.2rem;
+    }
+
+    .feature-text small {
+      color: var(--text-light);
+      font-size: 0.85rem;
+    }
+
+    .plan-note {
+      text-align: center;
+      margin-top: 3rem;
+      padding: 1.5rem;
+      background: white;
+      border-radius: 10px;
+      max-width: 800px;
+      margin: 3rem auto 0;
+      box-shadow: var(--shadow);
+    }
+
+    .note-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1rem;
+      color: var(--text-light);
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    .note-icon {
+      color: var(--accent-color);
+      font-size: 1.5rem;
+    }
+
+    /* Unlimited Section */
+    .unlimited-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--primary-color) 0%, var(--secondary-color) 100%);
+      color: white;
+    }
+
+    .unlimited-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .unlimited-text .section-title {
+      background: linear-gradient(45deg, white, #f0fdf4);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+    }
+
+    .unlimited-description {
+      font-size: 1.2rem;
+      margin-bottom: 2rem;
+      opacity: 0.9;
+    }
+
+    .unlimited-illustration {
+      display: flex;
+      justify-content: center;
+    }
+
+    .upgrade-animation {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .mini-server, .unlimited-server, .cloud-server {
+      font-size: 3rem;
+      animation: bounce 2s ease-in-out infinite;
+    }
+
+    .mini-server { animation-delay: 0s; }
+    .unlimited-server { animation-delay: 0.3s; }
+    .cloud-server { animation-delay: 0.6s; }
+
+    .arrow {
+      font-size: 1.5rem;
+      animation: arrowBounce 1.5s infinite;
+    }
+
+    @keyframes arrowBounce {
+      0%, 100% { transform: translateX(0); }
+      50% { transform: translateX(10px); }
+    }
+
+    /* Support Quality */
+    .support-quality-section {
+      padding: 6rem 1rem;
+    }
+
+    .support-content {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .support-description {
+      font-size: 1.2rem;
+      text-align: center;
+      margin-bottom: 3rem;
+      color: var(--dark-color);
+    }
+
+    .support-principles {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin-bottom: 3rem;
+    }
+
+    .principle {
+      text-align: center;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .principle:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .principle-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .principle h4 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .principle p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    .support-note {
+      text-align: center;
+      color: var(--text-light);
+      line-height: 1.7;
+      font-size: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+      padding: 2rem;
+      background: white;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    /* Technology Section */
+    .technology-section {
+      padding: 6rem 1rem;
+      background: var(--light-color);
+    }
+
+    .tech-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(500px, 1fr));
+      gap: 3rem;
+      max-width: 1100px;
+      margin: 0 auto;
+    }
+
+    .tech-card {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .tech-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tech-header {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .tech-icon {
+      font-size: 2.5rem;
+      color: var(--primary-color);
+    }
+
+    .tech-header h3 {
+      font-size: 1.5rem;
+      color: var(--dark-color);
+      margin: 0;
+    }
+
+    .tech-content p {
+      color: var(--text-light);
+      line-height: 1.7;
+      margin: 0;
+    }
+
+    /* Advanced Plans */
+    .advanced-plans-section {
+      padding: 6rem 1rem;
+    }
+
+    .advanced-tabs {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1.1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .tab-btn.active {
+      background: var(--primary-color);
+      color: white;
+      border-color: var(--primary-color);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--primary-color);
+      color: var(--primary-color);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .advanced-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+    }
+
+    .advanced-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      position: relative;
+    }
+
+    .advanced-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .advanced-card.featured {
+      border: 3px solid var(--accent-color);
+      transform: scale(1.05);
+    }
+
+    .advanced-card.featured:hover {
+      transform: scale(1.05) translateY(-5px);
+    }
+
+    .card-badge {
+      position: absolute;
+      top: -15px;
+      left: 50%;
+      transform: translateX(-50%);
+      background: linear-gradient(45deg, var(--economy-color), var(--primary-color));
+      color: white;
+      padding: 0.5rem 1.5rem;
+      border-radius: 20px;
+      font-weight: 600;
+      font-size: 1.1rem;
+    }
+
+    .card-features {
+      margin: 2rem 0;
+    }
+
+    .feature {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.5rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .feature:last-child {
+      border-bottom: none;
+    }
+
+    .feature-label {
+      color: var(--text-light);
+    }
+
+    .feature-value {
+      font-weight: 600;
+      color: var(--dark-color);
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #f0fdf4 0%, #dcfce7 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-box {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .feature-box:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .feature-box .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-box h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: var(--dark-color);
+    }
+
+    .feature-box p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--economy-color) 0%, #ea580c 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container,
+      .unlimited-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .plans-grid,
+      .advanced-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-card.featured,
+      .advanced-card.featured {
+        transform: none;
+      }
+
+      .plan-card.featured:hover,
+      .advanced-card.featured:hover {
+        transform: translateY(-5px);
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .tech-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .support-principles {
+        grid-template-columns: 1fr;
+      }
+
+      .features-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .feature-item {
+        flex-direction: column;
+        text-align: center;
+        gap: 0.5rem;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          // Show corresponding content
+          const tabId = btn.getAttribute('data-tab');
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

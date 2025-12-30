@@ -1,0 +1,1017 @@
+---
+// gizlilik-politikasi.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const pageTitle = `Gizlilik Politikası - ${companyName}`;
+const pageDescription = `${companyName} gizlilik politikası ve kişisel verilerin korunması hakkında detaylı bilgi.`;
+---
+
+<BasicLayout title={pageTitle} description={pageDescription}>
+
+<main class="privacy-policy">
+    <div class="container">
+        <!-- Header -->
+        <div class="privacy-header">
+            <h1>Gizlilik Politikası</h1>
+            <div class="header-meta">
+                <span class="last-updated">İş de Yeter</span>
+                
+            </div>
+        </div>
+
+        <!-- Onay Banner -->
+        <div class="confirmation-banner">
+            <div class="confirmation-icon">✓</div>
+            <p class="confirmation-text">
+                Gizlilik Politikasında yer alan bilgileri ve Kullanıcı Sözleşmesi koşullarını okudum, kabul ediyorum.
+            </p>
+        </div>
+
+        <!-- Table of Contents -->
+        <div class="toc-container">
+            <h2 class="toc-title">İÇİNDEKİLER</h2>
+            <div class="toc-grid">
+                <div class="toc-column">
+                    <h3>Ana Başlıklar</h3>
+                    <ul class="toc-list">
+                        <li><a href="#giris">Giriş</a></li>
+                        <li><a href="#tanimlar">Tanımlar</a></li>
+                        <li><a href="#hizmetler">İsdeyeter.com Tarafından Sunulan Hizmetler</a></li>
+                        <li><a href="#kullanim-sartlari">Kullanım Şartları</a></li>
+                        <li><a href="#uyelik-sistemi">Üyelik Sistemi</a></li>
+                        <li><a href="#hizmet-talebi">Hizmet Talebi Oluşturulması</a></li>
+                    </ul>
+                </div>
+                <div class="toc-column">
+                    <h3>Modeller & Sistemler</h3>
+                    <ul class="toc-list">
+                        <li><a href="#teklif-modeli">Teklif Modeli</a></li>
+                        <li><a href="#rezervasyon-modeli">Rezervasyon Modeli</a></li>
+                        <li><a href="#meslek-profili">Meslek Profili Oluşturma</a></li>
+                        <li><a href="#odeme">Ödeme</a></li>
+                        <li><a href="#hizmet-sorumlulugu">Hizmet Sorumluluğu</a></li>
+                    </ul>
+                </div>
+                <div class="toc-column">
+                    <h3>Haklar & Yükümlülükler</h3>
+                    <ul class="toc-list">
+                        <li><a href="#kullanici-ilisikileri">Kullanıcılarla İlişkiler ve İşlemler</a></li>
+                        <li><a href="#hizmet-alan">Hizmet Alan'ın Yükümlülükleri</a></li>
+                        <li><a href="#hizmet-veren">Hizmet Veren'in Yükümlülükleri</a></li>
+                        <li><a href="#yetki-yukumluluk">İsdeyeter.com'un Yetki ve Yükümlülükleri</a></li>
+                        <li><a href="#web-icerigi">Web Sitesi İçeriği</a></li>
+                    </ul>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="privacy-content">
+            <!-- GİRİŞ -->
+            <section id="giris" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Giriş</h2>
+                    <span class="section-number">1</span>
+                </div>
+                <div class="section-content">
+                    <p class="section-intro">
+                        İşbu kullanıcı sözleşmesi ve Web Sitesi'nde yer alan diğer kurallar İsdeyeter.com tarafından sunulan hizmetlere ilişkin şart ve koşulları ve Web Sitesi'nin kullanılmasına ilişkin kuralları düzenlemektedir.
+                    </p>
+                    
+                    <div class="important-note">
+                        <div class="note-icon">!</div>
+                        <p>
+                            Kullanıcı'nın, Web Sitesi üzerinden Hizmet Talebi veya Meslek Profili oluştururken işbu Sözleşmeyi onayladığı veya Web Sitesi'nden yararlanmaya başladığı andan itibaren işbu Sözleşmeye uymayı taahhüt ettiği kabul edilir. Koşulların sizin için uygun olmaması halinde lütfen Web Sitesi'ni ve sunulan hizmetleri kullanmayınız.
+                        </p>
+                    </div>
+
+                    <div class="update-notice">
+                        <h4>Güncelleme Bilgisi:</h4>
+                        <p>
+                            İsdeyeter.com aracılık hizmetlerinin sürekliliğini sağlama, ileride doğacak teknik zaruretler veya mevzuata uyum sağlanması amacıyla Sözleşmeyi Kullanıcılar aleyhine olmamak kaydıyla tek taraflı olarak değiştirme ya da tadil etme hakkına sahiptir. İsdeyeter.com, herhangi bir değişiklik olması halinde güncel kullanım şartlarını aynı link altında yeni tarih güncellemesi ile Web Sitesi'nde yayınlayacak, gerek görmesi halinde elektronik posta veya mobil bildirim ile kullanıcılarına bildirilecek ve onayına sunacaktır. Yenilenmiş güncel Sözleşme, Web Sitesi'nde yayınlandığı andan itibaren geçerli olacak ve Web Sitesi'nin veya hizmetlerinin kullanımı o andan itibaren yenilenmiş Sözleşme şartlarına tabi olacaktır.
+                        </p>
+                    </div>
+                </div>
+            </section>
+
+            <!-- TANIMLAR -->
+            <section id="tanimlar" class="content-section">
+                <div class="section-header">
+                    <h2 class="section-title">Tanımlar</h2>
+                    <span class="section-number">2</span>
+                </div>
+                <div class="section-content">
+                    <p class="section-intro">
+                        İşbu Sözleşme'de geçen aşağıdaki terimler, yanlarında belirtilen anlamlara sahiptir:
+                    </p>
+
+                    <div class="definitions-grid">
+                        <div class="definition-card">
+                            <h4>"isdeyeter.com"</h4>
+                            <p>DD İnternet ve E-Ticaret Hizmetleri LTD. Şirketi'ni,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Web Sitesi"</h4>
+                            <p>isdeyeter.com internet sitesini ve IOS / Android tabanlı Mobil Uygulamaları,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Kullanıcı"</h4>
+                            <p>Herhangi bir sebeple Web Sitesi'ni kullanan kişileri,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Üye"</h4>
+                            <p>E-posta ve/veya telefon kaydı alınarak işbu Kullanıcı Sözleşmesi'nin kabul edilmesi koşuluna bağlı olarak kendisine kullanıcı adı ve şifre belirleyen Kullanıcı'yı,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Hizmet Alan"</h4>
+                            <p>Web Sitesi üzerinden Hizmet Verenlerce sunulan herhangi bir hizmeti satın almak için Hizmet Talebi gönderen gerçek veya tüzel kişi Kullanıcı'yı,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Hizmet Veren"</h4>
+                            <p>(Yönetmelik kapsamında Hizmet Sağlayıcı) Hizmet sağlamak üzere Web Sitesi üzerinden Meslek Profili oluşturan ve işbu Kullanıcı sözleşmesini onaylayan şahıs, kuruluş veya tüzel kişiyi (Hizmet Veren tüzel bir kişi ise, söz konusu tanım Hizmet Veren adına hizmetleri yürüten ve ona bağlı olarak çalışan kişileri de kapsar.),</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Hizmet Talebi"</h4>
+                            <p>Hizmet Alan tarafından, bir veya daha fazla Hizmet Veren'den Teklif almak amacıyla Web Sitesi üzerinde oluşturulan hizmet talebi,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Teklif"</h4>
+                            <p>Hizmet Veren'in, Hizmet Alan'ın gönderdiği Hizmet Talebi'ne yanıt olarak gönderdiği, hizmetleri belli bir süre ve belli bir ücret karşılığında sağlama teklifini,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Teklif Modeli"</h4>
+                            <p>Hizmet Alan'ın hizmet talebini oluşturduktan sonra, bu talebin Hizmet Verenlere yönlendirilmesiyle Hizmet Verenlerin kendi inisiyatifleri doğrultusunda Hizmet Alan'a Teklif verdiği modeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Rezervasyon Modeli"</h4>
+                            <p>Hizmet Alan'ın Hizmet Talebi oluştururken tek seferlik veya düzenli olarak talep edeceği hizmete ilişkin gün ve saat belirlediği ve Hizmet Veren'in İsdeyeter.com tarafından yönlendirildiği modeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Düzenli Hizmet"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Alan'ın haftalık veya 2 haftada 1 gibi sıklık belirten seçeneklerden birini seçmesi durumunda seçtiği sıklığa göre Hizmetin otomatik yenilenmesiyle oluşan modeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Abonelik Sistemi"</h4>
+                            <p>Rezervasyon Modeli'nin bir parçası olup daha uygun fiyatlar karşılığında Hizmet Alan'ın belirtilen süre boyunca düzenli olarak hizmet alacağını taahhüt ettiği sistemi,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Cayma bedeli"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Alan'ın almayı taahhüt ettiği hizmetlerinden tamamlayamadığı hizmetlerin toplam ücreti ya da o ana kadar abonelik kapsamında alınmış hizmetlerin taahhütsüz fiyat farkının toplamı seçeneklerinden tutar olarak en düşük olanı,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"İş Kabul Etme"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Veren'in işi üstlenmesi ve Rezervasyon dahilinde belirtilen gün ve saatte detaylarda belirtilen hizmeti gerçekleştireceğini taahhüt etmesi,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"İş Silme"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Veren'in kabul ettiği herhangi bir işe gidemeyeceğini mazeret göstererek Web Sitesi üzerinden bildirmesi,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Meslek Profili"</h4>
+                            <p>Hizmet Veren'in Hizmet Alan'a sunabileceği hizmetin tanıtımını yapmak, Teklif Modeli'nde Hizmet Alanlar tarafından sunulan Hizmet Talebi'ne Teklif vermek amacıyla, Rezervasyon Modeli'nde Hizmet Alanlar tarafından yapılan rezervasyonları kabul etmek için Web Sitesi üzerinde oluşturduğu profili,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Teklif Verme Ücreti"</h4>
+                            <p>Teklif Modeli'nde Hizmet Veren'in Hizmet Alan'a Teklif verme hakkını kazanabilmesi için İsdeyeter.com'a ödeyeceği hizmet bedelini,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Komisyon Ücreti"</h4>
+                            <p>Anlaşmaya Varılmış İşler için Teklif Modeli'nde İsdeyeter.com tarafından belirlenen oranda Anlaşmaya Varılmış Teklif üzerinden hak ettiği bedeli, Rezervasyon Modeli'nde ise Sabit Fiyat üzerinden İsdeyeter.com'un hak ettiği bedeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Sabit Fiyat"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Alan tarafından Online Ödeme Sistemi aracılığıyla Hizmet Veren'e ödenecek olan ve İsdeyeter.com'un Komisyon Ücreti'ni de içeren, Web Sitesi üzerinden hizmet için önceden açıklanan standart birim bedeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Hizmet Bedeli"</h4>
+                            <p>Teklif Modeli'nde Hizmet Alan'ın Hizmet Talebi doğrultusunda Hizmet Verenlerin Web Sitesi üzerinden verdiği teklifler arasından anlaştığı teklifin bedeli, Rezervasyon Modeli'nde ise Hizmet Alan'ın Hizmet Talebi doğrultusunda verilen Hizmet karşılığında ödemekle yükümlü olduğu bedeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Bakiye"</h4>
+                            <p>Teklif Modeli'nde Hizmet Veren'ın kendisine yönlendirilen Hizmet Taleplerine Teklif verebilmek için ve Anlaşmaya Varılmış İş sonrası İsdeyeter.com'a ödemekle yükümlü olduğu Komisyon ücretlerini ödeyebilmesi için İsdeyeter.com hesabına tanımlanan bedeli, Rezervasyon Modeli'nde ise müşteri memnuniyeti kapsamında Rezervasyon servislerinde kullanmak üzere İsdeyeter.com hesabına tanımlanabilen bedeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Hediye Kuponu"</h4>
+                            <p>Teklif Modeli'nde Hizmet Veren'in bakiyesine İsdeyeter.com'un inisiyatifi doğrultusunda tanımlanan bedeli,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Kredi Limiti"</h4>
+                            <p>Teklif Modeli'nde Hizmet Veren'in Bakiyesi'nde yeterli tutar bulunmadığında teklif vermeye ve iş kazanmaya devam edebilmesi için Teklif Ücretleri ve Komisyon Ücretlerinin ödenebileceği İsdeyeter.com tarafından Hizmet Veren'in bazı kriterlere göre hesabına tanımlanan kredi tutarını,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Kullanılabilir Bakiye"</h4>
+                            <p>Teklif Modeli'nde Hizmet Veren'in Teklif Ücreti ödeyerek teklif verebileceği ve/veya iş kazandığında Komisyon Ücretini ödeyebileceği varsa Kredi Limiti sonrası kullanabileceği mevcut bakiye bedelini,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Anlaşmaya Varılmış İş"</h4>
+                            <p>Teklif Modeli'nde Hizmet Verenler tarafından Web Sitesi Üzerinden gönderilen Teklif'in Hizmet Alan tarafından Web Sitesi Üzerinden kabul edilmesi ya da Hizmet Veren'in Hizmet Alan ile anlaşmaya vardıktan sonra bunu Web Sitesi üzerinden belirtmesi, Rezervasyon Modeli'ndeki hizmetler için Hizmet Talebi'nin Hizmet Alan tarafından onaylanması,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Online Ödeme Sistemi"</h4>
+                            <p>Rezervasyon Modeli'nde Hizmet Alan'ın Web Sitesi üzerinden alacağı hizmete ilişkin ücretin, İsdeyeter.com veya İsdeyeter.com'un iş birliği yaptığı ödeme kuruluşları tarafından, işbu Sözleşme'de belirlenen hüküm ve koşullar altında kredi kartı, banka kartı, bankalar tarafından sağlanan online ödemeyi destekleyen sair ödeme yöntemleriyle Hizmet Alan'dan tahsilini sağlayan sistemi, Teklif Modeli'nde ise Hizmet Alan'ın gönderdiği Hizmet Talebi'ne Teklif vermek amacıyla İsdeyeter.com'a ödediği Teklif Verme Ücreti ve İsdeyeter.com'a ödemekle yükümlü olduğu Komisyon Ücretlerinin, İsdeyeter.com veya İsdeyeter.com'un iş birliği yaptığı ödeme kuruluşları tarafından, işbu Sözleşme'de belirlenen hüküm ve koşullar altında kredi kartı, banka kartı, bankalar tarafından sağlanan online ödemeyi destekleyen sair ödeme yöntemleriyle Hizmet Veren'den tahsilini sağlayan sistemi,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Sözleşme"</h4>
+                            <p>İşbu Kullanıcı Sözleşmesini,</p>
+                        </div>
+                        <div class="definition-card">
+                            <h4>"Yönetmelik"</h4>
+                            <p>26 Ağustos 2015 günlü ve 29457 sayılı Resmî Gazete'de yayınlanan Elektronik Ticarette Hizmet Sağlayıcı ve Aracı Hizmet Sağlayıcılar Hakkında Yönetmelik'i, ifade eder.</p>
+                        </div>
+                    </div>
+                </div>
+            </section>
+
+            <!-- Diğer bölümler için şablon -->
+            <!-- Her bölüm için aynı yapı kullanılacak -->
+            
+            <!-- Kısa Özet -->
+            <div class="quick-summary">
+                <h3 class="summary-title">Önemli Hatırlatmalar</h3>
+                <div class="summary-items">
+                    <div class="summary-item">
+                        <div class="summary-icon">📋</div>
+                        <div class="summary-content">
+                            <h4>Tam Metin</h4>
+                            <p>Bu sözleşmenin tamamı 6500+ kelimeden oluşmaktadır. Yukarıdaki içindekiler bölümünden istediğiniz başlığa tıklayarak ilgili bölüme gidebilirsiniz.</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">⚖️</div>
+                        <div class="summary-content">
+                            <h4>Yasal Geçerlilik</h4>
+                            <p>Sözleşmede yer alan tüm maddeler yasal olarak bağlayıcıdır. Lütfen tamamını dikkatlice okuyunuz.</p>
+                        </div>
+                    </div>
+                    <div class="summary-item">
+                        <div class="summary-icon">📄</div>
+                        <div class="summary-content">
+                            <h4>Değişiklik Hakkı</h4>
+                            <p>İsdeyeter.com, sözleşmeyi kullanıcılar aleyhine olmamak kaydıyla tek taraflı olarak değiştirebilir.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- Contact Info -->
+        <div class="contact-section">
+            <div class="contact-card">
+                <h3 class="contact-title">İletişim ve Sorular</h3>
+                <p class="contact-description">Sözleşme ile ilgili sorularınız için bizimle iletişime geçebilirsiniz:</p>
+                
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.location.href='/iletisim'">
+                        <span class="btn-icon">📧</span>
+                        İletişim Sayfasına Git
+                    </button>
+                
+
+                <div class="action-buttons">
+                    <button class="btn btn-primary" onclick="window.print()">
+                        <span class="btn-icon">🖨️</span>
+                        Sözleşmeyi Yazdır
+                    </button>
+                  
+                </div>
+            </div>
+        </div>
+    </div>
+</main>
+
+<style is:global>
+    /* Reset ve Temel Stiller */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    :root {
+        --primary-color: #2563eb;
+        --primary-dark: #1d4ed8;
+        --secondary-color: #10b981;
+        --accent-color: #f59e0b;
+        --text-primary: #1f2937;
+        --text-secondary: #6b7280;
+        --text-light: #9ca3af;
+        --bg-primary: #ffffff;
+        --bg-secondary: #f8fafc;
+        --bg-tertiary: #f1f5f9;
+        --border-color: #e5e7eb;
+        --shadow-sm: 0 1px 3px 0 rgba(0, 0, 0, 0.1);
+        --shadow-md: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        --shadow-lg: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+        --border-radius: 8px;
+        --border-radius-lg: 12px;
+        --spacing-xs: 0.5rem;
+        --spacing-sm: 1rem;
+        --spacing-md: 1.5rem;
+        --spacing-lg: 2rem;
+        --spacing-xl: 3rem;
+    }
+
+    body {
+        font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        line-height: 1.6;
+        color: var(--text-primary);
+        background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 var(--spacing-md);
+    }
+
+    /* Privacy Policy Ana Stiller */
+    .privacy-policy {
+        padding: var(--spacing-xl) 0;
+        min-height: 100vh;
+    }
+
+    /* Header */
+    .privacy-header {
+        text-align: center;
+        margin-bottom: var(--spacing-xl);
+        padding: var(--spacing-xl) 0;
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        position: relative;
+        overflow: hidden;
+    }
+
+    .privacy-header::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        height: 4px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+    }
+
+    .privacy-header h1 {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+        line-height: 1.2;
+    }
+
+    .header-meta {
+        display: flex;
+        justify-content: center;
+        align-items: center;
+        gap: var(--spacing-lg);
+        margin-top: var(--spacing-md);
+    }
+
+    .last-updated {
+        font-size: 1.1rem;
+        color: var(--primary-color);
+        font-weight: 600;
+        padding: var(--spacing-xs) var(--spacing-md);
+        background: rgba(37, 99, 235, 0.1);
+        border-radius: 20px;
+    }
+
+    .document-date {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        font-style: italic;
+    }
+
+    /* Onay Banner */
+    .confirmation-banner {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        background: linear-gradient(135deg, #dcfce7, #bbf7d0);
+        border: 1px solid #86efac;
+        border-radius: var(--border-radius);
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .confirmation-icon {
+        width: 32px;
+        height: 32px;
+        background: var(--secondary-color);
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+    }
+
+    .confirmation-text {
+        font-size: 1rem;
+        color: #065f46;
+        font-weight: 500;
+        margin: 0;
+    }
+
+    /* Table of Contents */
+    .toc-container {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        padding: var(--spacing-xl);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .toc-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+        position: relative;
+        padding-bottom: var(--spacing-sm);
+    }
+
+    .toc-title::after {
+        content: '';
+        position: absolute;
+        bottom: 0;
+        left: 50%;
+        transform: translateX(-50%);
+        width: 100px;
+        height: 3px;
+        background: linear-gradient(90deg, var(--primary-color), var(--secondary-color));
+        border-radius: 2px;
+    }
+
+    .toc-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .toc-column h3 {
+        font-size: 1.2rem;
+        font-weight: 600;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-md);
+        padding-left: var(--spacing-sm);
+        border-left: 4px solid var(--primary-color);
+    }
+
+    .toc-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+
+    .toc-list li {
+        margin-bottom: var(--spacing-xs);
+        position: relative;
+        padding-left: var(--spacing-sm);
+    }
+
+    .toc-list li::before {
+        content: '•';
+        position: absolute;
+        left: 0;
+        color: var(--primary-color);
+        font-weight: bold;
+    }
+
+    .toc-list a {
+        display: block;
+        padding: var(--spacing-xs) var(--spacing-sm);
+        color: var(--text-secondary);
+        text-decoration: none;
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+        font-size: 0.95rem;
+    }
+
+    .toc-list a:hover {
+        background: var(--bg-tertiary);
+        color: var(--primary-color);
+        transform: translateX(4px);
+    }
+
+    /* Content Sections */
+    .content-section {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-md);
+        margin-bottom: var(--spacing-lg);
+        overflow: hidden;
+        border: 1px solid var(--border-color);
+    }
+
+    .section-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: var(--spacing-lg);
+        background: linear-gradient(135deg, var(--bg-tertiary), var(--bg-secondary));
+        border-bottom: 1px solid var(--border-color);
+    }
+
+    .section-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin: 0;
+    }
+
+    .section-number {
+        font-size: 1.2rem;
+        font-weight: 800;
+        color: var(--primary-color);
+        background: rgba(37, 99, 235, 0.1);
+        width: 40px;
+        height: 40px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        border-radius: 50%;
+    }
+
+    .section-content {
+        padding: var(--spacing-xl);
+    }
+
+    .section-intro {
+        font-size: 1.1rem;
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-lg);
+        line-height: 1.8;
+        padding: var(--spacing-md);
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius);
+        border-left: 4px solid var(--primary-color);
+    }
+
+    /* Important Note */
+    .important-note {
+        display: flex;
+        gap: var(--spacing-md);
+        background: linear-gradient(135deg, #fef3c7, #fde68a);
+        border: 1px solid #fbbf24;
+        border-radius: var(--border-radius);
+        padding: var(--spacing-md);
+        margin-bottom: var(--spacing-lg);
+    }
+
+    .note-icon {
+        width: 24px;
+        height: 24px;
+        background: #f59e0b;
+        color: white;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-weight: bold;
+        flex-shrink: 0;
+        font-size: 0.9rem;
+    }
+
+    .important-note p {
+        margin: 0;
+        color: #92400e;
+        font-weight: 500;
+        line-height: 1.6;
+    }
+
+    /* Update Notice */
+    .update-notice {
+        background: linear-gradient(135deg, #f0f9ff, #e0f2fe);
+        border: 1px solid #7dd3fc;
+        border-radius: var(--border-radius);
+        padding: var(--spacing-lg);
+        margin-top: var(--spacing-lg);
+    }
+
+    .update-notice h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-sm);
+    }
+
+    .update-notice p {
+        margin: 0;
+        color: var(--text-secondary);
+        line-height: 1.7;
+    }
+
+    /* Definitions Grid */
+    .definitions-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: var(--spacing-md);
+        margin-top: var(--spacing-lg);
+    }
+
+    .definition-card {
+        background: var(--bg-secondary);
+        border: 1px solid var(--border-color);
+        border-radius: var(--border-radius);
+        padding: var(--spacing-md);
+        transition: all 0.3s ease;
+        position: relative;
+        overflow: hidden;
+    }
+
+    .definition-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        width: 4px;
+        height: 100%;
+        background: var(--primary-color);
+    }
+
+    .definition-card:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+        border-color: var(--primary-color);
+    }
+
+    .definition-card h4 {
+        font-size: 1rem;
+        font-weight: 600;
+        color: var(--primary-color);
+        margin-bottom: var(--spacing-xs);
+        font-family: 'Courier New', monospace;
+    }
+
+    .definition-card p {
+        font-size: 0.9rem;
+        color: var(--text-secondary);
+        line-height: 1.6;
+        margin: 0;
+    }
+
+    /* Quick Summary */
+    .quick-summary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        border-radius: var(--border-radius-lg);
+        padding: var(--spacing-xl);
+        margin: var(--spacing-xl) 0;
+        color: white;
+    }
+
+    .summary-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: var(--spacing-lg);
+        text-align: center;
+    }
+
+    .summary-items {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+    }
+
+    .summary-item {
+        display: flex;
+        align-items: flex-start;
+        gap: var(--spacing-md);
+    }
+
+    .summary-icon {
+        font-size: 1.5rem;
+        background: rgba(255, 255, 255, 0.2);
+        width: 48px;
+        height: 48px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        flex-shrink: 0;
+    }
+
+    .summary-content h4 {
+        font-size: 1.1rem;
+        font-weight: 600;
+        margin-bottom: var(--spacing-xs);
+        color: white;
+    }
+
+    .summary-content p {
+        font-size: 0.9rem;
+        opacity: 0.9;
+        line-height: 1.5;
+        margin: 0;
+    }
+
+    /* Contact Section */
+    .contact-section {
+        margin-top: var(--spacing-xl);
+    }
+
+    .contact-card {
+        background: var(--bg-primary);
+        border-radius: var(--border-radius-lg);
+        box-shadow: var(--shadow-lg);
+        padding: var(--spacing-xl);
+        border-top: 4px solid var(--primary-color);
+    }
+
+    .contact-title {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: var(--text-primary);
+        margin-bottom: var(--spacing-sm);
+        text-align: center;
+    }
+
+    .contact-description {
+        text-align: center;
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-lg);
+        font-size: 1rem;
+    }
+
+    .contact-info {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: var(--spacing-lg);
+        margin-bottom: var(--spacing-xl);
+    }
+
+    .info-item {
+        display: flex;
+        align-items: center;
+        gap: var(--spacing-md);
+        padding: var(--spacing-md);
+        background: var(--bg-secondary);
+        border-radius: var(--border-radius);
+        transition: all 0.3s ease;
+    }
+
+    .info-item:hover {
+        transform: translateY(-2px);
+        box-shadow: var(--shadow-md);
+    }
+
+    .info-icon {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+    }
+
+    .info-content h4 {
+        font-size: 0.9rem;
+        font-weight: 600;
+        color: var(--text-secondary);
+        margin-bottom: var(--spacing-xs);
+        text-transform: uppercase;
+        letter-spacing: 0.5px;
+    }
+
+    .info-content p {
+        font-size: 1rem;
+        color: var(--text-primary);
+        margin: 0;
+        font-weight: 500;
+    }
+
+    /* Action Buttons */
+    .action-buttons {
+        display: flex;
+        justify-content: center;
+        gap: var(--spacing-md);
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: var(--spacing-sm);
+        padding: var(--spacing-md) var(--spacing-lg);
+        border: none;
+        border-radius: var(--border-radius);
+        font-size: 1rem;
+        font-weight: 600;
+        cursor: pointer;
+        transition: all 0.3s ease;
+        text-decoration: none;
+        min-width: 200px;
+        justify-content: center;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, var(--primary-color), var(--primary-dark));
+        color: white;
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 12px rgba(37, 99, 235, 0.3);
+    }
+
+    .btn-secondary {
+        background: var(--bg-tertiary);
+        color: var(--text-primary);
+        border: 1px solid var(--border-color);
+    }
+
+    .btn-secondary:hover {
+        background: var(--border-color);
+        transform: translateY(-2px);
+    }
+
+    .btn-icon {
+        font-size: 1.2rem;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .privacy-header h1 {
+            font-size: 2rem;
+        }
+
+        .header-meta {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+
+        .toc-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .definitions-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .summary-items {
+            grid-template-columns: 1fr;
+        }
+
+        .contact-info {
+            grid-template-columns: 1fr;
+        }
+
+        .action-buttons {
+            flex-direction: column;
+        }
+
+        .btn {
+            width: 100%;
+        }
+
+        .section-header {
+            flex-direction: column;
+            align-items: flex-start;
+            gap: var(--spacing-sm);
+        }
+
+        .section-number {
+            align-self: flex-start;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .privacy-header {
+            padding: var(--spacing-lg) var(--spacing-md);
+        }
+
+        .privacy-header h1 {
+            font-size: 1.75rem;
+        }
+
+        .section-content {
+            padding: var(--spacing-md);
+        }
+
+        .toc-container,
+        .content-section,
+        .contact-card {
+            padding: var(--spacing-md);
+        }
+
+        .important-note,
+        .update-notice {
+            flex-direction: column;
+            gap: var(--spacing-sm);
+        }
+    }
+
+    /* Scroll Animasyonu */
+    .content-section {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.6s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    /* Yazdırma Stilleri */
+    @media print {
+        body {
+            background: white !important;
+        }
+
+        .privacy-header,
+        .toc-container,
+        .content-section,
+        .contact-card {
+            box-shadow: none !important;
+            border: 1px solid #ddd !important;
+        }
+
+        .action-buttons,
+        .quick-summary {
+            display: none !important;
+        }
+    }
+</style>
+
+<script>
+    // Bağlantı yönlendirme
+    document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function (e) {
+            e.preventDefault();
+            const targetId = this.getAttribute('href');
+            if (targetId === '#') return;
+            
+            const targetElement = document.querySelector(targetId);
+            if (targetElement) {
+                window.scrollTo({
+                    top: targetElement.offsetTop - 100,
+                    behavior: 'smooth'
+                });
+                
+                // Aktif bölüm vurgulama
+                document.querySelectorAll('.content-section').forEach(section => {
+                    section.classList.remove('active-section');
+                });
+                targetElement.classList.add('active-section');
+            }
+        });
+    });
+
+    // PDF İndirme simülasyonu
+    function downloadPDF() {
+        alert('PDF indirme işlemi başlatılıyor...');
+        // Gerçek uygulamada burada PDF oluşturma ve indirme işlemi yapılır
+    }
+
+    // Scroll animasyonları
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('visible');
+            }
+        });
+    }, observerOptions);
+
+    document.querySelectorAll('.content-section').forEach(section => {
+        observer.observe(section);
+    });
+
+    // Aktif bölüm takibi
+    let currentSection = null;
+    
+    window.addEventListener('scroll', () => {
+        const sections = document.querySelectorAll('.content-section');
+        const scrollPosition = window.scrollY + 150;
+        
+        sections.forEach(section => {
+            const sectionTop = section.offsetTop;
+            const sectionHeight = section.clientHeight;
+            
+            if (scrollPosition >= sectionTop && scrollPosition < sectionTop + sectionHeight) {
+                if (currentSection !== section.id) {
+                    currentSection = section.id;
+                    // Aktif bağlantıyı güncelle
+                    document.querySelectorAll('.toc-list a').forEach(link => {
+                        link.classList.remove('active');
+                        if (link.getAttribute('href') === `#${section.id}`) {
+                            link.classList.add('active');
+                        }
+                    });
+                }
+            }
+        });
+    });
+</script>
+
+</BasicLayout>

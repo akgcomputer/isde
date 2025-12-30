@@ -1,0 +1,734 @@
+---
+// /src/pages/isdeyeter.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import hakkimizdaData from './data/hakkimizda.json';
+import configData from './data/config.json';
+
+const whatsappNumber = configData.whatsapp;
+const dil = Astro.url.pathname.includes('/en/') ? 'en' : 'tr';
+const icerik = hakkimizdaData.hakkimizda[dil];
+---
+
+<BasicLayout title={`${icerik.baslik} | İş de YETER`}>
+
+<!-- Hero Section -->
+<section class="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content" style="margin-top: 40px;">
+            <div style="max-width: 800px; margin: 0 auto; text-align: center;">
+                <h1 class="hero-title">
+                    <span style="color: #1F2937;">{icerik.baslik}</span>
+                </h1>
+                <p style="color: #f3003d; font-size: 1.5rem; font-weight: 600; line-height: 1.6; margin-bottom: 20px;">
+                    {icerik.ustBaslik}
+                </p>
+                <p class="hero-subtitle" style="font-size: 1.2rem; line-height: 1.7;">
+                    {icerik.tanitim}
+                </p>
+                <div class="btn-group">
+                    <a href="#icerik" class="btn btn-primary">
+                        <i class="fas fa-book-open"></i>
+                        {dil === 'tr' ? 'İş de yeter' : 'Read About Us'}
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(icerik.baslik)}%20sayfasından%20yazıyorum`} 
+                       target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        {dil === 'tr' ? 'WhatsApp ile İletişim' : 'Contact via WhatsApp'}
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- İçerik Bölümü -->
+<section class="content-section" id="icerik">
+    <div class="container">
+        <!-- Ana İçerik Kartları -->
+        <div class="content-grid">
+            {icerik.icerik.map((bolum, index) => (
+                <div class="content-card" key={index}>
+                    <div class="content-icon">
+                        <i class={bolum.ikon}></i>
+                    </div>
+                    <h3>{bolum.baslik}</h3>
+                    <p>{bolum.icerik}</p>
+                </div>
+            ))}
+        </div>
+
+        <!-- Faaliyet Alanları -->
+        <div class="activity-grid">
+  {icerik.faaliyetler.konular.map((konu, index) => (
+        <div 
+            class="activity-card" 
+            key={index}
+            style={`
+                background: linear-gradient(135deg, ${konu.renk1}, ${konu.renk2});
+                color: white;
+            `}
+            >
+            <h4>{konu.baslik}</h4>
+            <p>{konu.icerik}</p>
+            </div>
+        ))}
+        </div>
+
+        <!-- Neden Biz? -->
+        <div class="why-section">
+            <div class="section-header">
+                <h2>{icerik.nedenBiz.baslik}</h2>
+                <p>{icerik.nedenBiz.aciklama}</p>
+            </div>
+            
+            <div class="why-grid">
+                {icerik.nedenBiz.nedenler.map((neden, index) => (
+                    <div class="why-card" key={index}>
+                        <div class="why-icon">
+                            <i class={neden.ikon}></i>
+                        </div>
+                        <h4>{neden.baslik}</h4>
+                        <p>{neden.icerik}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- Hedef Kitle -->
+        <div class="target-section">
+            <div class="section-header">
+                <h2>{icerik.hedefKitle.baslik}</h2>
+                <p>{icerik.hedefKitle.aciklama}</p>
+            </div>
+            
+            <div class="target-grid">
+                {icerik.hedefKitle.gruplar.map((grup, index) => (
+                    <div class="target-card" key={index}>
+                        <div class="target-icon">
+                            <i class={grup.ikon}></i>
+                        </div>
+                        <h4>{grup.baslik}</h4>
+                        <p>{grup.icerik}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- Değerlerimiz -->
+        <div class="values-section">
+            <div class="section-header">
+                <h2>{icerik.degerler.baslik}</h2>
+                <p>{icerik.degerler.aciklama}</p>
+            </div>
+            
+            <div class="values-grid">
+                {icerik.degerler.degerler.map((deger, index) => (
+                    <div class="values-card" key={index}>
+                        <div class="values-icon">
+                            <i class={deger.ikon}></i>
+                        </div>
+                        <h4>{deger.baslik}</h4>
+                        <p>{deger.icerik}</p>
+                    </div>
+                ))}
+            </div>
+        </div>
+
+        <!-- İstatistikler -->
+        <div class="stats-section">
+            <div class="container">
+                <div class="stats-grid">
+                    <div class="stat-item">
+                        <div class="stat-number">24+</div>
+                        <div class="stat-label">{dil === 'tr' ? 'Yıllık Tecrübe' : 'Years of Experience'}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">500+</div>
+                        <div class="stat-label">{dil === 'tr' ? 'Hizmet Kategorisi' : 'Service Categories'}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">1000+</div>
+                        <div class="stat-label">{dil === 'tr' ? 'Mutlu Müşteri' : 'Happy Clients'}</div>
+                    </div>
+                    <div class="stat-item">
+                        <div class="stat-number">7/24</div>
+                        <div class="stat-label">{dil === 'tr' ? 'Destek' : 'Support'}</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+
+        <!-- CTA Section -->
+        <div class="cta-section">
+            <div class="container">
+                <div class="cta-content">
+                    <h2>{icerik.iletisim.baslik}</h2>
+                    <p>{icerik.iletisim.aciklama}</p>
+                    <div class="cta-buttons">
+                        <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(icerik.baslik)}%20sayfasından%20yazıyorum,%20bilgi%20almak%20istiyorum`} 
+                           target="_blank" class="btn btn-whatsapp btn-lg">
+                            <i class="fab fa-whatsapp"></i>
+                            {icerik.iletisim.buton}
+                        </a>
+                    </div>
+                    <p class="cta-slogan">{icerik.iletisim.slogan}</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section */
+    .hero {
+        background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f87171' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-title {
+        font-size: 3.5rem;
+        color: #1F2937;
+        margin-bottom: 1rem;
+        font-weight: 800;
+    }
+    
+    .btn-group {
+        display: flex;
+        gap: 1rem;
+        justify-content: center;
+        margin-top: 2rem;
+        flex-wrap: wrap;
+    }
+    
+    /* Butonlar */
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: 2px solid transparent;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        background: #f3003d;
+        color: white;
+        border-color: #f3003d;
+    }
+    
+    .btn-primary:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(243, 0, 61, 0.2);
+    }
+    
+    .btn-whatsapp {
+        background: #25D366;
+        color: white;
+        border-color: #25D366;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128C7E;
+        border-color: #128C7E;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+    }
+    
+    .btn-lg {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+    
+    /* Content Section */
+    .content-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    /* İçerik Kartları */
+    .content-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+        gap: 30px;
+        margin-bottom: 60px;
+    }
+    
+    .content-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .content-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(243, 0, 61, 0.1);
+    }
+    
+    .content-icon {
+        font-size: 3rem;
+        color: #f3003d;
+        margin-bottom: 20px;
+    }
+    
+    .content-card h3 {
+        color: #1F2937;
+        font-size: 1.5rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .content-card p {
+        color: #4B5563;
+        line-height: 1.6;
+    }
+    
+    /* Section Header */
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: #ec0163;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    
+    .section-header p {
+        color: #6B7280;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+        line-height: 1.6;
+    }
+    
+    /* Activity Cards */
+    .activity-section {
+        margin-bottom: 80px;
+    }
+    
+    .activity-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .activity-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        color: white;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .activity-card::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: linear-gradient(135deg, var(--tw-gradient-from), var(--tw-gradient-to));
+        z-index: 1;
+    }
+    
+    .activity-card > * {
+        position: relative;
+        z-index: 2;
+    }
+    
+    .activity-card h4 {
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .activity-card p {
+        line-height: 1.5;
+        opacity: 0.9;
+    }
+    
+    /* Why Section */
+    .why-section {
+        margin-bottom: 80px;
+    }
+    
+    .why-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .why-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .why-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.1);
+        border-top: 3px solid #10B981;
+    }
+    
+    .why-icon {
+        font-size: 2.5rem;
+        color: #10B981;
+        margin-bottom: 20px;
+    }
+    
+    .why-card h4 {
+        color: #1F2937;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .why-card p {
+        color: #4B5563;
+        line-height: 1.5;
+    }
+    
+    /* Target Section */
+    .target-section {
+        margin-bottom: 80px;
+    }
+    
+    .target-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .target-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .target-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(59, 130, 246, 0.1);
+        border-top: 3px solid #3B82F6;
+    }
+    
+    .target-icon {
+        font-size: 2.5rem;
+        color: #3B82F6;
+        margin-bottom: 20px;
+    }
+    
+    .target-card h4 {
+        color: #1F2937;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .target-card p {
+        color: #4B5563;
+        line-height: 1.5;
+    }
+    
+    /* Values Section */
+    .values-section {
+        margin-bottom: 80px;
+    }
+    
+    .values-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .values-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: all 0.3s ease;
+        text-align: center;
+    }
+    
+    .values-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(168, 85, 247, 0.1);
+        border-top: 3px solid #A855F7;
+    }
+    
+    .values-icon {
+        font-size: 2.5rem;
+        color: #A855F7;
+        margin-bottom: 20px;
+    }
+    
+    .values-card h4 {
+        color: #1F2937;
+        font-size: 1.3rem;
+        margin-bottom: 15px;
+        font-weight: 600;
+    }
+    
+    .values-card p {
+        color: #4B5563;
+        line-height: 1.5;
+    }
+    
+    /* Stats Section */
+    .stats-section {
+        background: linear-gradient(135deg, #1F2937, #374151);
+        color: white;
+        padding: 60px 0;
+        margin-bottom: 80px;
+        border-radius: 15px;
+    }
+    
+    .stats-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+    
+    .stat-item {
+        padding: 20px;
+    }
+    
+    .stat-number {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #f3003d;
+        margin-bottom: 10px;
+    }
+    
+    .stat-label {
+        font-size: 1.1rem;
+        color: #D1D5DB;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        background: white;
+        border-radius: 15px;
+        padding: 60px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.1);
+        text-align: center;
+        margin-top: 60px;
+    }
+    
+    .cta-content h2 {
+        color: #1F2937;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .cta-content p {
+        color: #6B7280;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+    }
+    
+    .cta-buttons {
+        margin-bottom: 30px;
+    }
+    
+    .cta-slogan {
+        color: #f3003d;
+        font-size: 1.3rem;
+        font-weight: 600;
+        margin-top: 20px;
+    }
+    
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .content-grid,
+        .activity-grid,
+        .why-grid,
+        .target-grid,
+        .values-grid,
+        .stats-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .content-section {
+            padding: 60px 0;
+        }
+        
+        .activity-section,
+        .why-section,
+        .target-section,
+        .values-section {
+            margin-bottom: 60px;
+        }
+        
+        .cta-section {
+            padding: 40px 20px;
+        }
+        
+        .btn-group {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-group .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .content-card,
+        .activity-card,
+        .why-card,
+        .target-card,
+        .values-card {
+            padding: 20px;
+        }
+        
+        .stat-number {
+            font-size: 2.5rem;
+        }
+    }
+</style>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(icerik.baslik)}%20sayfasından%20yazıyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- Dil Değiştirme Butonu -->
+<div class="language-switcher">
+    {dil === 'tr' ? (
+        <a href="/en/isdeyeter" class="btn btn-outline">
+            
+            İş de yeter!
+        </a>
+    ) : (
+        <a href="/isdeyeter" class="btn btn-outline">
+            <i class="fas fa-language"></i>
+            Türkçe
+        </a>
+    )}
+</div>
+
+<style>
+    .language-switcher {
+        position: fixed;
+        top: 100px;
+        right: 20px;
+        z-index: 1000;
+    }
+    
+    .btn-outline {
+        background: transparent;
+        color: #f3003d;
+        border: 2px solid #f3003d;
+    }
+    
+    .btn-outline:hover {
+        background: #f3003d;
+        color: white;
+    }
+    
+    .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #25D366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        text-decoration: none;
+    }
+    
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+    
+    @media (max-width: 768px) {
+        .language-switcher {
+            top: 80px;
+            right: 10px;
+        }
+        
+        .whatsapp-float {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.2rem;
+        }
+    }
+</style>
+
+</BasicLayout>

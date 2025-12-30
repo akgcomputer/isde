@@ -1,0 +1,1085 @@
+---
+// src/pages/ai-robot.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Bilgi Al";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "İş Süreçleri Otomasyonu | RPA Çözümleri ile Dijital Dönüşüm";
+const pageDescription = "Robbot benzeri RPA çözümleri ile iş süreçlerinizi otomatikleştirin. Yapay zeka destekli otomasyon sistemleriyle verimliliği artırın, maliyetleri düşürün.";
+---
+
+<BasicLayout title={pageTitle} description={pageDescription}>
+  <div class="rpa-automation-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="digital-text">İş Süreçlerinizi</span>
+            <span class="era-text">Dijital Çağa Taşıyın!</span>
+          </h1>
+          <p class="hero-description">
+            Tekrarlayan işleri hızla tamamlayan, verimliliği artıran ve maliyetleri düşüren 
+            RPA ve otomasyon çözümleriyle tanışın. Akıllı teknolojilerimizle iş süreçlerinizi 
+            kolaylaştırın ve rakiplerinizin önüne geçin. 7/24 kesintisiz çalışan sistemlerimizle, 
+            işiniz her an güvende!
+          </p>
+          <div class="hero-stats">
+            <div class="stat-item">
+              <div class="stat-number">%80</div>
+              <div class="stat-text">Maliyet Azaltma</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">40x</div>
+              <div class="stat-text">Daha Hızlı Süreç</div>
+            </div>
+            <div class="stat-item">
+              <div class="stat-number">150+</div>
+              <div class="stat-text">Otomasyon Çözümü</div>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href={getWhatsAppLink("RPA Çözümleri Demo")} class="btn primary-btn">
+              <span class="btn-icon">🤖</span>
+              Demo Talep Et
+            </a>
+            <a href="#solutions" class="btn secondary-btn">
+              <span class="btn-icon">🔧</span>
+              Çözümleri İncele
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="robot-animation">
+            <div class="robot-icon">🤖</div>
+            <div class="automation-flow"></div>
+            <div class="process-icon">⚙️</div>
+            <div class="automation-flow"></div>
+            <div class="ai-icon">🧠</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Products Section -->
+    <section class="products-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Ürünlerimiz</h2>
+          <p class="section-subtitle">İhtiyaçlarınıza Özel RPA Çözümleri</p>
+        </div>
+
+        <div class="products-grid">
+          <div class="product-card">
+            <div class="product-icon">✂️</div>
+            <h3>Tailor-Made RPA Çözümleri</h3>
+            <p>Her işletmenin kendine özgü süreç ve ihtiyaçlarına özel geliştirdiğimiz RPA çözümleri ile iş süreçlerinizi tam anlamıyla optimize ediyoruz.</p>
+          </div>
+          <div class="product-card">
+            <div class="product-icon">🎨</div>
+            <h3>Kendi RPA Stüdyomuz</h3>
+            <p>Şirketlerin dijital dönüşüm süreçlerini güçlendirmesi için kendi RPA stüdyomuzu sunuyoruz. Otomasyon çözümlerini kolayca entegre edin.</p>
+          </div>
+          <div class="product-card">
+            <div class="product-icon">📦</div>
+            <h3>Sektörlere Özel Hazır Paketler</h3>
+            <p>Finans, sağlık, üretim, perakende gibi sektörler için geliştirdiğimiz standart çözümlerimiz ile hızlıca devreye alın.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- 24/7 Automation -->
+    <section class="continuous-section">
+      <div class="container">
+        <div class="continuous-content">
+          <div class="continuous-text">
+            <h2 class="section-title">7/24 Çalışan Otomasyon!</h2>
+            <p class="continuous-description">
+              Herkes uyurken, dijital dönüşüm durmaz. Geceyi aydınlatan otomasyon gücümüzle fark yaratıyoruz. 
+              Bilgisayarlar kapanır işler durur; oysa bizim sistemlerimiz gece boyunca uykusuz çalışarak 
+              verimliliği ve dijital dönüşümü canlı tutar.
+            </p>
+            <a href={getWhatsAppLink("7/24 Otomasyon Sistemi")} class="btn primary-btn">
+              <span class="btn-icon">🌙</span>
+              24/7 Otomasyon İncele
+            </a>
+          </div>
+          <div class="continuous-illustration">
+            <div class="night-automation">
+              <div class="moon-icon">🌙</div>
+              <div class="working-robot">🤖</div>
+              <div class="data-stream"></div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Solutions Section -->
+    <section id="solutions" class="solutions-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Dijital Dönüşümün Gücünü Keşfedin!</h2>
+          <p class="section-subtitle">İş Süreçleriniz İçin Akıllı, Hızlı ve Hatasız Çözümler</p>
+        </div>
+
+        <div class="solutions-grid">
+          <div class="solution-card">
+            <div class="solution-icon">💬</div>
+            <h3>Akıllı Chatbot Uygulaması</h3>
+            <p>Yapay zeka destekli chatbot çözümleri</p>
+            <a href={getWhatsAppLink("Akıllı Chatbot Çözümü")} class="solution-link">Detaylı bilgi için tıklayın!</a>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">⚙️</div>
+            <h3>Robotik Süreç Otomasyonu</h3>
+            <p>Tam kapsamlı RPA çözümleri</p>
+            <a href={getWhatsAppLink("Robotik Süreç Otomasyonu")} class="solution-link">Detaylı bilgi için tıklayın!</a>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">🎯</div>
+            <h3>Merkezi Süreç & Robot Yönetimi</h3>
+            <p>Merkezi otomasyon yönetim sistemi</p>
+            <a href={getWhatsAppLink("Merkezi Robot Yönetimi")} class="solution-link">Detaylı bilgi için tıklayın!</a>
+          </div>
+          <div class="solution-card">
+            <div class="solution-icon">🔗</div>
+            <h3>API Entegrasyonu & İş Akışı</h3>
+            <p>BPM temelli entegre iş akışları</p>
+            <a href={getWhatsAppLink("API Entegrasyon Çözümleri")} class="solution-link">Detaylı bilgi için tıklayın!</a>
+          </div>
+        </div>
+
+        <div class="section-footer">
+          <p>
+            Burada yer alan otomasyon çözümleri yalnızca sunduklarımızın bir kısmı. İş süreçlerinize özel 
+            daha birçok yenilikçi çözüm ile işinizi daha verimli, hızlı ve hatasız hale getirmek için buradayız.
+          </p>
+          <a href={getWhatsAppLink("Özel Otomasyon Çözümleri")} class="btn primary-btn large">
+            <span class="btn-icon">💼</span>
+            Size Özel Çözüm İçin İletişime Geçin
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- Industry Solutions -->
+    <section class="industry-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sektörel Otomasyon Çözümlerimiz</h2>
+          <p class="section-subtitle">Her Sektöre Özel Optimize Edilmiş RPA Çözümleri</p>
+        </div>
+
+        <div class="industry-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="finance">Finans & Muhasebe</button>
+            <button class="tab-btn" data-tab="ecommerce">E-Ticaret</button>
+            <button class="tab-btn" data-tab="hr">İnsan Kaynakları</button>
+            <button class="tab-btn" data-tab="sales">Satış & CRM</button>
+            <button class="tab-btn" data-tab="logistics">Lojistik</button>
+            <button class="tab-btn" data-tab="health">Sağlık</button>
+          </div>
+
+          <!-- Finance Tab -->
+          <div class="tab-content active" id="finance-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">🧾</div>
+                <h4>Fatura İşlemleri</h4>
+                <p>Fatura okuma, işleme ve muhasebe sistemine otomatik aktarım</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🏦</div>
+                <h4>Banka Mutabakatı</h4>
+                <p>Ödeme ve tahsilatları anında kontrol eden akıllı sistem</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📊</div>
+                <h4>Bütçe ve Raporlama</h4>
+                <p>Finansal verileri analiz edip anlık raporlar sunan otomasyon</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">💰</div>
+                <h4>Kazanımlar</h4>
+                <p>Hatasız finansal süreçler, %80 zaman tasarrufu, insan hatalarını sıfıra indirme</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- E-commerce Tab -->
+          <div class="tab-content" id="ecommerce-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">📦</div>
+                <h4>Otomatik Stok Takibi</h4>
+                <p>Gerçek zamanlı stok güncellemeleri</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🛒</div>
+                <h4>Sipariş & Fatura Oluşturma</h4>
+                <p>E-ticaret siparişlerini anında işleyerek faturaya dönüştürme</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">💬</div>
+                <h4>Müşteri Destek Otomasyonu</h4>
+                <p>Chatbot entegrasyonu ile hızlı müşteri yanıtları</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">🚀</div>
+                <h4>Kazanımlar</h4>
+                <p>%70 daha hızlı sipariş işleme, müşteri memnuniyetinde artış, sipariş hatalarını önleme</p>
+              </div>
+            </div>
+          </div>
+
+          <!-- HR Tab -->
+          <div class="tab-content" id="hr-tab">
+            <div class="tab-grid">
+              <div class="tab-feature">
+                <div class="feature-icon">📄</div>
+                <h4>CV Tarama & Aday Değerlendirme</h4>
+                <p>Yapay zekâ ile binlerce CV'yi saniyeler içinde analiz</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">💰</div>
+                <h4>Bordro ve Özlük İşleri</h4>
+                <p>Maaş, prim, sigorta hesaplamalarını otomatik yönetim</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📅</div>
+                <h4>İzin ve Vardiya Planlama</h4>
+                <p>Çalışan izinlerini ve vardiyalarını akıllıca yönetme</p>
+              </div>
+              <div class="tab-feature">
+                <div class="feature-icon">📈</div>
+                <h4>Kazanımlar</h4>
+                <p>%90'a varan zaman tasarrufu, hızlı işe alım, çalışan memnuniyetinde artış</p>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Integration Section -->
+    <section class="integration-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Entegrasyonlar</h2>
+          <p class="section-subtitle">Tüm Sistemlerinizle Sorunsuz Entegre Çalışır</p>
+        </div>
+
+        <div class="integrations-grid">
+          <div class="integration-category">
+            <h3>ERP Sistemleri</h3>
+            <div class="integration-logos">
+              <div class="logo-item">SAP</div>
+              <div class="logo-item">Oracle</div>
+              <div class="logo-item">Microsoft Dynamics</div>
+              <div class="logo-item">Logo</div>
+              <div class="logo-item">Mikro</div>
+            </div>
+          </div>
+          
+          <div class="integration-category">
+            <h3>CRM Sistemleri</h3>
+            <div class="integration-logos">
+              <div class="logo-item">Salesforce</div>
+              <div class="logo-item">HubSpot</div>
+              <div class="logo-item">Zoho CRM</div>
+              <div class="logo-item">Microsoft CRM</div>
+            </div>
+          </div>
+
+          <div class="integration-category">
+            <h3>Muhasebe Yazılımları</h3>
+            <div class="integration-logos">
+              <div class="logo-item">QuickBooks</div>
+              <div class="logo-item">Eta</div>
+              <div class="logo-item">Oracle Netsuite</div>
+              <div class="logo-item">Parasut</div>
+            </div>
+          </div>
+
+          <div class="integration-category">
+            <h3>API Entegrasyonları</h3>
+            <div class="integration-logos">
+              <div class="logo-item">Özel API</div>
+              <div class="logo-item">Webhook</div>
+              <div class="logo-item">REST API</div>
+              <div class="logo-item">SOAP</div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Additional Industries -->
+    <section class="more-industries">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Diğer Sektör Çözümlerimiz</h2>
+          <p class="section-subtitle">Her Sektör İçin Özelleştirilmiş Otomasyon</p>
+        </div>
+
+        <div class="industries-grid">
+          <div class="industry-mini-card">
+            <div class="industry-icon">🏭</div>
+            <h4>Üretim Otomasyonu</h4>
+            <p>Üretim süreçlerini optimize edin</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">⚖️</div>
+            <h4>Hukuk & Danışmanlık</h4>
+            <p>Hukuki süreçleri dijitalleştirin</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">🚗</div>
+            <h4>Otomotiv</h4>
+            <p>Üretimden satışa tüm süreçler</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">⚡</div>
+            <h4>Enerji & Çevre</h4>
+            <p>Enerji verimliliği ve sürdürülebilirlik</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">🛍️</div>
+            <h4>Perakende & FMCG</h4>
+            <p>Mağaza ve tedarik süreçleri</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">💻</div>
+            <h4>Bilgi Teknolojileri</h4>
+            <p>Yazılım geliştirme süreçleri</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">📚</div>
+            <h4>Eğitim & Üniversite</h4>
+            <p>Eğitim süreçlerini dijitalleştirin</p>
+          </div>
+          <div class="industry-mini-card">
+            <div class="industry-icon">📢</div>
+            <h4>Pazarlama</h4>
+            <p>Potansiyel müşterilere hızlı ulaşın</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">İş Süreçlerinizi Dijitalleştirmeye Hazır mısınız?</h2>
+          <p class="cta-description">
+            RPA ve otomasyon çözümlerimizle iş süreçlerinizi optimize edin, verimliliği artırın 
+            ve rekabet avantajı elde edin. Uzman ekibimiz size özel çözümler sunmak için hazır.
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("RPA Çözümleri Teklif")} class="btn primary-btn large">
+              <span class="btn-icon">🤖</span>
+              Ücretsiz Danışmanlık Al
+            </a>
+            <a href={getWhatsAppLink("RPA Demo Talebi")} class="btn primary-btn large" style="color:#cbd5e1;">
+              <span class="btn-icon" >🎯</span>
+              Canlı Demo
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --rpa-blue: #2563eb;
+      --dark-blue: #1d4ed8;
+      --light-blue: #dbeafe;
+      --rpa-teal: #0d9488;
+      --automation-green: #10b981;
+      --dark-bg: #0f172a;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --rpa-gradient: linear-gradient(45deg, #2563eb, #10b981);
+    }
+
+    .rpa-automation-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1.5rem;
+    }
+
+    .digital-text {
+      color: var(--rpa-blue);
+      display: block;
+    }
+
+    .era-text {
+      color: var(--automation-green);
+      display: block;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-stats {
+      display: grid;
+      grid-template-columns: repeat(3, 1fr);
+      gap: 2rem;
+      margin: 3rem 0;
+    }
+
+    .stat-item {
+      text-align: center;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 1.5rem;
+      border-radius: 10px;
+      backdrop-filter: blur(10px);
+      border: 1px solid rgba(255, 255, 255, 0.2);
+    }
+
+    .stat-number {
+      font-size: 2.5rem;
+      font-weight: 800;
+      color: var(--automation-green);
+      margin-bottom: 0.5rem;
+    }
+
+    .stat-text {
+      font-size: 1rem;
+      color: #cbd5e1;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--rpa-gradient);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      filter: brightness(1.1);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--rpa-blue);
+    }
+
+    .secondary-btn:hover {
+      background: var(--rpa-blue);
+      transform: translateY(-2px);
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .robot-animation {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .robot-icon, .process-icon, .ai-icon {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .robot-icon { animation-delay: 0s; }
+    .process-icon { animation-delay: 0.5s; }
+    .ai-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .automation-flow {
+      width: 30px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--rpa-teal), transparent);
+      border-radius: 4px;
+      animation: flow 2s infinite;
+    }
+
+    @keyframes flow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Products Section */
+    .products-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--rpa-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .products-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .product-card {
+      background: white;
+      padding: 2.5rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      text-align: center;
+      border-top: 4px solid var(--rpa-blue);
+    }
+
+    .product-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .product-icon {
+      font-size: 3rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .product-card h3 {
+      font-size: 1.4rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .product-card p {
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* Continuous Section */
+    .continuous-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+      color: white;
+    }
+
+    .continuous-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .continuous-section .section-title {
+      color: white;
+      -webkit-text-fill-color: white;
+      background: none;
+    }
+
+    .continuous-description {
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+      font-size: 1.1rem;
+    }
+
+    .night-automation {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      position: relative;
+    }
+
+    .moon-icon {
+      font-size: 4rem;
+      animation: moon-glow 3s ease-in-out infinite;
+    }
+
+    @keyframes moon-glow {
+      0%, 100% { opacity: 0.7; }
+      50% { opacity: 1; }
+    }
+
+    .working-robot {
+      font-size: 3rem;
+      animation: work 2s ease-in-out infinite;
+    }
+
+    @keyframes work {
+      0%, 100% { transform: translateY(0) rotate(0); }
+      25% { transform: translateY(-10px) rotate(5deg); }
+      75% { transform: translateY(-5px) rotate(-5deg); }
+    }
+
+    /* Solutions Section */
+    .solutions-section {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .solutions-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      margin: 3rem auto;
+      max-width: 1000px;
+    }
+
+    .solution-card {
+      background: #f8fafc;
+      padding: 2rem;
+      border-radius: 15px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .solution-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--rpa-blue);
+      box-shadow: var(--shadow);
+    }
+
+    .solution-icon {
+      font-size: 3rem;
+      margin-bottom: 1rem;
+      color: var(--rpa-blue);
+    }
+
+    .solution-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .solution-card p {
+      color: var(--text-light);
+      margin-bottom: 1.5rem;
+      font-size: 0.9rem;
+    }
+
+    .solution-link {
+      display: inline-block;
+      color: var(--rpa-blue);
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .solution-link:hover {
+      color: var(--dark-blue);
+      text-decoration: underline;
+    }
+
+    .section-footer {
+      text-align: center;
+      margin-top: 4rem;
+      padding-top: 2rem;
+      border-top: 1px solid var(--border-color);
+    }
+
+    .section-footer p {
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto 2rem;
+      line-height: 1.7;
+    }
+
+    /* Industry Tabs */
+    .industry-tabs {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      gap: 0.5rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+
+    .tab-btn {
+      padding: 1rem 1.5rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 8px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-color);
+    }
+
+    .tab-btn.active {
+      background: var(--rpa-blue);
+      color: white;
+      border-color: var(--rpa-blue);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--rpa-blue);
+      color: var(--rpa-blue);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .tab-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+    }
+
+    .tab-feature {
+      background: white;
+      padding: 1.5rem;
+      border-radius: 10px;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .tab-feature:hover {
+      transform: translateY(-3px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .tab-feature .feature-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--rpa-blue);
+    }
+
+    .tab-feature h4 {
+      font-size: 1.1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .tab-feature p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Integration Section */
+    .integration-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .integrations-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .integration-category {
+      background: white;
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow);
+    }
+
+    .integration-category h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1.5rem;
+      color: var(--text-color);
+      text-align: center;
+    }
+
+    .integration-logos {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(100px, 1fr));
+      gap: 1rem;
+    }
+
+    .logo-item {
+      background: #f1f5f9;
+      padding: 0.8rem;
+      border-radius: 8px;
+      text-align: center;
+      font-weight: 600;
+      color: var(--text-color);
+      font-size: 0.9rem;
+      transition: all 0.3s ease;
+    }
+
+    .logo-item:hover {
+      background: var(--rpa-blue);
+      color: white;
+      transform: translateY(-2px);
+    }
+
+    /* More Industries */
+    .more-industries {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .industry-mini-card {
+      background: #f8fafc;
+      padding: 1.5rem;
+      border-radius: 10px;
+      text-align: center;
+      transition: all 0.3s ease;
+      border: 2px solid transparent;
+    }
+
+    .industry-mini-card:hover {
+      border-color: var(--rpa-blue);
+      transform: translateY(-3px);
+    }
+
+    .industry-mini-card .industry-icon {
+      font-size: 2rem;
+      margin-bottom: 1rem;
+      color: var(--rpa-blue);
+    }
+
+    .industry-mini-card h4 {
+      font-size: 1rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .industry-mini-card p {
+      color: var(--text-light);
+      font-size: 0.8rem;
+      line-height: 1.4;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--rpa-blue) 0%, var(--rpa-teal) 100%);
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      color: rgba(255, 255, 255, 0.9);
+      line-height: 1.6;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container,
+      .continuous-content {
+        grid-template-columns: 1fr;
+        gap: 2rem;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .hero-stats {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-actions {
+        flex-direction: column;
+      }
+
+      .btn {
+        width: 100%;
+        justify-content: center;
+      }
+
+      .products-grid,
+      .solutions-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .tabs {
+        flex-direction: column;
+      }
+
+      .tab-btn {
+        width: 100%;
+      }
+
+      .integrations-grid,
+      .industries-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+      }
+    }
+  </style>
+
+  <script>
+    // Tab functionality
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab switching
+      const tabButtons = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+
+      tabButtons.forEach(button => {
+        button.addEventListener('click', () => {
+          const tabId = button.getAttribute('data-tab') + '-tab';
+          
+          // Remove active class from all tabs
+          tabButtons.forEach(btn => btn.classList.remove('active'));
+          tabContents.forEach(content => content.classList.remove('active'));
+          
+          // Add active class to current tab
+          button.classList.add('active');
+          document.getElementById(tabId).classList.add('active');
+        });
+      });
+
+      // Smooth scrolling for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          e.preventDefault();
+          
+          const targetId = this.getAttribute('href');
+          if (targetId === '#') return;
+          
+          const targetElement = document.querySelector(targetId);
+          if (targetElement) {
+            window.scrollTo({
+              top: targetElement.offsetTop - 80,
+              behavior: 'smooth'
+            });
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

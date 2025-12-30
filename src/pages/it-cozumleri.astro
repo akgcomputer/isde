@@ -1,0 +1,1302 @@
+---
+// src/pages/it-cozumleri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "IT Çözümleri - Profesyonel Teknoloji Danışmanlığı";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="it-solutions-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="it-text">IT</span>
+            <span class="solutions-text">Çözümleri</span>
+          </h1>
+          <p class="hero-subtitle">PROFESYONEL TEKNOLOJİ DANIŞMANLIĞI</p>
+          <p class="hero-description">
+            IT sistemlerinizin sorunsuz çalışmasını sağlayın, donanım sorunlarını en aza indirerek 
+            kesinti sürelerini ortadan kaldırın. İşletmenizin verimliliğini artırmak için özelleştirilmiş 
+            IT destek hizmetlerimizle tanışın.
+          </p>
+          <div class="hero-actions">
+            <a href="#core-services" class="btn primary-btn">
+              <span class="btn-icon">🔧</span>
+              Temel Hizmetler
+            </a>
+            <a href="#all-services" class="btn secondary-btn">
+              <span class="btn-icon">📋</span>
+              Tüm Hizmetler
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="tech-animation">
+            <div class="server-icon">🖥️</div>
+            <div class="network-line"></div>
+            <div class="shield-icon">🛡️</div>
+            <div class="network-line"></div>
+            <div class="cloud-icon">☁️</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Core IT Services -->
+    <section id="core-services" class="core-services-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Temel IT Hizmetlerimiz</h2>
+          <p class="section-subtitle">İşletmeniz için önemli olan temel IT çözümleri</p>
+        </div>
+
+        <div class="services-grid">
+          <!-- IT Destek -->
+          <div class="service-card">
+            <div class="service-icon">🛠️</div>
+            <div class="service-content">
+              <h3>IT Destek</h3>
+              <p>IT sistemlerinizin sorunsuz çalışmasını sağlayın, donanım sorunlarını en aza indirerek kesinti sürelerini ortadan kaldırın.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("IT Destek Hizmeti")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- Çağrı Üzerine Destek -->
+          <div class="service-card featured">
+            <div class="service-icon">📞</div>
+            <div class="service-content">
+              <h3>Çağrı Üzerine Destek</h3>
+              <p>Teknik aksaklıklar her an ortaya çıkabilir. Uzman ekibimizden anında telefonla destek alın.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("Çağrı Üzerine Destek")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- Uzaktan IT Desteği -->
+          <div class="service-card">
+            <div class="service-icon">🌐</div>
+            <div class="service-content">
+              <h3>Uzaktan IT Desteği</h3>
+              <p>Sorunları yerinde ziyaret olmadan hızlı ve verimli bir şekilde çözün. Otomatik yardım masası uygulamaları.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("Uzaktan IT Desteği")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- Yeni Ofis Teknoloji Kurulumu -->
+          <div class="service-card">
+            <div class="service-icon">🏢</div>
+            <div class="service-content">
+              <h3>Yeni Ofis Kurulumu</h3>
+              <p>Yeni bir ofis kurmak karmaşık olabilir. Deneyimli IT çözümleri sağlayıcısıyla çalışın.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("Yeni Ofis Teknoloji Kurulumu")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- BT Yer Değiştirme -->
+          <div class="service-card">
+            <div class="service-icon">🚚</div>
+            <div class="service-content">
+              <h3>BT Yer Değiştirme</h3>
+              <p>IT taşınması, ofis göçleri, yer değiştirmeler, yükseltmeler ve daha fazlasını içerir.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("BT Yer Değiştirme")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- Buluta Geçiş Hizmetleri -->
+          <div class="service-card">
+            <div class="service-icon">☁️</div>
+            <div class="service-content">
+              <h3>Buluta Geçiş</h3>
+              <p>Tüm organizasyon verilerinizi yerel altyapıdan bulut bilişim ortamına taşıyın.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("Buluta Geçiş Hizmetleri")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- BT Danışmanlığı -->
+          <div class="service-card">
+            <div class="service-icon">💼</div>
+            <div class="service-content">
+              <h3>BT Danışmanlığı</h3>
+              <p>Mevcut sistemlerle uyumlu pratik önerilerle bir yol haritası sunuyoruz.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("BT Danışmanlığı")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+
+          <!-- Siber Güvenlik -->
+          <div class="service-card">
+            <div class="service-icon">🔒</div>
+            <div class="service-content">
+              <h3>Siber Güvenlik</h3>
+              <p>Şirketinizin güvenlik çerçevesini, geleneksel güvenlik duvarı teknolojisinin ötesine taşıyın.</p>
+            </div>
+            <div class="service-footer">
+              <a href={getWhatsAppLink("Siber Güvenlik Çözümleri")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">💬</span>
+                Detaylı Bilgi
+              </a>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- All Services Tabs -->
+    <section id="all-services" class="all-services-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Tüm Hizmetlerimiz ve Çözümlerimiz</h2>
+          <p class="section-subtitle">Kapsamlı IT çözümleri portföyümüz</p>
+        </div>
+
+        <div class="services-tabs">
+          <div class="tabs">
+            <button class="tab-btn active" data-tab="collaboration">İş Birliği</button>
+            <button class="tab-btn" data-tab="security">Güvenlik</button>
+            <button class="tab-btn" data-tab="infrastructure">Altyapı</button>
+            <button class="tab-btn" data-tab="communications">İletişim</button>
+          </div>
+
+          <!-- İş Birliği Çözümleri -->
+          <div class="tab-content active" id="collaboration-tab">
+            <div class="services-list">
+              <div class="service-item">
+                <div class="service-item-icon">🚨</div>
+                <div class="service-item-content">
+                  <h4>Kriz Odası Çözümleri</h4>
+                  <p>Farklı akışları tek bir ekranda görüntülemek için akıcı görselleştirme çözümleri.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">👥</div>
+                <div class="service-item-content">
+                  <h4>Toplantı Odası Çözümleri</h4>
+                  <p>Kablosuz toplantı odası çözümleriyle sezgisel toplantı deneyimi.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📅</div>
+                <div class="service-item-content">
+                  <h4>Toplantı Odası Planlayıcısı</h4>
+                  <p>Çift rezervasyon riskini azaltın, toplantı odalarını çevrimiçi rezerve edin.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📺</div>
+                <div class="service-item-content">
+                  <h4>Digital Signage</h4>
+                  <p>Dinamik dijital tabelalar ile marka değerini artırın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📹</div>
+                <div class="service-item-content">
+                  <h4>Video Konferans</h4>
+                  <p>Kablo karmaşasını ortadan kaldıran yüksek kaliteli video konferans ekipmanları.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">👆</div>
+                <div class="service-item-content">
+                  <h4>İnteraktif Ekranlar</h4>
+                  <p>İçeriği dokunma, hareket veya diğer fiziksel girişlerle etkileşimde bulunun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🖥️</div>
+                <div class="service-item-content">
+                  <h4>Video Wall</h4>
+                  <p>Birleşik bir ekran oluşturmak için birden fazla monitör kullanın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🎓</div>
+                <div class="service-item-content">
+                  <h4>Akıllı Sınıf Çözümleri</h4>
+                  <p>Etkileşimli ekranlar, eğitim yazılımları ve kablosuz iş birliği.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Güvenlik Çözümleri -->
+          <div class="tab-content" id="security-tab">
+            <div class="services-list">
+              <div class="service-item">
+                <div class="service-item-icon">🔥</div>
+                <div class="service-item-content">
+                  <h4>Yeni Nesil Güvenlik Duvarı</h4>
+                  <p>Gelişmiş ağ güvenliği ile şirketinizin güvenlik çerçevesini güçlendirin.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">💻</div>
+                <div class="service-item-content">
+                  <h4>Uç Nokta Güvenliği</h4>
+                  <p>Kötü niyetli saldırılara, yetkisiz erişime ve veri kaybına karşı koruma.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📧</div>
+                <div class="service-item-content">
+                  <h4>E-posta Güvenliği</h4>
+                  <p>Hassas bilgilerin gizliliğini ve mahremiyetini koruyun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🔐</div>
+                <div class="service-item-content">
+                  <h4>Cihaz Şifreleme</h4>
+                  <p>Hassas bilgilerinizi düz metni kodlanmış metne çevirerek güvence altına alın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">⚠️</div>
+                <div class="service-item-content">
+                  <h4>Güvenlik Açığı Yönetimi</h4>
+                  <p>Sisteminizdeki güvenlik açıklarını tanımlayıp önceliklendirin.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📱</div>
+                <div class="service-item-content">
+                  <h4>Kurumsal Mobilite</h4>
+                  <p>Hibrit çalışma senaryosuna kurumsal mobilite ile uyum sağlayın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🛡️</div>
+                <div class="service-item-content">
+                  <h4>Siber Güvenlik Çözümü</h4>
+                  <p>Gelişmiş tehdit tespiti, gerçek zamanlı izleme ve proaktif savunma.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">👤</div>
+                <div class="service-item-content">
+                  <h4>Kimlik ve Erişim Yönetimi</h4>
+                  <p>Kimlik tabanlı kontrollerden faydalanarak güvenlik önlemlerini artırın.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- Altyapı Çözümleri -->
+          <div class="tab-content" id="infrastructure-tab">
+            <div class="services-list">
+              <div class="service-item">
+                <div class="service-item-icon">💾</div>
+                <div class="service-item-content">
+                  <h4>Veri Yedekleme ve Koruma</h4>
+                  <p>Kayıp verileri geri almak karmaşık hale gelebilir. Tüm veri yedekleme ihtiyaçlarınızı karşılayın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🔄</div>
+                <div class="service-item-content">
+                  <h4>İş Sürekliliği Planı</h4>
+                  <p>Doğal afetler veya siber saldırılar sırasında izlenecek adımlarla kapsamlı bir plan oluşturun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">⚡</div>
+                <div class="service-item-content">
+                  <h4>Felaket Kurtarma Çözümleri</h4>
+                  <p>Ani cihaz arızaları, iş operasyonlarını olumsuz etkileyebilir. Veri kurtarma çözümleri ile korunun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">☁️</div>
+                <div class="service-item-content">
+                  <h4>Hizmet Olarak Yedekleme</h4>
+                  <p>Tüm veri yedekleme ve kurtarma ihtiyaçlarınızı özel bulut altyapısı ile karşılayın.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📱</div>
+                <div class="service-item-content">
+                  <h4>Cihaz Yönetimi</h4>
+                  <p>Fiziksel ve sanal cihazları herhangi bir yerden merkezi bir konsoldan uzaktan yönetin.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🖥️</div>
+                <div class="service-item-content">
+                  <h4>Sunucu Çözümleri</h4>
+                  <p>Yerinde ve bulut çözümlerinin sorunsuz entegrasyonu ile yüksek operasyonel verimlilik.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">💿</div>
+                <div class="service-item-content">
+                  <h4>Sunucu Depolama Alanı</h4>
+                  <p>Kurumsal verilerinizi güvenli ve ölçeklenebilir bir şekilde depolayın ve yönetin.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🗄️</div>
+                <div class="service-item-content">
+                  <h4>NAS Depolama</h4>
+                  <p>Verileri ağ bağlantılı bir sistemde depolayın, merkezi bir konumdan dosyalara erişim sağlayın.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <!-- İletişim Çözümleri -->
+          <div class="tab-content" id="communications-tab">
+            <div class="services-list">
+              <div class="service-item">
+                <div class="service-item-icon">🔌</div>
+                <div class="service-item-content">
+                  <h4>Yapısal Kablolama</h4>
+                  <p>Bir binanın telekomünikasyon ve veri ağı için standart, düzenli bir kablolama sistemi kurun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🔄</div>
+                <div class="service-item-content">
+                  <h4>Switching Routing</h4>
+                  <p>Bağlı bir ağdaki cihazlar, ağ tasarımı için hayati olan bu teknolojiler aracılığıyla iletişim kurar.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📶</div>
+                <div class="service-item-content">
+                  <h4>Yönetilebilir WiFi</h4>
+                  <p>Kablosuz ağınızı tasarlamak, dağıtmak ve yönetmek için kapsamlı bir çözüm.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🔒</div>
+                <div class="service-item-content">
+                  <h4>VPN Çözümleri</h4>
+                  <p>Şifreli özel ağlar, internet üzerinden veri iletiminin güvenli olmasını sağlar.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🏠</div>
+                <div class="service-item-content">
+                  <h4>Evden Çalışma</h4>
+                  <p>Uzaktan bağlantı IT çözümlerimiz, evden güvenli bir ortamda çalışmanıza olanak tanır.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">📞</div>
+                <div class="service-item-content">
+                  <h4>IP Telefon Santrali</h4>
+                  <p>Ofis içinde ve farklı lokasyonlardaki bağlı ofislerle IP telefonlar aracılığıyla kolayca iletişim kurun.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">🎥</div>
+                <div class="service-item-content">
+                  <h4>CCTV Güvenlik Hizmetleri</h4>
+                  <p>Gelişmiş yüksek teknolojili kameralarla güvenlik için vazgeçilmez bir araç.</p>
+                </div>
+              </div>
+              <div class="service-item">
+                <div class="service-item-icon">👁️</div>
+                <div class="service-item-content">
+                  <h4>Biyometrik Personel Takip</h4>
+                  <p>Biyometrik yoklama çözümleri ile çalışanlarınızın zaman kaydını sorunsuz takip edin.</p>
+                </div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Consultation CTA -->
+    <section class="consultation-section">
+      <div class="container">
+        <div class="consultation-content">
+          <div class="consultation-text">
+            <h2 class="section-title">Ücretsiz IT Danışmanlığı</h2>
+            <p class="consultation-description">
+              İşletmenizin IT ihtiyaçlarını analiz edelim, size özel çözümler önerelim. 
+              Uzman ekibimizle ücretsiz danışmanlık görüşmesi için hemen iletişime geçin.
+            </p>
+            <div class="consultation-features">
+              <div class="feature">✅ Ücretsiz Analiz</div>
+              <div class="feature">✅ Özel Çözüm Önerileri</div>
+              <div class="feature">✅ Teknik Değerlendirme</div>
+              <div class="feature">✅ Maliyet Analizi</div>
+            </div>
+          </div>
+          <div class="consultation-form">
+            <div class="form-card">
+              <h3 class="form-title">Hemen Danışmanlık Talep Edin</h3>
+              <div class="form-actions">
+                <a href={getWhatsAppLink("IT Çözümleri Danışmanlık")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  WhatsApp'tan İletişim
+                </a>
+                <a href="/iletisim" class="btn secondary-btn full-width" style="color: #fa0e0e;">
+                  <span class="btn-icon">📞</span>
+                  Bizi Arayın
+                </a>
+              </div>
+              <p class="form-note">En kısa sürede uzman ekibimiz sizinle iletişime geçecektir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Why Choose Us -->
+    <section class="why-choose-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Neden Bizi Tercih Etmelisiniz?</h2>
+          <p class="section-subtitle">Profesyonel IT çözümleri için güvenilir partneriniz</p>
+        </div>
+
+        <div class="reasons-grid">
+          <div class="reason-card">
+            <div class="reason-icon">👨‍💼</div>
+            <h3>Uzman Ekip</h3>
+            <p>Alanında uzman sertifikalı mühendisler ve teknik personel</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">⏱️</div>
+            <h3>7/24 Destek</h3>
+            <p>Kesintisiz destek hattı ile her an yanınızdayız</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">🔧</div>
+            <h3>Kapsamlı Çözümler</h3>
+            <p>Tek noktadan tüm IT ihtiyaçlarınız için çözümler</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">💼</div>
+            <h3>Kurumsal Deneyim</h3>
+            <p>Yılların getirdiği sektör tecrübesi ve referanslar</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">📊</div>
+            <h3>Proaktif Yaklaşım</h3>
+            <p>Sorun oluşmadan önlem alan proaktif hizmet anlayışı</p>
+          </div>
+          <div class="reason-card">
+            <div class="reason-icon">💰</div>
+            <h3>Maliyet Etkin</h3>
+            <p>Uzun vadeli tasarruf sağlayan verimli çözümler</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Industries We Serve -->
+    <section class="industries-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Hizmet Verdiğimiz Sektörler</h2>
+          <p class="section-subtitle">Çeşitli sektörler için özelleştirilmiş IT çözümleri</p>
+        </div>
+
+        <div class="industries-grid">
+          <div class="industry">
+            <div class="industry-icon">🏢</div>
+            <span>Kurumsal Şirketler</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏥</div>
+            <span>Sağlık Kuruluşları</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏦</div>
+            <span>Banka ve Finans</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏫</div>
+            <span>Eğitim Kurumları</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏪</div>
+            <span>Perakende ve Ticaret</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏭</div>
+            <span>Üretim Sanayi</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">🏨</div>
+            <span>Otel ve Turizm</span>
+          </div>
+          <div class="industry">
+            <div class="industry-icon">⚖️</div>
+            <span>Hukuk Firmaları</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">IT Çözümleri ile Tanışın</h2>
+          <p class="cta-description">
+            İşletmenizin teknoloji ihtiyaçlarını profesyonel bir şekilde yönetin. 
+            Uzman ekibimiz size özel IT çözümleri sunmak için hazır.
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("Genel IT Çözümleri Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="/iletisim" class="btn primary-btn large">
+              <span class="btn-icon">📞</span>
+              Ücretsiz Danışmanlık
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --it-blue: #2563eb;
+      --dark-blue: #1d4ed8;
+      --light-blue: #93c5fd;
+      --tech-gray: #374151;
+      --dark-bg: #0f172a;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+    }
+
+    .it-solutions-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .it-text {
+      color: var(--it-blue);
+      display: block;
+    }
+
+    .solutions-text {
+      color: white;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--light-blue);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--it-blue);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      background: var(--dark-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--it-blue);
+    }
+
+    .secondary-btn:hover {
+      background: var(--it-blue);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .tech-animation {
+      display: flex;
+      align-items: center;
+      gap: 1.5rem;
+    }
+
+    .server-icon, .shield-icon, .cloud-icon {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .server-icon { animation-delay: 0s; }
+    .shield-icon { animation-delay: 0.5s; }
+    .cloud-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .network-line {
+      width: 30px;
+      height: 4px;
+      background: linear-gradient(90deg, transparent, var(--it-blue), transparent);
+      border-radius: 4px;
+      animation: flow 2s infinite;
+    }
+
+    @keyframes flow {
+      0%, 100% { opacity: 0.3; }
+      50% { opacity: 1; }
+    }
+
+    /* Section Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--it-blue), var(--dark-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: var(--text-light);
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Core Services */
+    .core-services-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .service-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .service-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .service-card.featured {
+      border: 3px solid var(--it-blue);
+      transform: scale(1.05);
+    }
+
+    .service-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .service-icon {
+      font-size: 3rem;
+      color: var(--it-blue);
+      margin-bottom: 1.5rem;
+    }
+
+    .service-content {
+      flex: 1;
+      margin-bottom: 2rem;
+    }
+
+    .service-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .service-content p {
+      color: var(--text-light);
+      line-height: 1.6;
+    }
+
+    /* All Services Tabs */
+    .all-services-section {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .services-tabs {
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .tabs {
+      display: flex;
+      justify-content: center;
+      gap: 1rem;
+      margin-bottom: 3rem;
+      flex-wrap: wrap;
+    }
+
+    .tab-btn {
+      padding: 1rem 2rem;
+      background: white;
+      border: 2px solid var(--border-color);
+      border-radius: 50px;
+      font-size: 1rem;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+      color: var(--text-color);
+    }
+
+    .tab-btn.active {
+      background: var(--it-blue);
+      color: white;
+      border-color: var(--it-blue);
+    }
+
+    .tab-btn:hover:not(.active) {
+      border-color: var(--it-blue);
+      color: var(--it-blue);
+    }
+
+    .tab-content {
+      display: none;
+    }
+
+    .tab-content.active {
+      display: block;
+    }
+
+    .services-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .service-item {
+      display: flex;
+      gap: 1rem;
+      padding: 1.5rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      border-left: 4px solid var(--it-blue);
+      transition: all 0.3s ease;
+    }
+
+    .service-item:hover {
+      background: #f1f5f9;
+      transform: translateX(5px);
+    }
+
+    .service-item-icon {
+      font-size: 1.8rem;
+      color: var(--it-blue);
+      flex-shrink: 0;
+    }
+
+    .service-item-content h4 {
+      font-size: 1.2rem;
+      margin-bottom: 0.5rem;
+      color: var(--text-color);
+    }
+
+    .service-item-content p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Consultation Section */
+    .consultation-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #1e293b 100%);
+      color: white;
+    }
+
+    .consultation-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .consultation-text .section-title {
+      background: linear-gradient(45deg, white, var(--light-blue));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+    }
+
+    .consultation-description {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .consultation-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1rem;
+      border-radius: 8px;
+      font-size: 0.9rem;
+    }
+
+    .form-card {
+      background: white;
+      color: var(--text-color);
+      padding: 2rem;
+      border-radius: 15px;
+      box-shadow: var(--shadow-lg);
+    }
+
+    .form-title {
+      font-size: 1.5rem;
+      margin-bottom: 1.5rem;
+      text-align: center;
+      color: var(--text-color);
+    }
+
+    .form-actions {
+      display: flex;
+      flex-direction: column;
+      gap: 1rem;
+      margin-bottom: 1.5rem;
+    }
+
+    .form-note {
+      text-align: center;
+      color: var(--text-light);
+      font-size: 0.9rem;
+    }
+
+    /* Why Choose Us */
+    .why-choose-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .reasons-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .reason-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .reason-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .reason-icon {
+      font-size: 2.5rem;
+      color: var(--it-blue);
+      margin-bottom: 1rem;
+    }
+
+    .reason-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .reason-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Industries Section */
+    .industries-section {
+      padding: 6rem 1rem;
+      background: white;
+    }
+
+    .industries-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .industry {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 1rem;
+      padding: 2rem;
+      background: #f8fafc;
+      border-radius: 10px;
+      transition: all 0.3s ease;
+    }
+
+    .industry:hover {
+      background: var(--it-blue);
+      color: white;
+      transform: translateY(-5px);
+    }
+
+    .industry:hover .industry-icon {
+      color: white;
+    }
+
+    .industry-icon {
+      font-size: 2.5rem;
+      color: var(--it-blue);
+    }
+
+    .industry span {
+      font-weight: 600;
+      text-align: center;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(45deg, var(--it-blue), var(--dark-blue));
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container,
+      .consultation-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .services-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .service-card.featured {
+        transform: none;
+      }
+
+      .service-card.featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .tab-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .services-list {
+        grid-template-columns: 1fr;
+      }
+
+      .consultation-features {
+        grid-template-columns: 1fr;
+      }
+
+      .reasons-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .industries-grid {
+        grid-template-columns: repeat(2, 1fr);
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .reasons-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .industries-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .tech-animation {
+        flex-direction: column;
+        gap: 1rem;
+      }
+
+      .network-line {
+        width: 4px;
+        height: 30px;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Tab functionality
+      const tabBtns = document.querySelectorAll('.tab-btn');
+      const tabContents = document.querySelectorAll('.tab-content');
+      
+      tabBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons and contents
+          tabBtns.forEach(b => b.classList.remove('active'));
+          tabContents.forEach(c => c.classList.remove('active'));
+          
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          // Show corresponding content
+          const tabId = btn.getAttribute('data-tab');
+          document.getElementById(`${tabId}-tab`).classList.add('active');
+        });
+      });
+
+      // Animate service cards on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe all cards
+      document.querySelectorAll('.service-card, .service-item, .reason-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

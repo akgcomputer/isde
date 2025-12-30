@@ -1,0 +1,212 @@
+---
+// src/layouts/BasicLayout.astro (Güncellenmiş versiyonu)
+export interface Props {
+  title: string;
+  description?: string;
+  canonical?: string;
+}
+
+const { title, description = "İş de Yeter! - İşinizi büyüten tüm çözümler tek platformda", canonical } = Astro.props;
+import siteConfig from '../pages/data/config.json';
+
+// Header ve Footer componentlerini import et
+import Header from '../components/Header.astro';
+import Footer from '../components/Footer.astro';
+
+// SEO için canonical URL
+const siteUrl = 'https://isdeyeter.com';
+const fullTitle = `${title} | İş De Yeter`;
+const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
+---
+
+<!DOCTYPE html>
+<html lang="tr" class="scroll-smooth" itemscope itemtype="https://schema.org/WebSite">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    
+    <!-- Primary Meta Tags -->
+    <title>{fullTitle}</title>
+    <meta name="description" content={description}>
+    
+    <!-- Canonical URL -->
+    <link rel="canonical" href={fullCanonical}>
+    
+    <!-- Favicon -->
+    <link rel="icon" type="image/png" href="img/isdeyeter-fav.png">
+    <link rel="apple-touch-icon" href="/img/isdeyeter-fav.png">
+    <link rel="shortcut icon" href="img/isdeyeter-fav.png" type="image/x-icon">
+    
+    <!-- Open Graph / Facebook -->
+    <meta property="og:type" content="website">
+    <meta property="og:url" content={fullCanonical}>
+    <meta property="og:title" content={fullTitle}>
+    <meta property="og:description" content={description}>
+    <meta property="og:image" content="https://isdeyeter.com/img/og-image.jpg">
+    
+    <!-- Twitter -->
+    <meta property="twitter:card" content="summary_large_image">
+    <meta property="twitter:url" content={fullCanonical}>
+    <meta property="twitter:title" content={fullTitle}>
+    <meta property="twitter:description" content={description}>
+    <meta property="twitter:image" content="https://isdeyeter.com/img/twitter-image.jpg">
+    
+    <!-- Schema.org -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "WebSite",
+      "name": "İş De Yeter",
+      "alternateName": "İş De Yeter!",
+      "url": "https://isdeyeter.com",
+      "description": "İşinizi büyüten tüm çözümler tek platformda. 5000+ hizmet ve ürünle işinizi büyütün.",
+      "publisher": {
+        "@type": "Organization",
+        "name": "İş De Yeter",
+        "logo": {
+          "@type": "ImageObject",
+          "url": "https://isdeyeter.com/img/isdeyeter-logo-5000px.png"
+        }
+      },
+      "potentialAction": {
+        "@type": "SearchAction",
+        "target": "https://isdeyeter.com/search?q={search_term_string}",
+        "query-input": "required name=search_term_string"
+      }
+    }
+    </script>
+    
+    <!-- Google Analytics -->
+    <script async src="https://www.googletagmanager.com/gtag/js?id=G-421111425"></script>
+    <script>
+      window.dataLayer = window.dataLayer || [];
+      function gtag(){dataLayer.push(arguments);}
+      gtag('js', new Date());
+      gtag('config', 'G-421111425');
+    </script>
+    
+    <!-- Google Search Console -->
+    <meta name="google-site-verification" content="your-verification-code-here">
+    
+    <!-- CSS Styles -->
+    <link rel="stylesheet" href="/css/style.css">
+    
+    <!-- Fonts & Icons -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=Poppins:wght@600;700;800&display=swap" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <!-- Modern CSS -->
+    <style>
+        :root {
+            --primary: #3B82F6;
+            --primary-dark: #1D4ED8;
+            --primary-light: #93C5FD;
+            --secondary: #F59E0B;
+            --dark: #1F2937;
+            --light: #F9FAFB;
+            --gray: #6B7280;
+            --white: #FFFFFF;
+            --success: #10B981;
+            --shadow-sm: 0 1px 2px 0 rgb(0 0 0 / 0.05);
+            --shadow: 0 4px 6px -1px rgb(0 0 0 / 0.1);
+            --shadow-lg: 0 10px 15px -3px rgb(0 0 0 / 0.1);
+            --radius: 12px;
+            --transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+        }
+        
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+        
+        html {
+            scroll-behavior: smooth;
+        }
+        
+        body {
+            font-family: 'Inter', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background: var(--white);
+            overflow-x: hidden;
+        }
+        
+        h1, h2, h3, h4, h5, h6 {
+            font-family: 'Poppins', sans-serif;
+            font-weight: 700;
+            line-height: 1.2;
+        }
+        
+        /* Container */
+        .container {
+            width: 100%;
+            max-width: 1280px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        
+        /* Main Content */
+        main {
+            margin-top: 100px;
+            min-height: calc(100vh - 400px);
+        }
+        
+        /* SEO için görünmeyen ancak okunabilir içerik */
+        .seo-hidden {
+            position: absolute;
+            left: -9999px;
+            width: 1px;
+            height: 1px;
+            overflow: hidden;
+        }
+    </style>
+</head>
+<body>
+    <!-- Schema.org Breadcrumb -->
+    <script type="application/ld+json">
+    {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [{
+        "@type": "ListItem",
+        "position": 1,
+        "name": "Ana Sayfa",
+        "item": "https://isdeyeter.com"
+      },{
+        "@type": "ListItem",
+        "position": 2,
+        "name": "{title}",
+        "item": "{fullCanonical}"
+      }]
+    }
+    </script>
+    
+    <!-- Header Component -->
+    <Header />
+    
+    <!-- Main Content -->
+    <main>
+        <slot />
+    </main>
+    
+    <!-- Footer Component -->
+    <Footer />
+    
+    <!-- Yapılandırılmış Veri için ek alan -->
+    <div class="seo-hidden">
+        <h1>İş De Yeter - İşinizi Büyüten Platform</h1>
+        <h2>Hizmet Eşleştirme, Global Şirket Kurulumu, İş Yazılımları</h2>
+        <p>5000+ hizmet, ABD şirket kurma, İngiltere şirket kurma, Estonya şirket kurma, bulut muhasebe, e-ticaret entegrasyonu, CRM çözümleri, banka API entegrasyonu</p>
+        <ul>
+            <li>Hizmet Eşleştirme Platformu</li>
+            <li>Global Şirket Kurulum Hizmetleri</li>
+            <li>İş Yazılımları ve Dijital Çözümler</li>
+            <li>E-ticaret Entegrasyonları</li>
+            <li>Bulut Muhasebe Sistemleri</li>
+        </ul>
+    </div>
+</body>
+</html>

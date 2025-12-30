@@ -1,0 +1,1129 @@
+---
+// /src/pages/psikolog-hizmetleri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const siteName = "Profesyonel Psikoloji Danışmanlığı";
+const whatsappNumber = configData.whatsapp;
+const pageTitle = "Uzman Psikolog Hizmetleri | Anksiyete, Travma, Ergen Terapisi";
+const pageDescription = "Deneyimli psikologlarımızla anksiyete, travma, ergen psikolojisi, çift terapisi ve daha birçok alanda profesyonel destek. Online ve yüz yüze seanslar.";
+const buttonText = "Hemen Randevu Al";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hizmeti%20için%20randevu%20almak%20istiyorum`;
+}
+
+// 13 resimli hizmet kategorileri
+const serviceCategories = [
+  {
+    id: 1,
+    title: "Ergen Psikolojisi",
+    description: "Ergenlik dönemi sorunları, kimlik arayışı, akademik baskı, aile iletişimi ve sosyal ilişkilerde uzman destek.",
+    image: "/img/psikolog/psikolog-hizmeti-1.jpg",
+    icon: "fas fa-user-graduate",
+    features: ["Ergen danışmanlığı", "Sınav kaygısı", "Aile iletişimi", "Akran ilişkileri"]
+  },
+  {
+    id: 2,
+    title: "Anksiyete Bozuklukları",
+    description: "Kaygı, panik atak, sosyal fobi, obsesif düşünceler ve genel anksiyete bozukluğu tedavisi.",
+    image: "/img/psikolog/psikolog-hizmeti-2.jpg",
+    icon: "fas fa-brain",
+    features: ["Panik bozukluk", "Sosyal anksiyete", "OKB tedavisi", "Kaygı yönetimi"]
+  },
+  {
+    id: 3,
+    title: "Travma ve PTSD",
+    description: "Travmatik yaşantılar sonrası iyileşme, EMDR terapisi ve travma sonrası stres bozukluğu tedavisi.",
+    image: "/img/psikolog/psikolog-hizmeti-3.jpg",
+    icon: "fas fa-hand-holding-heart",
+    features: ["EMDR terapisi", "Travma işleme", "Güvenli ortam", "Bütünsel iyileşme"]
+  },
+  {
+    id: 4,
+    title: "Çift ve Aile Terapisi",
+    description: "İlişki problemleri, evlilik danışmanlığı, aile içi iletişim ve bağlanma sorunları.",
+    image: "/img/psikolog/psikolog-hizmeti-8.jpg",
+    icon: "fas fa-heart",
+    features: ["Çift terapisi", "İletişim becerileri", "Aile danışmanlığı", "Çatışma çözümü"]
+  },
+  {
+    id: 5,
+    title: "Depresyon Tedavisi",
+    description: "Majör depresyon, distimi, mevsimsel duygulanım bozuklukları ve umutsuzlukla başa çıkma.",
+    image: "/img/psikolog/psikolog-hizmeti-5.jpg",
+    icon: "fas fa-cloud-sun",
+    features: ["Bilişsel terapi", "Duygu regülasyonu", "Motivasyon artırma", "Yaşam kalitesi"]
+  },
+  {
+    id: 6,
+    title: "Çocuk Psikolojisi",
+    description: "Çocuklarda davranış problemleri, öğrenme güçlükleri, dikkat eksikliği ve oyun terapisi.",
+    image: "/img/psikolog/psikolog-hizmeti-6.jpg",
+    icon: "fas fa-child",
+    features: ["Oyun terapisi", "Dikkat Eksikliği", "Öğrenme desteği", "Aile rehberliği"]
+  },
+  {
+    id: 7,
+    title: "Öfke Kontrolü",
+    description: "Öfke yönetimi, dürtü kontrol problemleri ve ilişkilerde öfkenin sağlıklı ifadesi.",
+    image: "/img/psikolog/psikolog-hizmeti-7.jpg",
+    icon: "fas fa-angry",
+    features: ["Öfke kontrolü", "Duygu ifadesi", "Stres yönetimi", "İlişki becerileri"]
+  },
+  {
+    id: 8,
+    title: "Ekran Bağımlılığı ve Yeme Bozuklukları",
+    description: "Telefon, Tablet Bağımlılığı ve Anoreksiya, bulimia, tıkınırcasına yeme bozukluğu ve sağlıklı beden algısı geliştirme.",
+    image: "/img/psikolog/psikolog-hizmeti-4.jpg",
+    icon: "fas fa-apple-alt",
+    features: ["Beden imajı", "Yeme davranışı", "Kendilik değeri", "Sağlıklı alışkanlıklar"]
+  },
+  {
+    id: 9,
+    title: "Sosyal Fobi",
+    description: "Sosyal ortamlarda kaygı, performans anksiyetesi ve sosyal ilişkilerde zorluklar.",
+    image: "/img/psikolog/psikolog-hizmeti-9.jpg",
+    icon: "fas fa-users",
+    features: ["Sosyal beceriler", "Kaygı yönetimi", "Kendine güven", "İletişim teknikleri"]
+  },
+  {
+    id: 10,
+    title: "Uyku Problemleri",
+    description: "Uykusuzluk, kabuslar, uyku hijyeni ve uykuyla ilişkili anksiyete bozuklukları.",
+    image: "/img/psikolog/psikolog-hizmeti-10.jpg",
+    icon: "fas fa-bed",
+    features: ["Uyku hijyeni", "Rahatlam teknikleri", "Stres yönetimi", "Gevşeme egzersizleri"]
+  },
+  {
+    id: 11,
+    title: "Cinsel Terapi",
+    description: "Cinsel işlev bozuklukları, ilişkilerde cinsellik ve cinsel kimlik konularında danışmanlık.",
+    image: "/img/psikolog/psikolog-hizmeti-11.jpg",
+    icon: "fas fa-heartbeat",
+    features: ["Cinsel sağlık", "İlişki terapisi", "Güvenli ortam", "Uzman destek"]
+  },
+  {
+    id: 12,
+    title: "Online Psikoterapi",
+    description: "Evden veya işyerinizden güvenli online seanslar. Zoom, Skype veya WhatsApp üzerinden.",
+    image: "/img/psikolog/psikolog-hizmeti-12.jpg",
+    icon: "fas fa-laptop-house",
+    features: ["Esnek saatler", "Güvenli platform", "Teknik destek", "Dünya çapında erişim"]
+  },
+  {
+    id: 13,
+    title: "Kurumsal Psikoloji",
+    description: "İşyerinde stres, tükenmişlik sendromu, liderlik koçluğu ve takım dinamikleri.",
+    image: "/img/psikolog/psikolog-hizmeti-13.jpg",
+    icon: "fas fa-briefcase",
+    features: ["Stres yönetimi", "Tükenmişlik", "Liderlik", "Takım verimliliği"]
+  },
+  {
+    id: 14,
+    title: "Sınav Kaydısı ve Akademik Danışmanlık",
+    description: "Sınav kaygısı, akademik başarı ve motivasyon konusunda danışmanlık.",
+    image: "/img/psikolog/psikolog-hizmeti-13.jpg",
+    icon: "fas fa-briefcase",
+    features: ["Stres yönetimi", "Tükenmişlik", "Liderlik", "Takım verimliliği"]
+  },
+  {
+    id: 15,
+    title: "Gelecek Planlama ve Kariyer Danışmanlığı",
+    description: "Gelecek planlaması, kariyer gelişimi ve kişisel hedefler konusunda danışmanlık.",
+    image: "/img/psikolog/psikolog-hizmeti-13.jpg",
+    icon: "fas fa-briefcase",
+    features: ["Stres yönetimi", "Tükenmişlik", "Liderlik", "Takım verimliliği"]
+  }
+];
+
+// Uzman psikologlarımız
+const experts = [
+  {
+    id: 1,
+    name: "Dr. Psikolog Emel Yıldız",
+    specialization: "Klinik Psikolog",
+    experience: "15 yıl",
+    image: "/img/psikolog/emel-yildiz.jpg",
+    description: "Anksiyete, travma ve EMDR terapisi uzmanı. 1000+ saat klinik deneyim.",
+    rating: 4.9
+  },
+  {
+    id: 2,
+    name: "Uzm. Psikolog Mehmet Kara",
+    specialization: "Ergen Psikoloğu",
+    experience: "12 yıl",
+    image: "/img/psikolog/mehmet-kara.jpg",
+    description: "Ergenlik dönemi sorunları ve aile danışmanlığı konusunda uzman.",
+    rating: 4.8
+  },
+  {
+    id: 3,
+    name: "Psikolog Elif Demir",
+    specialization: "Çift ve Aile Terapisti",
+    experience: "8 yıl",
+    image: "/img/psikolog/elif-demir.jpg",
+    description: "İlişki terapileri ve iletişim becerileri geliştirme uzmanı.",
+    rating: 4.9
+  },
+  {
+    id: 4,
+    name: "Dr. Psikolog Zeynep Arslan",
+    specialization: "Travma Uzmanı",
+    experience: "10 yıl",
+    image: "/img/psikolog/zeynep-arslan.jpg",
+    description: "EMDR sertifikalı travma terapisti. PTSD tedavisinde uzman.",
+    rating: 5.0
+  },
+  {
+    id: 4,
+    name: "Dr. Psikolog Sema Polat",
+    specialization: "Travma Uzmanı",
+    experience: "10 yıl",
+    image: "/img/psikolog/sema-polat.jpg",
+    description: "EMDR sertifikalı travma terapisti. PTSD tedavisinde uzman.",
+    rating: 5.0
+  },
+  {
+    id: 4,
+    name: "Dr. Psikolog Hale Mutlu",
+    specialization: "Travma Uzmanı",
+    experience: "10 yıl",
+    image: "/img/psikolog/hale-mutlu.jpg",
+    description: "EMDR sertifikalı travma terapisti. PTSD tedavisinde uzman.",
+    rating: 5.0
+  }
+];
+
+// İstatistikler
+const stats = [
+  { number: "+++", label: "Onlarca Mutlu Danışan" },
+  { number: "15+", label: "Uzman Psikolog" },
+  { number: "4.9", label: "Ortalama Puan" },
+  { number: "24/7", label: "Online Destek" }
+];
+---
+
+<BasicLayout title={pageTitle} description={pageDescription}>
+
+<!-- Hero Section -->
+<section class="hero-section">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <div class="hero-text">
+                <h1 class="hero-title">Ruh Sağlığınız İçin Güvenli Liman</h1>
+                <p class="hero-subtitle">Anksiyete, travma, ergen psikolojisi ve daha birçok alanda uzman psikologlarımızla profesyonel destek. Online ve yüz yüze terapi seansları.</p>
+                <div class="hero-stats">
+                    {stats.map(stat => (
+                        <div class="stat-item">
+                            <div class="stat-number">{stat.number}</div>
+                            <div class="stat-label">{stat.label}</div>
+                        </div>
+                    ))}
+                </div>
+                <div class="hero-buttons">
+                    <a href="#hizmetler" class="btn btn-primary">
+                        <i class="fas fa-search"></i>Hizmetlerimizi Keşfedin
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20psikolog%20randevusu%20almak%20istiyorum`} 
+                       target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>Hemen Randevu Al
+                    </a>
+                </div>
+            </div>
+            <div class="hero-image">
+                <img src="/img/psikolog/psikolog-hizmeti-1.jpg" alt="Psikolog Danışmanlığı" loading="lazy" />
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Hizmet Kategorileri -->
+<section class="services-section" id="hizmetler">
+    <div class="container">
+        <div class="section-header">
+            <h2>Uzmanlık Alanlarımız</h2>
+            <p>Farklı uzmanlık alanında profesyonel psikolojik destek sunuyoruz</p>
+        </div>
+        
+        <div class="services-grid">
+            {serviceCategories.map(service => (
+                <div class="service-card">
+                    <div class="service-image">
+                        <img src={service.image} alt={service.title} loading="lazy" />
+                        <div class="service-icon">
+                            <i class={service.icon}></i>
+                        </div>
+                    </div>
+                    <div class="service-content">
+                        <h3>{service.title}</h3>
+                        <p>{service.description}</p>
+                        <div class="service-features">
+                            {service.features.map((feature, index) => (
+                                <span class="feature-tag" key={index}>{feature}</span>
+                            ))}
+                        </div>
+                        <a href={getWhatsAppLink(service.title)} class="btn btn-outline" target="_blank">
+                            <i class="fab fa-whatsapp"></i>{buttonText}
+                        </a>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Uzman Psikologlarımız -->
+<section class="experts-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Uzman Psikologlarımız</h2>
+            <p>Deneyimli ve uzman kadromuzla tanışın</p>
+        </div>
+        
+        <div class="experts-grid">
+            {experts.map(expert => (
+                <div class="expert-card">
+                    <div class="expert-image">
+                        <img src={expert.image} alt={expert.name} loading="lazy" />
+                        <div class="expert-badge">{expert.specialization}</div>
+                    </div>
+                    <div class="expert-content">
+                        <div class="expert-header">
+                            <h3>{expert.name}</h3>
+                            <div class="expert-rating">
+                                <i class="fas fa-star"></i>
+                                <span>{expert.rating}</span>
+                            </div>
+                        </div>
+                        <p class="expert-experience">
+                            <i class="fas fa-clock"></i>{expert.experience} deneyim
+                        </p>
+                        <p class="expert-description">{expert.description}</p>
+                        <div class="expert-buttons">
+                            <a href={getWhatsAppLink(`${expert.name} - ${expert.specialization}`)} 
+                               class="btn btn-whatsapp" target="_blank">
+                                <i class="fab fa-whatsapp"></i>Randevu Al
+                            </a>
+                            <button class="btn btn-outline" onclick="openExpertModal({expert.id})">
+                                <i class="fas fa-info-circle"></i>Detaylı Bilgi
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Neden Biz? -->
+<section class="why-us-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Neden Bizi Tercih Etmelisiniz?</h2>
+            <p>Profesyonel psikolojik destekte fark yaratan özelliklerimiz</p>
+        </div>
+        
+        <div class="features-grid">
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-shield-alt"></i>
+                </div>
+                <h3>%100 Gizlilik</h3>
+                <p>Tüm seanslarımız tamamen gizlidir. Mesleki etik kurallara sıkı sıkıya bağlıyız.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-user-md"></i>
+                </div>
+                <h3>Uzman Kadro</h3>
+                <p>Sertifikalı ve deneyimli psikologlarımızla en kaliteli hizmeti sunuyoruz.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-calendar-check"></i>
+                </div>
+                <h3>Esnek Randevu</h3>
+                <p>7/24 online randevu sistemi ile size uygun zamanı seçebilirsiniz.</p>
+            </div>
+            
+            <div class="feature-card">
+                <div class="feature-icon">
+                    <i class="fas fa-hand-holding-usd"></i>
+                </div>
+                <h3>Uygun Fiyatlar</h3>
+                <p>Her bütçeye uygun paketler ve ödeme kolaylıkları sunuyoruz.</p>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>İlk Adımı Atın, Destek Almaya Başlayın</h2>
+            <p>Ruh sağlığınızı en çok siz önemsemilisiniz. <br>Profesyonel destek almak için hemen iletişime geçin.</p>
+            <div class="cta-buttons">
+                <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20psikolog%20randevusu%20almak%20istiyorum,%20bilgi%20almak%20istiyorum`} 
+                   target="_blank" class="btn btn-whatsapp btn-large">
+                    <i class="fab fa-whatsapp"></i>WhatsApp'tan Randevu Al
+                </a>
+                
+            </div>
+            <p class="cta-note">İş de yeter.</p>
+        </div>
+    </div>
+</section>
+
+<!-- FAQ -->
+<section class="faq-section">
+    <div class="container">
+        <div class="section-header">
+            <h2>Sıkça Sorulan Sorular</h2>
+            <p>Psikolog randevusu hakkında merak ettikleriniz</p>
+        </div>
+        
+        <div class="faq-container">
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Online terapi etkili mi?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Evet, online terapi yüz yüze terapi kadar etkilidir. Araştırmalar online terapinin anksiyete, depresyon ve diğer ruh sağlığı sorunlarında etkili olduğunu göstermektedir.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Seanslar ne kadar sürer?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Standart bireysel terapi seansları 50 dakika, çift terapisi seansları 75 dakika sürmektedir. İlk değerlendirme seansı 90 dakikadır.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Gizlilik nasıl sağlanıyor?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Tüm seanslar tamamen gizlidir. Psikologlarımız mesleki etik kurallara ve gizlilik yasalarına sıkı sıkıya bağlıdır. Hiçbir bilgi üçüncü şahıslarla paylaşılmaz.</p>
+                </div>
+            </div>
+            
+            <div class="faq-item">
+                <div class="faq-question">
+                    <span>Hangi ödeme yöntemleri kabul ediliyor?</span>
+                    <i class="fas fa-chevron-down"></i>
+                </div>
+                <div class="faq-answer">
+                    <p>Nakit, kredi kartı, banka havalesi ve online ödeme yöntemleri kabul ediyoruz. Ayrıca taksit imkanı da sunmaktayız.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style is:global>
+    /* Global Styles */
+    :root {
+        --primary-color: #4f46e5;
+        --secondary-color: #7c3aed;
+        --accent-color: #10b981;
+        --text-color: #1f2937;
+        --light-bg: #f8fafc;
+        --white: #ffffff;
+        --shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
+        --transition: all 0.3s ease;
+    }
+    
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+    
+    body {
+        font-family: 'Poppins', sans-serif;
+        color: var(--text-color);
+        line-height: 1.6;
+    }
+    
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+    
+    .section-header {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .section-header h2 {
+        font-size: 2.5rem;
+        color: var(--primary-color);
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    
+    .section-header p {
+        font-size: 1.1rem;
+        color: #6b7280;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .btn {
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        padding: 12px 24px;
+        border-radius: 10px;
+        text-decoration: none;
+        font-weight: 600;
+        transition: var(--transition);
+        cursor: pointer;
+        border: 2px solid transparent;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        background: var(--primary-color);
+        color: var(--white);
+    }
+    
+    .btn-primary:hover {
+        background: var(--secondary-color);
+        transform: translateY(-2px);
+        box-shadow: var(--shadow);
+    }
+    
+    .btn-whatsapp {
+        background: #25d366;
+        color: var(--white);
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128c7e;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.3);
+    }
+    
+    .btn-outline {
+        background: transparent;
+        color: var(--primary-color);
+        border-color: var(--primary-color);
+    }
+    
+    .btn-outline:hover {
+        background: var(--primary-color);
+        color: var(--white);
+    }
+    
+    .btn-large {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+    
+    /* Hero Section */
+    .hero-section {
+        background: linear-gradient(135deg, #f0f9ff 0%, #e0f2fe 100%);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%234f46e5' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .hero-content {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 50px;
+        align-items: center;
+        position: relative;
+        z-index: 1;
+    }
+    
+    .hero-title {
+        font-size: 3rem;
+        color: var(--primary-color);
+        margin-bottom: 20px;
+        font-weight: 800;
+        line-height: 1.2;
+    }
+    
+    .hero-subtitle {
+        font-size: 1.2rem;
+        color: #4b5563;
+        margin-bottom: 30px;
+        line-height: 1.7;
+    }
+    
+    .hero-stats {
+        display: grid;
+        grid-template-columns: repeat(4, 1fr);
+        gap: 20px;
+        margin: 30px 0;
+    }
+    
+    .stat-item {
+        text-align: center;
+        padding: 15px;
+        background: var(--white);
+        border-radius: 10px;
+        box-shadow: var(--shadow);
+    }
+    
+    .stat-number {
+        font-size: 2rem;
+        font-weight: 700;
+        color: var(--primary-color);
+        margin-bottom: 5px;
+    }
+    
+    .stat-label {
+        font-size: 0.9rem;
+        color: #6b7280;
+    }
+    
+    .hero-buttons {
+        display: flex;
+        gap: 15px;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .hero-image {
+        border-radius: 20px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+    }
+    
+    .hero-image img {
+        width: 100%;
+        height: 400px;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .hero-image:hover img {
+        transform: scale(1.05);
+    }
+    
+    /* Services Section */
+    .services-section {
+        padding: 80px 0;
+        background: var(--light-bg);
+    }
+    
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+    }
+    
+    .service-card {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .service-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(0, 0, 0, 0.15);
+    }
+    
+    .service-image {
+        height: 200px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .service-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .service-card:hover .service-image img {
+        transform: scale(1.1);
+    }
+    
+    .service-icon {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--white);
+        width: 50px;
+        height: 50px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        box-shadow: var(--shadow);
+    }
+    
+    .service-content {
+        padding: 25px;
+    }
+    
+    .service-content h3 {
+        font-size: 1.5rem;
+        color: var(--primary-color);
+        margin-bottom: 10px;
+    }
+    
+    .service-content p {
+        color: #6b7280;
+        margin-bottom: 15px;
+        line-height: 1.6;
+    }
+    
+    .service-features {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 8px;
+        margin-bottom: 20px;
+    }
+    
+    .feature-tag {
+        background: #e0e7ff;
+        color: var(--primary-color);
+        padding: 5px 12px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 500;
+    }
+    
+    /* Experts Section */
+    .experts-section {
+        padding: 80px 0;
+        background: var(--white);
+    }
+    
+    .experts-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+        gap: 30px;
+    }
+    
+    .expert-card {
+        background: var(--white);
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .expert-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    .expert-image {
+        height: 250px;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .expert-image img {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: var(--transition);
+    }
+    
+    .expert-card:hover .expert-image img {
+        transform: scale(1.05);
+    }
+    
+    .expert-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: var(--accent-color);
+        color: var(--white);
+        padding: 6px 12px;
+        border-radius: 20px;
+        font-size: 0.8rem;
+        font-weight: 600;
+    }
+    
+    .expert-content {
+        padding: 25px;
+    }
+    
+    .expert-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 10px;
+    }
+    
+    .expert-header h3 {
+        font-size: 1.3rem;
+        color: var(--text-color);
+    }
+    
+    .expert-rating {
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        color: #fbbf24;
+        font-weight: 600;
+    }
+    
+    .expert-experience {
+        color: #6b7280;
+        font-size: 0.9rem;
+        margin-bottom: 10px;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .expert-description {
+        color: #6b7280;
+        margin-bottom: 20px;
+        line-height: 1.6;
+    }
+    
+    .expert-buttons {
+        display: flex;
+        gap: 10px;
+    }
+    
+    .expert-buttons .btn {
+        flex: 1;
+        justify-content: center;
+    }
+    
+    /* Why Us Section */
+    .why-us-section {
+        padding: 80px 0;
+        background: var(--light-bg);
+    }
+    
+    .features-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 30px;
+    }
+    
+    .feature-card {
+        background: var(--white);
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: var(--shadow);
+        transition: var(--transition);
+    }
+    
+    .feature-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 15px 35px rgba(0, 0, 0, 0.1);
+    }
+    
+    .feature-icon {
+        width: 70px;
+        height: 70px;
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+        font-size: 1.8rem;
+        color: var(--white);
+    }
+    
+    .feature-card h3 {
+        font-size: 1.3rem;
+        color: var(--text-color);
+        margin-bottom: 10px;
+    }
+    
+    .feature-card p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        background: linear-gradient(135deg, var(--primary-color), var(--secondary-color));
+        padding: 80px 0;
+        color: var(--white);
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .cta-content p {
+        font-size: 1.2rem;
+        margin-bottom: 30px;
+        opacity: 0.9;
+        max-width: 700px;
+        margin: 0 auto 30px;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-bottom: 20px;
+        flex-wrap: wrap;
+    }
+    
+    .cta-note {
+        font-size: 1rem;
+        opacity: 0.8;
+    }
+    
+    /* FAQ Section */
+    .faq-section {
+        padding: 80px 0;
+        background: var(--white);
+    }
+    
+    .faq-container {
+        max-width: 800px;
+        margin: 0 auto;
+    }
+    
+    .faq-item {
+        border: 1px solid #e5e7eb;
+        border-radius: 10px;
+        margin-bottom: 15px;
+        overflow: hidden;
+    }
+    
+    .faq-question {
+        padding: 20px;
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        cursor: pointer;
+        background: var(--light-bg);
+        transition: var(--transition);
+    }
+    
+    .faq-question:hover {
+        background: #e5e7eb;
+    }
+    
+    .faq-question span {
+        font-weight: 600;
+        color: var(--text-color);
+        font-size: 1.1rem;
+    }
+    
+    .faq-question i {
+        color: var(--primary-color);
+        transition: var(--transition);
+    }
+    
+    .faq-item.active .faq-question i {
+        transform: rotate(180deg);
+    }
+    
+    .faq-answer {
+        padding: 0 20px;
+        max-height: 0;
+        overflow: hidden;
+        transition: var(--transition);
+    }
+    
+    .faq-item.active .faq-answer {
+        padding: 20px;
+        max-height: 500px;
+    }
+    
+    .faq-answer p {
+        color: #6b7280;
+        line-height: 1.6;
+    }
+    
+    /* Responsive Design */
+    @media (max-width: 992px) {
+        .hero-content {
+            grid-template-columns: 1fr;
+        }
+        
+        .hero-image {
+            order: -1;
+        }
+        
+        .hero-title {
+            font-size: 2.5rem;
+        }
+        
+        .hero-stats {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .services-grid,
+        .experts-grid,
+        .features-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .section-header h2 {
+            font-size: 2rem;
+        }
+        
+        .hero-title {
+            font-size: 2rem;
+        }
+        
+        .hero-buttons,
+        .expert-buttons,
+        .cta-buttons {
+            flex-direction: column;
+        }
+        
+        .btn {
+            width: 100%;
+            justify-content: center;
+        }
+        
+        .hero-stats {
+            grid-template-columns: 1fr;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 15px;
+        }
+        
+        .hero-section {
+            padding: 50px 0;
+        }
+        
+        .services-section,
+        .experts-section,
+        .why-us-section,
+        .faq-section {
+            padding: 50px 0;
+        }
+        
+        .feature-card,
+        .service-content,
+        .expert-content {
+            padding: 20px;
+        }
+    }
+</style>
+
+<script is:inline>
+    // FAQ Accordion
+    document.addEventListener('DOMContentLoaded', function() {
+        const faqItems = document.querySelectorAll('.faq-item');
+        
+        faqItems.forEach(item => {
+            const question = item.querySelector('.faq-question');
+            
+            question.addEventListener('click', () => {
+                const isActive = item.classList.contains('active');
+                
+                // Close all items
+                faqItems.forEach(faq => {
+                    faq.classList.remove('active');
+                });
+                
+                // Open clicked item if it wasn't active
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+        
+        // Expert modal function
+        window.openExpertModal = function(expertId) {
+            alert(`Uzman psikolog ${expertId} ile ilgili detaylı bilgi modali açılacak. Bu kısmı geliştirebilirsiniz.`);
+        };
+        
+        // WhatsApp button tracking
+        const whatsappButtons = document.querySelectorAll('.btn-whatsapp');
+        whatsappButtons.forEach(button => {
+            button.addEventListener('click', function(e) {
+                const serviceName = this.getAttribute('href').includes('text=') ? 
+                    decodeURIComponent(this.getAttribute('href').split('text=')[1]) : 
+                    'Genel Randevu';
+                console.log('WhatsApp randevu talebi:', serviceName);
+            });
+        });
+    });
+</script>
+
+<!-- WhatsApp Float Button -->
+<a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20psikolog%20randevusu%20almak%20istiyorum`} 
+   target="_blank" class="whatsapp-float">
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<style is:global>
+    .whatsapp-float {
+        position: fixed;
+        bottom: 30px;
+        right: 30px;
+        background: #25d366;
+        color: white;
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        font-size: 1.8rem;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+        transition: all 0.3s ease;
+        z-index: 1000;
+        text-decoration: none;
+    }
+    
+    .whatsapp-float:hover {
+        transform: scale(1.1);
+        box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+        background: #128c7e;
+    }
+    
+    @media (max-width: 768px) {
+        .whatsapp-float {
+            bottom: 20px;
+            right: 20px;
+            width: 50px;
+            height: 50px;
+            font-size: 1.5rem;
+        }
+    }
+</style>
+
+</BasicLayout>

@@ -1,0 +1,342 @@
+{
+  "sirketKurPaketleri": [
+    {
+      "id": "ucretsiz",
+      "ad": "ÜCRETSİZ ŞİRKET KUR",
+      "tip": "Girişimciler İçin Başlangıç",
+      "aciklama": "Yeni başlayan girişimciler için Şahıs Şirketi Kurulumu ile mükemmel başlangıç",
+      "oncekiFiyat": "3599₺",
+      "fiyat": "0₺",
+      "periyot": "Başlangıç Paketi",
+      "ozellikler": [
+        {
+          "text": "Ücretsiz Sanal ofis (Yasal Adres)",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Ücretsiz KOSGEB Analizi",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Ücretsiz Teşvik Analizi",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Ücretsiz Muhasebe Yazılımı",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Ücretsiz e-Fatura",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Ücretsiz e-Arşiv Fatura",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "e-İrsaliye",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "SGK İşlemleri",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "Ortak Sekreterya Hizmeti",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "Farklı Lokasyonlarda Ofis (17 şehir)",
+          "aktif": true,
+          "vurgulu": false,
+          "detay": "İstanbul, Ankara, İzmir, Bursa, Adana, Antalya, Kocaeli, Gaziantep, Diyarbakır, Konya, Mersin, Kayseri, Samsun, Balıkesir, Manisa, Tekirdağ, Malatya"
+        }
+      ],
+      "oncelikliButon": {
+        "text": "WhatsApp ile Ücretsiz Başla",
+        "link": "whatsapp",
+        "stil": "btn-gradient-free"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "🚀",
+      "renk": "from-emerald-50 to-teal-100",
+      "borderRenk": "border-emerald-200",
+      "textRenk": "text-emerald-800",
+      "ozelEtiket": "SIFIR MALİYET",
+      "ozelEtiketRenk": "bg-gradient-to-r from-emerald-500 to-teal-600",
+      "bayrak": ["Türkiye'de Şirket"]
+    },
+    {
+      "id": "limited",
+      "ad": "KURUMSAL LIMITED",
+      "tip": "LTD Şirket Kurulumu",
+      "aciklama": "Minimum ciro paket fiyatıdır. Kaçmaz Süper fiyat avantajı ile!",
+      "oncekiFiyat": "6500₺",
+      "fiyat": "3599₺",
+      "periyot": "/Aylık",
+      "ozellikler": [
+        {
+          "text": "12 Adet Ücretsiz Hizmetin Tamamı",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Gelişmiş Muhasebe Çözümleri",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "e-Dönüşüm Paketi",
+          "aktif": true,
+          "vurgulu": true,
+          "detay": "e-Defter / e-Fatura / e-İrsaliye / e-Arşiv Fatura / e-Müstahsil"
+        },
+        {
+          "text": "Sanal Pos Entegrasyonu",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Profesyonel Web Sitesi & SEO",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "E-Ticaret Sitesi Kurulumu",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Türkiye Pazaryeri Kurulumları",
+          "aktif": true,
+          "vurgulu": false,
+          "detay": "Trendyol, Hepsiburada, N11, ÇiçekSepeti, Amazon, Teknosa, İdefix, Kitapyurdu, Akakçe, Sahibinden, Dolap, Gardrops"
+        },
+        {
+          "text": "Yemek/Market Pazaryerleri",
+          "aktif": true,
+          "vurgulu": false,
+          "detay": "Yemeksepeti, Getir, Trendyol Market, Banabi, CarrefourSA, A101, Şok Mobil"
+        },
+        {
+          "text": "Global Pazaryeri Kurulumları",
+          "aktif": true,
+          "vurgulu": false,
+          "detay": "Amazon, eBay, Etsy, AliExpress, Walmart, Zalando +30 platform"
+        },
+        {
+          "text": "Şirkete Özel Sanal Sekreterya",
+          "aktif": true,
+          "vurgulu": false
+        }
+      ],
+      "oncelikliButon": {
+        "text": "WhatsApp ile LTD Şirket Kur",
+        "link": "whatsapp",
+        "stil": "btn-gradient-premium"
+      },
+      "ikincilButon": null,
+      "vurgulanan": true,
+      "enPopuler": true,
+      "icon": "💎",
+      "renk": "from-blue-50 via-indigo-50 to-purple-100",
+      "borderRenk": "border-blue-300",
+      "textRenk": "text-blue-900",
+      "ozelEtiket": "EN ÇOK TERCİH EDİLEN",
+      "ozelEtiketRenk": "bg-gradient-to-r from-blue-500 via-purple-500 to-pink-500",
+      "bayrak": ["🌍", "Global Erişim"]
+    },
+    {
+      "id": "anonim",
+      "ad": "KURUMSAL ANONİM",
+      "tip": "A.Ş. Şirket Kurulumu",
+      "aciklama": "Minimum ciro paket fiyatıdır. Uluslararası şirket kurma imkanı!",
+      "oncekiFiyat": "12500₺",
+      "fiyat": "4999₺",
+      "periyot": "/Aylık",
+      "ozellikler": [
+        {
+          "text": "12 Adet Ücretsiz Hizmetin Tamamı",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Avrupa ve Ortadoğu'da Prestijli Ofis",
+          "aktif": true,
+          "vurgulu": true,
+          "detay": "Sanal veya fiziki ofis adresi"
+        },
+        {
+          "text": "AB ve Ortadoğu Pazarına Giriş Danışmanlığı",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Uluslararası Kargo Yönetimi",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "Çok Dilli Sekreterya Desteği",
+          "aktif": true,
+          "vurgulu": true
+        },
+        {
+          "text": "60+ Prestijli Lokasyonda Ofis",
+          "aktif": true,
+          "vurgulu": false,
+          "detay": "Türkiye'nin tüm büyük şehirlerinde"
+        },
+        {
+          "text": "A+ Ofis Adresleri",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "24/7 Erişimli Çalışma Alanları",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "Kargo ve Posta Takip Sistemi",
+          "aktif": true,
+          "vurgulu": false
+        },
+        {
+          "text": "Sınırsız İkram ve Temizlik",
+          "aktif": true,
+          "vurgulu": false
+        }
+      ],
+      "oncelikliButon": {
+        "text": "WhatsApp ile Anonim Şirket Kur",
+        "link": "whatsapp",
+        "stil": "btn-gradient-global"
+      },
+      "ikincilButon": null,
+      "vurgulanan": false,
+      "enPopuler": false,
+      "icon": "🌍",
+      "renk": "from-amber-50 to-orange-100",
+      "borderRenk": "border-amber-200",
+      "textRenk": "text-amber-900",
+      "ozelEtiket": "ULUSLARARASI",
+      "ozelEtiketRenk": "bg-gradient-to-r from-amber-500 to-orange-600",
+      "bayrak": ["🌐", "60+ Ülke"]
+    }
+  ],
+  "hizmetKategorileri": [
+    {
+      "id": "kurulum",
+      "baslik": "ŞİRKET KURULUMU",
+      "ikon": "🏢",
+      "hizmetler": [
+        "Ücretsiz Online Şirket Kurma",
+        "Limited Şirket Kuruluşu",
+        "Anonim Şirket Kuruluşu",
+        "Şahıs Şirketi Kuruluşu",
+        "Yabancı Uyruklu Şirket Kuruluşu"
+      ],
+      "renk": "from-blue-50 to-indigo-100"
+    },
+    {
+      "id": "muhasebe",
+      "baslik": "MUHASEBE & FİNANSAL ÇÖZÜMLER",
+      "ikon": "📊",
+      "hizmetler": [
+        "Ücretsiz Yazılım",
+        "e-Fatura & e-Arşiv",
+        "e-İmza & Mali Mühür",
+        "Ön Muhasebe Yönetimi",
+        "Finansal Danışmanlık",
+        "Vergi Uyum Süreçleri"
+      ],
+      "renk": "from-emerald-50 to-green-100"
+    },
+    {
+      "id": "sanalofis",
+      "baslik": "SANAL OFİS & ÇALIŞMA ALANLARI",
+      "ikon": "💻",
+      "hizmetler": [
+        "Prestijli Yasal Adres",
+        "Çağrı Karşılama & Sekreterya",
+        "Sanal Sekreter",
+        "Sanal Santral",
+        "Posta & Kargo Takibi",
+        "Toplantı Odası Kiralama",
+        "Ortak Çalışma Alanları"
+      ],
+      "renk": "from-purple-50 to-violet-100"
+    },
+    {
+      "id": "uluslararasi",
+      "baslik": "ULUSLARARASI İŞ GELİŞTİRME",
+      "ikon": "✈️",
+      "hizmetler": [
+        "Global Ofis Çözümleri",
+        "Yurtdışı Pazar Danışmanlığı",
+        "Uluslararası Vergi Optimizasyonu"
+      ],
+      "renk": "from-amber-50 to-yellow-100"
+    }
+  ],
+  "ekHizmetler": [
+    {
+      "id": "marka",
+      "baslik": "🔍 Marka Tescil ve Koruma",
+      "aciklama": "Fikrinizi yasal güvence altına alın!",
+      "maddeler": [
+        "Marka araştırması",
+        "Tescil başvurusu",
+        "Uluslararası marka koruma"
+      ],
+      "renk": "bg-gradient-to-br from-blue-100 to-cyan-100"
+    },
+    {
+      "id": "pazaryeri",
+      "baslik": "🛒 Pazaryeri Entegrasyonu",
+      "aciklama": "50+ platformda aynı anda satış yapın!",
+      "maddeler": [
+        "Türkiye ve Dünya entegrasyonu",
+        "Stok ve sipariş yönetimi",
+        "Otomatik fatura kesme"
+      ],
+      "renk": "bg-gradient-to-br from-purple-100 to-pink-100"
+    },
+    {
+      "id": "hibe",
+      "baslik": "💰 Hibe ve Teşvik Danışmanlığı",
+      "aciklama": "Devlet desteklerinden maksimum faydalanın!",
+      "maddeler": [
+        "KOSGEB destekleri",
+        "TÜBİTAK Ar-Ge fonları",
+        "AB hibe programları",
+        "Başarı oranımız: %95"
+      ],
+      "renk": "bg-gradient-to-br from-emerald-100 to-teal-100"
+    }
+  ],
+  "ulkeler": {
+    "avrupa": ["Tüm avrupa", "Karadağ", "Almanya", "Slovenya", "Hollanda", "İngiltere", "İspanya", "Fransa", "İtalya", "Yunanistan", "Bulgaristan"],
+    "ortadogu": ["BAE (Dubai)", "Suudi Arabistan", "Katar", "Kuveyt", "Umman"],
+    "asya": ["Singapur", "Hong Kong", "Çin", "Japonya", "Güney Kore"],
+    "amerİka": ["ABD", "Kanada"],
+    "afrİka": ["Fas", "Tunus", "Mısır", "Güney Afrika"]
+  },
+  "iletisim": {
+    "whatsapp": "905412465429",
+    "baslik": "📅 Hemen Randevu Alın, Hayalinizdeki İşe Başlayın!",
+    "altBaslik": "Fikriniz bizimle gerçeğe dönüşsün!"
+  }
+}

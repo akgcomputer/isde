@@ -1,0 +1,375 @@
+---
+// 404.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "404 - Sayfa Bulunamadı";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="error-container">
+    <!-- Animasyonlu 404 -->
+    <div class="error-header">
+      <div class="error-number">
+        <span class="number">4</span>
+        <div class="logo-container">
+          <img src="/img/isdeyeter-logo-5000px.png" alt="{companyName} Logo" class="logo" />
+        </div>
+        <span class="number">4</span>
+      </div>
+      <h1 class="error-title">Haydaa! Kayboldunuz Gibi</h1>
+      <p class="error-description">
+        Aradığınız sayfaya ulaşamıyorum, dilersen ana sayfaya dönebilirsin ya da site haritasını inceleyebilirsin.
+      </p>
+    </div>
+
+    <!-- Komik İllüstrasyon veya Animasyon -->
+    <div class="error-illustration">
+      <div class="emoji">🔍</div>
+      <div class="emoji">📄</div>
+      <div class="emoji">❓</div>
+      <div class="search-beam"></div>
+    </div>
+
+    <!-- Aksiyon Butonları -->
+    <div class="action-buttons">
+      <a href="/" class="btn primary-btn">
+        <span class="btn-icon">🏠</span>
+        Ana Sayfaya Dön
+      </a>
+      <a href="/sitemap" class="btn secondary-btn">
+        <span class="btn-icon">🗺️</span>
+        Site Haritası
+      </a>
+      <a href={getWhatsAppLink("404 Sayfasından İletişim")} class="btn whatsapp-btn">
+        <span class="btn-icon">💬</span>
+        WhatsApp'tan Yardım Al
+      </a>
+    </div>
+
+    <!-- Eğlenceli Öneriler -->
+    <div class="fun-suggestions">
+      <h3 class="suggestions-title">Belki de şunları arıyordunuz:</h3>
+      <div class="suggestion-cards">
+        <div class="suggestion-card">
+          <span class="card-emoji">☕</span>
+          <p>İhtiyacın olan bir yazılım ve bir fincan kahve molası</p>
+        </div>
+        <div class="suggestion-card">
+          <span class="card-emoji">🧭</span>
+          <p>veya İhtiyacın olan bir yazılım ve zaman kaybetmemek</p>
+        </div>
+        <div class="suggestion-card">
+          <span class="card-emoji">🎯</span>
+          <p>yada doğru yazılımı ve hizmeti alarak doğru yol haritası</p>
+        </div>
+        <div class="suggestion-card">
+          <span class="card-emoji">🎯</span>
+          <p>Belki de İş de yeter! hizmetlerden bazıları</p>
+        </div>
+      </div>
+    </div>
+
+    
+  </div>
+
+  <style is:global>
+    :root {
+      --primary-color: #4f46e5;
+      --secondary-color: #7c3aed;
+      --accent-color: #f59e0b;
+      --text-color: #333;
+      --light-bg: #f8fafc;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+    }
+
+    .error-container {
+      min-height: 80vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      padding: 2rem;
+      text-align: center;
+      background: linear-gradient(135deg, #f8fafc 0%, #e2e8f0 100%);
+      border-radius: 20px;
+      margin: 2rem auto;
+      max-width: 1000px;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .error-container::before {
+      content: '';
+      position: absolute;
+      top: -50%;
+      left: -50%;
+      width: 200%;
+      height: 200%;
+      background: radial-gradient(circle, rgba(79, 70, 229, 0.05) 0%, transparent 70%);
+      z-index: 0;
+    }
+
+    .error-header {
+      position: relative;
+      z-index: 1;
+      margin-bottom: 3rem;
+    }
+
+    .error-number {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 1.5rem;
+      margin-bottom: 2rem;
+      font-size: 8rem;
+      font-weight: 900;
+      color: var(--primary-color);
+      text-shadow: 3px 3px 0 rgba(79, 70, 229, 0.2);
+    }
+
+    .logo-container {
+      width: 120px;
+      height: 120px;
+      background: white;
+      border-radius: 50%;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 1.5rem;
+      box-shadow: var(--shadow);
+      animation: bounce 2s infinite;
+    }
+
+    .logo {
+      max-width: 80px;
+      max-height: 80px;
+    }
+
+    @keyframes bounce {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-20px); }
+    }
+
+    .error-title {
+      font-size: 2.5rem;
+      color: var(--text-color);
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .error-description {
+      font-size: 1.2rem;
+      color: #666;
+      max-width: 600px;
+      line-height: 1.6;
+      margin: 0 auto;
+    }
+
+    .error-illustration {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 2rem;
+      margin: 3rem 0;
+      position: relative;
+    }
+
+    .emoji {
+      font-size: 3rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .emoji:nth-child(1) { animation-delay: 0s; }
+    .emoji:nth-child(2) { animation-delay: 0.5s; }
+    .emoji:nth-child(3) { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    .search-beam {
+      position: absolute;
+      bottom: -20px;
+      width: 200px;
+      height: 10px;
+      background: linear-gradient(90deg, transparent, var(--accent-color), transparent);
+      border-radius: 10px;
+      animation: search 4s infinite;
+    }
+
+    @keyframes search {
+      0%, 100% { transform: translateX(-100px); opacity: 0.3; }
+      50% { transform: translateX(100px); opacity: 1; }
+    }
+
+    .action-buttons {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin: 2rem 0;
+      z-index: 1;
+      position: relative;
+    }
+
+    .btn {
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      transition: all 0.3s ease;
+      font-size: 1.1rem;
+    }
+
+    .primary-btn {
+      background: var(--primary-color);
+      color: white;
+      box-shadow: 0 4px 15px rgba(79, 70, 229, 0.3);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(79, 70, 229, 0.4);
+    }
+
+    .secondary-btn {
+      background: white;
+      color: var(--primary-color);
+      border: 2px solid var(--primary-color);
+    }
+
+    .secondary-btn:hover {
+      background: var(--primary-color);
+      color: white;
+      transform: translateY(-3px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-btn:hover {
+      transform: translateY(-3px);
+      box-shadow: 0 6px 20px rgba(37, 211, 102, 0.4);
+    }
+
+    .fun-suggestions {
+      background: white;
+      padding: 2rem;
+      border-radius: 20px;
+      margin: 2rem 0;
+      box-shadow: var(--shadow);
+      max-width: 800px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .suggestions-title {
+      color: var(--text-color);
+      margin-bottom: 1.5rem;
+      font-size: 1.5rem;
+    }
+
+    .suggestion-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+      gap: 1.5rem;
+    }
+
+    .suggestion-card {
+      padding: 1.5rem;
+      background: var(--light-bg);
+      border-radius: 15px;
+      transition: transform 0.3s ease;
+    }
+
+    .suggestion-card:hover {
+      transform: translateY(-5px);
+    }
+
+    .card-emoji {
+      font-size: 2.5rem;
+      display: block;
+      margin-bottom: 1rem;
+    }
+
+    .fun-fact {
+      margin-top: 2rem;
+      padding: 1.5rem;
+      background: linear-gradient(45deg, var(--primary-color), var(--secondary-color));
+      color: white;
+      border-radius: 15px;
+      max-width: 600px;
+      z-index: 1;
+      position: relative;
+    }
+
+    .fact-text {
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 0.5rem;
+      font-size: 1.1rem;
+      margin: 0;
+    }
+
+    @media (max-width: 768px) {
+      .error-number {
+        font-size: 5rem;
+      }
+
+      .logo-container {
+        width: 80px;
+        height: 80px;
+        padding: 1rem;
+      }
+
+      .error-title {
+        font-size: 2rem;
+      }
+
+      .error-illustration {
+        gap: 1rem;
+      }
+
+      .emoji {
+        font-size: 2rem;
+      }
+
+      .action-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .suggestion-cards {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</BasicLayout>

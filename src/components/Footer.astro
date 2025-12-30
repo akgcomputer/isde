@@ -1,0 +1,685 @@
+---
+// src/components/Footer.astro
+
+const companyName = "İş De Yeter!";
+const currentYear = new Date().getFullYear();
+const slogan = "İşinizi büyüten tüm çözümler tek platformda. Profesyonel hizmetlerle işletmenizi bir üst seviyeye taşıyoruz.";
+
+// Footer linkleri
+const footerLinks = {
+  yapayZeka: [
+    { label: 'AI Destek Chatbot', to: '/ai-destek-chatbot', icon: 'fas fa-robot' },
+    { label: 'Robot Server', to: '/robot-server', icon: 'fas fa-robot' },
+    { label: 'AI Robot', to: '/ai-robot', icon: 'fas fa-rocket' },
+    { label: 'E-Mutabakat', to: '/e-mutabakat', icon: 'fas fa-calculator' },
+    { label: 'WhatsApp Chatbot', to: '/ai-destek-chatbot', icon: 'fab fa-whatsapp' },
+    { label: 'Instagram Chatbot', to: '/ai-destek-chatbot', icon: 'fab fa-instagram' },
+    { label: 'Web Site Chatbot', to: '/ai-destek-chatbot', icon: 'fas fa-globe' }
+  ],
+  yazilim: [
+    { label: 'Dijital İşler', to: '/dijital-isler', icon: 'fas fa-desktop' },
+    { label: 'E-Ticaret Paketleri', to: '/e-ticaret-paketleri', icon: 'fas fa-shopping-cart' },
+    { label: 'Web Paketleri', to: '/web-paketleri', icon: 'fas fa-globe' },
+    { label: 'Muhasebe Paketleri', to: '/muhasebe-paketleri', icon: 'fas fa-calculator' },
+    { label: 'Muhasebe Programı Özellikleri', to: '/muhasebe-programinin-ozellikleri', icon: 'fas fa-chart-line' },
+    { label: 'SEO ve Pazarlama', to: '/seo-ve-pazarlama-paketleri', icon: 'fas fa-search' },
+    { label: 'Bulut Muhasebe', to: '/neden-bulut-muhasebe-yazilimi', icon: 'fas fa-cloud' },
+    { label: 'Dijitalde Yerini Al', to: '/dijital-isler-ekibi', icon: 'fas fa-rocket' },
+    { label: 'Dijital Pazarlama', to: '/dijital-pazarlama-hizmetleri', icon: 'fas fa-bullhorn' }
+  ],
+  hizmetler: [
+    { label: 'Psikolog Hizmetleri', to: '/psikolog-hizmetleri', icon: 'fas fa-heart' },
+    { label: 'Online Psikolog', to: '/online-psikolog', icon: 'fas fa-user-md' },
+    { label: 'Dijital İşler', to: '/dijital-isler', icon: 'fas fa-desktop' },
+    { label: 'Temizlik', to: '/temizlik', icon: 'fas fa-broom' },
+    { label: 'Nakliyat', to: '/nakliyat', icon: 'fas fa-truck' },
+    { label: 'Tamirat', to: '/tamirat', icon: 'fas fa-tools' },
+    { label: 'Tadilat', to: '/tadilat', icon: 'fas fa-hammer' },
+    { label: 'Organizasyon', to: '/organizasyon', icon: 'fas fa-calendar-alt' },
+    { label: 'Sağlık', to: '/psikolog-hizmetleri', icon: 'fas fa-heartbeat' },
+    { label: 'Özel Ders', to: '/ozel-ders', icon: 'fas fa-graduation-cap' },
+    { label: 'Online Psikolog Randevu', to: '/online-psikolog-randevu', icon: 'fas fa-calendar-check' }
+  ],
+  donanim: [
+    { label: 'IT Çözümleri', to: '/it-cozumleri', icon: 'fas fa-tools' },
+    { label: 'Sunucu Kiralama', to: '/sunucu-kiralama', icon: 'fas fa-cloud-upload-alt' },
+    { label: 'Domain Hosting', to: '/domain-hosting', icon: 'fas fa-hdd' },
+    { label: 'cPanel Hosting', to: '/cpanel-hosting', icon: 'fas fa-cpanel' },
+    { label: 'Ekonomik Hosting', to: '/ekonomik-hosting', icon: 'fas fa-server' },
+    { label: 'SSL Sertifikası', to: '/ssl-sertifikasi', icon: 'fas fa-shield-alt' }
+  ],
+  sirket: [
+    { label: 'Şirket Kurma Hizmeti', to: '/sirket-kur', icon: 'fas fa-building' },
+    { label: 'İletişim', to: '/iletisim', icon: 'fas fa-envelope' },
+    { label: 'Bayimiz Olun', to: '/bayimiz-olun', icon: 'fas fa-handshake' },
+    { label: 'Gizlilik Politikası', to: '/gizlilik-politikasi', icon: 'fas fa-shield-alt' },
+    { label: 'Site Haritası', to: '/sitemap', icon: 'fas fa-sitemap' }
+  ]
+};
+
+// Sosyal medya linkleri
+const socialLinks = [
+  { icon: 'fab fa-whatsapp', to: 'https://wa.me/905412465429?text=Merhaba,%20%C4%B0%C5%9F%20De%20Yeter%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum', label: 'WhatsApp' },
+  { icon: 'fab fa-instagram', to: 'https://www.instagram.com/isdeyetercom/', label: 'Instagram' },
+  { icon: 'fab fa-linkedin-in', to: 'https://www.linkedin.com/company/isdeyeter', label: 'LinkedIn' },
+  { icon: 'fab fa-facebook-f', to: 'https://facebook.com/isdeyeter', label: 'Facebook' },
+  { icon: 'fab fa-twitter', to: 'https://twitter.com/isdeyeter', label: 'Twitter' }
+];
+
+// İletişim bilgileri
+const contactInfo = {
+  email: 'info@isdeyeter.com',
+  phone: '+90 541 246 54 29',
+  address: 'İstanbul, Türkiye'
+};
+---
+
+<footer class="footer">
+    <div class="container">
+        <!-- Üst Kısım: Slogan ve Tanıtım -->
+        <div class="footer-top">
+            <div class="footer-brand">
+                <a href="/" class="footer-logo">
+                    <img src="/img/isdeyeter-logo-5000px.png" alt="İşDeYeter Logo" width="80" height="auto">
+                </a>
+                <p class="slogan">{slogan}</p>
+                
+                <!-- Sosyal Medya -->
+                <div class="social-links">
+                    {socialLinks.map((social, index) => (
+                        <a 
+                            href={social.to} 
+                            class="social-link"
+                            target="_blank"
+                            rel="noopener noreferrer"
+                            aria-label={social.label}
+                        >
+                            <i class={social.icon}></i>
+                        </a>
+                    ))}
+                </div>
+            </div>
+
+            <!-- Hızlı Linkler -->
+            <div class="footer-grid">
+                <!-- Yapay Zeka -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-robot" style="margin-right: 8px;"></i>
+                        Yapay Zeka
+                    </h3>
+                    <ul class="footer-links">
+                        {footerLinks.yapayZeka.map((link, index) => (
+                            <li>
+                                <a href={link.to} class="footer-link">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- Yazılım -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-laptop-code" style="margin-right: 8px;"></i>
+                        Yazılım
+                    </h3>
+                    <ul class="footer-links">
+                        {footerLinks.yazilim.map((link, index) => (
+                            <li>
+                                <a href={link.to} class="footer-link">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- Hizmetler -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-concierge-bell" style="margin-right: 8px;"></i>
+                        Hizmetler
+                    </h3>
+                    <ul class="footer-links">
+                        {footerLinks.hizmetler.map((link, index) => (
+                            <li>
+                                <a href={link.to} class="footer-link">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- Donanım & Server -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-server" style="margin-right: 8px;"></i>
+                        Donanım & Server
+                    </h3>
+                    <ul class="footer-links">
+                        {footerLinks.donanim.map((link, index) => (
+                            <li>
+                                <a href={link.to} class="footer-link">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- Şirket -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-building" style="margin-right: 8px;"></i>
+                        Şirket
+                    </h3>
+                    <ul class="footer-links">
+                        {footerLinks.sirket.map((link, index) => (
+                            <li>
+                                <a href={link.to} class="footer-link">
+                                    {link.label}
+                                </a>
+                            </li>
+                        ))}
+                    </ul>
+                </div>
+
+                <!-- İletişim -->
+                <div class="footer-column">
+                    <h3 class="footer-title">
+                        <i class="fas fa-headset" style="margin-right: 8px;"></i>
+                        İletişim
+                    </h3>
+                    <div class="contact-info">
+                        <div class="contact-item">
+                            <i class="fas fa-phone-alt"></i>
+                            <a href={`tel:${contactInfo.phone.replace(/\s/g, '')}`} class="contact-link">
+                                {contactInfo.phone}
+                            </a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-envelope"></i>
+                            <a href={`mailto:${contactInfo.email}`} class="contact-link">
+                                {contactInfo.email}
+                            </a>
+                        </div>
+                        <div class="contact-item">
+                            <i class="fas fa-map-marker-alt"></i>
+                            <span>{contactInfo.address}</span>
+                        </div>
+                    </div>
+                    
+                    <!-- WhatsApp Butonu -->
+                    <a 
+                        href="https://wa.me/905412465429?text=Merhaba,%20%C4%B0%C5%9F%20De%20Yeter%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum" 
+                        class="whatsapp-button"
+                        target="_blank"
+                        rel="noopener noreferrer"
+                    >
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp'tan Yazın
+                    </a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Alt Kısım: Copyright -->
+        <div class="footer-bottom">
+            <div class="copyright">
+                © {currentYear} {companyName}. Tüm hakları saklıdır. 
+                <a 
+                    href="https://meetwork.com.tr" 
+                    target="_blank" 
+                    rel="noopener noreferrer"
+                    class="meetwork-link"
+                >
+                    MeetWork
+                </a>
+                Üyesidir.
+            </div>
+            
+            <!-- Ekstra Linkler -->
+            <div class="extra-links">
+                <a href="/gizlilik-politikasi" class="extra-link">Gizlilik Politikası</a>
+                <a href="/kullanici-sozlesmesi" class="extra-link">Kullanıcı Sözleşmesi</a>
+                <a href="/cerez-politikasi" class="extra-link">Çerez Politikası</a>
+            </div>
+        </div>
+    </div>
+</footer>
+
+<style>
+/* Footer Ana Stilleri */
+.footer {
+    background: linear-gradient(135deg, #1f2937 0%, #111827 100%);
+    color: #e5e7eb;
+    padding: 60px 0 30px;
+    margin-top: auto;
+    position: relative;
+}
+
+.footer::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, #3b82f6, #10b981, #8b5cf6);
+}
+
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+/* Footer Üst Kısım */
+.footer-top {
+    display: grid;
+    grid-template-columns: 1fr 3fr;
+    gap: 60px;
+    margin-bottom: 50px;
+}
+
+@media (max-width: 1024px) {
+    .footer-top {
+        grid-template-columns: 1fr;
+        gap: 40px;
+    }
+}
+
+/* Footer Brand */
+.footer-brand {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-logo img {
+    width: 80px;
+    height: auto;
+    margin-bottom: 20px;
+    filter: brightness(0) invert(1);
+    transition: transform 0.3s ease;
+}
+
+.footer-logo:hover img {
+    transform: scale(1.05);
+}
+
+.slogan {
+    font-size: 1.1rem;
+    line-height: 1.6;
+    color: #9ca3af;
+    margin-bottom: 25px;
+    font-weight: 300;
+}
+
+/* Sosyal Medya Linkleri */
+.social-links {
+    display: flex;
+    gap: 15px;
+    flex-wrap: wrap;
+}
+
+.social-link {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    width: 40px;
+    height: 40px;
+    background: rgba(255, 255, 255, 0.1);
+    border-radius: 50%;
+    color: #e5e7eb;
+    font-size: 18px;
+    transition: all 0.3s ease;
+    text-decoration: none;
+}
+
+.social-link:hover {
+    background: #3b82f6;
+    transform: translateY(-3px);
+    color: white;
+}
+
+/* Footer Grid */
+.footer-grid {
+    display: grid;
+    grid-template-columns: repeat(3, 1fr);
+    gap: 30px;
+}
+
+@media (max-width: 768px) {
+    .footer-grid {
+        grid-template-columns: repeat(2, 1fr);
+    }
+}
+
+@media (max-width: 480px) {
+    .footer-grid {
+        grid-template-columns: 1fr;
+    }
+}
+
+/* Footer Column */
+.footer-column {
+    display: flex;
+    flex-direction: column;
+}
+
+.footer-title {
+    font-size: 1.1rem;
+    font-weight: 600;
+    color: white;
+    margin-bottom: 20px;
+    padding-bottom: 10px;
+    border-bottom: 2px solid #3b82f6;
+    display: flex;
+    align-items: center;
+}
+
+/* Footer Links */
+.footer-links {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+}
+
+.footer-links li {
+    margin-bottom: 12px;
+}
+
+.footer-link {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.95rem;
+    transition: all 0.3s ease;
+    display: inline-block;
+    position: relative;
+    padding-left: 0;
+}
+
+.footer-link:hover {
+    color: #3b82f6;
+    transform: translateX(5px);
+}
+
+.footer-link::before {
+    content: '→';
+    position: absolute;
+    left: -20px;
+    opacity: 0;
+    transition: all 0.3s ease;
+}
+
+.footer-link:hover::before {
+    opacity: 1;
+    left: -15px;
+}
+
+/* İletişim Bilgileri */
+.contact-info {
+    display: flex;
+    flex-direction: column;
+    gap: 15px;
+}
+
+.contact-item {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    font-size: 0.95rem;
+    color: #9ca3af;
+}
+
+.contact-item i {
+    color: #3b82f6;
+    width: 20px;
+    text-align: center;
+}
+
+.contact-link {
+    color: #9ca3af;
+    text-decoration: none;
+    transition: color 0.3s ease;
+}
+
+.contact-link:hover {
+    color: #3b82f6;
+}
+
+/* WhatsApp Butonu */
+.whatsapp-button {
+    display: inline-flex;
+    align-items: center;
+    gap: 10px;
+    background: #25D366;
+    color: white;
+    text-decoration: none;
+    padding: 12px 20px;
+    border-radius: 8px;
+    font-weight: 500;
+    margin-top: 20px;
+    transition: all 0.3s ease;
+    font-size: 0.95rem;
+}
+
+.whatsapp-button:hover {
+    background: #128C7E;
+    transform: translateY(-2px);
+    box-shadow: 0 4px 12px rgba(37, 211, 102, 0.3);
+}
+
+.whatsapp-button i {
+    font-size: 1.2rem;
+}
+
+/* Footer Alt Kısım */
+.footer-bottom {
+    padding-top: 30px;
+    border-top: 1px solid rgba(255, 255, 255, 0.1);
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    flex-wrap: wrap;
+    gap: 20px;
+}
+
+@media (max-width: 768px) {
+    .footer-bottom {
+        flex-direction: column;
+        text-align: center;
+        gap: 15px;
+    }
+}
+
+.copyright {
+    color: #9ca3af;
+    font-size: 0.9rem;
+}
+
+.meetwork-link {
+    color: #3b82f6;
+    text-decoration: none;
+    font-weight: 500;
+    margin: 0 5px;
+    transition: color 0.3s ease;
+}
+
+.meetwork-link:hover {
+    color: #60a5fa;
+    text-decoration: underline;
+}
+
+/* Ekstra Linkler */
+.extra-links {
+    display: flex;
+    gap: 25px;
+}
+
+@media (max-width: 480px) {
+    .extra-links {
+        flex-direction: column;
+        gap: 10px;
+        align-items: center;
+    }
+}
+
+.extra-link {
+    color: #9ca3af;
+    text-decoration: none;
+    font-size: 0.9rem;
+    transition: color 0.3s ease;
+}
+
+.extra-link:hover {
+    color: #3b82f6;
+}
+
+/* Scroll to Top Button */
+.scroll-top {
+    position: fixed;
+    bottom: 30px;
+    right: 30px;
+    width: 50px;
+    height: 50px;
+    background: #3b82f6;
+    color: white;
+    border: none;
+    border-radius: 50%;
+    cursor: pointer;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(20px);
+    transition: all 0.3s ease;
+    z-index: 999;
+    box-shadow: 0 4px 15px rgba(59, 130, 246, 0.3);
+}
+
+.scroll-top.visible {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.scroll-top:hover {
+    background: #2563eb;
+    transform: translateY(-3px);
+    box-shadow: 0 6px 20px rgba(59, 130, 246, 0.4);
+}
+
+/* Animasyonlar */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.footer-column {
+    animation: fadeInUp 0.6s ease forwards;
+}
+
+.footer-column:nth-child(1) { animation-delay: 0.1s; }
+.footer-column:nth-child(2) { animation-delay: 0.2s; }
+.footer-column:nth-child(3) { animation-delay: 0.3s; }
+.footer-column:nth-child(4) { animation-delay: 0.4s; }
+.footer-column:nth-child(5) { animation-delay: 0.5s; }
+.footer-column:nth-child(6) { animation-delay: 0.6s; }
+</style>
+
+<script>
+document.addEventListener('DOMContentLoaded', function() {
+    // Scroll to top butonu
+    const scrollTopBtn = document.createElement('button');
+    scrollTopBtn.className = 'scroll-top';
+    scrollTopBtn.innerHTML = '<i class="fas fa-chevron-up"></i>';
+    scrollTopBtn.setAttribute('aria-label', 'Yukarı çık');
+    document.body.appendChild(scrollTopBtn);
+    
+    // Scroll event
+    window.addEventListener('scroll', function() {
+        if (window.scrollY > 300) {
+            scrollTopBtn.classList.add('visible');
+        } else {
+            scrollTopBtn.classList.remove('visible');
+        }
+    });
+    
+    // Scroll to top fonksiyonu
+    scrollTopBtn.addEventListener('click', function() {
+        window.scrollTo({
+            top: 0,
+            behavior: 'smooth'
+        });
+    });
+    
+    // Footer linklerine hover efekti
+    const footerLinks = document.querySelectorAll('.footer-link');
+    footerLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateX(5px)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateX(0)';
+        });
+    });
+    
+    // Sosyal medya linklerine hover efekti
+    const socialLinks = document.querySelectorAll('.social-link');
+    socialLinks.forEach(link => {
+        link.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-3px) scale(1.1)';
+        });
+        
+        link.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0) scale(1)';
+        });
+    });
+    
+    // WhatsApp butonuna hover efekti
+    const whatsappBtn = document.querySelector('.whatsapp-button');
+    if (whatsappBtn) {
+        whatsappBtn.addEventListener('mouseenter', function() {
+            this.style.transform = 'translateY(-2px)';
+        });
+        
+        whatsappBtn.addEventListener('mouseleave', function() {
+            this.style.transform = 'translateY(0)';
+        });
+    }
+    
+    // Footer animasyonları
+    const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+    };
+    
+    const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+            if (entry.isIntersecting) {
+                entry.target.classList.add('animated');
+            }
+        });
+    }, observerOptions);
+    
+    // Footer kolonlarını gözlemle
+    const footerColumns = document.querySelectorAll('.footer-column');
+    footerColumns.forEach(column => {
+        observer.observe(column);
+    });
+});
+</script>

@@ -1,0 +1,485 @@
+---
+// src/pages/site-haritasi.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const siteUrl = configData.siteUrl || 'https://isdeyeter.com';
+
+// Astro'nun glob import özelliğini kullanarak sayfaları otomatik alalım
+const pages = import.meta.glob('../pages/**/*.astro');
+
+// Sayfa bilgilerini işleyelim
+const pageUrls = [];
+
+for (const path in pages) {
+  // .astro uzantısını ve pages klasör yolunu temizle
+  const relativePath = path
+    .replace('../pages/', '')
+    .replace('.astro', '')
+    .replace('/index', ''); // index dosyaları için
+  
+  // Özel sayfalar (404, sitemap gibi) hariç tut
+  if (!['404', 'sitemap', '_error'].includes(relativePath)) {
+    pageUrls.push({
+      url: `/${relativePath}`,
+      name: formatPageName(relativePath)
+    });
+  }
+}
+
+// Sayfa ismini formatla
+function formatPageName(path) {
+  return path
+    .split('/')
+    .pop() // Son parçayı al
+    .replace(/-/g, ' ') // Tireleri boşluğa çevir
+    .replace(/\b\w/g, l => l.toUpperCase()); // İlk harfleri büyük yap
+}
+
+// Manuel olarak eklemek istediğin sayfalar
+const manualPages = [
+  { url: '/', name: 'Ana Sayfa' },
+  { url: '/bayimiz-olun', name: 'Bayimiz Olun' },
+  { url: '/gizlilik-politikasi', name: 'Gizlilik Politikası' },
+  { url: '/psikolog-hizmetleri', name: 'Psikolog Hizmetleri' },
+  { url: '/web-paketleri', name: 'Web Site Paketleri' },
+  { url: '/hakkimizda', name: 'Hakkımızda' },
+  { url: '/iletisim', name: 'İletişim' }
+];
+
+// Tüm sayfaları birleştir (manuel + otomatik)
+const allPages = [...manualPages, ...pageUrls.filter(p => 
+  !manualPages.some(mp => mp.url === p.url)
+)];
+
+// Tekilleştirme
+const uniquePages = [...new Map(allPages.map(item => [item.url, item])).values()];
+
+// Tarih formatı
+const lastModified = new Date().toISOString().split('T')[0];
+---
+
+<BasicLayout title="Site Haritası - Tüm Sayfalar" description="İşde Yeter tüm sayfalar listesi ve site haritası">
+
+<div class="sitemap-page">
+    <div class="container">
+        <header class="sitemap-header">
+            <h1>Site Haritası</h1>
+            <p class="subtitle">Sitemizdeki tüm sayfaları buradan keşfedin</p>
+            <p class="info">Son Güncelleme: <strong>{lastModified}</strong> • Toplam Sayfa: <strong>{uniquePages.length}</strong></p>
+        </header>
+
+        <div class="sitemap-content">
+            <section class="main-pages">
+                <h2><i class="fas fa-home"></i> Ana Sayfalar</h2>
+                <div class="pages-grid">
+                    {uniquePages.filter(page => 
+                        ['/', '/hakkimizda', '/iletisim', '/bayimiz-olun'].includes(page.url)
+                    ).map(page => (
+                        <a href={page.url} class="page-card main-card">
+                            <i class="fas fa-star"></i>
+                            <h3>{page.name}</h3>
+                            <span class="url">{siteUrl}{page.url}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <section class="service-pages">
+                <h2><i class="fas fa-briefcase"></i> Hizmet Sayfaları</h2>
+                <div class="pages-grid">
+                    {uniquePages.filter(page => 
+                        page.url.includes('paket') || 
+                        page.url.includes('hizmet') ||
+                        page.url.includes('psikolog') ||
+                        page.url.includes('web')
+                    ).map(page => (
+                        <a href={page.url} class="page-card service-card">
+                            <i class="fas fa-cogs"></i>
+                            <h3>{page.name}</h3>
+                            <span class="url">{siteUrl}{page.url}</span>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <section class="legal-pages">
+                <h2><i class="fas fa-scale-balanced"></i> Yasal Sayfalar</h2>
+                <div class="pages-list">
+                    {uniquePages.filter(page => 
+                        page.url.includes('gizlilik') || 
+                        page.url.includes('politika') ||
+                        page.url.includes('sözleşme')
+                    ).map(page => (
+                        <a href={page.url} class="page-link">
+                            <i class="fas fa-file-contract"></i>
+                            <span>{page.name}</span>
+                            <i class="fas fa-arrow-right"></i>
+                        </a>
+                    ))}
+                </div>
+            </section>
+
+            <section class="all-pages">
+                <h2><i class="fas fa-sitemap"></i> Tüm Sayfalar ({uniquePages.length})</h2>
+                <div class="pages-table">
+                    <table>
+                        <thead>
+                            <tr>
+                                <th>Sayfa Adı</th>
+                                <th>URL</th>
+                                <th>Tarih</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {uniquePages.map((page, index) => (
+                                <tr>
+                                    <td>
+                                        <a href={page.url} class="page-name">
+                                            <i class="fas fa-file-alt"></i>
+                                            {page.name}
+                                        </a>
+                                    </td>
+                                    <td class="url-cell">
+                                        <code>{page.url}</code>
+                                    </td>
+                                    <td class="date-cell">{lastModified}</td>
+                                </tr>
+                            ))}
+                        </tbody>
+                    </table>
+                </div>
+            </section>
+        </div>
+
+        <div class="sitemap-actions">
+            <div class="action-card">
+                <i class="fas fa-robot"></i>
+                <h3>SEO Dostu</h3>
+                <p>Arama motorları için optimize edilmiş yapı</p>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-mobile-alt"></i>
+                <h3>Mobil Uyumlu</h3>
+                <p>Tüm cihazlarda sorunsuz çalışır</p>
+            </div>
+            <div class="action-card">
+                <i class="fas fa-sync-alt"></i>
+                <h3>Otomatik Güncel</h3>
+                <p>Yeni sayfalar otomatik eklenir</p>
+            </div>
+        </div>
+    </div>
+</div>
+
+<style is:global>
+    /* Sitemap Styles */
+    .sitemap-page {
+        padding: 40px 0;
+        min-height: 100vh;
+        background: linear-gradient(135deg, #f5f7fa 0%, #c3cfe2 100%);
+    }
+
+    .container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    .sitemap-header {
+        text-align: center;
+        margin-bottom: 50px;
+        padding: 30px;
+        background: white;
+        border-radius: 20px;
+        box-shadow: 0 10px 30px rgba(0,0,0,0.1);
+    }
+
+    .sitemap-header h1 {
+        font-size: 2.8rem;
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-weight: 800;
+    }
+
+    .subtitle {
+        font-size: 1.2rem;
+        color: #7f8c8d;
+        margin-bottom: 15px;
+    }
+
+    .info {
+        font-size: 1rem;
+        color: #34495e;
+        background: #f8f9fa;
+        padding: 10px 20px;
+        border-radius: 50px;
+        display: inline-block;
+    }
+
+    /* Sections */
+    .sitemap-content {
+        margin-bottom: 50px;
+    }
+
+    section {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        margin-bottom: 30px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+    }
+
+    section h2 {
+        color: #2c3e50;
+        font-size: 1.8rem;
+        margin-bottom: 25px;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+
+    section h2 i {
+        color: #3498db;
+    }
+
+    /* Grid Layout */
+    .pages-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 20px;
+    }
+
+    .page-card {
+        background: #f8f9fa;
+        border-radius: 12px;
+        padding: 25px;
+        text-decoration: none;
+        color: inherit;
+        transition: all 0.3s ease;
+        display: flex;
+        flex-direction: column;
+        align-items: flex-start;
+        border: 2px solid transparent;
+    }
+
+    .page-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(0,0,0,0.15);
+        border-color: #3498db;
+    }
+
+    .page-card i {
+        font-size: 2rem;
+        margin-bottom: 15px;
+        color: #3498db;
+    }
+
+    .main-card i {
+        color: #e74c3c;
+    }
+
+    .service-card i {
+        color: #2ecc71;
+    }
+
+    .page-card h3 {
+        color: #2c3e50;
+        font-size: 1.3rem;
+        margin-bottom: 10px;
+    }
+
+    .page-card .url {
+        font-size: 0.85rem;
+        color: #7f8c8d;
+        font-family: monospace;
+        background: white;
+        padding: 5px 10px;
+        border-radius: 5px;
+        word-break: break-all;
+    }
+
+    /* List Layout */
+    .pages-list {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+
+    .page-link {
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 15px 20px;
+        background: #f8f9fa;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #34495e;
+        transition: all 0.3s ease;
+    }
+
+    .page-link:hover {
+        background: #3498db;
+        color: white;
+    }
+
+    .page-link:hover i {
+        color: white;
+    }
+
+    .page-link i:first-child {
+        color: #9b59b6;
+        margin-right: 15px;
+    }
+
+    .page-link i:last-child {
+        color: #bdc3c7;
+        transition: transform 0.3s ease;
+    }
+
+    .page-link:hover i:last-child {
+        transform: translateX(5px);
+    }
+
+    /* Table Layout */
+    .pages-table {
+        overflow-x: auto;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        margin-top: 20px;
+    }
+
+    th {
+        background: #34495e;
+        color: white;
+        padding: 15px;
+        text-align: left;
+        font-weight: 600;
+    }
+
+    td {
+        padding: 15px;
+        border-bottom: 1px solid #eee;
+    }
+
+    tr:hover {
+        background: #f8f9fa;
+    }
+
+    .page-name {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        text-decoration: none;
+        color: #2c3e50;
+        font-weight: 500;
+    }
+
+    .page-name i {
+        color: #3498db;
+    }
+
+    .url-cell code {
+        background: #f1f2f6;
+        padding: 5px 10px;
+        border-radius: 5px;
+        font-family: monospace;
+        color: #2c3e50;
+    }
+
+    .date-cell {
+        color: #7f8c8d;
+        font-size: 0.9rem;
+    }
+
+    /* Action Cards */
+    .sitemap-actions {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-top: 50px;
+    }
+
+    .action-card {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        text-align: center;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        transition: transform 0.3s ease;
+    }
+
+    .action-card:hover {
+        transform: translateY(-5px);
+    }
+
+    .action-card i {
+        font-size: 2.5rem;
+        color: #3498db;
+        margin-bottom: 20px;
+    }
+
+    .action-card h3 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 1.3rem;
+    }
+
+    .action-card p {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .sitemap-header h1 {
+            font-size: 2.2rem;
+        }
+
+        .pages-grid {
+            grid-template-columns: 1fr;
+        }
+
+        section {
+            padding: 20px;
+        }
+
+        .sitemap-actions {
+            grid-template-columns: 1fr;
+        }
+
+        table {
+            font-size: 0.9rem;
+        }
+
+        th, td {
+            padding: 10px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 15px;
+        }
+
+        .sitemap-header {
+            padding: 20px 15px;
+        }
+
+        .sitemap-header h1 {
+            font-size: 1.8rem;
+        }
+
+        .page-card {
+            padding: 20px;
+        }
+    }
+</style>
+
+<!-- Font Awesome Icons -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</BasicLayout>

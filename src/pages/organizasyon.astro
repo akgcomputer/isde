@@ -1,0 +1,811 @@
+---
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const {
+  company,
+  whatsapp,
+  blogUrl,
+  slogan,
+  buttonText,
+  whatsappText
+} = configData;
+
+const heroTitle = "Organizasyon Hizmetleri";
+const heroSubtitle = "Düğün, nişan, doğum günü ve tüm özel günleriniz için profesyonel organizasyon hizmetleri. Unutulmaz etkinlikler için uzman ekiplerimizle çalışıyoruz.";
+
+// 12 Hizmet Resimli
+const servicesWithImages = [
+  {
+    title: "Düğün Organizasyonu",
+    image: "public/img/organizasyon/dugun.jpg",
+    description: "Hayatınızın en özel gününü unutulmaz kılacak profesyonel düğün organizasyonu. Mekan, dekor, catering ve tüm detaylar bizden.",
+    icon: "fas fa-rings-wedding",
+    link: "dugun-organizasyonu-120",
+    color: "from-pink-500 to-pink-600"
+  },
+  {
+    title: "Etkinlik Organizasyonu",
+    image: "public/img/organizasyon/etkinlik-meetwork.jpg",
+    description: "Etkinlikleriniz için profesyonel organizasyon hizmetleri. Mekan, dekor, müzik, ses sistemi ve tüm detaylar bizden.",
+    icon: "fas fa-tshirt",
+    link: "etkinlik-organizasyonu-123",
+    color: "from-gray-100 to-gray-300"
+  },
+  {
+    title: "Yat Kiralama",
+    image: "public/img/organizasyon/yat.jpg",
+    description: "Özel günlerinizi denizde kutlayın. Yat kiralama hizmeti ile romantik akşamlar ve kutlamalar.",
+    icon: "fas fa-ship",
+    link: "yat-kiralama-127",
+    color: "from-cyan-500 to-cyan-600"
+  },
+  {
+    title: "Garson Kiralama",
+    image: "public/img/organizasyon/garson.jpg",
+    description: "Profesyonel garson kiralama hizmeti. Açılış, kurumsal davet, düğün, nişan, doğum günü ve tüm etkinlikleriniz için deneyimli personel.",
+    icon: "fas fa-utensils",
+    link: "garson-kiralama-130",
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    title: "Kına Organizasyonu",
+    image: "public/img/organizasyon/kina.jpg",
+    description: "Gelin kınası için unutulmaz organizasyonlar. Kına gecesi dekorasyonu, müzik ve ikramlar.",
+    icon: "fas fa-fire",
+    link: "kina-organizasyonu-124",
+    color: "from-orange-500 to-orange-600"
+  },
+  {
+    title: "Palyaço",
+    image: "public/img/organizasyon/palyaco.jpg",
+    description: "Çocuk doğum günleri ve etkinlikler için eğlenceli palyaço gösterileri. Şovlar ve aktivitelerle dolu eğlence.",
+    icon: "fas fa-laugh",
+    link: "palyaco-125",
+    color: "from-yellow-500 to-yellow-600"
+  },
+  {
+    title: "Butik Pasta",
+    image: "public/img/organizasyon/pasta.jpg",
+    description: "Özel günlerinize renk katan, el yapımı butik pastalar. Düğün, nişan, doğum günü ve tüm kutlamalarınız için.",
+    icon: "fas fa-birthday-cake",
+    link: "butik-pasta-121",
+    color: "from-purple-500 to-purple-600"
+  },
+  {
+    title: "Bando Takımı",
+    image: "public/img/organizasyon/bando-takimi.png",
+    description: "Düğün, nişan ve özel günleriniz için profesyonel bando takımı. Gelin alma, havai fişek ve kutlama organizasyonları.",
+    icon: "fas fa-music",
+    link: "bando-takimi-122",
+    color: "from-red-500 to-red-600"
+  },
+  
+  {
+    title: "DJ Hizmeti",
+    image: "public/img/organizasyon/dj.jpg",
+    description: "Düğün, parti ve tüm etkinlikleriniz için profesyonel DJ hizmeti. Müzik seçkileri ve ışık sistemleri.",
+    icon: "fas fa-headphones",
+    link: "dj-hizmeti-126",
+    color: "from-blue-500 to-blue-600"
+  },
+  
+  {
+    title: "Sünnet Organizasyonu",
+    image: "public/img/organizasyon/sunnet.jpg",
+    description: "Çocuğunuzun sünnet düğünü için unutulmaz organizasyon. Dekorasyon, yemek ve eğlence.",
+    icon: "fas fa-child",
+    link: "sunnet-organizasyonu-128",
+    color: "from-green-500 to-green-600"
+  },
+  {
+    title: "Balon Süsleme",
+    image: "public/img/organizasyon/balon.jpg",
+    description: "Tüm etkinlikleriniz için balon dekorasyonu. Balon figürleri, heliyum balonlar ve özel tasarımlar.",
+    icon: "fas fa-dot-circle",
+    link: "balon-susleme-129",
+    color: "from-indigo-500 to-indigo-600"
+  },
+  {
+    title: "Catering Hizmeti",
+    image: "public/img/organizasyon/catering.jpg",
+    description: "Profesyonel catering hizmeti. Açık büfe, tabldot, kokteyl ve özel menüler.",
+    icon: "fas fa-utensils",
+    link: "catering-hizmeti-130",
+    color: "from-amber-500 to-amber-600"
+  },
+  {
+    title: "Evlilik Teklifi",
+    image: "public/img/organizasyon/evlilik-teklifi.jpg",
+    description: "Romantik evlilik teklifi organizasyonları. Sürpriz planlaması, dekorasyon ve unutulmaz anlar.",
+    icon: "fas fa-ring",
+    link: "evlilik-teklifi-131",
+    color: "from-rose-500 to-rose-600"
+  },
+   {
+    title: "İkramlıklar Finger Foods",
+    image: "public/img/organizasyon/ikramlik-finger-foods.jpg",
+    description: "Tüm etkinlikleriniz için mini ikramlık finger foods. Özel tatlar, menüler ve lezzetli atıştırmalıklar.",
+    icon: "fas fa-dot-circle",
+    link: "ikramlik-finger-foods-129",
+    color: "from-indigo-500 to-indigo-600"
+  },
+  
+  {
+    title: "Gelin Arabası Kiralama ve Süsleme",
+    image: "public/img/organizasyon/gelin-arabasi.jpg",
+    description: "Son model araçlar ile gelin arabası kiralama ve süsleme hizmeti. Düğün gününüzde şık ve unutulmaz bir giriş yapın.",
+    icon: "fas fa-ring",
+    link: "gelin-arabasi-kiralama-ve-susleme-131",
+    color: "from-rose-500 to-rose-600"
+  }
+];
+
+// 50 Hizmet Resimsiz
+const servicesTextOnly = [
+  { title: "Açılış Organizasyonu", link: "acilis-organizasyonu" },
+  { title: "Hastane Açılış Organizasyonu", link: "hastane-acilis-organizasyonu" },
+  { title: "Animatör", link: "animator" },
+  { title: "Canlı Müzik", link: "canli-muzik" },
+  { title: "Davet Catering", link: "davet-catering" },
+  { title: "Davul Zurnacı Kiralama", link: "davul-zurnaci-kiralama" },
+  { title: "Doğum Günü Catering", link: "dogum-gunu-catering" },
+  { title: "Doğum Günü Mekanları", link: "dogum-gunu-mekanlari" },
+  { title: "Doğum Günü Organizasyonu", link: "dogum-gunu-organizasyonu" },
+  { title: "Garson Kiralama", link: "garson-kiralama" },
+  { title: "Gelin Alma Bandosu", link: "gelin-alma-bandosu" },
+  { title: "Gelinlik Dikimi (Kapalı Model)", link: "gelinlik-dikimi-kapali-model" },
+  { title: "Hastane Odası Süsleme", link: "hastane-odasi-susleme" },
+  { title: "Kına Organizasyonu (Evde Kına)", link: "kina-organizasyonu-evde-kina" },
+  { title: "Kiralık Kaleci", link: "kiralik-kaleci" },
+  { title: "Klasik Araba Kiralama", link: "klasik-araba-kiralama" },
+  { title: "Kokteyl Catering", link: "kokteyl-catering" },
+  { title: "Masa Sandalye Kiralama", link: "masa-sandalye-kiralama" },
+  { title: "Mevlüt Yemeği", link: "mevlut-yemegi" },
+  { title: "Mevlüt Yemeği Catering", link: "mevlut-yemegi-catering" },
+  { title: "Müzisyen", link: "muzisyen" },
+  { title: "Nişan İkramlıkları", link: "nisan-ikramliklari" },
+  { title: "Nişan Menüsü Catering", link: "nisan-menu-catering" },
+  { title: "Nişan Organizasyonu", link: "nisan-organizasyonu" },
+  { title: "Sihirbaz", link: "sihirbaz" },
+  { title: "Düğün Bandosu", link: "dugun-bandosu" },
+  { title: "Düğün Catering", link: "dugun-catering" },
+  { title: "Doğum Günü Pastası", link: "dogum-gunu-pastasi" },
+  { title: "Söz Organizasyonu", link: "soz-organizasyonu" },
+  { title: "Tabldot Yemek", link: "tabldot-yemek" },
+  { title: "Temsili Nikah Memuru", link: "temsili-nikah-memuru" },
+  { title: "Yaş Pasta", link: "yas-pasta" },
+  { title: "Yatta Evlilik Teklifi", link: "yatta-evlilik-teklifi" },
+  { title: "Yetişkin Doğum Günü Organizasyonu", link: "yetiskin-dogum-gunu-organizasyonu" },
+  { title: "Düğün Yemeği", link: "dugun-yemegi" },
+  { title: "Evlilik Teklifi Organizasyonu", link: "evlilik-teklifi-organizasyonu" },
+  { title: "Baby Shower Organizasyonu", link: "baby-shower-organizasyonu" },
+  { title: "Toplantı Organizasyonu", link: "toplanti-organizasyonu" },
+  { title: "Piknik Organizasyonu", link: "piknik-organizasyonu" },
+  { title: "Team Building", link: "team-building" },
+  { title: "Kahvaltı Organizasyonu", link: "kahvalti-organizasyonu" },
+  { title: "Sürpriz Doğum Günü", link: "surpriz-dogum-gunu" },
+  { title: "Online Party", link: "online-party" },
+  { title: "Sanal Düğün", link: "sanal-dugun" },
+  { title: "Ses Sistemi Kiralama", link: "ses-sistemi-kiralama" },
+  { title: "Işık Sistemi Kiralama", link: "isik-sistemi-kiralama" },
+  { title: "Dekorasyon", link: "dekorasyon" },
+  { title: "Fotoğrafçı", link: "fotografci" },
+  { title: "Video Çekimi", link: "video-cekimi" }
+];
+
+const stats = [
+  { number: "+++", label: "Onlarca Unutulmaz Etkinlik", icon: "fas fa-calendar-check" },
+  { number: "50+", label: "Profesyonel Ekip", icon: "fas fa-users" },
+  { number: "62", label: "Farklı Hizmet", icon: "fas fa-sparkles" },
+  { number: "%90", label: "Memnuniyet", icon: "fas fa-star" }
+];
+---
+
+<BasicLayout title="Organizasyon Hizmetleri | İş de YETER - Düğün, Nişan, Doğum Günü">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content">
+            <h1 class="hero-title">
+                <span style="color: #1F2937;">{heroTitle}</span>
+            </h1>
+            <p class="hero-slogan">{slogan}</p>
+            <p class="hero-subtitle">
+                {heroSubtitle}
+            </p>
+            <div class="btn-group">
+                <a href="#resimli-hizmetler" class="btn btn-primary">
+                    <i class="fas fa-calendar-alt"></i>
+                    Popüler Organizasyonlar
+                </a>
+                <a href="#diger-hizmetler" class="btn btn-secondary">
+                    <i class="fas fa-list"></i>
+                    Tüm Organizasyonlar
+                </a>
+                <a href={`https://wa.me/${whatsapp}?text=Merhaba,%20Organizasyon%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                    <i class="fab fa-whatsapp"></i>
+                    {whatsappText}
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Stats Section -->
+<section class="stats" id="istatistikler">
+    <div class="container">
+        <div class="grid-stats">
+            {stats.map((stat, index) => (
+                <div class="stat-item" key={index}>
+                    <div class="stat-icon">
+                        <i class={stat.icon}></i>
+                    </div>
+                    <div class="stat-number">{stat.number}</div>
+                    <div class="stat-label">{stat.label}</div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Services with Images Section -->
+<section class="services-with-images" id="resimli-hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>RESİMLİ HİZMETLER</span>
+            <h2>Özel Gününüz İçin</h2>
+            <p>Uzman ekiplerimizle etkinliklerinizi unutulmaz kılalım</p>
+        </div>
+
+        <div class="services-grid">
+            {servicesWithImages.map((service, index) => (
+                <div class="service-card" key={index}>
+                    <div class="service-image-container">
+                        <img 
+                            src={service.image} 
+                            alt={service.title}
+                            class="service-image"
+                            loading="lazy"
+                        />
+                    </div>
+                    <div class="service-icon">
+                        <i class={service.icon}></i>
+                    </div>
+                    <h3>{service.title}</h3>
+                    <p class="service-description">{service.description}</p>
+                    <a 
+                        href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                        target="_blank"
+                        class="btn btn-service"
+                    >
+                        <i class="fab fa-whatsapp"></i>
+                        {buttonText}
+                    </a>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Text Only Services Section -->
+<section class="services-text-only" id="diger-hizmetler">
+    <div class="container">
+        <div class="section-title">
+            <span>DİĞER HİZMETLER</span>
+            <h2>Tüm Organizasyon İhtiyaçlarınız İçin</h2>
+            <p>Aşağıdaki hizmetlerimizden de yararlanabilirsiniz</p>
+        </div>
+
+        <div class="text-services-grid">
+            {servicesTextOnly.map((service, index) => (
+                <a 
+                    href={`https://wa.me/${whatsapp}?text=Merhaba,%20${encodeURIComponent(service.title)}%20almak%20istiyorum`}
+                    target="_blank"
+                    class="text-service-item"
+                    key={index}
+                >
+                    <i class="fas fa-check-circle"></i>
+                    <span>{service.title}</span>
+                    <i class="fab fa-whatsapp whatsapp-icon"></i>
+                </a>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsapp}?text=Merhaba,%20Organizasyon%20Hizmetleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        // WhatsApp float buton tıklama efekti
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+
+        // Smooth scroll
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function(e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+
+        // Intersection Observer for animations
+        const observerOptions = {
+            threshold: 0.1,
+            rootMargin: '0px 0px -50px 0px'
+        };
+
+        const observer = new IntersectionObserver((entries) => {
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.classList.add('visible');
+                }
+            });
+        }, observerOptions);
+
+        document.querySelectorAll('.service-card, .text-service-item').forEach(el => {
+            observer.observe(el);
+        });
+    });
+</script>
+
+<style>
+    /* Hero Section */
+    .hero {
+        min-height: 70vh;
+        display: flex;
+        align-items: center;
+        position: relative;
+        overflow: hidden;
+        background: linear-gradient(135deg, #fdf2f8 0%, #fce7f3 100%);
+        padding: 80px 0;
+    }
+
+    .hero-bg {
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-image: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23EC4899' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        opacity: 0.5;
+    }
+
+    .container {
+        width: 90%;
+        max-width: 1400px;
+        margin: 0 auto;
+        padding: 0 20px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .hero-content {
+        text-align: center;
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 40px 0;
+    }
+
+    .hero-title {
+        font-size: 3rem;
+        font-weight: 800;
+        line-height: 1.2;
+        margin-bottom: 15px;
+        color: #1F2937;
+    }
+
+    .hero-slogan {
+        font-size: 1.4rem;
+        color: #db4205;
+        font-weight: 600;
+        margin-bottom: 20px;
+    }
+
+    .hero-subtitle {
+        font-size: 1.1rem;
+        color: #4B5563;
+        margin-bottom: 30px;
+        line-height: 1.6;
+    }
+
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+
+    .btn {
+        padding: 14px 28px;
+        border-radius: 10px;
+        font-weight: 600;
+        font-size: 1rem;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        transition: all 0.3s ease;
+        cursor: pointer;
+        border: none;
+    }
+
+    .btn-primary {
+        background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(236, 72, 153, 0.4);
+    }
+
+    .btn-primary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(236, 72, 153, 0.5);
+    }
+
+    .btn-secondary {
+        background: linear-gradient(135deg, #6B7280 0%, #4B5563 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(107, 114, 128, 0.4);
+    }
+
+    .btn-secondary:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(107, 114, 128, 0.5);
+    }
+
+    .btn-whatsapp {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    .btn-whatsapp:hover {
+        transform: translateY(-3px);
+        box-shadow: 0 8px 25px rgba(37, 211, 102, 0.5);
+    }
+
+    .btn-service {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        padding: 10px 20px;
+        font-size: 0.9rem;
+        border-radius: 8px;
+        text-decoration: none;
+        display: inline-flex;
+        align-items: center;
+        gap: 8px;
+        transition: all 0.3s ease;
+    }
+
+    .btn-service:hover {
+        transform: translateY(-2px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Stats Section */
+    .stats {
+        padding: 50px 0;
+        background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+    }
+
+    .grid-stats {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+        gap: 30px;
+        text-align: center;
+    }
+
+    .stat-item {
+        padding: 20px;
+    }
+
+    .stat-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: rgba(255, 255, 255, 0.2);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 15px;
+    }
+
+    .stat-icon i {
+        font-size: 1.5rem;
+        color: white;
+    }
+
+    .stat-number {
+        font-size: 2.5rem;
+        font-weight: 800;
+        color: white;
+        margin-bottom: 5px;
+    }
+
+    .stat-label {
+        color: rgba(255, 255, 255, 0.9);
+        font-size: 1rem;
+    }
+
+    /* Section Titles */
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .section-title span {
+        display: inline-block;
+        background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+        color: white;
+        padding: 8px 20px;
+        border-radius: 30px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        margin-bottom: 15px;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+    }
+
+    .section-title h2 {
+        font-size: 2.2rem;
+        color: #1F2937;
+        margin-bottom: 15px;
+        font-weight: 800;
+    }
+
+    .section-title p {
+        color: #6B7280;
+        font-size: 1.1rem;
+    }
+
+    /* Services with Images */
+    .services-with-images {
+        padding: 80px 0;
+        background: #fff;
+    }
+
+    .services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+        gap: 25px;
+    }
+
+    .service-card {
+        background: white;
+        border-radius: 16px;
+        padding: 25px;
+        text-align: center;
+        box-shadow: 0 4px 20px rgba(0, 0, 0, 0.08);
+        transition: all 0.3s ease;
+        border: 1px solid #f0f0f0;
+    }
+
+    .service-card:hover {
+        transform: translateY(-8px);
+        box-shadow: 0 15px 40px rgba(0, 0, 0, 0.12);
+    }
+
+    .service-image-container {
+        width: 200px;
+        height: 200px;
+        margin: 0 auto 20px;
+        border-radius: 12px;
+        overflow: hidden;
+        box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+    }
+
+    .service-image {
+        width: 100%;
+        height: 100%;
+        object-fit: cover;
+        transition: transform 0.3s ease;
+    }
+
+    .service-card:hover .service-image {
+        transform: scale(1.05);
+    }
+
+    .service-icon {
+        width: 60px;
+        height: 60px;
+        border-radius: 50%;
+        background: linear-gradient(135deg, #EC4899 0%, #DB2777 100%);
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: -40px auto 15px;
+        position: relative;
+        z-index: 1;
+    }
+
+    .service-icon i {
+        font-size: 1.4rem;
+        color: white;
+    }
+
+    .service-card h3 {
+        font-size: 1.2rem;
+        color: #1F2937;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+
+    .service-description {
+        color: #6B7280;
+        font-size: 0.95rem;
+        line-height: 1.5;
+        margin-bottom: 15px;
+        min-height: 3em;
+    }
+
+    /* Text Only Services */
+    .services-text-only {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+
+    .text-services-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+        gap: 15px;
+    }
+
+    .text-service-item {
+        display: flex;
+        align-items: center;
+        gap: 12px;
+        padding: 15px 20px;
+        background: white;
+        border-radius: 10px;
+        text-decoration: none;
+        color: #374151;
+        font-weight: 500;
+        font-size: 0.95rem;
+        box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+        transition: all 0.3s ease;
+        border: 1px solid #e5e7eb;
+    }
+
+    .text-service-item:hover {
+        background: linear-gradient(135deg, #25D366 0%, #20BD5A 100%);
+        color: white;
+        transform: translateX(5px);
+        box-shadow: 0 4px 15px rgba(37, 211, 102, 0.3);
+    }
+
+    .text-service-item i:first-child {
+        color: #EC4899;
+        font-size: 1rem;
+        transition: color 0.3s ease;
+    }
+
+    .text-service-item:hover i:first-child {
+        color: white;
+    }
+
+    .whatsapp-icon {
+        margin-left: auto;
+        font-size: 1.1rem;
+        opacity: 0;
+        transition: all 0.3s ease;
+    }
+
+    .text-service-item:hover .whatsapp-icon {
+        opacity: 1;
+    }
+
+    /* WhatsApp Float Button */
+    .whatsapp-float {
+        position: fixed;
+        width: 60px;
+        height: 60px;
+        bottom: 30px;
+        right: 30px;
+        background-color: #25D366;
+        color: #FFF;
+        border-radius: 50px;
+        text-align: center;
+        font-size: 30px;
+        box-shadow: 2px 2px 10px rgba(0, 0, 0, 0.2);
+        z-index: 1000;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        transition: all 0.3s ease;
+        text-decoration: none;
+    }
+
+    .whatsapp-float:hover {
+        background-color: #20BD5A;
+        transform: scale(1.1);
+        box-shadow: 4px 4px 15px rgba(37, 211, 102, 0.4);
+    }
+
+    /* Animations */
+    .service-card {
+        opacity: 0;
+        transform: translateY(20px);
+        animation: fadeInUp 0.5s ease forwards;
+    }
+
+    @keyframes fadeInUp {
+        to {
+            opacity: 1;
+            transform: translateY(0);
+        }
+    }
+
+    .text-service-item {
+        opacity: 0;
+        transform: translateX(-20px);
+        animation: slideInRight 0.4s ease forwards;
+    }
+
+    @keyframes slideInRight {
+        to {
+            opacity: 1;
+            transform: translateX(0);
+        }
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .hero-title {
+            font-size: 2rem;
+        }
+
+        .hero-slogan {
+            font-size: 1.1rem;
+        }
+
+        .hero-subtitle {
+            font-size: 1rem;
+        }
+
+        .services-grid {
+            grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+        }
+
+        .service-image-container {
+            width: 160px;
+            height: 160px;
+        }
+
+        .text-services-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .whatsapp-float {
+            width: 50px;
+            height: 50px;
+            font-size: 25px;
+            bottom: 20px;
+            right: 20px;
+        }
+    }
+</style>
+
+</BasicLayout>

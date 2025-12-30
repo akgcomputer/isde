@@ -1,0 +1,1511 @@
+---
+// src/pages/ssl-sertifikasi.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "SSL Sertifikası - En Ucuz SSL Sertifikaları";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="ssl-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="security-text">SSL</span>
+            <span class="certificate-text">Sertifikası</span>
+          </h1>
+          <p class="hero-subtitle">En Ucuz SSL Sertifikaları</p>
+          <p class="hero-description">
+            SSL sertifikası ile Google arama sonuçlarında yükselin, web sitenizin güvenliğini garanti altına alın!
+          </p>
+          <div class="hero-benefits">
+            <div class="benefit">
+              <span class="benefit-icon">📈</span>
+              <span>Google'da Yükselin</span>
+            </div>
+            <div class="benefit">
+              <span class="benefit-icon">🚀</span>
+              <span>Trafiğinizi Arttırın</span>
+            </div>
+            <div class="benefit">
+              <span class="benefit-icon">💳</span>
+              <span>Online Ödeme Alın</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href="#ssl-types" class="btn primary-btn">
+              <span class="btn-icon">🔒</span>
+              SSL Türlerini İncele
+            </a>
+            <a href="#ssl-comparison" class="btn secondary-btn">
+              <span class="btn-icon">⚡</span>
+              Hızlı Kurulum SSL
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="ssl-animation">
+            <div class="lock-icon">🔒</div>
+            <div class="shield-icon">🛡️</div>
+            <div class="cert-icon">📜</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Filter Tabs -->
+    <section class="filter-section">
+      <div class="container">
+        <div class="filter-tabs">
+          <button class="filter-btn active" data-filter="all">Tümü</button>
+          <button class="filter-btn" data-filter="dv">Hızlı Kurulum (DV SSL)</button>
+          <button class="filter-btn" data-filter="ov">Kurumsal (OV SSL)</button>
+          <button class="filter-btn" data-filter="ev">Gelişmiş Kurumsal (EV SSL)</button>
+          <button class="filter-btn" data-filter="wildcard">Subdomain (Wildcard SSL)</button>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Certificates -->
+    <section id="ssl-types" class="ssl-certificates-section">
+      <div class="container">
+        <!-- DV SSL -->
+        <div class="ssl-type-section" data-type="dv">
+          <div class="type-header">
+            <h2 class="type-title">Hızlı Kurulum (DV) SSL Sertifikaları</h2>
+            <p class="type-description">
+              Yalnızca domain doğrulaması yapılarak anında kurulum yapılabilen ve SEO çalışmaları için tercih edilen SSL sertifikasıdır.
+            </p>
+          </div>
+
+          <div class="ssl-cards">
+            <!-- PositiveSSL -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">🔐</div>
+                <div class="brand-info">
+                  <h3>PositiveSSL</h3>
+                  <span class="ssl-type">DV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">Aynı Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">10.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("PositiveSSL DV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- QuickSSL Premium -->
+            <div class="ssl-card featured">
+              <div class="ssl-brand">
+                <div class="brand-icon">⭐</div>
+                <div class="brand-info">
+                  <h3>QuickSSL Premium</h3>
+                  <span class="ssl-type">DV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">Aynı Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">500.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("QuickSSL Premium DV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- OV SSL -->
+        <div class="ssl-type-section" data-type="ov">
+          <div class="type-header">
+            <h2 class="type-title">Kurumsal (OV) SSL Sertifikaları</h2>
+            <p class="type-description">
+              İşletmeler ve e-ticaret siteleri tarafından tercih edilen, belge gerektiren ve kurumsal doğrulama yapılan SSL sertifikasıdır.
+            </p>
+          </div>
+
+          <div class="ssl-cards">
+            <!-- SectigoSSL OV -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">🏢</div>
+                <div class="brand-info">
+                  <h3>SectigoSSL (OV)</h3>
+                  <span class="ssl-type">OV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-3 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">50.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("SectigoSSL OV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- InstantSSL Pro -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">⚡</div>
+                <div class="brand-info">
+                  <h3>InstantSSL Pro</h3>
+                  <span class="ssl-type">OV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-3 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">100.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("InstantSSL Pro OV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- COMODO Instant Premium -->
+            <div class="ssl-card featured">
+              <div class="ssl-brand">
+                <div class="brand-icon">👑</div>
+                <div class="brand-info">
+                  <h3>COMODO Instant Premium</h3>
+                  <span class="ssl-type">OV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-3 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">250.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("COMODO Instant Premium OV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- EV SSL -->
+        <div class="ssl-type-section" data-type="ev">
+          <div class="type-header">
+            <h2 class="type-title">Gelişmiş Kurumsal (EV) SSL Sertifikaları</h2>
+            <p class="type-description">
+              İşletmeler ve e-ticaret siteleri tarafından tercih edilen, belge gerektiren ve kurumsal doğrulama yapılan SSL sertifikasıdır.
+            </p>
+          </div>
+
+          <div class="ssl-cards">
+            <!-- SectigoSSL EV -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">🏛️</div>
+                <div class="brand-info">
+                  <h3>SectigoSSL</h3>
+                  <span class="ssl-type">EV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-7 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">1.750.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("SectigoSSL EV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- GeoTrust True BusinessID -->
+            <div class="ssl-card featured">
+              <div class="ssl-brand">
+                <div class="brand-icon">💼</div>
+                <div class="brand-info">
+                  <h3>GeoTrust True BusinessID</h3>
+                  <span class="ssl-type">EV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-3 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">1.500.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("GeoTrust True BusinessID EV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- PositiveSSL EV -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">🔒</div>
+                <div class="brand-info">
+                  <h3>PositiveSSL (EV)</h3>
+                  <span class="ssl-type">EV SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-5 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">1.000.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Destek Yok</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("PositiveSSL EV Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Wildcard SSL -->
+        <div class="ssl-type-section" data-type="wildcard">
+          <div class="type-header">
+            <h2 class="type-title">Subdomain (Wildcard) SSL Sertifikaları</h2>
+            <p class="type-description">
+              Wildcard SSL, tüm alt alan adlarını da (subdomain) kapsayan ve tam kapsamlı bir koruma sağlayan sertifika çözümüdür.
+            </p>
+          </div>
+
+          <div class="ssl-cards">
+            <!-- PositiveSSL Wildcard -->
+            <div class="ssl-card">
+              <div class="ssl-brand">
+                <div class="brand-icon">🔑</div>
+                <div class="brand-info">
+                  <h3>PositiveSSL Wildcard</h3>
+                  <span class="ssl-type">Wildcard SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">Aynı Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">50.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Tüm Alt Alanlar</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("PositiveSSL Wildcard Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+
+            <!-- Positive UCC Wildcard -->
+            <div class="ssl-card featured">
+              <div class="ssl-brand">
+                <div class="brand-icon">🔄</div>
+                <div class="brand-info">
+                  <h3>Positive UCC Wildcard</h3>
+                  <span class="ssl-type">Wildcard SSL</span>
+                </div>
+              </div>
+              <div class="ssl-features">
+                <div class="feature">
+                  <span class="feature-label">Kurulum:</span>
+                  <span class="feature-value">1-3 Gün</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Garanti:</span>
+                  <span class="feature-value">250.000$</span>
+                </div>
+                <div class="feature">
+                  <span class="feature-label">Subdomain:</span>
+                  <span class="feature-value">Tüm Alt Alanlar</span>
+                </div>
+              </div>
+              <div class="ssl-footer">
+                <a href={getWhatsAppLink("Positive UCC Wildcard Sertifikası")} class="btn whatsapp-btn full-width">
+                  <span class="btn-icon">💬</span>
+                  Fiyatlar ve Detay
+                </a>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Benefits -->
+    <section class="benefits-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Neden SSL Sertifikası Almalıyım?</h2>
+          <p class="section-subtitle">
+            SSL sertifikası, sitenizin arama motorlarındaki sıralamasına pozitif etki eder. 
+            Site ziyaretçileri ve sunucu arasındaki veri akışını şifreleyerek güvenli iletilmesini sağlar.
+          </p>
+        </div>
+
+        <div class="benefits-grid">
+          <div class="benefit-card">
+            <div class="benefit-icon">📈</div>
+            <h3>Google Sıralamanızı Yükseltir</h3>
+            <p>SSL sertifikalı siteler Google arama sonuçlarında önceliklidir</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">🚀</div>
+            <h3>Site Trafiğini ve Satışları Artırır</h3>
+            <p>Güven vererek ziyaretçi ve müşteri sayınızı artırır</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">📱</div>
+            <h3>SEO Uyumlu, Mobil Site Desteği</h3>
+            <p>SEO dostudur ve mobil sitelerde tam uyumludur</p>
+          </div>
+          <div class="benefit-card">
+            <div class="benefit-icon">🛡️</div>
+            <h3>Güven Verir, Veri Koruması Sağlar</h3>
+            <p>Kullanıcı verilerini şifreleyerek güvende tutar</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Types -->
+    <section class="ssl-types-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">SSL Sertifikası Türleri</h2>
+          <p class="section-subtitle">Çeşitlerine ve sunduğu özelliklere göre SSL sertifikası türleri</p>
+        </div>
+
+        <div class="types-grid">
+          <div class="type-card">
+            <div class="type-icon">⚡</div>
+            <h3>DV SSL</h3>
+            <p>Hızlı Kurulum SSL, kişisel web siteleri ve bloglar için ideal, en çok tercih edilen SSL türüdür.</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon">🏢</div>
+            <h3>OV SSL</h3>
+            <p>Kurumsal SSL, işletmeler ve e-ticaret siteleri için belge gerektiren SSL türüdür.</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon">👑</div>
+            <h3>EV SSL</h3>
+            <p>Gelişmiş Kurumsal SSL, yüksek güvenlik ve prestij sağlayan en kapsamlı SSL türüdür.</p>
+          </div>
+          <div class="type-card">
+            <div class="type-icon">🔑</div>
+            <h3>Wildcard SSL</h3>
+            <p>Alan adı ile birlikte tüm alt alan adlarını kapsayan tam koruma sağlayan SSL türüdür.</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Features -->
+    <section class="features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">SSL Sertifikası Neler Sağlar?</h2>
+          <p class="section-subtitle">SSL Sertifikanızın sitenize değer ve prestij katacak avantajları</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">🔍</div>
+            <div class="feature-content">
+              <h3>Google'da Yükselin</h3>
+              <p>Google, SSL sahibi olarak HTTPS url yapısı kullanan siteleri arama sonuçlarında önceliklendirir ve daha üst sıralarda listeler.</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔒</div>
+            <div class="feature-content">
+              <h3>Güçlü Şifreleme</h3>
+              <p>Web sitenizin veri trafiği ve kullanıcı bilgileri, güçlü şifreleme ile güven altına alınır.</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">⚡</div>
+            <div class="feature-content">
+              <h3>Hızlı Kurulum</h3>
+              <p>SSL sertifikaları, e-ticaret siteleri için kullanacağınız sanal pos ve ödeme çözümleri ile uyumludur.</p>
+            </div>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💼</div>
+            <div class="feature-content">
+              <h3>Tüm Bankalarla Uyumlu</h3>
+              <p>Yüksek garanti bedelleri ile SSL kaynaklı oluşabilecek zararlarınız tazmin edilir.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- SSL Comparison -->
+    <section id="ssl-comparison" class="comparison-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">SSL Sertifikaları Karşılaştırması</h2>
+          <p class="section-subtitle">İhtiyacınıza uygun SSL sertifikasını seçmeniz için karşılaştırmalı özellikler</p>
+        </div>
+
+        <div class="comparison-table">
+          <div class="table-header">
+            <div class="table-cell"></div>
+            <div class="table-cell">Hızlı Kurulum SSL (DV)</div>
+            <div class="table-cell">Şirketler için SSL (OV)</div>
+            <div class="table-cell">Kurumsal SSL (EV)</div>
+            <div class="table-cell">Wildcard SSL</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">Kurulum Süresi</div>
+            <div class="table-cell">Aynı Gün</div>
+            <div class="table-cell">1-3 Gün</div>
+            <div class="table-cell">1-7 Gün</div>
+            <div class="table-cell">Aynı Gün</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">Belge Gerekliliği</div>
+            <div class="table-cell">Yok</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Yok</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">Subdomain Desteği</div>
+            <div class="table-cell">Yok</div>
+            <div class="table-cell">Yok</div>
+            <div class="table-cell">Yok</div>
+            <div class="table-cell">Var</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">Mobil Uyumluluk</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">SEO Desteği</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+          </div>
+          
+          <div class="table-row">
+            <div class="table-cell">Kurumsal Doğrulama</div>
+            <div class="table-cell">Yok</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Var</div>
+            <div class="table-cell">Yok</div>
+          </div>
+        </div>
+
+        <div class="comparison-cta">
+          <a href={getWhatsAppLink("SSL Sertifikası Karşılaştırma")} class="btn whatsapp-btn large">
+            <span class="btn-icon">💬</span>
+            Hangi SSL Sertifikası Bana Uygun?
+          </a>
+        </div>
+      </div>
+    </section>
+
+    <!-- FAQ Section -->
+    <section class="faq-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Sıkça Sorulan Sorular</h2>
+          <p class="section-subtitle">SSL Sertifikası ile ilgili en çok merak edilen sorular</p>
+        </div>
+
+        <div class="faq-list">
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>SSL Sertifikası Nedir, Ne İşe Yarar?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>SSL (Secure Socket Layer) "Güvenli Giriş Katmanı" olarak adlandırılır. Web sitesine bağlanırken paylaşılan tüm veriler şifrelenir ve güvenli iletilir. Kullanıcı şifreleri ve kart bilgileri gibi hassas verileri korur.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>SSL Sertifikası Türleri Nelerdir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>4 ana SSL türü vardır: DV SSL (hızlı kurulum), OV SSL (kurumsal), EV SSL (gelişmiş kurumsal) ve Wildcard SSL (alt alan adları için). Her birinin farklı doğrulama süreçleri ve garantileri bulunur.</p>
+            </div>
+          </div>
+
+          <div class="faq-item">
+            <div class="faq-question">
+              <h3>Web Siteleri için SSL Sertifikası Neden Önemlidir?</h3>
+              <span class="faq-toggle">+</span>
+            </div>
+            <div class="faq-answer">
+              <p>SSL sertifikası hem Google sıralamasını yükseltir hem de ziyaretçilere güven verir. Güvensiz olarak işaretlenen siteler ziyaretçi kaybeder. Ayrıca e-ticaret için zorunludur.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">SSL Sertifikası ile Tanışın</h2>
+          <p class="cta-description">
+            Web sitenizin güvenliğini sağlayın, Google'da yükselin ve ziyaretçilerinize güven verin. 
+            Uzman ekibimiz size en uygun SSL sertifikasını önermek için hazır.
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("SSL Sertifikası Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">💬</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="/iletisim" class="btn secondary-btn large">
+              <span class="btn-icon">📞</span>
+              Ücretsiz Danışmanlık
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --gold-yellow: #f59e0b;
+      --dark-gold: #d97706;
+      --light-gold: #fbbf24;
+      --black-bg: #0f172a;
+      --dark-bg: #1e293b;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #e5e7eb;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --gold-gradient: linear-gradient(45deg, #f59e0b, #fbbf24, #fcd34d);
+    }
+
+    .ssl-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--black-bg) 0%, var(--dark-bg) 100%);
+      color: white;
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .security-text {
+      color: var(--gold-yellow);
+      display: block;
+    }
+
+    .certificate-text {
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--light-gold);
+      margin-bottom: 1.5rem;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-benefits {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .benefit {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .benefit-icon {
+      color: var(--gold-yellow);
+      font-size: 1.2rem;
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--gold-gradient);
+      color: var(--black-bg);
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      filter: brightness(1.1);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--gold-yellow);
+    }
+
+    .secondary-btn:hover {
+      background: var(--gold-yellow);
+      color: var(--black-bg);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .ssl-animation {
+      display: flex;
+      align-items: center;
+      gap: 2rem;
+    }
+
+    .lock-icon, .shield-icon, .cert-icon {
+      font-size: 3.5rem;
+      animation: float 3s ease-in-out infinite;
+    }
+
+    .lock-icon { animation-delay: 0s; }
+    .shield-icon { animation-delay: 0.5s; }
+    .cert-icon { animation-delay: 1s; }
+
+    @keyframes float {
+      0%, 100% { transform: translateY(0); }
+      50% { transform: translateY(-15px); }
+    }
+
+    /* Filter Section */
+    .filter-section {
+      padding: 2rem 1rem;
+      background: var(--light-gold);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .filter-tabs {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 1rem;
+      justify-content: center;
+    }
+
+    .filter-btn {
+      padding: 0.8rem 1.5rem;
+      background: rgba(255, 255, 255, 0.2);
+      border: 2px solid transparent;
+      border-radius: 25px;
+      color: var(--black-bg);
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.3s ease;
+    }
+
+    .filter-btn.active {
+      background: white;
+      border-color: var(--gold-yellow);
+      box-shadow: var(--shadow);
+    }
+
+    .filter-btn:hover:not(.active) {
+      background: rgba(255, 255, 255, 0.3);
+      border-color: white;
+    }
+
+    /* SSL Certificates */
+    .ssl-certificates-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .ssl-type-section {
+      margin-bottom: 4rem;
+      opacity: 0.5;
+      transform: translateY(20px);
+      transition: all 0.5s ease;
+    }
+
+    .ssl-type-section.active {
+      opacity: 1;
+      transform: translateY(0);
+    }
+
+    .type-header {
+      text-align: center;
+      margin-bottom: 3rem;
+      padding-bottom: 2rem;
+      border-bottom: 2px solid var(--light-gold);
+    }
+
+    .type-title {
+      font-size: 2rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .type-description {
+      color: var(--text-light);
+      max-width: 800px;
+      margin: 0 auto;
+      line-height: 1.6;
+    }
+
+    .ssl-cards {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .ssl-card {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .ssl-card:hover {
+      transform: translateY(-10px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .ssl-card.featured {
+      border: 3px solid var(--gold-yellow);
+      transform: scale(1.05);
+    }
+
+    .ssl-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+    }
+
+    .ssl-brand {
+      background: linear-gradient(45deg, var(--dark-bg), #334155);
+      color: white;
+      padding: 1.5rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+    }
+
+    .brand-icon {
+      font-size: 2rem;
+      color: var(--gold-yellow);
+    }
+
+    .brand-info h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.3rem;
+    }
+
+    .ssl-type {
+      font-size: 0.8rem;
+      background: rgba(245, 158, 11, 0.2);
+      color: var(--light-gold);
+      padding: 0.2rem 0.8rem;
+      border-radius: 15px;
+    }
+
+    .ssl-features {
+      padding: 1.5rem;
+    }
+
+    .feature {
+      display: flex;
+      justify-content: space-between;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .feature:last-child {
+      border-bottom: none;
+    }
+
+    .feature-label {
+      color: var(--text-light);
+      font-weight: 500;
+    }
+
+    .feature-value {
+      color: var(--text-color);
+      font-weight: 600;
+    }
+
+    .ssl-footer {
+      padding: 0 1.5rem 1.5rem;
+    }
+
+    /* Benefits Section */
+    .benefits-section {
+      padding: 6rem 1rem;
+      background: var(--black-bg);
+      color: white;
+    }
+
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: var(--gold-gradient);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    .benefits-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .benefit-card {
+      background: rgba(255, 255, 255, 0.1);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .benefit-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold-yellow);
+      background: rgba(245, 158, 11, 0.1);
+    }
+
+    .benefit-card .benefit-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .benefit-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .benefit-card p {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* SSL Types */
+    .ssl-types-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .types-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .type-card {
+      background: white;
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      box-shadow: var(--shadow);
+      transition: all 0.3s ease;
+    }
+
+    .type-card:hover {
+      transform: translateY(-5px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .type-icon {
+      font-size: 3rem;
+      color: var(--gold-yellow);
+      margin-bottom: 1rem;
+    }
+
+    .type-card h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: var(--text-color);
+    }
+
+    .type-card p {
+      color: var(--text-light);
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Features Section */
+    .features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--black-bg) 0%, var(--dark-bg) 100%);
+      color: white;
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      display: flex;
+      gap: 1.5rem;
+      align-items: flex-start;
+      background: rgba(255, 255, 255, 0.1);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--gold-yellow);
+    }
+
+    .feature-card .feature-icon {
+      font-size: 2rem;
+      color: var(--gold-yellow);
+      flex-shrink: 0;
+    }
+
+    .feature-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .feature-content p {
+      color: #cbd5e1;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Comparison Section */
+    .comparison-section {
+      padding: 6rem 1rem;
+      background: #f8fafc;
+    }
+
+    .comparison-table {
+      background: white;
+      border-radius: 15px;
+      overflow: hidden;
+      box-shadow: var(--shadow);
+      margin-bottom: 3rem;
+    }
+
+    .table-header {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      background: var(--gold-gradient);
+      color: var(--black-bg);
+      font-weight: 700;
+    }
+
+    .table-row {
+      display: grid;
+      grid-template-columns: repeat(5, 1fr);
+      border-bottom: 1px solid var(--border-color);
+    }
+
+    .table-row:last-child {
+      border-bottom: none;
+    }
+
+    .table-cell {
+      padding: 1.5rem;
+      text-align: center;
+      border-right: 1px solid var(--border-color);
+    }
+
+    .table-cell:last-child {
+      border-right: none;
+    }
+
+    .table-header .table-cell {
+      padding: 1rem;
+    }
+
+    .table-row .table-cell:first-child {
+      font-weight: 600;
+      background: #f9fafb;
+    }
+
+    .comparison-cta {
+      text-align: center;
+    }
+
+    /* FAQ Section */
+    .faq-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, var(--black-bg) 0%, var(--dark-bg) 100%);
+      color: white;
+    }
+
+    .faq-list {
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .faq-item {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      margin-bottom: 1rem;
+      overflow: hidden;
+      border: 1px solid rgba(245, 158, 11, 0.2);
+    }
+
+    .faq-question {
+      padding: 1.5rem 2rem;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      cursor: pointer;
+    }
+
+    .faq-question h3 {
+      font-size: 1.2rem;
+      margin: 0;
+      color: white;
+    }
+
+    .faq-toggle {
+      font-size: 1.5rem;
+      font-weight: bold;
+      color: var(--gold-yellow);
+      transition: transform 0.3s ease;
+    }
+
+    .faq-answer {
+      padding: 0 2rem 1.5rem;
+      border-top: 1px solid rgba(245, 158, 11, 0.2);
+      display: none;
+      color: #cbd5e1;
+    }
+
+    .faq-item.active .faq-answer {
+      display: block;
+    }
+
+    .faq-item.active .faq-toggle {
+      transform: rotate(45deg);
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: var(--gold-gradient);
+      color: var(--black-bg);
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .filter-tabs {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .filter-btn {
+        width: 100%;
+        max-width: 300px;
+      }
+
+      .ssl-cards {
+        grid-template-columns: 1fr;
+      }
+
+      .ssl-card.featured {
+        transform: none;
+      }
+
+      .ssl-card.featured:hover {
+        transform: translateY(-5px);
+      }
+
+      .table-header,
+      .table-row {
+        grid-template-columns: 1fr;
+      }
+
+      .table-cell {
+        border-right: none;
+        border-bottom: 1px solid var(--border-color);
+      }
+
+      .table-cell:last-child {
+        border-bottom: none;
+      }
+
+      .table-row .table-cell:first-child {
+        background: var(--gold-yellow);
+        color: white;
+        font-weight: 700;
+      }
+
+      .benefits-grid,
+      .types-grid,
+      .features-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-benefits {
+        flex-direction: column;
+      }
+
+      .feature-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Filter functionality
+      const filterBtns = document.querySelectorAll('.filter-btn');
+      const sslSections = document.querySelectorAll('.ssl-type-section');
+      
+      filterBtns.forEach(btn => {
+        btn.addEventListener('click', () => {
+          // Remove active class from all buttons
+          filterBtns.forEach(b => b.classList.remove('active'));
+          
+          // Add active class to clicked button
+          btn.classList.add('active');
+          
+          const filter = btn.getAttribute('data-filter');
+          
+          // Show/hide sections based on filter
+          sslSections.forEach(section => {
+            if (filter === 'all') {
+              section.classList.add('active');
+            } else {
+              if (section.getAttribute('data-type') === filter) {
+                section.classList.add('active');
+              } else {
+                section.classList.remove('active');
+              }
+            }
+          });
+        });
+      });
+
+      // FAQ Toggle Functionality
+      const faqItems = document.querySelectorAll('.faq-item');
+      
+      faqItems.forEach(item => {
+        const question = item.querySelector('.faq-question');
+        
+        question.addEventListener('click', () => {
+          // Close other open items
+          faqItems.forEach(otherItem => {
+            if (otherItem !== item && otherItem.classList.contains('active')) {
+              otherItem.classList.remove('active');
+            }
+          });
+          
+          // Toggle current item
+          item.classList.toggle('active');
+        });
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

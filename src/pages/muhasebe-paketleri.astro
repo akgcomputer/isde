@@ -1,0 +1,708 @@
+---
+// /src/pages/muhasebe-paketleri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import muhasebePaketleriData from './data/muhasebe-fiyatlar.json';
+import configData from './data/config.json';
+
+const whatsappNumber = configData.whatsapp;
+
+const heroTitle = "Muhasebe Paketleri";
+const heroSlogan = "İşletmenize Özel Muhasebe Çözümleri";
+const heroDescription = "Stok yönetiminden ERP sistemlerine kadar işletmenizin tüm muhasebe ihtiyaçları için profesyonel paketler. Ömür boyu lisans avantajı ile kalıcı çözümler sunuyoruz.";
+
+const muhasebePaketleri = muhasebePaketleriData.muhasebePaketleri;
+const packageDetails = muhasebePaketleriData.packageDetails;
+---
+
+<BasicLayout title="Muhasebe Paketleri | İş de YETER - Profesyonel Muhasebe Çözümleri">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content" style="margin-top: 40px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 class="hero-title">
+                    <span style="color: #1F2937;">{heroTitle}</span>
+                </h1>
+                <p style="color: #f3003d; font-size: 1.5rem; font-weight: 600; line-height: 1.6; margin-bottom: 20px;">
+                    {heroSlogan}
+                </p>
+                <p class="hero-subtitle">
+                    {heroDescription}
+                </p>
+                <div class="info-box">
+                    <p class="info-text">
+                        💡 <strong>Önemli Not:</strong> Programı satın aldığınızda ilk yıl server/hosting/bakım/yenileme gibi ödemeleri yapmazsınız, 
+                        2. yıldan itibaren her yıl sadece yenileme ücreti talep edilir.
+                    </p>
+                </div>
+                <div class="btn-group">
+                    <a href="#paketler" class="btn btn-primary">
+                        <i class="fas fa-eye"></i>
+                        Paketleri İncele
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20Muhasebe%20Paketleri%20hakkında%20danışmanlık%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        Ücretsiz Danışmanlık
+                    </a>
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Muhasebe Paketleri Section -->
+<section class="paketler-section" id="paketler">
+    <div class="container">
+        <div class="section-title">
+            <span>MUHASEBE PAKETLERİ</span>
+            <h2>İşletmenize Uygun Paketi Seçin</h2>
+            <p>Tek şubeden kurumsal çözümlere kadar tüm ihtiyaçlarınız için</p>
+        </div>
+        
+        <div class="pricing-grid">
+            {muhasebePaketleri.map((paket) => (
+                <div class={`pricing-card ${paket.popular ? 'featured' : ''}`} key={paket.id}>
+                    {paket.popular && (
+                        <div class="popular-badge">
+                            <i class="fas fa-fire"></i> POPÜLER
+                        </div>
+                    )}
+                    
+                    <div class="pricing-header">
+                        <h3 class="package-name" set:html={paket.name}></h3>
+                        <div class="price-container">
+                            <span class="price">{paket.price}</span>
+                            <span class="currency">₺</span>
+                            <span class="period">/{paket.period}</span>
+                        </div>
+                        {paket.note && <p class="package-note">{paket.note}</p>}
+                    </div>
+                    
+                    <ul class="package-features">
+                        {paket.features.map((feature, index) => (
+                            <li key={index}>{feature}</li>
+                        ))}
+                    </ul>
+                    
+                    <div class="pricing-footer">
+                        {paket.whatsappOnly ? (
+                            <a 
+                                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Merhaba, ${paket.name} hakkında bilgi almak istiyorum`)}`}
+                                class="btn btn-whatsapp w-full"
+                                target="_blank"
+                            >
+                                <i class="fab fa-whatsapp"></i>
+                                WhatsApp ile İletişim
+                            </a>
+                        ) : (
+                            <a 
+                                href={`https://wa.me/${whatsappNumber}?text=${encodeURIComponent(`Merhaba, ${paket.name} paketini kullanmaya başlamak istiyorum`)}`}
+                                class="btn btn-primary w-full"
+                                target="_blank"
+                            >
+                                Şimdi Kullanmaya Başla
+                                <span class="btn-subtext">WhatsApp ile Görüş</span>
+                            </a>
+                        )}
+                    </div>
+                </div>
+            ))}
+        </div>
+    </div>
+</section>
+
+<!-- Package Details Section -->
+<section class="details-section">
+    <div class="container">
+        <div class="section-title">
+            <span>PAKET DETAYLARI</span>
+            <h2>Paketlerin Detaylı Özellikleri</h2>
+            <p>Her paketin sunduğu kapsamlı özellikleri keşfedin</p>
+        </div>
+        
+        <div class="details-grid">
+            <!-- Ücretsiz Paket -->
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h3 class="detail-title">{packageDetails.free.title}</h3>
+                    <p class="detail-description">{packageDetails.free.description}</p>
+                </div>
+                <ul class="detail-list">
+                    {packageDetails.free.modules.map((module, index) => (
+                        <li key={index}>{module}</li>
+                    ))}
+                </ul>
+            </div>
+            
+            <!-- Mağazacılık Paketi -->
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h3 class="detail-title">{packageDetails.magaza.title}</h3>
+                    <p class="detail-description">{packageDetails.magaza.description}</p>
+                </div>
+                <ul class="detail-list">
+                    {packageDetails.magaza.modules.map((module, index) => (
+                        <li key={index}>{module}</li>
+                    ))}
+                </ul>
+            </div>
+            
+            <!-- ERP Proje Yönetimi -->
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h3 class="detail-title">{packageDetails.erp.title}</h3>
+                    <p class="detail-description">{packageDetails.erp.description}</p>
+                </div>
+                <ul class="detail-list">
+                    {packageDetails.erp.modules.map((module, index) => (
+                        <li key={index}>{module}</li>
+                    ))}
+                </ul>
+            </div>
+            
+            <!-- ERP İş Zekası -->
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h3 class="detail-title">{packageDetails.bi.title}</h3>
+                    <p class="detail-description">{packageDetails.bi.description}</p>
+                </div>
+                <ul class="detail-list">
+                    {packageDetails.bi.modules.map((module, index) => (
+                        <li key={index}>{module}</li>
+                    ))}
+                </ul>
+            </div>
+            
+            <!-- Teknik Servis Yönetimi -->
+            <div class="detail-card">
+                <div class="detail-header">
+                    <h3 class="detail-title">{packageDetails.service.title}</h3>
+                    <p class="detail-description">{packageDetails.service.description}</p>
+                </div>
+                <ul class="detail-list">
+                    {packageDetails.service.modules.map((module, index) => (
+                        <li key={index}>{module}</li>
+                    ))}
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Paketlerimizle İlgili Sorularınız mı Var?</h2>
+            <p>Size en uygun paketi seçmenize yardımcı olalım. Teklif almak veya demo talep etmek için hemen iletişime geçin.</p>
+            <div class="cta-buttons">
+                <a 
+                    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20Muhasebe%20paketleri%20hakkında%20bilgi%20almak%20istiyorum`}
+                    class="btn btn-whatsapp btn-lg"
+                    target="_blank"
+                >
+                    <i class="fab fa-whatsapp"></i>
+                    WhatsApp'tan Yazın
+                </a>
+                <a href="/iletisim" class="btn btn-outline btn-lg">
+                    İletişim Sayfası
+                </a>
+            </div>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Hero Section - Kırmızı Tema */
+    .hero {
+        background: linear-gradient(135deg, #fef2f2 0%, #fecaca 100%);
+        padding: 80px 0;
+        position: relative;
+        overflow: hidden;
+    }
+    
+    .hero::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23f87171' fill-opacity='0.1'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+    }
+    
+    .hero-content {
+        position: relative;
+        z-index: 1;
+    }
+    
+    .info-box {
+        background: white;
+        border-radius: 12px;
+        padding: 20px;
+        box-shadow: 0 4px 12px rgba(239, 68, 68, 0.1);
+        margin: 30px auto;
+        max-width: 700px;
+        border-left: 4px solid #f3003d;
+    }
+    
+    .info-text {
+        color: #4B5563;
+        font-size: 1.1rem;
+        line-height: 1.6;
+        margin: 0;
+    }
+    
+    /* Section Title */
+    .section-title {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+    
+    .section-title span {
+        display: block;
+        color: #f3003d;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-bottom: 10px;
+        font-weight: 600;
+    }
+    
+    .section-title h2 {
+        color: #1F2937;
+        font-size: 2.5rem;
+        margin-bottom: 15px;
+        font-weight: 700;
+    }
+    
+    .section-title p {
+        color: #6B7280;
+        font-size: 1.1rem;
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    /* Pricing Cards - Kırmızı Tema */
+    .pricing-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+        gap: 30px;
+        margin-top: 30px;
+    }
+    
+    .pricing-card {
+        background: white;
+        border-radius: 15px;
+        overflow: hidden;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.08);
+        transition: all 0.3s ease;
+        position: relative;
+        display: flex;
+        flex-direction: column;
+        border: 2px solid transparent;
+    }
+    
+    .pricing-card:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 20px 40px rgba(243, 0, 61, 0.1);
+        border-color: #f3003d;
+    }
+    
+    .pricing-card.featured {
+        border: 3px solid #f3003d;
+        transform: scale(1.02);
+    }
+    
+    .popular-badge {
+        position: absolute;
+        top: 15px;
+        right: 15px;
+        background: linear-gradient(135deg, #f3003d, #dc2626);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.85rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+        z-index: 1;
+    }
+    
+    .pricing-header {
+        padding: 30px 30px 20px;
+        text-align: center;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .package-name {
+        font-size: 1.4rem;
+        color: #1F2937;
+        font-weight: 700;
+        margin-bottom: 15px;
+        line-height: 1.4;
+        min-height: 60px;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+    }
+    
+    .price-container {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 5px;
+        margin-bottom: 5px;
+    }
+    
+    .price {
+        font-size: 3rem;
+        font-weight: 800;
+        color: #f3003d;
+        line-height: 1;
+    }
+    
+    .currency {
+        font-size: 1.5rem;
+        font-weight: 700;
+        color: #f3003d;
+    }
+    
+    .period {
+        font-size: 1rem;
+        color: #6B7280;
+    }
+    
+    .package-note {
+        color: #9CA3AF;
+        font-size: 0.9rem;
+        font-style: italic;
+        margin-top: 10px;
+    }
+    
+    .package-features {
+        list-style: none;
+        padding: 20px 30px;
+        flex-grow: 1;
+        margin: 0;
+    }
+    
+    .package-features li {
+        padding: 10px 0;
+        color: #4B5563;
+        position: relative;
+        padding-left: 25px;
+        line-height: 1.5;
+        border-bottom: 1px solid #f3f4f6;
+    }
+    
+    .package-features li:last-child {
+        border-bottom: none;
+    }
+    
+    .package-features li::before {
+        content: "✓";
+        position: absolute;
+        left: 0;
+        color: #10B981;
+        font-weight: bold;
+    }
+    
+    .pricing-footer {
+        padding: 0 30px 30px;
+    }
+    
+    /* Butonlar */
+    .btn {
+        display: inline-block;
+        padding: 12px 24px;
+        border-radius: 8px;
+        font-weight: 600;
+        text-decoration: none;
+        text-align: center;
+        transition: all 0.3s ease;
+        border: none;
+        cursor: pointer;
+        font-size: 1rem;
+    }
+    
+    .btn-primary {
+        background: #f3003d;
+        color: white;
+        border: 2px solid #f3003d;
+    }
+    
+    .btn-primary:hover {
+        background: #dc2626;
+        border-color: #dc2626;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(243, 0, 61, 0.2);
+    }
+    
+    .btn-whatsapp {
+        background: #25D366;
+        color: white;
+        border: 2px solid #25D366;
+    }
+    
+    .btn-whatsapp:hover {
+        background: #128C7E;
+        border-color: #128C7E;
+        color: white;
+        transform: translateY(-2px);
+        box-shadow: 0 5px 15px rgba(37, 211, 102, 0.2);
+    }
+    
+    .btn-outline {
+        background: transparent;
+        color: #f3003d;
+        border: 2px solid #f3003d;
+    }
+    
+    .btn-outline:hover {
+        background: #f3003d;
+        color: white;
+        transform: translateY(-2px);
+    }
+    
+    .btn-group {
+        display: flex;
+        gap: 15px;
+        justify-content: center;
+        margin-top: 30px;
+        flex-wrap: wrap;
+    }
+    
+    .w-full {
+        width: 100%;
+    }
+    
+    .btn-lg {
+        padding: 15px 30px;
+        font-size: 1.1rem;
+    }
+    
+    .btn-subtext {
+        display: block;
+        font-size: 0.85rem;
+        opacity: 0.9;
+        margin-top: 5px;
+        font-weight: normal;
+    }
+    
+    /* Package Details */
+    .details-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .details-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fill, minmax(350px, 1fr));
+        gap: 30px;
+    }
+    
+    .detail-card {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        transition: transform 0.3s ease;
+        border-top: 4px solid #f3003d;
+    }
+    
+    .detail-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 10px 25px rgba(243, 0, 61, 0.1);
+    }
+    
+    .detail-header {
+        margin-bottom: 20px;
+        padding-bottom: 15px;
+        border-bottom: 2px solid #fecaca;
+    }
+    
+    .detail-title {
+        font-size: 1.5rem;
+        color: #f3003d;
+        margin-bottom: 10px;
+        font-weight: 700;
+    }
+    
+    .detail-description {
+        color: #6B7280;
+        line-height: 1.5;
+        font-size: 1rem;
+    }
+    
+    .detail-list {
+        list-style: none;
+        padding: 0;
+        margin: 0;
+    }
+    
+    .detail-list li {
+        padding: 12px 0;
+        color: #4B5563;
+        border-bottom: 1px solid #f3f4f6;
+        line-height: 1.5;
+        font-size: 0.95rem;
+    }
+    
+    .detail-list li:last-child {
+        border-bottom: none;
+    }
+    
+    /* CTA Section */
+    .cta-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #1F2937, #374151);
+        color: white;
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        color: white;
+        font-size: 2.5rem;
+        margin-bottom: 20px;
+        font-weight: 700;
+    }
+    
+    .cta-content p {
+        color: #D1D5DB;
+        font-size: 1.2rem;
+        max-width: 600px;
+        margin: 0 auto 30px;
+        line-height: 1.6;
+    }
+    
+    .cta-buttons {
+        display: flex;
+        gap: 20px;
+        justify-content: center;
+        flex-wrap: wrap;
+    }
+    
+    /* Paketler Bölümü */
+    .paketler-section {
+        padding: 80px 0;
+        background: white;
+    }
+    
+    /* Responsive */
+    @media (max-width: 1200px) {
+        .pricing-grid {
+            grid-template-columns: repeat(2, 1fr);
+        }
+    }
+    
+    @media (max-width: 768px) {
+        .pricing-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .details-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .cta-buttons {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-lg {
+            width: 100%;
+            max-width: 300px;
+        }
+        
+        .section-title h2 {
+            font-size: 2rem;
+        }
+        
+        .hero {
+            padding: 60px 0;
+        }
+        
+        .paketler-section,
+        .details-section,
+        .cta-section {
+            padding: 60px 0;
+        }
+        
+        .btn-group {
+            flex-direction: column;
+            align-items: center;
+        }
+        
+        .btn-group .btn {
+            width: 100%;
+            max-width: 300px;
+        }
+    }
+    
+    @media (max-width: 480px) {
+        .pricing-header,
+        .package-features,
+        .pricing-footer {
+            padding-left: 20px;
+            padding-right: 20px;
+        }
+        
+        .detail-card {
+            padding: 20px;
+        }
+        
+        .price {
+            font-size: 2.5rem;
+        }
+        
+        .package-name {
+            font-size: 1.2rem;
+            min-height: 50px;
+        }
+    }
+</style>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20Muhasebe%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    document.addEventListener('DOMContentLoaded', function() {
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+</BasicLayout>

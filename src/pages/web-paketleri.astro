@@ -1,0 +1,411 @@
+---
+// /src/pages/web-paketleri.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import webPaketleriData from './data/webpaket-fiyatlar.json';
+import configData from './data/config.json';
+
+const whatsappNumber = configData.whatsapp;
+
+const heroTitle = "Web Paketleri";
+const heroSlogan = "Web siteni kendin yapabilirsin";
+const heroDescription = "Profesyonel web paketlerimiz ile ihtiyacınıza en uygun çözümü seçin. Kurumsal kimliğinizi yansıtan, SEO uyumlu ve modern web siteleri ile dijital dünyada fark yaratın.";
+
+const webPaketleri = webPaketleriData.webPaketleri;
+---
+
+<BasicLayout title="Web Paketleri | İş de YETER - Profesyonel Web Sitesi Paketleri">
+
+<!-- Hero Section -->
+<section class="hero" id="hero">
+    <div class="hero-bg"></div>
+    <div class="container">
+        <div class="hero-content" style="margin-top: 40px;">
+            <div style="max-width: 800px; margin: 0 auto;">
+                <h1 class="hero-title">
+                    <span style="color: #1F2937;">{heroTitle}</span>
+                </h1>
+                <p style="color: #f3003d; font-size: 1.5rem; font-weight: 600; line-height: 1.6; margin-bottom: 20px;">
+                    {heroSlogan}
+                </p>
+                <p class="hero-subtitle">
+                    {heroDescription}
+                </p>
+                <div class="btn-group">
+                    <a href="/isdeyeter" class="btn btn-primary">
+                        <i class="fas fa-rocket"></i>
+                        İş de Yeter Hakkında Bilgi Al
+                    </a>
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20Web%20Paketleri%20hakkında%20danışmanlık%20almak%20istiyorum`} target="_blank" class="btn btn-whatsapp">
+                        <i class="fab fa-whatsapp"></i>
+                        WhatsApp'tan Sor
+                    </a>
+                    
+                </div>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- Web Paketleri Section -->
+<section class="paketler-section" id="paketler">
+    <div class="container">
+        <div class="section-title">
+            <span>WEB PAKETLERİ</span>
+            <h2>İhtiyacınıza Uygun Paketi Seçin</h2>
+            <p>Farklı bütçe ve ihtiyaçlar için hazırlanmış profesyonel çözümler</p>
+        </div>
+        
+        <div class="paketler-grid">
+            {webPaketleri.map((paket) => (
+                <div 
+                    class={`paket-kart ${paket.vurgulanan ? 'vurgulanan' : ''} ${paket.enPopuler ? 'populer' : ''}`}
+                    key={paket.id}
+                >
+                    {paket.enPopuler && (
+                        <div class="populer-badge">
+                            <i class="fas fa-fire"></i> EN POPÜLER
+                        </div>
+                    )}
+                    
+                    <div class="paket-header">
+                        <div class="paket-icon">
+                            <i class={paket.icon}></i>
+                        </div>
+                        <h3>{paket.ad}</h3>
+                        <p class="paket-tip">{paket.tip}</p>
+                    </div>
+                    
+                    <div class="paket-fiyat">
+                        {paket.fiyatlar.indirimli ? (
+                            <>
+                                <div class="eski-fiyat">
+                                    {paket.fiyatlar.aylik.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="indirimli-fiyat">
+                                    {paket.fiyatlar.indirimli.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="fiyat-not">
+                                    Yıllık ödeme ile: {paket.fiyatlar.yillik.toLocaleString('tr-TR')}₺
+                                </div>
+                            </>
+                        ) : (
+                            <>
+                                <div class="normal-fiyat">
+                                    {paket.fiyatlar.aylik.toLocaleString('tr-TR')} ₺/Ay
+                                </div>
+                                <div class="fiyat-not">
+                                    Yıllık ödeme ile: {paket.fiyatlar.yillik.toLocaleString('tr-TR')}₺
+                                </div>
+                            </>
+                        )}
+                    </div>
+                    
+                    <div class="paket-ozellikler">
+                        <ul>
+                            {paket.ozellikler.map((ozellik, index) => (
+                                <li key={index}>
+                                    <i class="fas fa-check-circle"></i>
+                                    {ozellik}
+                                </li>
+                            ))}
+                        </ul>
+                    </div>
+                    
+                    <div class="paket-butonlar">
+                        {paket.oncelikliButon.link === 'whatsapp' ? (
+                            <a 
+                                href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(paket.ad)}%20paketi%20hakkında%20bilgi%20almak%20istiyorum`} 
+                                target="_blank"
+                                class={`btn ${paket.oncelikliButon.stil}`}
+                            >
+                                <i class="fab fa-whatsapp"></i>
+                                {paket.oncelikliButon.text}
+                            </a>
+                        ) : (
+                            <a href={paket.oncelikliButon.link} class={`btn ${paket.oncelikliButon.stil}`}>
+                                {paket.oncelikliButon.text}
+                            </a>
+                        )}
+                        
+                        
+                    </div>
+                </div>
+            ))}
+        </div>
+        
+        <!-- Ekstra Bilgi -->
+        <div class="paket-ekstra">
+            <div class="ekstra-kart">
+                <i class="fas fa-info-circle"></i>
+                <h4>Tüm Paketlerde Ortak Özellikler</h4>
+                <ul>
+                    <li><i class="fas fa-check"></i> Responsive (Mobil Uyumlu) Tasarım</li>
+                    <li><i class="fas fa-check"></i> SEO Uyumlu Kodlama</li>
+                    <li><i class="fas fa-check"></i> SSL Sertifikası</li>
+                    <li><i class="fas fa-check"></i> 7/24 Teknik Destek</li>
+                    <li><i class="fas fa-check"></i> 30 Gün Para İade Garantisi</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+</section>
+
+<!-- CTA Section -->
+<section class="cta-section">
+    <div class="container">
+        <div class="cta-content">
+            <h2>Özel İhtiyaçlarınız mı Var?</h2>
+            <p>Standart paketler dışında özel ihtiyaçlarınız için özelleştirilmiş çözümler sunuyoruz.</p>
+            <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20özel%20bir%20web%20sitesi%20projem%20var,%20danışmanlık%20almak%20istiyorum`} 
+               target="_blank" 
+               class="btn btn-whatsapp btn-large">
+                <i class="fab fa-whatsapp"></i>
+                Özel Proje Teklifi Al
+            </a>
+        </div>
+    </div>
+</section>
+
+<style>
+    /* Paketler Bölümü Stilleri */
+    .paketler-section {
+        padding: 80px 0;
+        background: #f8fafc;
+    }
+    
+    .paketler-grid {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+        gap: 30px;
+        margin-top: 50px;
+    }
+    
+    .paket-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        position: relative;
+        transition: transform 0.3s ease;
+        border: 2px solid transparent;
+    }
+    
+    .paket-kart:hover {
+        transform: translateY(-10px);
+        box-shadow: 0 15px 30px rgba(0,0,0,0.1);
+    }
+    
+    .paket-kart.vurgulanan {
+        border-color: #f3003d;
+    }
+    
+    .paket-kart.populer {
+        border-color: #10B981;
+    }
+    
+    .populer-badge {
+        position: absolute;
+        top: -15px;
+        right: 20px;
+        background: linear-gradient(135deg, #10B981, #059669);
+        color: white;
+        padding: 8px 15px;
+        border-radius: 20px;
+        font-size: 0.9rem;
+        font-weight: 600;
+        display: flex;
+        align-items: center;
+        gap: 5px;
+    }
+    
+    .paket-header {
+        text-align: center;
+        margin-bottom: 25px;
+    }
+    
+    .paket-icon {
+        font-size: 2.5rem;
+        color: #3B82F6;
+        margin-bottom: 15px;
+    }
+    
+    .paket-tip {
+        color: #6B7280;
+        font-size: 0.9rem;
+        text-transform: uppercase;
+        letter-spacing: 1px;
+        margin-top: 5px;
+    }
+    
+    .paket-fiyat {
+        text-align: center;
+        margin-bottom: 25px;
+        padding-bottom: 25px;
+        border-bottom: 1px solid #e5e7eb;
+    }
+    
+    .normal-fiyat {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #1F2937;
+    }
+    
+    .indirimli-fiyat {
+        font-size: 2.5rem;
+        font-weight: 700;
+        color: #10B981;
+    }
+    
+    .eski-fiyat {
+        font-size: 1.2rem;
+        color: #9CA3AF;
+        text-decoration: line-through;
+        margin-bottom: 5px;
+    }
+    
+    .fiyat-not {
+        color: #6B7280;
+        font-size: 0.9rem;
+        margin-top: 10px;
+    }
+    
+    .paket-ozellikler ul {
+        list-style: none;
+        padding: 0;
+        margin-bottom: 30px;
+    }
+    
+    .paket-ozellikler li {
+        padding: 8px 0;
+        color: #4B5563;
+        display: flex;
+        align-items: center;
+        gap: 10px;
+    }
+    
+    .paket-ozellikler i {
+        color: #10B981;
+    }
+    
+    .paket-butonlar {
+        display: flex;
+        flex-direction: column;
+        gap: 10px;
+    }
+    
+    .paket-ekstra {
+        margin-top: 60px;
+        text-align: center;
+    }
+    
+    .ekstra-kart {
+        background: white;
+        border-radius: 15px;
+        padding: 30px;
+        box-shadow: 0 5px 15px rgba(0,0,0,0.05);
+        max-width: 600px;
+        margin: 0 auto;
+    }
+    
+    .ekstra-kart i {
+        font-size: 3rem;
+        color: #3B82F6;
+        margin-bottom: 20px;
+    }
+    
+    .ekstra-kart ul {
+        list-style: none;
+        padding: 0;
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 15px;
+        margin-top: 20px;
+    }
+    
+    .ekstra-kart li {
+        display: flex;
+        align-items: center;
+        gap: 10px;
+        justify-content: center;
+        color: #4B5563;
+    }
+    
+    .cta-section {
+        padding: 80px 0;
+        background: linear-gradient(135deg, #1F2937, #374151);
+        color: white;
+        text-align: center;
+    }
+    
+    .cta-content h2 {
+        color: white;
+        margin-bottom: 20px;
+    }
+    
+    .cta-content p {
+        color: #D1D5DB;
+        max-width: 600px;
+        margin: 0 auto 30px;
+    }
+    
+    .btn-large {
+        padding: 15px 40px;
+        font-size: 1.1rem;
+    }
+    
+    @media (max-width: 768px) {
+        .paketler-grid {
+            grid-template-columns: 1fr;
+        }
+        
+        .paket-kart {
+            padding: 20px;
+        }
+        
+        .normal-fiyat,
+        .indirimli-fiyat {
+            font-size: 2rem;
+        }
+    }
+</style>
+
+<!-- WhatsApp Float Button -->
+<a 
+    href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20Web%20Paketleri%20hakkında%20bilgi%20almak%20istiyorum`} 
+    target="_blank" 
+    class="whatsapp-float"
+>
+    <i class="fab fa-whatsapp"></i>
+</a>
+
+<!-- JavaScript -->
+<script>
+    // Mevcut JavaScript fonksiyonları
+    document.addEventListener('DOMContentLoaded', function() {
+        const whatsappFloat = document.querySelector('.whatsapp-float');
+        if (whatsappFloat) {
+            whatsappFloat.addEventListener('click', function() {
+                this.style.transform = 'scale(0.95)';
+                setTimeout(() => {
+                    this.style.transform = 'scale(1)';
+                }, 150);
+            });
+        }
+        
+        // Smooth scroll for anchor links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const target = document.querySelector(this.getAttribute('href'));
+                if (target) {
+                    target.scrollIntoView({
+                        behavior: 'smooth',
+                        block: 'start'
+                    });
+                }
+            });
+        });
+    });
+</script>
+
+</BasicLayout>

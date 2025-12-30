@@ -1,0 +1,1293 @@
+---
+// Yapılandırma - Sabit değerler
+const siteName = "İşde Yeter";
+const baseUrl = "https://isdeyeter.com";
+const whatsappNumber = "905412465429";
+const whatsappText = "WhatsApp ile İletişime Geç";
+const buttonText = "Teklif Al";
+
+const pageTitle = "Web Sitesi Paketleri - Profesyonel Web Tasarım Hizmetleri";
+const pageDescription = "Profesyonel web sitesi paketleri ile dijital dünyada yerinizi alın. SEO uyumlu, mobil uyumlu ve modern tasarımlı web sitesi paketleri.";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+// Ana hizmetler (Resimli - 12 ana hizmet)
+const mainServices = [
+  {
+    title: "Web Sitesi Oluşturucu",
+    description: "Kendi web sitenizi kolayca oluşturun. Sürükle-bırak arayüzü ile profesyonel sonuçlar elde edin.",
+    icon: "fas fa-globe",
+    image: "/img/dijital-isler/web-sitesi-olusturucu.jpg",
+    features: ["Kolay Kullanım", "Mobil Uyumlu", "SEO Dostu"]
+  },
+  {
+    title: "E-Ticaret Web Sitesi",
+    description: "Online mağazanızı açın, ürünlerinizi satın. Güvenli ödeme sistemleri ve yönetim paneli ile satış yapın.",
+    icon: "fas fa-shopping-cart",
+    image: "/img/dijital-isler/e-ticaret.jpg",
+    features: ["Güvenli Ödeme", "Stok Yönetimi", "Raporlama"]
+  },
+  {
+    title: "SEO Hizmeti",
+    description: "Google'da üst sıralara çıkın. Organik trafik ve satışlarınızı artırın.",
+    icon: "fas fa-search",
+    image: "/img/dijital-isler/seo-hizmeti.jpg",
+    features: ["Anahtar Kelime Analizi", "On-Page SEO", "Backlink"]
+  },
+  {
+    title: "Kurumsal Web Sitesi",
+    description: "Şirketinize özel kurumsal kimlik. Profesyonel imaj ve güvenilirlik için.",
+    icon: "fas fa-building",
+    image: "/img/dijital-isler/kurumsal-web.jpg",
+    features: ["Kurumsal Kimlik", "Hakkımızda", "Referanslar"]
+  },
+  {
+    title: "WordPress Web Sitesi",
+    description: "Dünyaca ünlü WordPress altyapısı ile esnek ve güçlü web sitesi.",
+    icon: "fab fa-wordpress",
+    image: "/img/dijital-isler/wordpress.jpg",
+    features: ["Kolay Yönetim", "Eklenti Desteği", "Tema Çeşitliliği"]
+  },
+  {
+    title: "Web Yazılım",
+    description: "Özel yazılım çözümleri ile ihtiyaçlarınıza özel web uygulamaları geliştirin.",
+    icon: "fas fa-code",
+    image: "/img/dijital-isler/web-yazilim.jpg",
+    features: ["Özel Çözümler", "API Entegrasyonu", "Veritabanı"]
+  },
+  {
+    title: "Domain ve Hosting",
+    description: "Web siteniz için domain kaydı ve güvenli hosting hizmetleri.",
+    icon: "fas fa-server",
+    image: "/img/dijital-isler/hosting.jpg",
+    features: ["Hızlı Sunucu", "SSL Güvenlik", "Yedekleme"]
+  },
+  {
+    title: "Mobil Uygulama",
+    description: "iOS ve Android için native mobil uygulamalar ile müşterilerinize ulaşın.",
+    icon: "fas fa-mobile-alt",
+    image: "/img/dijital-isler/mobil-uygulama.jpg",
+    features: ["Cross-Platform", "Push Bildirim", "Performans"]
+  },
+  {
+    title: "Sosyal Medya Yönetimi",
+    description: "Sosyal medya hesaplarınızı profesyonelce yönetin ve büyütün.",
+    icon: "fab fa-instagram",
+    image: "/img/dijital-isler/sosyal-medya.jpg",
+    features: ["İçerik Planlama", "Etkileşim", "Raporlama"]
+  },
+  {
+    title: "Google Ads Yönetimi",
+    description: "Google reklamlarınızı profesyonelce yönetin, dönüşümlerinizi artırın.",
+    icon: "fab fa-google",
+    image: "/img/dijital-isler/google-ads.jpg",
+    features: ["Anahtar Kelime", "A/B Test", "Performans"]
+  },
+  {
+    title: "Video Prodüksiyon",
+    description: "Tanıtım videoları, reklam filmleri ve içerik üretimi.",
+    icon: "fas fa-video",
+    image: "/img/dijital-isler/video.jpg",
+    features: ["4K Çekim", "Profesyonel Kurgu", "Animasyon"]
+  },
+  {
+    title: "Logo ve Marka Tasarımı",
+    description: "Markanız için unutulmaz logo ve kurumsal kimlik tasarlayın.",
+    icon: "fas fa-pen-fancy",
+    image: "/img/dijital-isler/logo-tasarim.jpg",
+    features: ["Özgün Tasarım", "Renk Paleti", "Kılavuz"]
+  }
+];
+
+// Ek hizmetler (Resimli olmayan - Liste formatında)
+const additionalServices = [
+  { title: "Server Kurulumu", category: "Altyapı", icon: "fas fa-hdd" },
+  { title: "WooCommerce Entegrasyonu", category: "E-Ticaret", icon: "fab fa-woocommerce" },
+  { title: "Sanal Asistan", category: "Destek", icon: "fas fa-headset" },
+  { title: "Oyun Geliştirme", category: "Yazılım", icon: "fas fa-gamepad" },
+  { title: "Influencer Marketing", category: "Pazarlama", icon: "fas fa-users" },
+  { title: "Masaüstü Uygulamalar", category: "Yazılım", icon: "fas fa-desktop" },
+  { title: "Data Analizi", category: "Veri", icon: "fas fa-chart-bar" },
+  { title: "Teknolojik Destek", category: "Destek", icon: "fas fa-tools" },
+  { title: "WordPress Bakım", category: "Bakım", icon: "fas fa-wrench" },
+  { title: "Web Analytics", category: "Analiz", icon: "fas fa-chart-line" },
+  { title: "Pazar Araştırması", category: "Araştırma", icon: "fas fa-search-dollar" },
+  { title: "Marka Danışmanlığı", category: "Danışmanlık", icon: "fas fa-briefcase" },
+  { title: "İçerik Üretimi", category: "İçerik", icon: "fas fa-pen-nib" },
+  { title: "Çeviri Hizmetleri", category: "Dil", icon: "fas fa-language" },
+  { title: "Mix Mastering", category: "Ses", icon: "fas fa-music" },
+  { title: "Seslendirme", category: "Ses", icon: "fas fa-microphone" },
+  { title: "Animasyon", category: "Görsel", icon: "fas fa-film" },
+  { title: "SEO Uyumlu Yazı", category: "İçerik", icon: "fas fa-pen" },
+  { title: "E-Bülten Tasarımı", category: "Pazarlama", icon: "fas fa-envelope" },
+  { title: "Instagram Reklam", category: "Sosyal Medya", icon: "fab fa-instagram" },
+  { title: "LinkedIn Yönetimi", category: "Sosyal Medya", icon: "fab fa-linkedin" },
+  { title: "TikTok İçerik", category: "Sosyal Medya", icon: "fab fa-tiktok" },
+  { title: "Podcast Düzenleme", category: "Ses", icon: "fas fa-podcast" },
+  { title: "CV Danışmanlığı", category: "Kariyer", icon: "fas fa-file-alt" }
+];
+
+// Web paketleri
+const webPackages = [
+  {
+    name: "Basit Kurumsal Paket",
+    price: "20.000 ₺",
+    originalPrice: "0 ₺",
+    icon: "fas fa-star",
+    color: "from-blue-500 to-blue-600",
+    features: ["Ana Sayfa", "5 Yan Sayfa", "Mobil Uyumlu", "Türkçe Yönetim Paneli", "5 Farklı Tema", "Google SEO", "Sınırsız Blog"]
+  },
+  {
+    name: "Gelişmiş Kurumsal Paket",
+    price: "35.000 ₺",
+    originalPrice: "25.000 ₺",
+    icon: "fas fa-gem",
+    color: "from-purple-500 to-purple-600",
+    features: ["Ana Sayfa", "Sınırsız Yan Sayfa", "Mobil Uyumlu", "Türkçe Yönetim Paneli", "5 Farklı Tema", "Google SEO", "Sınırsız Blog"]
+  }
+];
+
+// Müşteri yorumları
+const testimonials = [
+  {
+    name: "Ali Yılmaz",
+    company: "Ahşap Atölyesi Ltd. Şti.",
+    service: "SEO Hizmeti",
+    before: "Web sitesi düşük sıralamalarda, az organik trafik",
+    after: "Yüksek sıralamalar, büyük trafik artışı",
+    rating: 5
+  },
+  {
+    name: "Neslihan Gül Aydemir",
+    company: "Vatan Boru Reklam",
+    service: "İçerik Girişi",
+    before: "Özgün içerik üretme zorluğu",
+    after: "Düzenli ve optimize içerik üretimi",
+    rating: 5
+  },
+  {
+    name: "Ünal Sergileyen",
+    company: "Kista Fuar Organizasyon",
+    service: "Google Ads",
+    before: "Reklam yönetiminde zorluk ve zaman kaybı",
+    after: "Etkili kampanyalar ve yüksek dönüşüm",
+    rating: 5
+  }
+];
+
+// SSS
+const faqs = [
+  {
+    question: "Web sitesi paketimi daha sonra yükseltebilir miyim?",
+    answer: "Evet, dilediğiniz zaman alt paketteki hizmetinizi üst pakete geçirebilirsiniz. Bu işlem için ek ücret ödersiniz ve web sitenizdeki tüm içerikler korunur."
+  },
+  {
+    question: "E-ticaret paketi normal web paketine dönüştürülebilir mi?",
+    answer: "Evet, e-ticaret paketlerinizi normal kurumsal web paketlerine dönüştürebilirsiniz. Bu sayede ihtiyaçlarınıza göre esnek bir yapı oluşturabilirsiniz."
+  },
+  {
+    question: "Web sitem mobil uyumlu olacak mı?",
+    answer: "Tüm web paketlerimiz %100 mobil uyumludur. Telefon, tablet ve masaüstü bilgisayarlarda sorunsuz çalışır ve modern kullanıcı deneyimi sunar."
+  },
+  {
+    question: "SEO hizmeti paketlere dahil mi?",
+    answer: "Evet, tüm web paketlerimizde Google optimizasyonu (SEO) dahildir. Ayrıca profesyonel SEO hizmetlerimizden da yararlanabilirsiniz."
+  },
+  {
+    question: "Yönetim paneli Türkçe mi?",
+    answer: "Evet, tüm paketlerimizde tamamen Türkçe yönetim paneli bulunur. İçerik ekleme, düzenleme ve güncelleme işlemlerini kolayca yapabilirsiniz."
+  }
+];
+---
+
+<html lang="tr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content={pageDescription}>
+    <meta name="keywords" content="web sitesi paketleri, web tasarım, e-ticaret sitesi, SEO hizmeti, kurumsal web sitesi, profesyonel web sitesi, mobil uyumlu web sitesi">
+    <title>{pageTitle} | {siteName}</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: 'Poppins', sans-serif;
+            background-color: #f8f9fa;
+            color: #333;
+            line-height: 1.6;
+        }
+
+        .container {
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+
+        /* Header */
+        header {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 80px 0;
+            text-align: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        header::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            right: 0;
+            bottom: 0;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.05'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        header h1 {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            position: relative;
+            z-index: 1;
+            text-shadow: 2px 2px 4px rgba(0,0,0,0.2);
+        }
+
+        header p {
+            font-size: 1.3rem;
+            opacity: 0.95;
+            position: relative;
+            z-index: 1;
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        /* Hero Section */
+        .hero-section {
+            background: white;
+            padding: 60px 0;
+        }
+
+        .hero-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 50px;
+            align-items: center;
+        }
+
+        .hero-text h2 {
+            font-size: 2.2rem;
+            color: #1a237e;
+            margin-bottom: 20px;
+        }
+
+        .hero-text p {
+            color: #666;
+            margin-bottom: 15px;
+            font-size: 1.05rem;
+        }
+
+        .hero-features {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin-top: 25px;
+        }
+
+        .hero-feature {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            padding: 15px;
+            background: #f8f9fa;
+            border-radius: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .hero-feature:hover {
+            transform: translateX(5px);
+            background: #e8eaf6;
+        }
+
+        .hero-feature i {
+            color: #4CAF50;
+            font-size: 1.3rem;
+        }
+
+        .hero-feature span {
+            font-size: 0.95rem;
+            color: #444;
+            font-weight: 500;
+        }
+
+        /* Packages Section */
+        .packages-section {
+            padding: 80px 0;
+            background: linear-gradient(180deg, #f8f9fa 0%, #fff 100%);
+        }
+
+        .packages-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .package-card {
+            background: white;
+            border-radius: 20px;
+            padding: 40px 30px;
+            text-align: center;
+            box-shadow: 0 10px 40px rgba(0,0,0,0.1);
+            transition: all 0.4s ease;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .package-card:hover {
+            transform: translateY(-10px);
+            box-shadow: 0 20px 60px rgba(0,0,0,0.15);
+        }
+
+        .package-card.featured {
+            border: 3px solid #4CAF50;
+        }
+
+        .package-icon {
+            width: 80px;
+            height: 80px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            margin: 0 auto 25px;
+        }
+
+        .package-icon i {
+            font-size: 2rem;
+            color: white;
+        }
+
+        .package-card h3 {
+            font-size: 1.5rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+        }
+
+        .package-price {
+            font-size: 2.5rem;
+            font-weight: 700;
+            color: #1a237e;
+            margin-bottom: 5px;
+        }
+
+        .package-original {
+            text-decoration: line-through;
+            color: #999;
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+        }
+
+        .package-features {
+            list-style: none;
+            text-align: left;
+            margin-bottom: 30px;
+        }
+
+        .package-features li {
+            padding: 12px 0;
+            border-bottom: 1px solid #eee;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .package-features li:last-child {
+            border-bottom: none;
+        }
+
+        .package-features i {
+            color: #4CAF50;
+        }
+
+        .btn {
+            display: inline-flex;
+            align-items: center;
+            gap: 8px;
+            padding: 14px 28px;
+            border-radius: 10px;
+            text-decoration: none;
+            font-weight: 600;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            cursor: pointer;
+            border: none;
+        }
+
+        .btn-whatsapp {
+            background: #25D366;
+            color: white;
+        }
+
+        .btn-whatsapp:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+        }
+
+        .btn-primary {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            transform: scale(1.05);
+            box-shadow: 0 10px 30px rgba(26, 35, 126, 0.3);
+        }
+
+        /* Section Titles */
+        .section-title {
+            text-align: center;
+            padding: 60px 0 40px;
+        }
+
+        .section-title h2 {
+            font-size: 2.2rem;
+            color: #1a237e;
+            margin-bottom: 15px;
+            position: relative;
+            display: inline-block;
+        }
+
+        .section-title h2::after {
+            content: '';
+            position: absolute;
+            bottom: -10px;
+            left: 50%;
+            transform: translateX(-50%);
+            width: 60px;
+            height: 3px;
+            background: #4CAF50;
+            border-radius: 2px;
+        }
+
+        .section-title p {
+            color: #666;
+            max-width: 600px;
+            margin: 20px auto 0;
+        }
+
+        /* Services Grid */
+        .services-section {
+            padding: 60px 0;
+            background: white;
+        }
+
+        .services-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .service-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            overflow: hidden;
+            transition: all 0.4s ease;
+        }
+
+        .service-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0,0,0,0.12);
+        }
+
+        .service-image {
+            height: 200px;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            position: relative;
+        }
+
+        .service-image img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .service-icon-overlay {
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            transform: translate(-50%, -50%);
+            width: 70px;
+            height: 70px;
+            background: white;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            box-shadow: 0 5px 20px rgba(0,0,0,0.2);
+        }
+
+        .service-icon-overlay i {
+            font-size: 1.8rem;
+            color: #1a237e;
+        }
+
+        .service-content {
+            padding: 25px;
+        }
+
+        .service-content h3 {
+            font-size: 1.25rem;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+
+        .service-content p {
+            color: #666;
+            font-size: 0.95rem;
+            margin-bottom: 15px;
+        }
+
+        .service-tags {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin-bottom: 20px;
+        }
+
+        .service-tag {
+            background: #e8eaf6;
+            color: #1a237e;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            font-weight: 500;
+        }
+
+        /* Additional Services */
+        .additional-services-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .services-list {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(280px, 1fr));
+            gap: 20px;
+        }
+
+        .service-list-item {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            padding: 20px;
+            background: white;
+            border-radius: 12px;
+            transition: all 0.3s ease;
+            border: 1px solid #eee;
+        }
+
+        .service-list-item:hover {
+            box-shadow: 0 8px 25px rgba(0,0,0,0.1);
+            transform: translateX(5px);
+            border-color: #4CAF50;
+        }
+
+        .service-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 12px;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-shrink: 0;
+        }
+
+        .service-icon i {
+            color: white;
+            font-size: 1.2rem;
+        }
+
+        .service-info h4 {
+            font-size: 1rem;
+            color: #1a237e;
+            margin-bottom: 3px;
+        }
+
+        .service-info span {
+            font-size: 0.85rem;
+            color: #888;
+        }
+
+        /* Testimonials */
+        .testimonials-section {
+            padding: 80px 0;
+            background: white;
+        }
+
+        .testimonials-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(320px, 1fr));
+            gap: 30px;
+        }
+
+        .testimonial-card {
+            background: #f8f9fa;
+            border-radius: 15px;
+            padding: 30px;
+            border-left: 4px solid #4CAF50;
+        }
+
+        .testimonial-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 20px;
+        }
+
+        .testimonial-avatar {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-weight: 600;
+            font-size: 1.3rem;
+        }
+
+        .testimonial-info h4 {
+            color: #1a237e;
+            font-size: 1.1rem;
+        }
+
+        .testimonial-info span {
+            color: #666;
+            font-size: 0.9rem;
+        }
+
+        .testimonial-service {
+            background: #e8eaf6;
+            color: #1a237e;
+            padding: 5px 12px;
+            border-radius: 15px;
+            font-size: 0.8rem;
+            display: inline-block;
+            margin-bottom: 15px;
+        }
+
+        .testimonial-before-after {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin-top: 15px;
+        }
+
+        .ba-item {
+            padding: 15px;
+            border-radius: 10px;
+            font-size: 0.9rem;
+        }
+
+        .ba-before {
+            background: #ffebee;
+            color: #c62828;
+        }
+
+        .ba-after {
+            background: #e8f5e9;
+            color: #2e7d32;
+        }
+
+        .ba-item strong {
+            display: block;
+            margin-bottom: 5px;
+            font-size: 0.8rem;
+            text-transform: uppercase;
+        }
+
+        .testimonial-rating {
+            margin-top: 15px;
+        }
+
+        .testimonial-rating i {
+            color: #FFC107;
+        }
+
+        /* Features Section */
+        .features-section {
+            padding: 80px 0;
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+        }
+
+        .features-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 30px;
+            margin-top: 50px;
+        }
+
+        .feature-card {
+            text-align: center;
+            padding: 30px 20px;
+            background: rgba(255,255,255,0.1);
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s ease;
+        }
+
+        .feature-card:hover {
+            background: rgba(255,255,255,0.2);
+            transform: translateY(-5px);
+        }
+
+        .feature-card i {
+            font-size: 3rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .feature-card h3 {
+            font-size: 1.2rem;
+            margin-bottom: 10px;
+        }
+
+        .feature-card p {
+            font-size: 0.95rem;
+            opacity: 0.9;
+        }
+
+        /* FAQ Section */
+        .faq-section {
+            padding: 80px 0;
+            background: #f8f9fa;
+        }
+
+        .faq-container {
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        .faq-item {
+            background: white;
+            border-radius: 12px;
+            margin-bottom: 15px;
+            overflow: hidden;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.05);
+        }
+
+        .faq-question {
+            padding: 20px 25px;
+            cursor: pointer;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            font-weight: 600;
+            color: #1a237e;
+            transition: background 0.3s ease;
+        }
+
+        .faq-question:hover {
+            background: #f8f9fa;
+        }
+
+        .faq-question i {
+            transition: transform 0.3s ease;
+            color: #4CAF50;
+        }
+
+        .faq-item.active .faq-question i {
+            transform: rotate(180deg);
+        }
+
+        .faq-answer {
+            padding: 0 25px;
+            max-height: 0;
+            overflow: hidden;
+            transition: all 0.3s ease;
+            color: #666;
+        }
+
+        .faq-item.active .faq-answer {
+            padding: 0 25px 20px;
+            max-height: 500px;
+        }
+
+        /* CTA Section */
+        .cta-section {
+            background: linear-gradient(135deg, #1a237e 0%, #283593 100%);
+            color: white;
+            padding: 100px 0;
+            text-align: center;
+        }
+
+        .cta-content {
+            max-width: 700px;
+            margin: 0 auto;
+        }
+
+        .cta-content h2 {
+            font-size: 2.5rem;
+            margin-bottom: 20px;
+        }
+
+        .cta-content p {
+            font-size: 1.2rem;
+            opacity: 0.95;
+            margin-bottom: 30px;
+        }
+
+        .cta-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 20px;
+            flex-wrap: wrap;
+        }
+
+        .btn-whatsapp-large {
+            background: #25D366;
+            color: white;
+            padding: 18px 45px;
+            font-size: 1.15rem;
+            border-radius: 15px;
+            box-shadow: 0 10px 30px rgba(37, 211, 102, 0.4);
+        }
+
+        .btn-whatsapp-large:hover {
+            background: #128C7E;
+            transform: scale(1.05);
+            box-shadow: 0 15px 40px rgba(37, 211, 102, 0.5);
+        }
+
+        /* Footer */
+        footer {
+            background: #1a1a2e;
+            color: white;
+            padding: 50px 0 30px;
+        }
+
+        .footer-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 40px;
+            margin-bottom: 40px;
+        }
+
+        .footer-col h3 {
+            font-size: 1.2rem;
+            margin-bottom: 20px;
+            color: #4CAF50;
+        }
+
+        .footer-col ul {
+            list-style: none;
+        }
+
+        .footer-col ul li {
+            margin-bottom: 10px;
+        }
+
+        .footer-col ul li a {
+            color: #ccc;
+            text-decoration: none;
+            transition: color 0.3s ease;
+        }
+
+        .footer-col ul li a:hover {
+            color: #4CAF50;
+        }
+
+        .footer-bottom {
+            border-top: 1px solid #333;
+            padding-top: 30px;
+            text-align: center;
+        }
+
+        .footer-bottom p {
+            opacity: 0.8;
+            font-size: 0.9rem;
+        }
+
+        .footer-bottom a {
+            color: #4CAF50;
+            text-decoration: none;
+        }
+
+        /* Stats Section */
+        .stats-section {
+            background: white;
+            padding: 60px 0;
+            border-bottom: 1px solid #eee;
+        }
+
+        .stats-grid {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 30px;
+            text-align: center;
+        }
+
+        .stat-item h3 {
+            font-size: 2.5rem;
+            color: #1a237e;
+            margin-bottom: 10px;
+        }
+
+        .stat-item p {
+            color: #666;
+            font-size: 1rem;
+        }
+
+        /* Responsive */
+        @media (max-width: 992px) {
+            .hero-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .stats-grid {
+                grid-template-columns: repeat(2, 1fr);
+            }
+
+            header h1 {
+                font-size: 2.2rem;
+            }
+        }
+
+        @media (max-width: 768px) {
+            .services-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .packages-grid {
+                grid-template-columns: 1fr;
+            }
+
+            .cta-buttons {
+                flex-direction: column;
+                align-items: center;
+            }
+
+            .testimonial-before-after {
+                grid-template-columns: 1fr;
+            }
+
+            .hero-features {
+                grid-template-columns: 1fr;
+            }
+
+            .section-title h2 {
+                font-size: 1.8rem;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <h1>Profesyonel Web Sitesi Paketleri</h1>
+            <p>Dijital dünyada şirketinizin kimliğini yansıtan, SEO dostu ve mobil uyumlu web sitesi paketleri ile tanışın.</p>
+        </div>
+    </header>
+
+    <section class="stats-section">
+        <div class="container">
+            <div class="stats-grid">
+                <div class="stat-item">
+                    <h3>1.8M+</h3>
+                    <p>Dünya Genelinde Web Sitesi</p>
+                </div>
+                <div class="stat-item">
+                    <h3>%60</h3>
+                    <p>SEO Hizmeti Alan Site</p>
+                </div>
+                <div class="stat-item">
+                    <h3>50M+</h3>
+                    <p>Günlük Ziyaretçi</p>
+                </div>
+                <div class="stat-item">
+                    <h3>25+</h3>
+                    <p>Uzman Kadromuz</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="hero-section">
+        <div class="container">
+            <div class="hero-grid">
+                <div class="hero-text">
+                    <h2>Web Paketlerimizle Dijital Dünyada Yerinizi Alın</h2>
+                    <p>Web siteniz, dijital dünyada şirketinizin kimliğidir. İş de Yeter Web Tasarım, her sektöre ve ihtiyaca uygun profesyonel, SEO dostu ve mobil uyumlu web sitesi paketleri sunar.</p>
+                    <p>Paketlerimiz dilediğiniz zaman yükseltilebilir ve e-ticaret paketlerine dönüştürülebilir.</p>
+                    <div class="hero-features">
+                        <div class="hero-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Mobil Uyumlu Tasarım</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>SEO Optimizasyonu</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Türkçe Yönetim Paneli</span>
+                        </div>
+                        <div class="hero-feature">
+                            <i class="fas fa-check-circle"></i>
+                            <span>Sınırsız Blog İçeriği</span>
+                        </div>
+                    </div>
+                </div>
+                <div class="hero-image">
+                    <img src="/img/dijital-isler/web-tasarim-banner.jpg" alt="Web Tasarım Hizmetleri" style="width: 100%; border-radius: 20px; box-shadow: 0 20px 50px rgba(0,0,0,0.15);" onerror="this.style.display='none'" />
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="packages-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Web Sitesi Paketleri</h2>
+                <p>İhtiyacınıza uygun paketi seçin, dijital varlığınızı güçlendirin. Tüm paketlerimiz profesyonel kalite ve destekle birlikte gelir.</p>
+            </div>
+            <div class="packages-grid">
+                {webPackages.map((pkg) => (
+                    <div class="package-card">
+                        <div class="package-icon">
+                            <i class={pkg.icon}></i>
+                        </div>
+                        <h3>{pkg.name}</h3>
+                        <div class="package-price">{pkg.price}</div>
+                        {pkg.originalPrice !== pkg.price && (
+                            <div class="package-original">{pkg.originalPrice}</div>
+                        )}
+                        <ul class="package-features">
+                            {pkg.features.map((feature) => (
+                                <li>
+                                    <i class="fas fa-check"></i>
+                                    {feature}
+                                </li>
+                            ))}
+                        </ul>
+                        <a href={getWhatsAppLink(pkg.name)} class="btn btn-whatsapp" target="_blank">
+                            <i class="fab fa-whatsapp"></i>
+                            {buttonText}
+                        </a>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="features-section">
+        <div class="container">
+            <div class="section-title" style="color: white;">
+                <h2 style="color: white;">Neden Profesyonel Web Sitesi?</h2>
+                <p style="color: rgba(255,255,255,0.9);">Web sitenizin başarısı için uzman desteği almanın faydaları</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card">
+                    <i class="fas fa-rocket"></i>
+                    <h3>Daha Fazla Trafik</h3>
+                    <p>SEO çalışmaları ile organik trafik ve satışlarınızı artırın</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-trophy"></i>
+                    <h3>Üst Sıralar</h3>
+                    <p>Google aramalarında üst sıralarda yer alarak marka bilinirliğinizi artırın</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-shield-alt"></i>
+                    <h3>Güvenlik</h3>
+                    <p>SSL sertifikası ve güvenlik önlemleri ile verilerinizi koruyun</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-bolt"></i>
+                    <h3>Hız Optimizasyonu</h3>
+                    <p>Hızlı yüklenen siteler ile kullanıcı deneyimini iyileştirin</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-sync-alt"></i>
+                    <h3>Sürekli Güncelleme</h3>
+                    <p>Site haritası ve teknik optimizasyonlarla güncel kalın</p>
+                </div>
+                <div class="feature-card">
+                    <i class="fas fa-chart-line"></i>
+                    <h3>Analiz ve Raporlama</h3>
+                    <p>Düzenli analizler ile performansınızı takip edin</p>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    <section class="services-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Dijital Hizmetlerimiz</h2>
+                <p>Geniş hizmet yelpazemiz ile tüm dijital ihtiyaçlarınızı karşılıyoruz. Uzman kadromuzla projelerinizi hayata geçiriyoruz.</p>
+            </div>
+            <div class="services-grid">
+                {mainServices.map((service) => (
+                    <div class="service-card">
+                        <div class="service-image">
+                            <img src={service.image} alt={service.title} loading="lazy" onerror="this.parentElement.innerHTML='<div class=\'service-icon-overlay\'><i class=\'' + service.icon + '\'></i></div>'" />
+                        </div>
+                        <div class="service-content">
+                            <h3>{service.title}</h3>
+                            <p>{service.description}</p>
+                            <div class="service-tags">
+                                {service.features.map((feature) => (
+                                    <span class="service-tag">{feature}</span>
+                                ))}
+                            </div>
+                            <a href={getWhatsAppLink(service.title)} class="btn btn-whatsapp" target="_blank">
+                                <i class="fab fa-whatsapp"></i>
+                                {buttonText}
+                            </a>
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="additional-services-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Diğer Dijital Hizmetler</h2>
+                <p>Dijital ihtiyaçlarınız için daha fazla hizmet seçeneği</p>
+            </div>
+            <div class="services-list">
+                {additionalServices.map((service) => (
+                    <div class="service-list-item">
+                        <div class="service-icon">
+                            <i class={service.icon}></i>
+                        </div>
+                        <div class="service-info">
+                            <h4>{service.title}</h4>
+                            <span>{service.category}</span>
+                        </div>
+                        <a href={getWhatsAppLink(service.title)} class="btn btn-whatsapp" target="_blank" style="margin-left: auto;">
+                            <i class="fab fa-whatsapp"></i>
+                            {buttonText}
+                        </a>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="testimonials-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Müşteri Yorumları</h2>
+                <p>Hizmetlerimizden yararlanan müşterilerimizin deneyimleri</p>
+            </div>
+            <div class="testimonials-grid">
+                {testimonials.map((testimonial) => (
+                    <div class="testimonial-card">
+                        <div class="testimonial-header">
+                            <div class="testimonial-avatar">
+                                {testimonial.name.split(' ').map(n => n[0]).join('')}
+                            </div>
+                            <div class="testimonial-info">
+                                <h4>{testimonial.name}</h4>
+                                <span>{testimonial.company}</span>
+                            </div>
+                        </div>
+                        <span class="testimonial-service">{testimonial.service}</span>
+                        <div class="testimonial-before-after">
+                            <div class="ba-item ba-before">
+                                <strong>Önce</strong>
+                                {testimonial.before}
+                            </div>
+                            <div class="ba-item ba-after">
+                                <strong>Sonra</strong>
+                                {testimonial.after}
+                            </div>
+                        </div>
+                        <div class="testimonial-rating">
+                            {[...Array(testimonial.rating)].map(() => (
+                                <i class="fas fa-star"></i>
+                            ))}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="faq-section">
+        <div class="container">
+            <div class="section-title">
+                <h2>Sıkça Sorulan Sorular</h2>
+                <p>Web sitesi paketleri hakkında merak ettiğiniz soruların cevapları</p>
+            </div>
+            <div class="faq-container">
+                {faqs.map((faq, index) => (
+                    <div class="faq-item">
+                        <div class="faq-question">
+                            {faq.question}
+                            <i class="fas fa-chevron-down"></i>
+                        </div>
+                        <div class="faq-answer">
+                            {faq.answer}
+                        </div>
+                    </div>
+                ))}
+            </div>
+        </div>
+    </section>
+
+    <section class="cta-section">
+        <div class="container">
+            <div class="cta-content">
+                <h2>Web Sitenizi Hemen Oluşturun</h2>
+                <p>Profesyonel ekibimizle web sitenizi tasarlayalım. Hemen WhatsApp üzerinden teklif alın, projenizi başlatın.</p>
+                <div class="cta-buttons">
+                    <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20web%20sitesi%20paketi%20hakkında%20bilgi%20almak%20istiyorum`} class="btn btn-whatsapp-large" target="_blank">
+                        <i class="fab fa-whatsapp"></i>
+                        Hemen Teklif Al
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+
+    
+
+    <script>
+        // FAQ Accordion
+        document.querySelectorAll('.faq-question').forEach(question => {
+            question.addEventListener('click', () => {
+                const item = question.parentElement;
+                const isActive = item.classList.contains('active');
+                
+                document.querySelectorAll('.faq-item').forEach(faq => {
+                    faq.classList.remove('active');
+                });
+
+                if (!isActive) {
+                    item.classList.add('active');
+                }
+            });
+        });
+    </script>
+</body>
+</html>

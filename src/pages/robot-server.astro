@@ -1,0 +1,1326 @@
+---
+// src/pages/robot-server.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Başvur";
+const buttonText = configData.buttonText || "Başvur";
+
+// WhatsApp link oluşturma fonksiyonu
+function getWhatsAppLink(serviceTitle) {
+  return `https://wa.me/${whatsappNumber}?text=Merhaba,%20${encodeURIComponent(serviceTitle)}%20hakkında%20bilgi%20almak%20istiyorum`;
+}
+
+const pageTitle = "Robot Server - Kodsuz Otomasyon ve AI Çözümleri";
+---
+
+<BasicLayout title={pageTitle}>
+  <div class="robot-server-page">
+    <!-- Hero Section -->
+    <section class="hero-section">
+      <div class="container">
+        <div class="hero-content">
+          <h1 class="hero-title">
+            <span class="robot-text">Robot</span>
+            <span class="server-text">Server</span>
+          </h1>
+          <p class="hero-subtitle">KODSUZ OTOMASYON PLATFORMU</p>
+          <p class="hero-description">
+            n8n gibi profesyonel otomasyon araçları ile iş akışlarınızı robotize edin.
+            AI destekli, kodsuz otomasyon çözümleriyle verimliliğinizi katlayın.
+          </p>
+          <div class="hero-features">
+            <div class="feature">
+              <span class="feature-icon">🤖</span>
+              <span>Kodsuz Otomasyon</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">⚡</span>
+              <span>Kolay Kurulum ve Yönetim</span>
+            </div>
+            <div class="feature">
+              <span class="feature-icon">🔄</span>
+              <span>Sınırsız İş Akışları</span>
+            </div>
+          </div>
+          <div class="hero-actions">
+            <a href="#server-plans" class="btn primary-btn">
+              <span class="btn-icon">🚀</span>
+              Robot Server Paketleri
+            </a>
+            <a href="#automation-features" class="btn secondary-btn">
+              <span class="btn-icon">🤖</span>
+              Otomasyon Özellikleri
+            </a>
+          </div>
+        </div>
+        <div class="hero-illustration">
+          <div class="robot-animation">
+            <div class="robot-head">🤖</div>
+            <div class="robot-arms">
+              <span class="arm">🦾</span>
+              <span class="arm">🦾</span>
+            </div>
+            <div class="server-rack">🗄️</div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Robot Server Features -->
+    <section class="robot-features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Robot Server Avantajları</h2>
+          <p class="section-subtitle">AI destekli otomasyon ile işlerinizi robotize edin</p>
+        </div>
+
+        <div class="features-grid">
+          <div class="feature-card">
+            <div class="feature-icon">📋</div>
+            <h3>İhtiyacınıza Uygun Şablon</h3>
+            <p>Kendi sunucunuzda barındırılan n8n, kuyruk modlu n8n veya 100+ önceden hazırlanmış iş akışı şablonları</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">∞</div>
+            <h3>Sınırsız İş Akışları</h3>
+            <p>Kendi sunucunuzda barındırılan n8n ile otomasyon olanakları sınırsız, sürekli ölçeklendirebilirsiniz</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">💰</div>
+            <h3>Daha Fazlası, Daha Az Öde</h3>
+            <p>VPS hosting planıyla n8n özelliklerine ve diğer avantajlara düşük maliyetle erişim</p>
+          </div>
+          <div class="feature-card">
+            <div class="feature-icon">🔌</div>
+            <h3>Özel Topluluk Düğümleri</h3>
+            <p>n8n topluluğu tarafından geliştirilen özel düğümlerle daha fazla hizmete ve araca erişim</p>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Robot Server Plans -->
+    <section id="server-plans" class="server-plans-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Kendi Sunucunuzda Barındırılan n8n</h2>
+          <p class="section-subtitle">Kodsuz yapay zeka iş akışları ile sınırsız otomasyon</p>
+        </div>
+
+        <div class="plans-grid">
+          <!-- KVM 1 -->
+          <div class="plan-card robot-card">
+            <div class="plan-badge">
+              <span class="badge-text">ROBOT-1</span>
+              <span class="badge-subtext">Başlangıç</span>
+            </div>
+            <div class="plan-specs">
+              <div class="spec">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-info">
+                  <strong>1 vCPU Çekirdeği</strong>
+                  <small>Yüksek performans işlemci</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💾</span>
+                <div class="spec-info">
+                  <strong>4 GB RAM</strong>
+                  <small>Hızlı erişim belleği</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💿</span>
+                <div class="spec-info">
+                  <strong>50 GB NVMe Disk</strong>
+                  <small>Yüksek hızlı depolama</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-info">
+                  <strong>4 TB Bant Genişliği</strong>
+                  <small>Yüksek trafik kapasitesi</small>
+                </div>
+              </div>
+            </div>
+            <div class="plan-features">
+              <div class="feature">✅ Sınırsız İş Akışı</div>
+              <div class="feature">✅ Sınırsız Eşzamanlı Yürütme</div>
+              <div class="feature">✅ Topluluk Düğümleri</div>
+              <div class="feature">✅ Tek Tıkla n8n Kurulumu</div>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("Robot Server KVM 1 Paketi")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">🤖</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          <!-- KVM 2 -->
+          <div class="plan-card robot-card featured">
+            <div class="plan-badge">
+              <span class="badge-text">ROBOT-2</span>
+              <span class="badge-subtext">En Popüler</span>
+            </div>
+            <div class="plan-specs">
+              <div class="spec">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-info">
+                  <strong>2 vCPU Çekirdeği</strong>
+                  <small>Çoklu işlemci desteği</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💾</span>
+                <div class="spec-info">
+                  <strong>8 GB RAM</strong>
+                  <small>Geniş bellek kapasitesi</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💿</span>
+                <div class="spec-info">
+                  <strong>100 GB NVMe Disk</strong>
+                  <small>Büyük depolama alanı</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-info">
+                  <strong>8 TB Bant Genişliği</strong>
+                  <small>Yüksek trafik kapasitesi</small>
+                </div>
+              </div>
+            </div>
+            <div class="plan-features">
+              <div class="feature">✅ Sınırsız İş Akışı</div>
+              <div class="feature">✅ Sınırsız Eşzamanlı Yürütme</div>
+              <div class="feature">✅ Topluluk Düğümleri</div>
+              <div class="feature">✅ Kuyruk Modu ile n8n</div>
+              <div class="feature">✅ 100+ Hazır İş Akışı</div>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("Robot Server KVM 2 Paketi")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">🤖</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          <!-- KVM 4 -->
+          <div class="plan-card robot-card">
+            <div class="plan-badge">
+              <span class="badge-text">ROBOT-4</span>
+              <span class="badge-subtext">Profesyonel</span>
+            </div>
+            <div class="plan-specs">
+              <div class="spec">
+                <span class="spec-icon">⚡</span>
+                <div class="spec-info">
+                  <strong>4 vCPU Çekirdeği</strong>
+                  <small>Yüksek performans CPU</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💾</span>
+                <div class="spec-info">
+                  <strong>16 GB RAM</strong>
+                  <small>Geniş bellek kapasitesi</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">💿</span>
+                <div class="spec-info">
+                  <strong>200 GB NVMe Disk</strong>
+                  <small>Büyük depolama alanı</small>
+                </div>
+              </div>
+              <div class="spec">
+                <span class="spec-icon">🌐</span>
+                <div class="spec-info">
+                  <strong>16 TB Bant Genişliği</strong>
+                  <small>Yüksek trafik kapasitesi</small>
+                </div>
+              </div>
+            </div>
+            <div class="plan-features">
+              <div class="feature">✅ Sınırsız İş Akışı</div>
+              <div class="feature">✅ Sınırsız Eşzamanlı Yürütme</div>
+              <div class="feature">✅ Topluluk Düğümleri</div>
+              <div class="feature">✅ Kuyruk Modu ile n8n</div>
+              <div class="feature">✅ 100+ Hazır İş Akışı</div>
+              <div class="feature">✅ MCP Destekli AI Asistan</div>
+            </div>
+            <div class="plan-footer">
+              <a href={getWhatsAppLink("Robot Server KVM 4 Paketi")} class="btn whatsapp-btn full-width">
+                <span class="btn-icon">🤖</span>
+                Fiyatlar ve Detay
+              </a>
+            </div>
+          </div>
+
+          
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Automation Features -->
+    <section id="automation-features" class="automation-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">İş Akışlarını Bağlayın. Verileri Entegre Edin</h2>
+          <p class="section-subtitle">
+            Ücretsiz iş akışı otomasyon aracı n8n, tüm uygulamalarınızı ve verilerinizi 
+            tek bir özelleştirilebilir, kodsuz platformda bağlamanızı sağlar.
+          </p>
+        </div>
+
+        <div class="automation-grid">
+          <div class="automation-card">
+            <div class="automation-icon">🔌</div>
+            <div class="automation-content">
+              <h3>500+ Uygulama Entegrasyonu</h3>
+              <p>Popüler uygulamalar ve servisler ile sorunsuz entegrasyon</p>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-icon">🚀</div>
+            <div class="automation-content">
+              <h3>MCP Sunucu Tetikleyicisi</h3>
+              <p>Gelişmiş tetikleyiciler ile otomatik iş akışları</p>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-icon">📋</div>
+            <div class="automation-content">
+              <h3>Önceden Oluşturulmuş İş Akışları</h3>
+              <p>100+ hazır iş akışı şablonu ile hemen başlayın</p>
+            </div>
+          </div>
+          <div class="automation-card">
+            <div class="automation-icon">🧠</div>
+            <div class="automation-content">
+              <h3>AI Düğümleri</h3>
+              <p>Yapay zeka destekli akıllı iş akışları</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Server Management -->
+    <section class="management-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Robot Server Yönetimi</h2>
+          <p class="section-subtitle">AI destekli akıllı yönetim ile sunucunuzu kolayca kontrol edin</p>
+        </div>
+
+        <div class="management-grid">
+          <div class="management-card">
+            <div class="management-icon">📊</div>
+            <div class="management-content">
+              <h3>Sunucu Sağlığını İzleyin</h3>
+              <p>VPS performansınızı takip edin. CPU, bellek ve disk kullanımı ile ilgili ayrıntıları edinin, sorunları erken fark edin.</p>
+            </div>
+          </div>
+          <div class="management-card">
+            <div class="management-icon">🛡️</div>
+            <div class="management-content">
+              <h3>Güvenlik Ayarlarını Yönetin</h3>
+              <p>Sunucunuzu güvenli tutmak için güvenlik duvarı kurallarını, SSH anahtarlarını ve ters DNS'i ayarlayın.</p>
+            </div>
+          </div>
+          <div class="management-card">
+            <div class="management-icon">💾</div>
+            <div class="management-content">
+              <h3>Yedeklemeleri Yönetin</h3>
+              <p>Verilerinizi güvende tutmak için yedekler ve anlık görüntüler oluşturun, VPS'inizi hızlıca geri yükleyin.</p>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- AI Assistant -->
+    <section class="ai-assistant-section">
+      <div class="container">
+        <div class="ai-content">
+          <div class="ai-text">
+            <h2 class="section-title">VPS'inizi AI ile Yönetin</h2>
+            <p class="ai-description">
+              MCP destekli yapay zeka asistanı ile tanışın! 50+ dilde destek alıp sunucunuzu kolayca yönetebilir, 
+              performans, güvenlik ve verilerinizi basit komutlarla doğrudan sohbet üzerinden kontrol edebilirsiniz.
+            </p>
+            <div class="ai-features">
+              <div class="ai-feature">🎯 Doğal dil komutları</div>
+              <div class="ai-feature">🌍 50+ dil desteği</div>
+              <div class="ai-feature">⚡ Anlık yanıtlar</div>
+              <div class="ai-feature">🔧 Teknik terim gerekmez</div>
+            </div>
+            <a href={getWhatsAppLink("Robot Server AI Asistanı")} class="btn primary-btn">
+              <span class="btn-icon">🤖</span>
+              AI Asistan Hakkında Bilgi Al
+            </a>
+          </div>
+          <div class="ai-illustration">
+            <div class="robot-assistant">
+              <div class="ai-robot">🤖</div>
+              <div class="speech-bubble">Merhaba! Size nasıl yardımcı olabilirim?</div>
+              <div class="chat-interface">
+                <div class="message">Sunucu durumunu göster</div>
+                <div class="message ai-response">✅ Sunucunuz aktif, CPU kullanımı: %25</div>
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Global Locations -->
+    <section class="locations-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Yerel Dağıtım. Küresel Erişim.</h2>
+          <p class="section-subtitle">
+            Yükleme hızlarını artırmak için kitlenize yakın bir sunucu konumu seçin. 
+            Türkiye, Kuzey Amerika, Avrupa, Asya ve Güney Amerika'da veri merkezlerimiz bulunuyor.
+          </p>
+        </div>
+
+        <div class="locations-map">
+          <div class="location">🇹🇷 Türkiye</div>
+          <div class="location">🇺🇸 Kuzey Amerika</div>
+          <div class="location">🇪🇺 Avrupa</div>
+          <div class="location">🇯🇵 Asya</div>
+          <div class="location">🇧🇷 Güney Amerika</div>
+        </div>
+      </div>
+    </section>
+
+    <!-- Included Features -->
+    <section class="included-features-section">
+      <div class="container">
+        <div class="section-header">
+          <h2 class="section-title">Her Pakette İhtiyacınız Olan Her Şey</h2>
+          <p class="section-subtitle">Robot Server paketlerinde standart olarak sunulan özellikler</p>
+        </div>
+
+        <div class="features-list">
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>Sınırsız İş Akışı</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>Sınırsız Eşzamanlı Yürütme</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>Topluluk Düğümleri</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>Kuyruk Modu ile n8n</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>100+ Hazır İş Akışı</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>Tek Tıkla n8n Kurulumu</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>MCP Destekli AI Asistan</span>
+          </div>
+          <div class="feature-item">
+            <div class="feature-check">✅</div>
+            <span>30 Gün Para İade Garantisi</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <!-- CTA Section -->
+    <section class="cta-section">
+      <div class="container">
+        <div class="cta-content">
+          <h2 class="cta-title">Robot Server ile Tanışın</h2>
+          <p class="cta-description">
+            Kodsuz otomasyon, AI destekli yönetim ve sınırsız iş akışları ile işlerinizi robotize edin.
+            Uzman ekibimiz size en uygun Robot Server çözümünü sunmak için hazır.
+          </p>
+          <div class="cta-buttons">
+            <a href={getWhatsAppLink("Robot Server Teklif")} class="btn whatsapp-btn large">
+              <span class="btn-icon">🤖</span>
+              WhatsApp'tan Hemen Teklif Al
+            </a>
+            <a href="/iletisim" class="btn primary-btn large">
+              <span class="btn-icon">📞</span>
+              Ücretsiz Danışmanlık
+            </a>
+          </div>
+        </div>
+      </div>
+    </section>
+  </div>
+
+  <style is:global>
+    :root {
+      --robot-blue: #3b82f6;
+      --dark-blue: #1d4ed8;
+      --light-blue: #93c5fd;
+      --ai-purple: #8b5cf6;
+      --dark-bg: #0f172a;
+      --darker-bg: #030712;
+      --text-color: #1f2937;
+      --text-light: #6b7280;
+      --border-color: #374151;
+      --shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1);
+      --shadow-lg: 0 20px 25px -5px rgba(0, 0, 0, 0.1);
+      --glow-effect: 0 0 20px rgba(59, 130, 246, 0.5);
+    }
+
+    .robot-server-page {
+      font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+      color: var(--text-color);
+      line-height: 1.6;
+      background: var(--darker-bg);
+      color: white;
+    }
+
+    .container {
+      max-width: 1200px;
+      margin: 0 auto;
+      padding: 0 1rem;
+    }
+
+    /* Hero Section */
+    .hero-section {
+      background: linear-gradient(135deg, var(--dark-bg) 0%, #111827 100%);
+      padding: 6rem 1rem;
+      position: relative;
+      overflow: hidden;
+    }
+
+    .hero-section::before {
+      content: '';
+      position: absolute;
+      top: 0;
+      left: 0;
+      right: 0;
+      bottom: 0;
+      background: radial-gradient(circle at 30% 20%, rgba(59, 130, 246, 0.1) 0%, transparent 50%);
+    }
+
+    .hero-section .container {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      position: relative;
+      z-index: 1;
+    }
+
+    .hero-title {
+      font-size: 3.5rem;
+      font-weight: 800;
+      line-height: 1.2;
+      margin-bottom: 1rem;
+    }
+
+    .robot-text {
+      color: var(--robot-blue);
+      display: block;
+      text-shadow: 0 0 10px rgba(59, 130, 246, 0.5);
+    }
+
+    .server-text {
+      color: white;
+      display: block;
+    }
+
+    .hero-subtitle {
+      font-size: 1.5rem;
+      font-weight: 600;
+      color: var(--light-blue);
+      margin-bottom: 1.5rem;
+      text-transform: uppercase;
+      letter-spacing: 1px;
+    }
+
+    .hero-description {
+      font-size: 1.1rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .hero-features {
+      display: flex;
+      flex-direction: column;
+      gap: 0.8rem;
+      margin-bottom: 2rem;
+    }
+
+    .feature {
+      display: flex;
+      align-items: center;
+      gap: 0.8rem;
+      color: white;
+      font-weight: 500;
+    }
+
+    .feature-icon {
+      color: var(--robot-blue);
+      font-size: 1.2rem;
+      animation: pulse 2s infinite;
+    }
+
+    @keyframes pulse {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.5; }
+    }
+
+    .hero-actions {
+      display: flex;
+      gap: 1rem;
+      flex-wrap: wrap;
+    }
+
+    /* Button Styles */
+    .btn {
+      display: inline-flex;
+      align-items: center;
+      gap: 0.5rem;
+      padding: 1rem 2rem;
+      border-radius: 50px;
+      text-decoration: none;
+      font-weight: 600;
+      transition: all 0.3s ease;
+      border: none;
+      cursor: pointer;
+      font-size: 1rem;
+    }
+
+    .primary-btn {
+      background: var(--robot-blue);
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .primary-btn:hover {
+      background: var(--dark-blue);
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+      filter: brightness(1.1);
+    }
+
+    .secondary-btn {
+      background: transparent;
+      color: white;
+      border: 2px solid var(--robot-blue);
+    }
+
+    .secondary-btn:hover {
+      background: var(--robot-blue);
+      transform: translateY(-2px);
+    }
+
+    .whatsapp-btn {
+      background: #25D366;
+      color: white;
+      box-shadow: var(--shadow);
+    }
+
+    .whatsapp-btn:hover {
+      background: #128C7E;
+      transform: translateY(-2px);
+      box-shadow: var(--shadow-lg);
+    }
+
+    .full-width {
+      width: 100%;
+      justify-content: center;
+    }
+
+    .large {
+      padding: 1.2rem 2.5rem;
+      font-size: 1.1rem;
+    }
+
+    .hero-illustration {
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .robot-animation {
+      position: relative;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+
+    .robot-head {
+      font-size: 5rem;
+      animation: robotFloat 3s ease-in-out infinite;
+      filter: drop-shadow(0 0 10px rgba(59, 130, 246, 0.7));
+    }
+
+    @keyframes robotFloat {
+      0%, 100% { transform: translateY(0) rotate(0deg); }
+      33% { transform: translateY(-10px) rotate(5deg); }
+      66% { transform: translateY(-5px) rotate(-5deg); }
+    }
+
+    .robot-arms {
+      display: flex;
+      gap: 6rem;
+      margin: -1rem 0;
+    }
+
+    .arm {
+      font-size: 2.5rem;
+      animation: armWave 2s ease-in-out infinite;
+    }
+
+    .arm:first-child {
+      animation-delay: 0s;
+    }
+
+    .arm:last-child {
+      animation-delay: 1s;
+    }
+
+    @keyframes armWave {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(20deg); }
+    }
+
+    .server-rack {
+      font-size: 4rem;
+      margin-top: 1rem;
+      animation: serverGlow 3s infinite;
+    }
+
+    @keyframes serverGlow {
+      0%, 100% { opacity: 1; }
+      50% { opacity: 0.7; }
+    }
+
+    /* Section Styles */
+    .section-header {
+      text-align: center;
+      margin-bottom: 3rem;
+    }
+
+    .section-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+      background: linear-gradient(45deg, var(--robot-blue), var(--ai-purple));
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+    }
+
+    .section-subtitle {
+      font-size: 1.2rem;
+      color: #94a3b8;
+      max-width: 600px;
+      margin: 0 auto;
+    }
+
+    /* Robot Features */
+    .robot-features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    }
+
+    .features-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .feature-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      text-align: center;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .feature-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--robot-blue);
+      background: rgba(59, 130, 246, 0.1);
+      box-shadow: var(--glow-effect);
+    }
+
+    .feature-card .feature-icon {
+      font-size: 2.5rem;
+      margin-bottom: 1rem;
+      display: block;
+    }
+
+    .feature-card h3 {
+      font-size: 1.3rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .feature-card p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Server Plans */
+    .server-plans-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .plans-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+      gap: 2rem;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .plan-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      overflow: hidden;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .plan-card:hover {
+      transform: translateY(-10px);
+      border-color: var(--robot-blue);
+      box-shadow: var(--glow-effect);
+    }
+
+    .plan-card.featured {
+      border: 3px solid var(--ai-purple);
+      transform: scale(1.05);
+    }
+
+    .plan-card.featured:hover {
+      transform: scale(1.05) translateY(-10px);
+      box-shadow: 0 0 30px rgba(139, 92, 246, 0.5);
+    }
+
+    .plan-badge {
+      background: linear-gradient(45deg, var(--robot-blue), var(--ai-purple));
+      color: white;
+      padding: 1.5rem;
+      text-align: center;
+    }
+
+    .badge-text {
+      font-size: 1.8rem;
+      font-weight: 700;
+      display: block;
+      margin-bottom: 0.3rem;
+    }
+
+    .badge-subtext {
+      font-size: 0.9rem;
+      opacity: 0.9;
+    }
+
+    .plan-specs {
+      padding: 2rem;
+    }
+
+    .spec {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      padding: 0.8rem 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    }
+
+    .spec:last-child {
+      border-bottom: none;
+    }
+
+    .spec-icon {
+      font-size: 1.5rem;
+      color: var(--robot-blue);
+      flex-shrink: 0;
+    }
+
+    .spec-info {
+      flex: 1;
+    }
+
+    .spec-info strong {
+      display: block;
+      color: white;
+      margin-bottom: 0.2rem;
+    }
+
+    .spec-info small {
+      color: #94a3b8;
+      font-size: 0.85rem;
+    }
+
+    .plan-features {
+      padding: 1rem 2rem;
+      background: rgba(0, 0, 0, 0.2);
+    }
+
+    .feature {
+      padding: 0.5rem 0;
+      color: #cbd5e1;
+      font-size: 0.9rem;
+    }
+
+    .plan-footer {
+      padding: 0 2rem 2rem;
+    }
+
+    /* Automation Section */
+    .automation-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    }
+
+    .automation-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .automation-card {
+      display: flex;
+      gap: 1.5rem;
+      align-items: center;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 2rem;
+      border-radius: 15px;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .automation-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--robot-blue);
+    }
+
+    .automation-icon {
+      font-size: 2rem;
+      color: var(--robot-blue);
+      flex-shrink: 0;
+    }
+
+    .automation-content h3 {
+      font-size: 1.3rem;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .automation-content p {
+      color: #94a3b8;
+      font-size: 0.9rem;
+      line-height: 1.5;
+    }
+
+    /* Management Section */
+    .management-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .management-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
+      gap: 2rem;
+      max-width: 1000px;
+      margin: 0 auto;
+    }
+
+    .management-card {
+      background: rgba(255, 255, 255, 0.05);
+      backdrop-filter: blur(10px);
+      border-radius: 15px;
+      padding: 2rem;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+      transition: all 0.3s ease;
+    }
+
+    .management-card:hover {
+      transform: translateY(-5px);
+      border-color: var(--robot-blue);
+    }
+
+    .management-icon {
+      font-size: 2.5rem;
+      color: var(--robot-blue);
+      margin-bottom: 1rem;
+    }
+
+    .management-content h3 {
+      font-size: 1.5rem;
+      margin-bottom: 1rem;
+      color: white;
+    }
+
+    .management-content p {
+      color: #94a3b8;
+      line-height: 1.6;
+    }
+
+    /* AI Assistant Section */
+    .ai-assistant-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #1e1b4b 0%, #312e81 100%);
+    }
+
+    .ai-content {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 4rem;
+      align-items: center;
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    .ai-text .section-title {
+      background: linear-gradient(45deg, #a855f7, #8b5cf6);
+      -webkit-background-clip: text;
+      -webkit-text-fill-color: transparent;
+      text-align: left;
+    }
+
+    .ai-description {
+      font-size: 1.2rem;
+      color: #cbd5e1;
+      margin-bottom: 2rem;
+      line-height: 1.7;
+    }
+
+    .ai-features {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 1rem;
+      margin-bottom: 2rem;
+    }
+
+    .ai-feature {
+      background: rgba(255, 255, 255, 0.1);
+      padding: 0.8rem 1rem;
+      border-radius: 10px;
+      color: white;
+      font-size: 0.9rem;
+    }
+
+    .ai-illustration {
+      display: flex;
+      justify-content: center;
+    }
+
+    .robot-assistant {
+      background: rgba(0, 0, 0, 0.3);
+      border-radius: 20px;
+      padding: 2rem;
+      position: relative;
+      max-width: 400px;
+    }
+
+    .ai-robot {
+      font-size: 4rem;
+      text-align: center;
+      margin-bottom: 1rem;
+      animation: robotNod 2s infinite;
+    }
+
+    @keyframes robotNod {
+      0%, 100% { transform: rotate(0deg); }
+      50% { transform: rotate(5deg); }
+    }
+
+    .speech-bubble {
+      background: white;
+      color: #1f2937;
+      padding: 1rem;
+      border-radius: 15px;
+      margin-bottom: 1.5rem;
+      position: relative;
+      font-weight: 500;
+    }
+
+    .speech-bubble::after {
+      content: '';
+      position: absolute;
+      bottom: -10px;
+      left: 20px;
+      border-width: 10px 10px 0;
+      border-style: solid;
+      border-color: white transparent transparent;
+    }
+
+    .chat-interface {
+      background: rgba(255, 255, 255, 0.1);
+      border-radius: 10px;
+      padding: 1rem;
+    }
+
+    .message {
+      background: rgba(255, 255, 255, 0.2);
+      padding: 0.8rem;
+      border-radius: 8px;
+      margin-bottom: 0.5rem;
+      color: white;
+    }
+
+    .ai-response {
+      background: rgba(59, 130, 246, 0.3);
+      color: #93c5fd;
+    }
+
+    /* Locations Section */
+    .locations-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #111827 0%, #1f2937 100%);
+    }
+
+    .locations-map {
+      display: flex;
+      justify-content: center;
+      flex-wrap: wrap;
+      gap: 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .location {
+      background: rgba(59, 130, 246, 0.1);
+      border: 2px solid var(--robot-blue);
+      border-radius: 50px;
+      padding: 1rem 2rem;
+      font-size: 1.1rem;
+      font-weight: 600;
+      color: white;
+      transition: all 0.3s ease;
+    }
+
+    .location:hover {
+      background: var(--robot-blue);
+      transform: scale(1.05);
+    }
+
+    /* Included Features */
+    .included-features-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
+    }
+
+    .features-list {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+      gap: 1rem;
+      max-width: 800px;
+      margin: 0 auto;
+    }
+
+    .feature-item {
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      background: rgba(255, 255, 255, 0.05);
+      padding: 1rem 1.5rem;
+      border-radius: 10px;
+      color: white;
+      border: 1px solid rgba(59, 130, 246, 0.2);
+    }
+
+    .feature-check {
+      color: var(--robot-blue);
+      font-size: 1.2rem;
+    }
+
+    /* CTA Section */
+    .cta-section {
+      padding: 6rem 1rem;
+      background: linear-gradient(45deg, var(--robot-blue), var(--ai-purple));
+      color: white;
+      text-align: center;
+    }
+
+    .cta-title {
+      font-size: 2.5rem;
+      font-weight: 700;
+      margin-bottom: 1rem;
+    }
+
+    .cta-description {
+      font-size: 1.2rem;
+      max-width: 600px;
+      margin: 0 auto 2rem;
+      opacity: 0.9;
+    }
+
+    .cta-buttons {
+      display: flex;
+      gap: 1rem;
+      justify-content: center;
+      flex-wrap: wrap;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+      .hero-section .container,
+      .ai-content {
+        grid-template-columns: 1fr;
+        text-align: center;
+      }
+
+      .hero-title {
+        font-size: 2.5rem;
+      }
+
+      .section-title {
+        font-size: 2rem;
+      }
+
+      .plans-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .plan-card.featured {
+        transform: none;
+      }
+
+      .plan-card.featured:hover {
+        transform: translateY(-10px);
+      }
+
+      .automation-grid,
+      .management-grid {
+        grid-template-columns: 1fr;
+      }
+
+      .ai-features {
+        grid-template-columns: 1fr;
+      }
+
+      .locations-map {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .features-list {
+        grid-template-columns: 1fr;
+      }
+
+      .cta-buttons {
+        flex-direction: column;
+        align-items: center;
+      }
+
+      .btn {
+        width: 100%;
+        max-width: 300px;
+        justify-content: center;
+      }
+
+      .robot-animation {
+        transform: scale(0.8);
+      }
+    }
+
+    @media (max-width: 480px) {
+      .hero-title {
+        font-size: 2rem;
+      }
+
+      .hero-features {
+        flex-direction: column;
+      }
+
+      .automation-card {
+        flex-direction: column;
+        text-align: center;
+      }
+    }
+  </style>
+
+  <script>
+    document.addEventListener('DOMContentLoaded', function() {
+      // Animate robot elements on scroll
+      const observerOptions = {
+        threshold: 0.1,
+        rootMargin: '0px 0px -50px 0px'
+      };
+
+      const observer = new IntersectionObserver((entries) => {
+        entries.forEach(entry => {
+          if (entry.isIntersecting) {
+            entry.target.style.opacity = '1';
+            entry.target.style.transform = 'translateY(0)';
+          }
+        });
+      }, observerOptions);
+
+      // Observe all cards and sections
+      document.querySelectorAll('.feature-card, .plan-card, .automation-card, .management-card').forEach(card => {
+        card.style.opacity = '0';
+        card.style.transform = 'translateY(20px)';
+        card.style.transition = 'opacity 0.5s ease, transform 0.5s ease';
+        observer.observe(card);
+      });
+
+      // Smooth scroll for anchor links
+      document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+        anchor.addEventListener('click', function(e) {
+          const href = this.getAttribute('href');
+          if (href !== '#') {
+            e.preventDefault();
+            const target = document.querySelector(href);
+            if (target) {
+              target.scrollIntoView({
+                behavior: 'smooth',
+                block: 'start'
+              });
+            }
+          }
+        });
+      });
+
+      // Add robot sound effect on button hover
+      const robotButtons = document.querySelectorAll('.btn');
+      robotButtons.forEach(btn => {
+        btn.addEventListener('mouseenter', () => {
+          // Add subtle animation effect
+          btn.style.boxShadow = '0 0 20px rgba(59, 130, 246, 0.5)';
+        });
+        
+        btn.addEventListener('mouseleave', () => {
+          btn.style.boxShadow = '';
+        });
+      });
+    });
+  </script>
+</BasicLayout>

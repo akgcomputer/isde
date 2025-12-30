@@ -1,0 +1,276 @@
+---
+// src/pages/iletisim.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import configData from './data/config.json';
+
+const companyName = configData.company;
+const siteUrl = configData.siteUrl;
+const whatsappNumber = configData.whatsapp;
+const whatsappText = configData.whatsappText || "WhatsApp'tan Yazın";
+const email = configData.email || "iletisim@isdeyeter.com";
+const phone = configData.phone || whatsappNumber;
+---
+
+<BasicLayout title="İletişim - Bize Ulaşın" description="İşde Yeter iletişim sayfası. WhatsApp, telefon ve e-posta ile bize ulaşın.">
+
+<div class="iletisim-sayfasi">
+    <div class="container">
+        <!-- Başlık -->
+        <header class="iletisim-baslik">
+            <h1>İletişim</h1>
+            <p>Size nasıl yardımcı olabiliriz? Hemen iletişime geçin.</p>
+        </header>
+
+        <!-- WhatsApp Butonu (Ana CTA) -->
+        <div class="whatsapp-ana">
+            <a href={`https://wa.me/${whatsappNumber}?text=Merhaba,%20${companyName}%20iletişim%20sayfasından%20yazıyorum`} 
+               class="whatsapp-button" target="_blank">
+                <i class="fab fa-whatsapp"></i>
+                <span>{whatsappText}</span>
+            </a>
+        </div>
+
+        <!-- İletişim Bilgileri -->
+        <div class="iletisim-bilgileri">
+            <div class="bilgi-kart">
+                <div class="ikon">
+                    <i class="fab fa-whatsapp"></i>
+                </div>
+                <div class="icerik">
+                    <h3>WhatsApp</h3>
+                    <a href={`https://wa.me/${whatsappNumber}`} target="_blank">
+                        {whatsappNumber}
+                    </a>
+                    <p>7/24 WhatsApp üzerinden yazabilirsiniz</p>
+                </div>
+            </div>
+
+                        <div class="bilgi-kart">
+                <div class="ikon">
+                    <i class="fas fa-envelope"></i>
+                </div>
+                <div class="icerik">
+                    <h3>E-posta</h3>
+                    <a href={`mailto:${email}`}>
+                        {email}
+                    </a>
+                    <p>E-posta ile iletişime geçin</p>
+                </div>
+            </div>
+        </div>
+
+        <!-- Açıklama -->
+        <div class="aciklama">
+            <p><strong>Hızlı Yanıt:</strong> WhatsApp üzerinden en hızlı şekilde yanıt alırsınız.</p>
+            <p><strong>Çalışma Saatleri:</strong> 7 gün 24 saat WhatsApp destek hattımız açıktır.</p>
+        </div>
+    </div>
+</div>
+
+<style is:global>
+    /* Temel Stiller */
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+    }
+
+    body {
+        font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, Oxygen, Ubuntu, sans-serif;
+        line-height: 1.6;
+        color: #333;
+        background: #f8f9fa;
+    }
+
+    .container {
+        max-width: 800px;
+        margin: 0 auto;
+        padding: 0 20px;
+    }
+
+    /* İletişim Sayfası */
+    .iletisim-sayfasi {
+        min-height: 80vh;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        padding: 40px 0;
+    }
+
+    /* Başlık */
+    .iletisim-baslik {
+        text-align: center;
+        margin-bottom: 50px;
+    }
+
+    .iletisim-baslik h1 {
+        font-size: 2.5rem;
+        color: #2c3e50;
+        margin-bottom: 15px;
+    }
+
+    .iletisim-baslik p {
+        font-size: 1.1rem;
+        color: #7f8c8d;
+    }
+
+    /* WhatsApp Ana Buton */
+    .whatsapp-ana {
+        text-align: center;
+        margin-bottom: 60px;
+    }
+
+    .whatsapp-button {
+        display: inline-flex;
+        align-items: center;
+        gap: 15px;
+        background: #25D366;
+        color: white;
+        padding: 20px 40px;
+        border-radius: 50px;
+        text-decoration: none;
+        font-size: 1.3rem;
+        font-weight: 600;
+        transition: all 0.3s ease;
+        box-shadow: 0 10px 30px rgba(37, 211, 102, 0.3);
+    }
+
+    .whatsapp-button:hover {
+        background: #128C7E;
+        transform: translateY(-3px);
+        box-shadow: 0 15px 40px rgba(37, 211, 102, 0.4);
+    }
+
+    .whatsapp-button i {
+        font-size: 1.8rem;
+    }
+
+    /* İletişim Bilgileri */
+    .iletisim-bilgileri {
+        display: grid;
+        grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+        gap: 25px;
+        margin-bottom: 50px;
+    }
+
+    .bilgi-kart {
+        background: white;
+        padding: 30px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.08);
+        text-align: center;
+        transition: transform 0.3s ease;
+    }
+
+    .bilgi-kart:hover {
+        transform: translateY(-5px);
+    }
+
+    .ikon {
+        width: 70px;
+        height: 70px;
+        background: #f8f9fa;
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        margin: 0 auto 20px;
+    }
+
+    .ikon i {
+        font-size: 1.8rem;
+        color: #25D366;
+    }
+
+    .bilgi-kart:nth-child(2) .ikon i {
+        color: #667eea;
+    }
+
+    .bilgi-kart:nth-child(3) .ikon i {
+        color: #e74c3c;
+    }
+
+    .icerik h3 {
+        color: #2c3e50;
+        margin-bottom: 10px;
+        font-size: 1.2rem;
+    }
+
+    .icerik a {
+        color: #25D366;
+        text-decoration: none;
+        font-size: 1.1rem;
+        font-weight: 600;
+        display: block;
+        margin-bottom: 10px;
+    }
+
+    .icerik p {
+        color: #7f8c8d;
+        font-size: 0.95rem;
+        margin-top: 5px;
+    }
+
+    /* Açıklama */
+    .aciklama {
+        background: white;
+        padding: 25px;
+        border-radius: 15px;
+        box-shadow: 0 5px 20px rgba(0,0,0,0.05);
+        text-align: center;
+    }
+
+    .aciklama p {
+        margin-bottom: 10px;
+        color: #555;
+    }
+
+    .aciklama strong {
+        color: #2c3e50;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+        .iletisim-baslik h1 {
+            font-size: 2rem;
+        }
+
+        .whatsapp-button {
+            padding: 15px 30px;
+            font-size: 1.1rem;
+        }
+
+        .iletisim-bilgileri {
+            grid-template-columns: 1fr;
+            gap: 20px;
+        }
+
+        .bilgi-kart {
+            padding: 25px 20px;
+        }
+    }
+
+    @media (max-width: 480px) {
+        .container {
+            padding: 0 15px;
+        }
+
+        .iletisim-baslik h1 {
+            font-size: 1.8rem;
+        }
+
+        .iletisim-baslik p {
+            font-size: 1rem;
+        }
+
+        .whatsapp-button {
+            width: 100%;
+            justify-content: center;
+        }
+    }
+</style>
+
+<!-- Font Awesome -->
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+
+</BasicLayout>

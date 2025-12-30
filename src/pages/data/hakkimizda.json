@@ -1,0 +1,267 @@
+{
+  "hakkimizda": {
+    "tr": {
+      "baslik": "1999'dan günümüze..",
+      "ustBaslik": "Teknoloji ile Geleceği Şekillendiriyoruz",
+      "tanitim": "İş de Yeter'i aslında bir slogan olarak düşünebilirsiniz, sen yeterki İş var De gerisi kolay dedik ve İş de Yeter'i kurduk, ticari hayatımız 1999 yılından bu yana bilişim/yazılım sektöründe faaliyet gösteriyoruz, köklü ve yenilikçi bir deneyime sahibiz, teknolojinin gücüyle iş dünyasını dönüştüren öncü bir kuruluş olmaya, üretmeye, ticarete destek olmaya tüm gücümüzle  katkı sağlamaya çaşışıyoruz.",
+      "icerik": [
+        {
+          "baslik": "Kuruluş Hikayemiz",
+          "icerik": "İş de Yeter, 1999 yılında kurucusu Mehmet Fatih Akgün'ün vizyonu doğrultusunda, bilişim sektöründe kalıcı bir iz bırakmak amacıyla yola çıktı. Teknolojinin hızla evrildiği bir dönemde, iş dünyasının dijital dönüşüm ihtiyaçlarına yönelik çözümler üretmek için kuruldu.",
+          "ikon": "fas fa-history"
+        },
+        {
+          "baslik": "Hizmet Platformumuz",
+          "icerik": "Yalnızca yazılım hizmetleri sunmakla kalmıyor, aynı zamanda kapsamlı bir hizmet platformu olarak faaliyet gösteriyoruz. Web sitemiz üzerinden 500'den fazla farklı alanda hizmet alabilir, ücretsiz tekliflerle ihtiyaçlarınıza en uygun çözümü bulabilirsiniz.",
+          "ikon": "fas fa-layer-group"
+        },
+        {
+          "baslik": "Vizyonumuz",
+          "icerik": "Teknolojinin gücüyle, iş dünyasının ihtiyaçlarını karşılayan ve geleceğe yön veren bir şirket olmak. Dijital dönüşümde öncü rol oynayarak, müşterilerimizin süreçlerini optimize ediyor ve büyümelerine katkı sağlıyoruz.",
+          "ikon": "fas fa-eye"
+        }
+      ],
+      "faaliyetler": {
+        "baslik": "Ana Faaliyet Konularımız",
+        "aciklama": "İş de Yeter olarak, işletmelerin dijital dönüşüm yolculuğunda ihtiyaç duyduğu tüm çözümleri tek çatı altında sunuyoruz.",
+        "konular": [
+          {
+            "baslik": "🌐 Web Paketleri",
+            "icerik": "Profesyonel web tasarımı, e-ticaret çözümleri, mobil uyumlu web siteleri ve SEO optimizasyonu",
+            "renk1": "#3B82F6",
+            "renk2": "#06B6D4"
+          },
+          {
+            "baslik": "📊 Muhasebe Paketleri",
+            "icerik": "Şirketlerin finansal süreçlerini kolaylaştıran entegre muhasebe çözümleri ve otomasyon sistemleri",
+            "renk1": "#10B981",
+            "renk2": "#059669"
+          },
+          {
+            "baslik": "🛠️ ERP ve CRM Paketleri",
+            "icerik": "İş süreçlerinizi optimize eden kurumsal kaynak planlama (ERP) ve müşteri ilişkileri yönetimi (CRM) sistemleri",
+            "renk1": "#8B5CF6",
+            "renk2": "#EC4899"
+          },
+          {
+            "baslik": "📈 Dijital Pazarlama",
+            "icerik": "SEO, sosyal medya yönetimi, pazaryeri entegrasyonları ve online reklam yönetimi",
+            "renk1": "#F59E0B",
+            "renk2": "#F97316"
+          }
+        ]
+      },
+      "nedenBiz": {
+        "baslik": "Neden İş de Yeter?",
+        "aciklama": "Tecrübemiz, uzman ekibimiz ve müşteri odaklı yaklaşımımızla fark yaratıyoruz.",
+        "nedenler": [
+          {
+            "baslik": "Teknoloji ve Yenilikçilik",
+            "icerik": "Yapay zeka, büyük veri ve otomasyon gibi alanlarda öncü çözümler sunuyoruz.",
+            "ikon": "fas fa-microchip"
+          },
+          {
+            "baslik": "Müşteri Odaklılık",
+            "icerik": "Her projeyi müşteri ihtiyaçlarına özel olarak tasarlıyor, kalite ve güvenilirlikten ödün vermiyoruz.",
+            "ikon": "fas fa-users"
+          },
+          {
+            "baslik": "Geniş Hizmet Yelpazesi",
+            "icerik": "Web paketlerinden muhasebe çözümlerine, ERP ve CRM sistemlerine kadar her alanda kapsamlı hizmetler sunuyoruz.",
+            "ikon": "fas fa-list-check"
+          },
+          {
+            "baslik": "24 Yıllık Tecrübe",
+            "icerik": "1999'dan beri edindiğimiz sektör tecrübesiyle, projelerinizde güvenilir bir ortak olarak yanınızdayız.",
+            "ikon": "fas fa-award"
+          }
+        ]
+      },
+      "hedefKitle": {
+        "baslik": "İş de Yeter Kimler İçin?",
+        "aciklama": "Farklı ihtiyaçlara yönelik özelleştirilmiş çözümlerimizle herkes için uygun çözümler sunuyoruz.",
+        "gruplar": [
+          {
+            "baslik": "İşletmeler",
+            "icerik": "E-ticaret sitesi kurmak isteyenler, pazaryerlerinde yer almak isteyenler, dijital pazarlama ve yazılım çözümlerine ihtiyaç duyanlar.",
+            "ikon": "fas fa-building"
+          },
+          {
+            "baslik": "Girişimciler",
+            "icerik": "Yeni bir iş fikrini hayata geçirmek isteyenler, teknolojik altyapı ve danışmanlık hizmetlerine ihtiyaç duyanlar.",
+            "ikon": "fas fa-lightbulb"
+          },
+          {
+            "baslik": "Bireysel Kullanıcılar",
+            "icerik": "Özel ders almak isteyen öğrenciler, yabancı dil öğrenmek isteyenler, kişisel gelişimine yatırım yapmak isteyenler.",
+            "ikon": "fas fa-user-graduate"
+          }
+        ]
+      },
+      "degerler": {
+        "baslik": "Değerlerimiz",
+        "aciklama": "Çalışma prensiplerimiz ve temel değerlerimiz.",
+        "degerler": [
+          {
+            "baslik": "Kalite",
+            "icerik": "En yüksek kalite standartlarında hizmet sunmak temel prensibimizdir.",
+            "ikon": "fas fa-star"
+          },
+          {
+            "baslik": "Güvenilirlik",
+            "icerik": "Söz verdiğimiz her şeyi zamanında ve eksiksiz teslim ederiz.",
+            "ikon": "fas fa-handshake"
+          },
+          {
+            "baslik": "İnovasyon",
+            "icerik": "Sürekli öğrenme ve yenilikçi çözümler geliştirme kültürüne sahibiz.",
+            "ikon": "fas fa-rocket"
+          },
+          {
+            "baslik": "Şeffaflık",
+            "icerik": "Tüm süreçlerde açık ve şeffaf iletişim kurarız.",
+            "ikon": "fas fa-eye"
+          }
+        ]
+      },
+      "iletisim": {
+        "baslik": "Bizimle İletişime Geçin",
+        "aciklama": "Projeleriniz hakkında görüşmek veya hizmetlerimiz hakkında daha fazla bilgi almak için bize ulaşın.",
+        "buton": "Hemen İletişime Geç",
+        "slogan": "İş de Yeter: Teknoloji, çözüm ve güvenilirlik bir arada! 🚀"
+      }
+    },
+    "en": {
+      "baslik": "About Us",
+      "ustBaslik": "Shaping the Future with Technology",
+      "tanitim": "Job is Enough (İş de Yeter) is a pioneering organization with deep-rooted experience in the IT sector since 1999, transforming the business world with the power of technology.",
+      "icerik": [
+        {
+          "baslik": "Our Founding Story",
+          "icerik": "Job is Enough started its journey in 1999 under the vision of its founder Mehmet Fatih Akgün, with the aim of leaving a permanent mark in the IT sector. It was established to produce solutions for the digital transformation needs of the business world during a period of rapid technological evolution.",
+          "ikon": "fas fa-history"
+        },
+        {
+          "baslik": "Our Service Platform",
+          "icerik": "We not only provide software services but also operate as a comprehensive service platform. Through our website, you can access services in over 500 different fields and find the most suitable solution for your needs with free quotes.",
+          "ikon": "fas fa-layer-group"
+        },
+        {
+          "baslik": "Our Vision",
+          "icerik": "To be a company that meets the needs of the business world with the power of technology and shapes the future. By playing a leading role in digital transformation, we optimize our customers' processes and contribute to their growth.",
+          "ikon": "fas fa-eye"
+        },
+        {
+          "baslik": "Our Mission",
+          "icerik": "To provide the best service to our customers, making their work easier and contributing to their growth. With our innovative solutions, we make business processes efficient and increase your competitive power.",
+          "ikon": "fas fa-bullseye"
+        }
+      ],
+      "faaliyetler": {
+        "baslik": "Our Main Areas of Activity",
+        "aciklama": "As Job is Enough, we offer all the solutions businesses need in their digital transformation journey under one roof.",
+        "konular": [
+          {
+            "baslik": "🌐 Web Packages",
+            "icerik": "Professional web design, e-commerce solutions, mobile-friendly websites, and SEO optimization",
+            "renk": "from-blue-500 to-cyan-400"
+          },
+          {
+            "baslik": "📊 Accounting Packages",
+            "icerik": "Integrated accounting solutions and automation systems that simplify companies' financial processes",
+            "renk": "from-green-500 to-emerald-400"
+          },
+          {
+            "baslik": "🛠️ ERP and CRM Packages",
+            "icerik": "Enterprise Resource Planning (ERP) and Customer Relationship Management (CRM) systems that optimize your business processes",
+            "renk": "from-purple-500 to-pink-500"
+          },
+          {
+            "baslik": "📈 Digital Marketing",
+            "icerik": "SEO, social media management, marketplace integrations, and online advertising management",
+            "renk": "from-yellow-500 to-orange-400"
+          }
+        ]
+      },
+      "nedenBiz": {
+        "baslik": "Why Job is Enough?",
+        "aciklama": "We make a difference with our experience, expert team, and customer-focused approach.",
+        "nedenler": [
+          {
+            "baslik": "Technology and Innovation",
+            "icerik": "We offer pioneering solutions in areas such as artificial intelligence, big data, and automation.",
+            "ikon": "fas fa-microchip"
+          },
+          {
+            "baslik": "Customer-Centric Approach",
+            "icerik": "We design every project according to the specific needs of our customers, never compromising on quality and reliability.",
+            "ikon": "fas fa-users"
+          },
+          {
+            "baslik": "Wide Range of Services",
+            "icerik": "We provide comprehensive services in every field, from web packages to accounting solutions, ERP, and CRM systems.",
+            "ikon": "fas fa-list-check"
+          },
+          {
+            "baslik": "24 Years of Experience",
+            "icerik": "With our industry experience since 1999, we are by your side as a reliable partner in your projects.",
+            "ikon": "fas fa-award"
+          }
+        ]
+      },
+      "hedefKitle": {
+        "baslik": "Who is Job is Enough For?",
+        "aciklama": "We offer suitable solutions for everyone with our customized solutions for different needs.",
+        "gruplar": [
+          {
+            "baslik": "Businesses",
+            "icerik": "Those who want to set up an e-commerce site, participate in marketplaces, or need digital marketing and software solutions.",
+            "ikon": "fas fa-building"
+          },
+          {
+            "baslik": "Entrepreneurs",
+            "icerik": "Those who want to bring a new business idea to life and need technological infrastructure and consulting services.",
+            "ikon": "fas fa-lightbulb"
+          },
+          {
+            "baslik": "Individual Users",
+            "icerik": "Students seeking private lessons, individuals wanting to learn a foreign language, or those looking to invest in personal development.",
+            "ikon": "fas fa-user-graduate"
+          }
+        ]
+      },
+      "degerler": {
+        "baslik": "Our Values",
+        "aciklama": "Our working principles and core values.",
+        "degerler": [
+          {
+            "baslik": "Quality",
+            "icerik": "Providing services according to the highest quality standards is our fundamental principle.",
+            "ikon": "fas fa-star"
+          },
+          {
+            "baslik": "Reliability",
+            "icerik": "We deliver everything we promise on time and completely.",
+            "ikon": "fas fa-handshake"
+          },
+          {
+            "baslik": "Innovation",
+            "icerik": "We have a culture of continuous learning and developing innovative solutions.",
+            "ikon": "fas fa-rocket"
+          },
+          {
+            "baslik": "Transparency",
+            "icerik": "We maintain open and transparent communication in all processes.",
+            "ikon": "fas fa-eye"
+          }
+        ]
+      },
+      "iletisim": {
+        "baslik": "Contact Us",
+        "aciklama": "Reach out to us to discuss your projects or to learn more about our services.",
+        "buton": "Contact Now",
+        "slogan": "Job is Enough: Technology, solutions, and reliability all in one! 🚀"
+      }
+    }
+  }
+}

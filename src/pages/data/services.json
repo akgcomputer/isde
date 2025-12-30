@@ -1,0 +1,175 @@
+{
+  "categories": [
+    {
+      "name": "Yazılım ve Teknoloji",
+      "services": [
+        "Web Yazılım",
+        "Mobil Uygulamalar",
+        "E-ticaret",
+        "Masaüstü Uygulamalar",
+        "Domain & Hosting Hizmetleri",
+        "Son Kullanıcı Testleri",
+        "Teknolojik Destek",
+        "WordPress"
+      ]
+    },
+    {
+      "name": "Oyun Geliştirme & CMS",
+      "services": [
+        "Oyun Geliştirme",
+        "Websitesi Kurulumu",
+        "Data Analizi & Raporlama",
+        "WordPress ile E-Ticaret",
+        "Web Sitesi Oluşturucular & CMS",
+        "Diğer Yazılım Teknoloji",
+        "WooCommerce ile E-Ticaret"
+      ]
+    },
+    {
+      "name": "İnternet Reklamcılığı",
+      "services": [
+        "Sosyal Medya Yönetimi",
+        "Web Analytics & İzleme",
+        "Diğer İnternet Reklamcılığı",
+        "Influencer Marketing",
+        "Reklam Yönetimi",
+        "Mobil Reklamcılık",
+        "Arama Motoru Optimizasyonu (SEO)"
+      ]
+    },
+    {
+      "name": "İş ve Yönetim",
+      "services": [
+        "Pazar Araştırmaları",
+        "Marka Hizmetleri",
+        "Sanal Asistanlık",
+        "Ürün & Veri Girişi",
+        "Excel İşleri",
+        "Danışmanlıklar",
+        "Satış & Müşteri Bulma",
+        "Diğer İş Yönetim"
+      ]
+    },
+    {
+      "name": "Video ve Animasyon",
+      "services": [
+        "Introlar",
+        "Video Reklamlar",
+        "Video Prodüksiyon",
+        "Oyunculu Tanıtım Videoları",
+        "Diğer Video",
+        "Animasyon & 3D",
+        "Kurgu & Post Prodüksiyon",
+        "Yayıncılar İçin Videolar",
+        "Özel Günlere Videolar"
+      ]
+    },
+    {
+      "name": "Ses ve Müzik",
+      "services": [
+        "Seslendirme",
+        "Mix & Mastering",
+        "Beste & Şarkı Yazarlığı",
+        "Jingle & Reklam Müziği",
+        "Podcast Düzenleme",
+        "Diğer Ses & Müzik"
+      ]
+    },
+    {
+      "name": "Çeviri ve Metin",
+      "services": [
+        "Web Sitesi İçeriği Çeviri",
+        "Senaryo & Yaratıcı Metin",
+        "Basın Bülteni",
+        "CV & Ön Yazı",
+        "Diğer Yazı & Çeviri",
+        "Metin Yazarlığı",
+        "Redaksiyon & Metin Düzenleme",
+        "Deşifre",
+        "Marka Adı & Slogan",
+        "Yorum & İnceleme"
+      ]
+    },
+    {
+      "name": "Grafik ve Tasarım",
+      "services": [
+        "Logo Tasarımı",
+        "Reklam & Banner Tasarımı",
+        "3D Tasarımlar",
+        "UI/UX Tasarımı",
+        "İllüstrasyon",
+        "Fotoğraf & Düzenleme",
+        "Dövme Tasarımı",
+        "Kurumsal Kimlik & Kartvizit",
+        "Davetiye Tasarımları",
+        "Yayıncılar İçin Tasarımlar",
+        "Broşür & Katalog Tasarımı",
+        "Oyun Sanatı",
+        "Sosyal Medya Tasarımları",
+        "Ambalaj Tasarımı",
+        "Storyboard Tasarımı",
+        "Sunum & Infografik",
+        "Karikatür & Karakalem",
+        "Diğer Tasarımlar"
+      ]
+    }
+  ],
+  "featuredServices": [
+    {
+      "title": "İnternet Reklamcılığı ile Pazarlamanı Yaptır",
+      "slug": "internet-reklamciligi-ile-pazarlamani-yaptir",
+      "description": "Google Ads, sosyal medya reklamları ve dijital pazarlama stratejileri ile markanızı doğru kitlelere ulaştırın.",
+      "icon": "fa-bullhorn",
+      "link": "https://isdeyeter.com/diger-internet-reklamciligi-37/"
+    },
+    {
+      "title": "Web Sitesi Yapımı ve Paketler",
+      "slug": "web-sitesi-yapimi-ve-paketler",
+      "description": "Modern, responsive ve SEO uyumlu web siteleri ile dijital varlığınızı güçlendirin.",
+      "icon": "fa-globe",
+      "link": "https://isdeyeter.com/ana-dijital-isler-web-sitesi-yapimi-web-paketleri/"
+    },
+    {
+      "title": "SEO ile Google'da 1. Sıraya Çıkın",
+      "slug": "seo-ile-googleda-1-siraya-cikin",
+      "description": "Organik trafik ve kalıcı sonuçlar için profesyonel SEO hizmetleri.",
+      "icon": "fa-search",
+      "link": "https://isdeyeter.com/ana-dijital-isler-seo-hizmeti-alarak-web-sitenizi-google-aramalarinda-bir-numara-yapin/"
+    },
+    {
+      "title": "E-Ticaret Çözümleri",
+      "slug": "e-ticaret-cozumleri",
+      "description": "Online mağazanızı kurun, yönetin ve satışlarınızı artırın.",
+      "icon": "fa-shopping-cart",
+      "link": "https://isdeyeter.com/is-de-yeter/"
+    },
+    {
+      "title": "Sosyal Medya Yönetimi",
+      "slug": "sosyal-medya-yonetimi",
+      "description": "Sosyal medya hesaplarınızı profesyonel ekibimizle yönetin.",
+      "icon": "fa-instagram",
+      "link": "https://isdeyeter.com/is-de-yeter/"
+    },
+    {
+      "title": "Pazaryeri Entegrasyonları",
+      "slug": "pazaryeri-entegrasyonlari",
+      "description": "Trendyol, Hepsiburada, Amazon ve diğer pazaryerlerinde satış yapın.",
+      "icon": "fa-store",
+      "link": "https://isdeyeter.com/is-de-yeter/"
+    },
+    {
+      "title": "Yazılım Geliştirme",
+      "slug": "yazilim-gelistirme",
+      "description": "Özel yazılım çözümleri ile iş süreçlerinizi dijitalleştirin.",
+      "icon": "fa-code",
+      "link": "https://isdeyeter.com/is-de-yeter/"
+    },
+    {
+      "title": "Grafik Tasarım Hizmetleri",
+      "slug": "grafik-tasarim-hizmetleri",
+      "description": "Marka kimliğinize uygun profesyonel grafik tasarımlar.",
+      "icon": "fa-palette",
+      "link": "https://isdeyeter.com/is-de-yeter/"
+    }
+  ]
+}

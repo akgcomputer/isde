@@ -1,0 +1,196 @@
+{
+  "muhasebePaketleri": [
+    {
+      "id": "free",
+      "name": "Ücretsiz Paket",
+      "price": "0",
+      "period": "Ömür Boyu Ücretsiz",
+      "note": "*Sadece yıllık server/hosting bedeli öder",
+      "features": [
+        "📦 Stok Yönetimi – Detaylı stok takibi ve envanter kontrolü",
+        "🔍 Cari Yönetimi – Müşteri ve tedarikçi hesaplarının yönetimi"
+      ],
+      "popular": false,
+      "whatsappOnly": true
+    },
+    {
+      "id": "basic",
+      "name": "Online Muhasebe + Tek Şube Paketi",
+      "price": "999",
+      "period": "aylık",
+      "features": [
+        "📦 Stok Yönetimi",
+        "🔍 Cari Yönetimi",
+        "🧾 e-Fatura & e-İrsaliye",
+        "💼 Kasa ve Banka Yönetimi",
+        "📱 Mobil Uyumlu"
+      ],
+      "popular": true
+    },
+    {
+      "id": "pro5",
+      "name": "Online Muhasebe+5 Şubeli Mağaza + E-Ticaret + B2B Paketi",
+      "price": "4,999",
+      "period": "aylık",
+      "features": [
+        "Temel Paketin Tüm Özellikleri",
+        "5 Şube Yönetimi",
+        "Çoklu Depo Takibi",
+        "Kullanıcı Yetkilendirme",
+        "Personel Yönetimi"
+      ],
+      "popular": false
+    },
+    {
+      "id": "pro10",
+      "name": "Online Muhasebe+10 Şubeli Mağaza + E-Ticaret + B2B Paketi",
+      "price": "8,999",
+      "period": "aylık",
+      "features": [
+        "5 Şube Paketi Tüm Özellikleri",
+        "10 Şube Yönetimi",
+        "Toplu Stok İşlemleri",
+        "Veri Transferi-Yedekleme",
+        "500 Adet e-Fatura Kontör HEDİYE"
+      ],
+      "popular": false
+    },
+    {
+      "id": "pro15",
+      "name": "Online Muhasebe+15 Şubeli Mağaza + E-Ticaret + B2B Paketi",
+      "price": "9,999",
+      "period": "aylık",
+      "features": [
+        "10 Şube Paketi Tüm Özellikleri",
+        "15 Şube Yönetimi",
+        "Saha/Sıcak Satış Modülü",
+        "Sayım İşlemleri",
+        "7/24 Öncelikli Destek"
+      ],
+      "popular": false
+    },
+    {
+      "id": "unlimited",
+      "name": "Online Muhasebe+Sınırsız Şubeli Mağaza + E-Ticaret + B2B Paketi",
+      "price": "19,999",
+      "period": "aylık",
+      "features": [
+        "15 Şube Paketi Tüm Özellikleri",
+        "Sınırsız Şube Yönetimi",
+        "Web & Android Uygulama",
+        "Depo Yönetimi",
+        "1000 Adet e-Fatura Kontör HEDİYE"
+      ],
+      "popular": false
+    },
+    {
+      "id": "erp",
+      "name": "Online Muhasebe+Mağazacılık + B2B + E-Ticaret + ERP Proje Yönetimi Modülü",
+      "price": "49,999",
+      "period": "aylık",
+      "features": [
+        "Sınırsız Şube Paketi Tüm Özellikleri",
+        "ERP Proje Yönetimi",
+        "Görev Atama ve Takip",
+        "Maliyet ve Süre Raporlama",
+        "Proje Sonlandırma Modülü"
+      ],
+      "popular": false
+    },
+    {
+      "id": "bi",
+      "name": "Online Muhasebe+Mağazacılık + E-Ticaret + B2B +ERP Proje Yönetimi+ERP İş Zekası (BI) Modülü",
+      "price": "69,999",
+      "period": "aylık",
+      "features": [
+        "ERP Proje Yönetimi Tüm Özellikleri",
+        "ERP İş Zekası (BI) Modülü",
+        "Veri Toplama ve Analiz",
+        "Dashboard Tasarımı",
+        "Özelleştirilmiş Raporlama"
+      ],
+      "popular": false
+    },
+    {
+      "id": "service",
+      "name": "Online Muhasebe+Mağazacılık + B2B + E-Ticaret Teknik Servis Yönetimi Modülü",
+      "price": "29,999",
+      "period": "aylık",
+      "features": [
+        "Sınırsız Şube Paketi Tüm Özellikleri",
+        "Teknik Servis Yönetimi",
+        "Servis Talebi ve Takip",
+        "Faturalandırma Sistemi",
+        "Müşteri Memnuniyeti Analizi"
+      ],
+      "popular": false
+    }
+  ],
+  "packageDetails": {
+    "free": {
+      "title": "Ücretsiz Paket Detayları",
+      "description": "Temel işletme ihtiyaçlarınız için başlangıç paketi",
+      "modules": [
+        "📦 Stok Yönetimi – Detaylı stok takibi ve envanter kontrolü",
+        "🔍 Cari Yönetimi – Müşteri ve tedarikçi hesaplarının yönetimi"
+      ]
+    },
+    "magaza": {
+      "title": "Mağazacılık Paketi Detayları",
+      "description": "Tam entegre mağaza yönetim çözümü",
+      "modules": [
+        "📦 Stok Yönetimi – Detaylı stok takibi ve envanter kontrolü",
+        "🔍 Cari Yönetimi – Müşteri ve tedarikçi hesaplarının yönetimi",
+        "🧾 e-Fatura – Tam entegre elektronik fatura çözümü",
+        "📑 e-İrsaliye – Elektronik irsaliye yönetimi",
+        "💼 Kasa – Nakit ve banka hesaplarının detaylı takibi",
+        "🏦 Banka – Banka hesap yönetimi ve takibi",
+        "📋 Çek & Senet – Çek-senet portföy yönetimi ve takibi",
+        "📊 Toplu Stok İşlemleri – Toplu ürün giriş, fiyat güncelleme gibi işlemler",
+        "🔄 Veri Transferi-Yedekleme – Excel/XML ile veri aktarımı ve otomatik yedekleme",
+        "🔐 Kullanıcı Yetkilendirme – Rol bazlı kullanıcı yetkilendirme sistemi",
+        "👥 Personel Yönetimi – Personel bilgileri ve performans takibi",
+        "📄 Özlük Modülü – Personel dosyaları ve belge yönetimi",
+        "📱 Saha/Sıcak Satış – Mobil cihazlarla saha satış işlemleri",
+        "🌐 Web & 📱 Android – Tüm platformlarda sorunsuz çalışma",
+        "🏚️ Depo Yönetimi – Çoklu depo ve depo arası transfer işlemleri",
+        "🧮 Sayım İşlemleri – Periyodik stok sayımı ve fark analizi",
+        "🎁 500 Adet e-Fatura/e-Arşiv Kontör HEDİYE – Yeni başlayanlar için özel avantaj"
+      ]
+    },
+    "erp": {
+      "title": "ERP Proje Yönetimi Modülü Detayları",
+      "description": "Kurumsal proje yönetimi ve takip sistemi",
+      "modules": [
+        "• Proje Oluşturma – Proje Adı, Başlangıç-Bitiş Tarihleri, Bütçe Tanımlama, Sorumlu Kişi/Listesi",
+        "• Görev Atama – Görev Tanımlama, Görev Süresi, İlgili Kişiye Atama",
+        "• Görev Takibi – Görev Durumu (Başlamadı, Devam Ediyor, Tamamlandı), İlerleme Yüzdesi, Görev Geçmişi",
+        "• Maliyet ve Süre Raporlama – Gerçekleşen Maliyetler, Planlanan ve Gerçekleşen Süre Karşılaştırması, Bütçe Fark Analizi",
+        "• Proje Sonlandırma – Proje Sonuç Raporu, Performans Değerlendirmesi, Doküman Arşivleme"
+      ]
+    },
+    "bi": {
+      "title": "ERP İş Zekası (BI) Modülü Detayları",
+      "description": "Gelişmiş analiz ve iş zekası çözümleri",
+      "modules": [
+        "* Veri Toplama – Üretim Verileri, Satış Verileri, Stok Verileri, Finansal Veriler",
+        "o Görselleştirme – Dashboard Tasarımı, Grafikler (Çubuk, Pasta, Çizgi Grafikleri), Tablolar ve Filtreleme Seçenekleri",
+        "o Analiz – Satış Analizi, Stok Hareketleri Analizi, Maliyet ve Karlılık Analizi, Performans Göstergeleri (KPI'lar)",
+        "o Raporlama – Otomatik Rapor Oluşturma, PDF/Excel Dışa Aktarma, Yöneticiye Gönderilen Haftalık/Aylık Raporlar",
+        "o Özelleştirme – Kullanıcı Bazlı Dashboard Ayarları, Favori Raporlar ve Görseller, Erişim Yetkilendirmesi"
+      ]
+    },
+    "service": {
+      "title": "Teknik Servis Yönetimi Modülü Detayları",
+      "description": "Kapsamlı teknik servis yönetim sistemi",
+      "modules": [
+        "• Tanımlamalar (Ayarlar) – Yapılacakları tanımlama, Kontrol Değerleri, İşlem durumu, Cihaz durumu",
+        "• Servis Talebi Oluşturma – Müşteri Bilgisi, Arızalı ürün listesi, Problem Açıklaması, Teknisyen Atama",
+        "• Servis Kaydı ve İzleme – Servis Kaydı Oluşturma/Güncelleme, Yapılan İşlemler Listesi, Tanımlamalar, Aciliyet Derecesi",
+        "• Müşteri Onayı – Kağıt/PDF dökümü, E-Posta Onayı, SMS Onayı",
+        "• Faturalandırma – Servis Ücreti Hesaplama, Fatura Oluşturma, Müşteriye Fatura Gönderme",
+        "• Raporlama – Servis Süreleri, Çözülen Talep Sayısı, Müşteri Memnuniyeti Analizi"
+      ]
+    }
+  }
+}
