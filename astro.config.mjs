@@ -1,9 +1,8 @@
 import { defineConfig } from 'astro/config';
 import cloudflare from '@astrojs/cloudflare';
 
+// https://astro.build/config
 export default defineConfig({
-  output: 'static',  // 'server' yerine 'static' yap!
-  adapter: cloudflare({
-    imageService: 'noop'
-  })
+  output: 'server', // veya 'static' eğer statik site ise
+  adapter: cloudflare()
 });
