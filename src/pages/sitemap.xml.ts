@@ -1,5 +1,6 @@
 // src/pages/sitemap.xml.ts
 import type { APIRoute } from 'astro';
+import servicesSlugs from './data/services_slugs.json';
 
 export const prerender = false; // Sunucu tarafında anlık çalışması (request-time) için SSR/Hybrid zorunlu
 
@@ -21,6 +22,16 @@ const staticPages = [
 export const GET: APIRoute = async (context) => {
   const lastMod = new Date().toISOString().split('T')[0];
   let dynamicUrls: string[] = [];
+
+  // Yedeklenen tüm programmatic SEO hizmet sayfalarını dinamik site haritasına ekle
+  servicesSlugs.forEach((slug: string) => {
+    dynamicUrls.push(`<url>
+      <loc>${siteUrl}/hizmetler/${slug}</loc>
+      <lastmod>${lastMod}</lastmod>
+      <changefreq>weekly</changefreq>
+      <priority>0.7</priority>
+    </url>`);
+  });
 
   // 1. Cloudflare D1 veritabanı bağlantısı denetimi
   const runtime = context.locals.runtime as any;
