@@ -1,8 +1,27 @@
 ---
 // src/pages/hizmetler/[service].astro
 import RedirectTemplate from '../../components/RedirectTemplate.astro';
+import servicesSlugs from '../data/services_slugs.json';
 
-export const prerender = false; // İstek anında dinamik çalışması için SSR aktif
+// Statik üretimi aktifleştiriyoruz (Astro Hybrid modunda getStaticPaths tanımlandığında prerender otomatik true olur)
+export async function getStaticPaths() {
+  const paths: any[] = [];
+  
+  servicesSlugs.forEach((slug: string) => {
+    // 1. Orijinal tam slug (örn: 'ankara-boya-badana-132')
+    paths.push({ params: { service: slug } });
+    
+    // 2. Kimlik nosuz temiz slug (örn: 'ankara-boya-badana')
+    const cleanSlug = slug.replace(/-\d+$/, '');
+    if (cleanSlug !== slug) {
+      paths.push({ params: { service: cleanSlug } });
+    }
+  });
+
+  return paths;
+}
+
+const { service } = Astro.params;
 ---
 
-<RedirectTemplate />
+<RedirectTemplate serviceSlug={service} />

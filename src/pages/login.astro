@@ -5,22 +5,22 @@ import BasicLayout from '../layouts/BasicLayout.astro';
 export const prerender = true; // Login sayfası statik olarak önceden derlenir
 ---
 
-<BasicLayout title="Giriş Yap | İş De Yeter" description="İş De Yeter platformuna üye veya iş ortağı olarak giriş yapın. Sosyal hesaplarınızla anında bağlanın.">
-  <div class="login-wrapper">
+<BasicLayout title="Giriş Yap veya Kayıt Ol | İş De Yeter" description="İş De Yeter platformuna üye veya iş ortağı olarak giriş yapın ya da kolayca kayıt olun.">
+  <div class="login-wrapper" id="login-wrapper">
     <div class="login-container">
       
       <!-- Glassmorphic Card -->
-      <div class="login-card">
+      <div class="login-card" id="login-card">
         
         <!-- Header -->
         <div class="login-header">
           <div class="brand-logo">
-            <span class="logo-text">İŞ DE <span class="accent-text">YETER</span></span>
+            <span class="logo-text">İŞ DE <span class="accent-text" id="logo-accent">YETER</span></span>
           </div>
           <p class="login-subtitle">Hizmet Pazaryeri ve İşletme Yönetim Portalı</p>
         </div>
 
-        <!-- Role Selector Tabs -->
+        <!-- Role Selector Tabs (Müşteri & İş Ortağı) -->
         <div class="role-selector">
           <button type="button" id="btn-member" class="role-btn active" onclick="setRole('member')">
             <i class="fa-solid fa-user-tie"></i>
@@ -34,38 +34,156 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
 
         <!-- Dynamically Switched Role Benefits Info -->
         <div class="role-info" id="role-desc">
-          <p class="info-text font-medium text-blue-600">
+          <p class="info-text">
             <i class="fa-solid fa-circle-info mr-2"></i>
-            Hizmet ilanı/talebi oluşturabilir, gelen teklifleri WhatsApp üzerinden onaylayabilir ve ücretsiz web sitesi kurma sihirbazını kullanabilirsiniz.
+            <span id="desc-content">Hizmet ilanı/talebi oluşturabilir, profesyonellerden gelen teklifleri değerlendirebilirsiniz.</span>
           </p>
         </div>
+
+        <!-- Alert Box for Errors -->
+        <div class="alert-box hidden" id="alert-box">
+          <i class="fa-solid fa-triangle-exclamation alert-icon"></i>
+          <span class="alert-message" id="alert-message">Bir hata oluştu.</span>
+        </div>
+
+        <!-- Form Toggle (Giriş Yap / Kayıt Ol) -->
+        <div class="form-toggle">
+          <button type="button" id="tab-login" class="toggle-tab active" onclick="switchForm('login')">Giriş Yap</button>
+          <button type="button" id="tab-register" class="toggle-tab" onclick="switchForm('register')">Kayıt Ol</button>
+        </div>
+
+        <!-- 1. GİRİŞ FORMU -->
+        <form id="form-login" action="/api/auth/classic-login" method="POST" class="auth-form active">
+          <!-- Hangi rolün seçili olduğunu backend'e iletmek için gizli girdi -->
+          <input type="hidden" name="role" class="role-input" value="member" />
+          
+          <div class="input-group">
+            <label for="login-identifier"><i class="fa-solid fa-envelope-open-text icon-label"></i> E-posta veya Telefon</label>
+            <input 
+              type="text" 
+              name="identifier" 
+              id="login-identifier" 
+              placeholder="admin@isdeyeter.com veya 5325000999" 
+              required 
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="login-password"><i class="fa-solid fa-lock icon-label"></i> Şifre</label>
+            <input 
+              type="password" 
+              name="password" 
+              id="login-password" 
+              placeholder="Şifreniz" 
+              required 
+            />
+          </div>
+
+          <!-- Ben Robot Değilim (Mock reCAPTCHA) -->
+          <div class="captcha-container">
+            <label class="captcha-checkbox-label">
+              <input type="checkbox" name="captcha" required />
+              <span class="captcha-custom-checkbox"></span>
+              <span class="captcha-text">Ben robot değilim</span>
+            </label>
+            <div class="captcha-logo">
+              <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="recaptcha-img" />
+              <span>reCAPTCHA</span>
+              <span class="captcha-privacy">Gizlilik - Şartlar</span>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-login-submit" class="submit-btn">Giriş Yap</button>
+        </form>
+
+        <!-- 2. KAYIT FORMU -->
+        <form id="form-register" action="/api/auth/classic-register" method="POST" class="auth-form">
+          <input type="hidden" name="role" class="role-input" value="member" />
+
+          <div class="input-group">
+            <label for="reg-name"><i class="fa-solid fa-user icon-label"></i> Adı Soyadı <span class="required-star">*</span></label>
+            <input 
+              type="text" 
+              name="name" 
+              id="reg-name" 
+              placeholder="Adınız Soyadınız veya Firma Adınız" 
+              required 
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="reg-phone"><i class="fa-solid fa-phone icon-label"></i> Telefon Numarası <span class="required-star">*</span></label>
+            <input 
+              type="tel" 
+              name="phone" 
+              id="reg-phone" 
+              placeholder="Örn: 5325000999" 
+              required 
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="reg-email"><i class="fa-solid fa-envelope icon-label"></i> E-posta Adresi <span class="optional-label">(Opsiyonel)</span></label>
+            <input 
+              type="email" 
+              name="email" 
+              id="reg-email" 
+              placeholder="eposta@isdeyeter.com" 
+            />
+          </div>
+
+          <div class="input-group">
+            <label for="reg-password"><i class="fa-solid fa-lock icon-label"></i> Şifre <span class="optional-label">(Opsiyonel)</span></label>
+            <input 
+              type="password" 
+              name="password" 
+              id="reg-password" 
+              placeholder="Opsiyonel (Boş bırakılırsa 123456 tanımlanır)" 
+            />
+          </div>
+
+          <!-- Ben Robot Değilim (Kayıt Formu için) -->
+          <div class="captcha-container">
+            <label class="captcha-checkbox-label">
+              <input type="checkbox" name="captcha" required />
+              <span class="captcha-custom-checkbox"></span>
+              <span class="captcha-text">Ben robot değilim</span>
+            </label>
+            <div class="captcha-logo">
+              <img src="https://www.gstatic.com/recaptcha/api2/logo_48.png" alt="reCAPTCHA" class="recaptcha-img" />
+              <span>reCAPTCHA</span>
+              <span class="captcha-privacy">Gizlilik - Şartlar</span>
+            </div>
+          </div>
+
+          <button type="submit" id="btn-register-submit" class="submit-btn">Kayıt Ol ve Giriş Yap</button>
+        </form>
 
         <!-- Social Login Buttons Container -->
         <div class="social-login-container">
           <p class="section-title">Sosyal Hesap ile Güvenli ve Hızlı Bağlan</p>
           
-          <!-- Google -->
-          <a href="#" id="auth-google" class="social-btn google-btn">
-            <i class="fa-brands fa-google btn-icon"></i>
-            <span>Google ile Hızlı Giriş</span>
-          </a>
+          <div class="social-buttons-row">
+            <!-- Google -->
+            <a href="#" id="auth-google" class="social-icon-btn google-icon-btn" title="Google ile Giriş">
+              <i class="fa-brands fa-google"></i>
+            </a>
 
-          <!-- Facebook -->
-          <a href="#" id="auth-facebook" class="social-btn facebook-btn">
-            <i class="fa-brands fa-facebook-f btn-icon"></i>
-            <span>Facebook ile Bağlan</span>
-          </a>
+            <!-- Facebook -->
+            <a href="#" id="auth-facebook" class="social-icon-btn facebook-icon-btn" title="Facebook ile Giriş">
+              <i class="fa-brands fa-facebook-f"></i>
+            </a>
 
-          <!-- Apple -->
-          <a href="#" id="auth-apple" class="social-btn apple-btn">
-            <i class="fa-brands fa-apple btn-icon"></i>
-            <span>Apple ID ile Giriş Yap</span>
-          </a>
+            <!-- Apple -->
+            <a href="#" id="auth-apple" class="social-icon-btn apple-icon-btn" title="Apple ID ile Giriş">
+              <i class="fa-brands fa-apple"></i>
+            </a>
+          </div>
         </div>
 
         <!-- Footnote -->
         <div class="login-footer">
-          <p>Giriş yaparak <a href="/gizlilik-politikasi" target="_blank" class="footer-link">Kullanıcı Sözleşmesi ve Gizlilik Politikası</a> koşullarını kabul etmiş olursunuz.</p>
+          <p>Giriş yaparak veya kayıt olarak <a href="/gizlilik-politikasi" target="_blank" class="footer-link">Kullanıcı Sözleşmesi ve Gizlilik Politikası</a> koşullarını kabul etmiş olursunuz.</p>
         </div>
 
       </div>
@@ -75,15 +193,46 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
 
   <!-- Styling -->
   <style>
+    /* CSS Variables System */
+    :root {
+      --primary-color: #3b82f6;      /* Mavi - Üye Rengi */
+      --primary-hover: #1d4ed8;
+      --primary-light: rgba(59, 130, 246, 0.1);
+      --primary-border: rgba(59, 130, 246, 0.3);
+      --primary-glow: rgba(59, 130, 246, 0.2);
+      
+      --partner-orange: #f97316;     /* Turuncu - İş Ortağı Rengi */
+      --partner-orange-hover: #ea580c;
+      --partner-orange-light: rgba(249, 115, 22, 0.08);
+      --partner-orange-border: rgba(249, 115, 22, 0.35);
+      --partner-orange-glow: rgba(249, 115, 22, 0.25);
+      
+      --active-primary: var(--primary-color);
+      --active-hover: var(--primary-hover);
+      --active-light: var(--primary-light);
+      --active-border: var(--primary-border);
+      --active-glow: var(--primary-glow);
+    }
+
+    /* İş Ortağı moduna geçildiğinde dinamik değişkenleri güncelle */
+    .theme-partner {
+      --active-primary: var(--partner-orange) !important;
+      --active-hover: var(--partner-orange-hover) !important;
+      --active-light: var(--partner-orange-light) !important;
+      --active-border: var(--partner-orange-border) !important;
+      --active-glow: var(--partner-orange-glow) !important;
+    }
+
     .login-wrapper {
-      min-height: calc(100vh - 200px);
+      min-height: calc(100vh - 120px);
       display: flex;
       align-items: center;
       justify-content: center;
-      background: linear-gradient(135deg, #f1f5f9 0%, #e2e8f0 100%);
-      padding: 40px 20px;
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 50%, #e2e8f0 100%);
+      padding: 60px 20px;
       position: relative;
       overflow: hidden;
+      transition: background 0.5s ease;
     }
 
     /* Arka plan dekoratif daireler */
@@ -92,52 +241,64 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
       content: '';
       position: absolute;
       border-radius: 50%;
-      filter: blur(80px);
+      filter: blur(100px);
       z-index: 0;
-      opacity: 0.5;
+      opacity: 0.55;
+      transition: all 0.6s ease;
     }
 
+    /* Üye modunda arka plan */
     .login-wrapper::before {
-      width: 300px;
-      height: 300px;
-      background: rgba(59, 130, 246, 0.4);
+      width: 350px;
+      height: 350px;
+      background: rgba(59, 130, 246, 0.35);
       top: -50px;
       left: -50px;
     }
 
     .login-wrapper::after {
-      width: 400px;
-      height: 400px;
-      background: rgba(245, 158, 11, 0.3);
+      width: 450px;
+      height: 450px;
+      background: rgba(147, 197, 253, 0.3);
       bottom: -100px;
       right: -100px;
     }
 
+    /* İş ortağı modunda turuncu arka plan patlaması */
+    .login-wrapper.theme-partner::before {
+      background: rgba(249, 115, 22, 0.3);
+    }
+    .login-wrapper.theme-partner::after {
+      background: rgba(253, 186, 116, 0.25);
+    }
+
     .login-container {
       width: 100%;
-      max-width: 480px;
+      max-width: 500px;
       position: relative;
       z-index: 10;
     }
 
     /* Glassmorphism Card */
     .login-card {
-      background: rgba(255, 255, 255, 0.85);
-      backdrop-filter: blur(20px);
-      -webkit-backdrop-filter: blur(20px);
-      border: 1px solid rgba(255, 255, 255, 0.6);
-      border-radius: 24px;
-      box-shadow: 0 20px 40px -15px rgba(15, 23, 42, 0.1);
-      padding: 40px 30px;
+      background: rgba(255, 255, 255, 0.88);
+      backdrop-filter: blur(30px);
+      -webkit-backdrop-filter: blur(30px);
+      border: 1px solid rgba(255, 255, 255, 0.7);
+      border-radius: 28px;
+      box-shadow: 0 25px 50px -12px rgba(15, 23, 42, 0.12);
+      padding: 45px 35px;
       display: flex;
       flex-direction: column;
       gap: 24px;
-      transition: all 0.3s ease;
+      transition: all 0.4s cubic-bezier(0.4, 0, 0.2, 1);
     }
 
-    .login-card:hover {
-      box-shadow: 0 30px 50px -10px rgba(15, 23, 42, 0.15);
-      transform: translateY(-2px);
+    /* İş ortağı kartı turuncu zemin hafif vurgulu */
+    .login-card.theme-partner {
+      background: rgba(255, 255, 255, 0.92);
+      border-color: var(--partner-orange-border);
+      box-shadow: 0 25px 50px -12px rgba(234, 88, 12, 0.15);
     }
 
     /* Header */
@@ -155,21 +316,23 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
     }
 
     .logo-text {
-      font-size: 2.2rem;
-      font-weight: 800;
-      letter-spacing: -1px;
+      font-size: 2.4rem;
+      font-weight: 900;
+      letter-spacing: -1.5px;
       color: #0f172a;
-      font-family: 'Poppins', sans-serif;
+      font-family: 'Outfit', sans-serif;
     }
 
     .accent-text {
-      color: #3b82f6;
+      color: var(--active-primary);
+      transition: color 0.3s ease;
     }
 
     .login-subtitle {
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       color: #64748b;
-      font-weight: 400;
+      font-weight: 500;
+      letter-spacing: 0.2px;
     }
 
     /* Role Selector Tabs */
@@ -178,8 +341,9 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
       grid-template-columns: 1fr 1fr;
       background: #f1f5f9;
       padding: 6px;
-      border-radius: 14px;
+      border-radius: 16px;
       border: 1px solid #e2e8f0;
+      gap: 4px;
     }
 
     .role-btn {
@@ -187,30 +351,29 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
       align-items: center;
       justify-content: center;
       gap: 8px;
-      padding: 12px 16px;
+      padding: 14px 16px;
       border: none;
       background: transparent;
-      border-radius: 10px;
+      border-radius: 12px;
       font-size: 0.95rem;
-      font-weight: 600;
+      font-weight: 700;
       color: #64748b;
       cursor: pointer;
-      transition: all 0.2s ease;
+      transition: all 0.25s ease;
     }
 
     .role-btn.active {
       background: #ffffff;
-      color: #3b82f6;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.12);
+      color: var(--active-primary);
+      box-shadow: 0 4px 12px rgba(15, 23, 42, 0.08);
     }
 
     /* Dynamic Info Block */
     .role-info {
-      background: rgba(59, 130, 246, 0.05);
-      border: 1px dashed rgba(59, 130, 246, 0.25);
-      padding: 16px;
-      border-radius: 12px;
-      min-height: 80px;
+      background: var(--active-light);
+      border: 1px dashed var(--active-border);
+      padding: 16px 20px;
+      border-radius: 14px;
       display: flex;
       align-items: center;
       transition: all 0.3s ease;
@@ -219,79 +382,303 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
     .info-text {
       font-size: 0.88rem;
       line-height: 1.5;
-      color: #1e3a8a;
+      color: #1e293b;
+      font-weight: 500;
     }
 
-    /* Social Login Buttons */
+    /* Alert Box */
+    .alert-box {
+      background: rgba(239, 68, 68, 0.1);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      padding: 12px 16px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      color: #dc2626;
+      font-size: 0.88rem;
+      font-weight: 600;
+      animation: shake 0.4s ease;
+    }
+
+    .alert-box.hidden {
+      display: none;
+    }
+
+    .alert-icon {
+      font-size: 1.1rem;
+    }
+
+    /* Form Toggles (Giriş / Kayıt) */
+    .form-toggle {
+      display: flex;
+      border-bottom: 2px solid #e2e8f0;
+      gap: 20px;
+      margin-bottom: 4px;
+    }
+
+    .toggle-tab {
+      background: transparent;
+      border: none;
+      padding: 10px 4px;
+      font-size: 1.05rem;
+      font-weight: 700;
+      color: #64748b;
+      cursor: pointer;
+      position: relative;
+      transition: all 0.25s ease;
+    }
+
+    .toggle-tab.active {
+      color: var(--active-primary);
+    }
+
+    .toggle-tab::after {
+      content: '';
+      position: absolute;
+      bottom: -2px;
+      left: 0;
+      width: 0;
+      height: 2px;
+      background: var(--active-primary);
+      transition: all 0.25s ease;
+    }
+
+    .toggle-tab.active::after {
+      width: 100%;
+    }
+
+    /* Auth Forms */
+    .auth-form {
+      display: none;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .auth-form.active {
+      display: flex;
+    }
+
+    .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .input-group label {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #334155;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .icon-label {
+      color: var(--active-primary);
+      font-size: 0.95rem;
+    }
+
+    .required-star {
+      color: #ef4444;
+      margin-left: 2px;
+    }
+
+    .optional-label {
+      color: #94a3b8;
+      font-weight: 500;
+      font-size: 0.8rem;
+      margin-left: 4px;
+    }
+
+    .input-group input {
+      padding: 14px 16px;
+      border-radius: 12px;
+      border: 1px solid #cbd5e1;
+      background: rgba(255, 255, 255, 0.9);
+      font-size: 0.98rem;
+      color: #0f172a;
+      transition: all 0.2s ease;
+    }
+
+    .input-group input:focus {
+      outline: none;
+      border-color: var(--active-primary);
+      box-shadow: 0 0 0 4px var(--active-glow);
+    }
+
+    /* reCAPTCHA Mock Box */
+    .captcha-container {
+      background: #f9f9f9;
+      border: 1px solid #d3d3d3;
+      border-radius: 4px;
+      padding: 12px 16px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      height: 74px;
+      box-sizing: border-box;
+    }
+
+    .captcha-checkbox-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      cursor: pointer;
+      user-select: none;
+    }
+
+    .captcha-checkbox-label input {
+      display: none;
+    }
+
+    .captcha-custom-checkbox {
+      width: 24px;
+      height: 24px;
+      border: 2px solid #c1c1c1;
+      border-radius: 2px;
+      background: #ffffff;
+      display: inline-block;
+      position: relative;
+      transition: all 0.15s ease;
+    }
+
+    .captcha-checkbox-label input:checked + .captcha-custom-checkbox {
+      border-color: #009d57;
+      background: #ffffff;
+    }
+
+    .captcha-checkbox-label input:checked + .captcha-custom-checkbox::after {
+      content: '';
+      position: absolute;
+      left: 7px;
+      top: 2px;
+      width: 6px;
+      height: 12px;
+      border: solid #009d57;
+      border-width: 0 3px 3px 0;
+      transform: rotate(45deg);
+    }
+
+    .captcha-text {
+      font-family: 'Roboto', sans-serif;
+      font-size: 14px;
+      color: #2b2b2b;
+      font-weight: 500;
+    }
+
+    .captcha-logo {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .recaptcha-img {
+      width: 30px;
+      height: 30px;
+    }
+
+    .captcha-logo span {
+      font-family: 'Roboto', sans-serif;
+      font-size: 8px;
+      color: #555555;
+      margin-top: 2px;
+      font-weight: 500;
+    }
+
+    .captcha-privacy {
+      font-size: 7px !important;
+      color: #9b9b9b !important;
+    }
+
+    /* Submit Button (Orange / Blue responsive) */
+    .submit-btn {
+      padding: 16px;
+      border-radius: 12px;
+      border: none;
+      background: var(--active-primary);
+      color: #ffffff;
+      font-size: 1.05rem;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 8px 18px var(--active-glow);
+      transition: all 0.25s ease;
+      text-align: center;
+    }
+
+    .submit-btn:hover {
+      background: var(--active-hover);
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px var(--active-glow);
+    }
+
+    .submit-btn:active {
+      transform: translateY(0);
+    }
+
+    /* Social Login */
     .social-login-container {
       display: flex;
       flex-direction: column;
       gap: 12px;
+      border-top: 1px solid #e2e8f0;
+      padding-top: 20px;
+      margin-top: 10px;
     }
 
     .section-title {
-      font-size: 0.85rem;
-      font-weight: 600;
+      font-size: 0.82rem;
+      font-weight: 700;
       color: #64748b;
       text-transform: uppercase;
-      letter-spacing: 0.5px;
+      letter-spacing: 0.8px;
       text-align: center;
-      margin-bottom: 4px;
+      margin-bottom: 6px;
     }
 
-    .social-btn {
+    .social-buttons-row {
+      display: flex;
+      justify-content: center;
+      gap: 20px;
+    }
+
+    .social-icon-btn {
+      width: 52px;
+      height: 52px;
+      border-radius: 50%;
       display: flex;
       align-items: center;
       justify-content: center;
-      gap: 12px;
-      padding: 14px;
-      border-radius: 12px;
-      text-decoration: none;
-      font-size: 0.95rem;
-      font-weight: 600;
-      transition: all 0.2s ease;
-      border: 1px solid transparent;
-    }
-
-    .btn-icon {
-      font-size: 1.2rem;
-    }
-
-    /* Google Button Styling */
-    .google-btn {
-      background: #ffffff;
+      font-size: 1.35rem;
       color: #334155;
-      border-color: #cbd5e1;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      text-decoration: none;
+      transition: all 0.25s ease;
+      box-shadow: 0 4px 10px rgba(0,0,0,0.03);
     }
 
-    .google-btn:hover {
-      background: #f8fafc;
+    .social-icon-btn:hover {
+      transform: translateY(-3px) scale(1.05);
+      border-color: var(--active-primary);
+      color: var(--active-primary);
+      box-shadow: 0 8px 16px rgba(15, 23, 42, 0.08);
+    }
+
+    .google-icon-btn:hover {
+      color: #db4437;
+      border-color: #fca5a5;
+    }
+
+    .facebook-icon-btn:hover {
+      color: #1877f2;
+      border-color: #93c5fd;
+    }
+
+    .apple-icon-btn:hover {
+      color: #000000;
       border-color: #94a3b8;
-      transform: translateY(-1px);
-    }
-
-    /* Facebook Button Styling */
-    .facebook-btn {
-      background: #1877f2;
-      color: #ffffff;
-    }
-
-    .facebook-btn:hover {
-      background: #166fe5;
-      box-shadow: 0 4px 12px rgba(24, 119, 242, 0.25);
-      transform: translateY(-1px);
-    }
-
-    /* Apple Button Styling */
-    .apple-btn {
-      background: #090d16;
-      color: #ffffff;
-    }
-
-    .apple-btn:hover {
-      background: #000000;
-      box-shadow: 0 4px 12px rgba(0, 0, 0, 0.25);
-      transform: translateY(-1px);
     }
 
     /* Footer text */
@@ -299,69 +686,143 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
       text-align: center;
       font-size: 0.8rem;
       color: #64748b;
-      line-height: 1.4;
-      padding-top: 10px;
-      border-top: 1px solid #e2e8f0;
+      line-height: 1.5;
+      padding-top: 5px;
     }
 
     .footer-link {
-      color: #3b82f6;
+      color: var(--active-primary);
       text-decoration: underline;
-      font-weight: 500;
+      font-weight: 600;
+      transition: color 0.2s ease;
+    }
+
+    /* Animations */
+    @keyframes shake {
+      0%, 100% { transform: translateX(0); }
+      20%, 60% { transform: translateX(-6px); }
+      40%, 80% { transform: translateX(6px); }
     }
 
     /* Responsive */
     @media (max-width: 480px) {
       .login-card {
-        padding: 30px 20px;
+        padding: 35px 20px;
       }
     }
   </style>
 
-  <!-- Client-side role selection handler -->
+  <!-- Client-side handler for role switching, form tabs, and URL errors -->
   <script is:inline>
     let activeRole = 'member';
+    let activeForm = 'login';
 
     function setRole(role) {
       activeRole = role;
       
+      const wrapper = document.getElementById('login-wrapper');
+      const card = document.getElementById('login-card');
       const btnMember = document.getElementById('btn-member');
       const btnPartner = document.getElementById('btn-partner');
-      const roleDesc = document.getElementById('role-desc');
+      const descContent = document.getElementById('desc-content');
       
+      // Hidden role inputs
+      const roleInputs = document.querySelectorAll('.role-input');
+      roleInputs.forEach(input => input.value = role);
+
       if (role === 'member') {
+        wrapper.classList.remove('theme-partner');
+        card.classList.remove('theme-partner');
         btnMember.classList.add('active');
         btnPartner.classList.remove('active');
-        roleDesc.innerHTML = `
-          <p class="info-text">
-            <i class="fa-solid fa-circle-info mr-2"></i>
-            Hizmet ilanı/talebi oluşturabilir, gelen teklifleri WhatsApp üzerinden onaylayabilir ve ücretsiz web sitesi kurma sihirbazını kullanabilirsiniz.
-          </p>
-        `;
+        descContent.innerText = "Hizmet ilanı/talebi oluşturabilir, profesyonellerden gelen teklifleri değerlendirebilirsiniz.";
       } else {
+        wrapper.classList.add('theme-partner');
+        card.classList.add('theme-partner');
         btnPartner.classList.add('active');
         btnMember.classList.remove('active');
-        roleDesc.innerHTML = `
-          <p class="info-text">
-            <i class="fa-solid fa-circle-info mr-2"></i>
-            Uzmanlık kategorilerinizi seçerek size uygun talepleri anlık havuzda görebilir, fiyat teklifi verebilir ve işlerinizi takip edebilirsiniz.
-          </p>
-        `;
+        descContent.innerText = "Uzmanlık kategorilerinizi seçerek size uygun talepleri anlık havuzda görebilir, fiyat teklifi verebilir ve işlerinizi takip edebilirsiniz.";
       }
       
-      updateAuthLinks();
+      updateSocialLinks();
     }
 
-    function updateAuthLinks() {
-      // Dynamic auth redirection with role selection state
+    function switchForm(form) {
+      activeForm = form;
+      
+      const tabLogin = document.getElementById('tab-login');
+      const tabRegister = document.getElementById('tab-register');
+      const formLogin = document.getElementById('form-login');
+      const formRegister = document.getElementById('form-register');
+      
+      if (form === 'login') {
+        tabLogin.classList.add('active');
+        tabRegister.classList.remove('active');
+        formLogin.classList.add('active');
+        formRegister.classList.remove('active');
+      } else {
+        tabRegister.classList.add('active');
+        tabLogin.classList.remove('active');
+        formRegister.classList.add('active');
+        formLogin.classList.remove('active');
+      }
+    }
+
+    function updateSocialLinks() {
+      // Dynamic auth redirection with role selection state for social login buttons
       document.getElementById('auth-google').href = `/api/auth/login?provider=google&role=${activeRole}`;
       document.getElementById('auth-facebook').href = `/api/auth/login?provider=facebook&role=${activeRole}`;
       document.getElementById('auth-apple').href = `/api/auth/login?provider=apple&role=${activeRole}`;
     }
 
-    // Initialize links on load
+    // URL parametrelerinden gelen hataları yakala ve Türkçe olarak göster
+    function checkUrlErrors() {
+      const params = new URLSearchParams(window.location.search);
+      const error = params.get('error');
+      
+      if (error) {
+        const alertBox = document.getElementById('alert-box');
+        const alertMessage = document.getElementById('alert-message');
+        
+        let messageText = "Bir hata oluştu. Lütfen tekrar deneyin.";
+        
+        switch (error) {
+          case 'missing_fields':
+            messageText = "Lütfen e-posta/telefon ve şifre alanlarını doldurun.";
+            break;
+          case 'missing_required_fields':
+            messageText = "Lütfen ad soyad ve telefon numarası alanlarını doldurun.";
+            break;
+          case 'user_not_found':
+            messageText = "Bu bilgilere sahip bir kullanıcı bulunamadı.";
+            break;
+          case 'wrong_password':
+            messageText = "Girdiğiniz şifre yanlıştır. Lütfen kontrol edin.";
+            break;
+          case 'phone_already_registered':
+            messageText = "Bu telefon numarası ile zaten kayıtlı bir hesap var.";
+            break;
+          case 'email_already_registered':
+            messageText = "Bu e-posta adresi ile zaten kayıtlı bir hesap var.";
+            break;
+          case 'db_error':
+            messageText = "Veritabanı bağlantı hatası. Lütfen konsolu kontrol edin.";
+            break;
+          case 'server_error':
+            const detailedMsg = params.get('message');
+            messageText = detailedMsg ? `Sunucu Hatası: ${decodeURIComponent(detailedMsg)}` : "Sunucu hatası oluştu.";
+            break;
+        }
+        
+        alertMessage.innerText = messageText;
+        alertBox.classList.remove('hidden');
+      }
+    }
+
+    // Sayfa yüklendiğinde çalıştır
     document.addEventListener('DOMContentLoaded', () => {
-      updateAuthLinks();
+      updateSocialLinks();
+      checkUrlErrors();
     });
   </script>
 </BasicLayout>

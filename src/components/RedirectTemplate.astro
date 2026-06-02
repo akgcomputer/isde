@@ -28,20 +28,22 @@ export interface Props {
   category?: string;
   showBackButton?: boolean;
   customBlogUrl?: string;
+  serviceSlug?: string;
 }
 
 const { 
   customTitle, 
   category, 
   showBackButton = false,
-  customBlogUrl 
+  customBlogUrl,
+  serviceSlug
 } = Astro.props;
 
 // Dosya adından otomatik veri çıkar
 const extractPageData = () => {
   const pathSegments = Astro.url.pathname.split('/').filter(Boolean);
   const filename = pathSegments.pop() || '';
-  const slug = filename.replace('.astro', '');
+  const slug = serviceSlug || filename.replace('.astro', '');
   
   let title = slug
     .replace(/-\d+$/, '')
