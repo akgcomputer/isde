@@ -7,9 +7,9 @@ pages_build_output_dir = "dist"
 [[d1_databases]]
 binding = "DB"                                                 # Kod içerisindeki referans adı (Astro.locals.runtime.env.DB)
 database_name = "isdeyeter-db"                                 # Cloudflare panelindeki veritabanı adı
-database_id = "local-db-placeholder-id-please-replace"        # Canlıda deploy ederken veritabanı ID'si ile değiştirilecektir
+database_id = "a2c9fcf4-b110-4fa5-9de4-024c37650155"        # Canlıda deploy ederken veritabanı ID'si ile değiştirilecektir
 
 # 2. Cloudflare R2 Depolama / CDN Tanımlaması
 [[r2_buckets]]
 binding = "R2"                                                 # Kod içerisindeki referans adı (Astro.locals.runtime.env.R2)
-bucket_name = "isdeyeter-bucket"                               # Cloudflare panelindeki R2 kova adı
+bucket_name = "isdeyeter-media"                               # Cloudflare panelindeki R2 kova adı
