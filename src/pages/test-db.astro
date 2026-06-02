@@ -1,0 +1,242 @@
+---
+// src/pages/test-db.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+
+export const prerender = false; // Teşhis sayfasının anlık çalışması gerekir (SSR)
+
+let d1BindingStatus = "Bilinmiyor";
+let tablesList: string[] = [];
+let usersColumns: string[] = [];
+let dbError: string | null = null;
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+if (!db) {
+  d1BindingStatus = "❌ BULUNAMADI! Cloudflare Pages panelinde D1 veritabanı bağlaması (binding) eksik.";
+} else {
+  d1BindingStatus = "✅ BAŞARILI! D1 veritabanı bağlantısı aktif.";
+  
+  try {
+    // 1. Veritabanındaki tüm tabloları çek
+    const tablesQuery = await db.prepare(
+      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+    ).all();
+    
+    if (tablesQuery && tablesQuery.results) {
+      tablesList = tablesQuery.results.map((row: any) => row.name);
+    }
+    
+    // 2. Eğer users tablosu varsa sütunlarını çek
+    if (tablesList.includes('users')) {
+      const columnsQuery = await db.prepare("PRAGMA table_info(users)").all();
+      if (columnsQuery && columnsQuery.results) {
+        usersColumns = columnsQuery.results.map((row: any) => `${row.name} (${row.type})`);
+      }
+    }
+  } catch (err: any) {
+    dbError = err.message || "Bilinmeyen SQL hatası";
+  }
+}
+---
+
+<BasicLayout title="D1 Veritabanı Teşhis Raporu" description="İş De Yeter D1 Veritabanı Teşhis Sayfası">
+  <div class="debug-container">
+    <div class="debug-card">
+      <h1 class="debug-title">⚙️ D1 Veritabanı Teşhis Raporu</h1>
+      <p class="debug-subtitle">Sistem ve veritabanı bağlantı durumunu anlık analiz eder.</p>
+      
+      <hr class="divider" />
+      
+      <!-- 1. Bağlantı Durumu -->
+      <div class="status-section">
+        <h3>1. Cloudflare D1 Bağlantı Durumu</h3>
+        <div class={`status-badge ${db ? 'success' : 'danger'}`}>
+          {d1BindingStatus}
+        </div>
+      </div>
+
+      <!-- 2. Hata Bildirimi -->
+      {dbError && (
+        <div class="status-section">
+          <h3>⚠️ Hata Raporu</h3>
+          <pre class="error-box">{dbError}</pre>
+        </div>
+      )}
+
+      <!-- 3. Tablolar Listesi -->
+      <div class="status-section">
+        <h3>2. Veritabanındaki Aktif Tablolar ({tablesList.length})</h3>
+        {tablesList.length > 0 ? (
+          <ul class="tables-list">
+            {tablesList.map(table => (
+              <li><i class="fa-solid fa-table"></i> {table}</li>
+            ))}
+          </ul>
+        ) : (
+          <p class="empty-text">Veritabanında henüz hiç tablo bulunmuyor!</p>
+        )}
+      </div>
+
+      <!-- 4. Users Sütunları -->
+      {tablesList.includes('users') && (
+        <div class="status-section">
+          <h3>3. 'users' Tablosunun Sütunları ({usersColumns.length})</h3>
+          <div class="columns-grid">
+            {usersColumns.map(col => {
+              const isPassword = col.startsWith('password');
+              return (
+                <span class={`column-badge ${isPassword ? 'highlight' : ''}`}>
+                  <i class="fa-solid fa-cube"></i> {col}
+                </span>
+              );
+            })}
+          </div>
+          {!usersColumns.some(c => c.startsWith('password')) && (
+            <div class="warning-box mt-3">
+              ❌ HATA: 'users' tablosunda 'password' sütunu eksik! Lütfen ALTER TABLE sorgusunu çalıştırın.
+            </div>
+          )}
+        </div>
+      )}
+      
+      <div class="actions mt-4">
+        <a href="/login" class="back-btn">Giriş Sayfasına Dön</a>
+      </div>
+    </div>
+  </div>
+
+  <style>
+    .debug-container {
+      min-height: 80vh;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      background: #f8fafc;
+      padding: 40px 20px;
+    }
+    .debug-card {
+      background: white;
+      border-radius: 20px;
+      box-shadow: 0 15px 30px rgba(0,0,0,0.08);
+      max-width: 650px;
+      width: 100%;
+      padding: 40px;
+    }
+    .debug-title {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
+      margin-bottom: 8px;
+    }
+    .debug-subtitle {
+      font-size: 0.95rem;
+      color: #64748b;
+    }
+    .divider {
+      border: 0;
+      border-top: 1px solid #e2e8f0;
+      margin: 24px 0;
+    }
+    .status-section {
+      margin-bottom: 24px;
+    }
+    .status-section h3 {
+      font-size: 1rem;
+      font-weight: 700;
+      color: #334155;
+      margin-bottom: 12px;
+    }
+    .status-badge {
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+    }
+    .status-badge.success {
+      background: #ecfdf5;
+      color: #059669;
+      border: 1px solid #a7f3d0;
+    }
+    .status-badge.danger {
+      background: #fef2f2;
+      color: #dc2626;
+      border: 1px solid #fecaca;
+    }
+    .error-box {
+      background: #1e293b;
+      color: #f8fafc;
+      padding: 16px;
+      border-radius: 10px;
+      font-family: monospace;
+      font-size: 0.85rem;
+      overflow-x: auto;
+    }
+    .tables-list {
+      list-style: none;
+      padding: 0;
+      display: flex;
+      flex-wrap: wrap;
+      gap: 10px;
+    }
+    .tables-list li {
+      background: #f1f5f9;
+      color: #475569;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      border: 1px solid #e2e8f0;
+    }
+    .columns-grid {
+      display: flex;
+      flex-wrap: wrap;
+      gap: 8px;
+    }
+    .column-badge {
+      background: #f8fafc;
+      color: #64748b;
+      border: 1px solid #e2e8f0;
+      padding: 6px 12px;
+      border-radius: 6px;
+      font-size: 0.82rem;
+      font-weight: 500;
+    }
+    .column-badge.highlight {
+      background: #fff7ed;
+      color: #ea580c;
+      border-color: #ffedd5;
+      font-weight: 700;
+    }
+    .warning-box {
+      background: #fff7ed;
+      color: #c2410c;
+      border: 1px solid #ffedd5;
+      padding: 12px;
+      border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+    .back-btn {
+      display: inline-block;
+      background: #0f172a;
+      color: white;
+      padding: 12px 24px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.92rem;
+      transition: background 0.2s;
+    }
+    .back-btn:hover {
+      background: #1e293b;
+    }
+    .empty-text {
+      color: #94a3b8;
+      font-size: 0.88rem;
+      font-style: italic;
+    }
+    .mt-3 { margin-top: 12px; }
+    .mt-4 { margin-top: 24px; }
+  </style>
+</BasicLayout>
