@@ -1,0 +1,489 @@
+---
+// src/pages/dashboard/member/index.astro
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+
+export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 0) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+let totalRequests = 0;
+let totalSites = 0;
+let recentRequests: any[] = [];
+
+if (db) {
+  try {
+    // Toplam Talep sayısı
+    const reqCount = await db.prepare("SELECT COUNT(*) as count FROM service_requests WHERE client_id = ?").bind(user.id).first() as any;
+    totalRequests = reqCount?.count || 0;
+
+    // Toplam Site sayısı
+    const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites WHERE user_id = ?").bind(user.id).first() as any;
+    totalSites = sitesCount?.count || 0;
+
+    // Son 3 Talep
+    const recentReqs = await db.prepare("SELECT * FROM service_requests WHERE client_id = ? ORDER BY created_at DESC LIMIT 3").bind(user.id).all();
+    recentRequests = recentReqs.results || [];
+  } catch (e) {
+    console.error("Member Overview query error:", e);
+  }
+}
+---
+
+<DashboardLayout title="Üye Paneli | İş De Yeter" activeTab="overview">
+  <div class="overview-content">
+    
+    <!-- Welcome Header -->
+    <div class="welcome-banner">
+      <div class="welcome-text">
+        <h1>Merhaba, {user.name}! 👋</h1>
+        <p>İş De Yeter panelinize hoş geldiniz. Taleplerinizi yönetebilir, teklifleri inceleyebilir veya sitelerinizi koordine edebilirsiniz.</p>
+      </div>
+      <div class="welcome-ill">
+        <i class="fa-solid fa-laptop-house banner-icon"></i>
+      </div>
+    </div>
+
+    <!-- Quick Stats -->
+    <div class="stats-grid">
+      
+      <!-- Stat 1 -->
+      <div class="stat-card">
+        <div class="card-icon request-blue">
+          <i class="fa-solid fa-file-signature"></i>
+        </div>
+        <div class="card-details">
+          <h3>Açtığım Talepler</h3>
+          <p class="val">{totalRequests}</p>
+        </div>
+      </div>
+
+      <!-- Stat 2 -->
+      <div class="stat-card">
+        <div class="card-icon site-teal">
+          <i class="fa-solid fa-globe"></i>
+        </div>
+        <div class="card-details">
+          <h3>Aktif Web Sitelerim</h3>
+          <p class="val">{totalSites}</p>
+        </div>
+      </div>
+
+      <!-- Stat 3 -->
+      <div class="stat-card">
+        <div class="card-icon phone-orange">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <div class="card-details">
+          <h3>Destek Durumu</h3>
+          <p class="val font-semibold text-emerald-500 text-lg flex items-center gap-2">
+            <span class="pulse-dot"></span> Canlı ve Aktif
+          </p>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Dashboard Content Layout -->
+    <div class="content-split">
+      
+      <!-- Left side: Quick Shortcuts -->
+      <div class="split-left">
+        <h2>Hızlı İşlemler</h2>
+        <div class="shortcuts-grid">
+          
+          <a href="/dashboard/member/requests" class="shortcut-box">
+            <i class="fa-solid fa-circle-plus blue"></i>
+            <div>
+              <h4>Yeni Hizmet Talebi Gir</h4>
+              <p>Uzmanlardan teklif toplamak için saniyeler içinde yeni ilan açın.</p>
+            </div>
+          </a>
+
+          <a href="/dashboard/member/sites" class="shortcut-box">
+            <i class="fa-solid fa-wand-magic-sparkles teal"></i>
+            <div>
+              <h4>Ücretsiz Web Sitesi Kur</h4>
+              <p>laflaf.net altyapısı ile dakikalar içinde markanızı dijitale taşıyın.</p>
+            </div>
+          </a>
+
+          <a href="/dashboard/member/profile" class="shortcut-box">
+            <i class="fa-solid fa-address-card orange"></i>
+            <div>
+              <h4>Profil Bilgilerini Düzenle</h4>
+              <p>Fatura ve kişisel bilgilerinizi güncel tutarak sipariş süreçlerini hızlandırın.</p>
+            </div>
+          </a>
+
+        </div>
+      </div>
+
+      <!-- Right side: Recent Requests List -->
+      <div class="split-right shadow-card">
+        <div class="card-header">
+          <h2>Son Açtığım Talepler</h2>
+          <a href="/dashboard/member/requests" class="view-all">Tümünü Gör</a>
+        </div>
+        <div class="requests-list">
+          {recentRequests.map(r => (
+            <div class="req-item">
+              <div class="req-title-bar">
+                <span class="req-cat">{r.category}</span>
+                <span class={`status-badge ${r.status}`}>{r.status}</span>
+              </div>
+              <h4 class="req-title">{r.title}</h4>
+              <p class="req-date"><i class="fa-regular fa-calendar-check mr-1"></i> {new Date(r.created_at).toLocaleDateString('tr-TR')}</p>
+            </div>
+          ))}
+
+          {recentRequests.length === 0 && (
+            <div class="empty-state">
+              <i class="fa-solid fa-clipboard-question empty-icon"></i>
+              <p>Henüz bir hizmet ilanı veya talebi oluşturmadınız.</p>
+              <a href="/dashboard/member/requests" class="btn-primary">İlk Talebini Oluştur</a>
+            </div>
+          )}
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <style>
+    .overview-content {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Welcome Banner */
+    .welcome-banner {
+      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      color: #ffffff;
+      border-radius: 20px;
+      padding: 32px 40px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+      position: relative;
+      overflow: hidden;
+    }
+
+    .welcome-banner::before {
+      content: '';
+      position: absolute;
+      width: 200px;
+      height: 200px;
+      background: rgba(255, 255, 255, 0.05);
+      border-radius: 50%;
+      top: -50px;
+      right: -20px;
+      z-index: 0;
+    }
+
+    .welcome-text {
+      max-width: 600px;
+      z-index: 1;
+    }
+
+    .welcome-text h1 {
+      font-size: 2rem;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .welcome-text p {
+      font-size: 0.95rem;
+      opacity: 0.9;
+      line-height: 1.5;
+    }
+
+    .welcome-ill {
+      z-index: 1;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .banner-icon {
+      font-size: 5rem;
+      color: rgba(255, 255, 255, 0.15);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+      gap: 24px;
+    }
+
+    .stat-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 18px;
+      padding: 24px;
+      display: flex;
+      align-items: center;
+      gap: 20px;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      box-shadow: 0 10px 20px rgba(0, 0, 0, 0.02);
+      transform: translateY(-1px);
+    }
+
+    .card-icon {
+      font-size: 1.6rem;
+      width: 52px;
+      height: 52px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .request-blue { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    .site-teal { background: rgba(20, 184, 166, 0.1); color: #14b8a6; }
+    .phone-orange { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+
+    .card-details h3 {
+      font-size: 0.82rem;
+      color: #64748b;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      font-weight: 600;
+    }
+
+    .card-details .val {
+      font-size: 1.8rem;
+      font-weight: 800;
+      color: #0f172a;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    /* Pulse Dot for active support */
+    .pulse-dot {
+      display: inline-block;
+      width: 8px;
+      height: 8px;
+      background: #10b981;
+      border-radius: 50%;
+      animation: pulse 1.5s infinite;
+    }
+
+    @keyframes pulse {
+      0% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0.4); }
+      70% { box-shadow: 0 0 0 8px rgba(16, 185, 129, 0); }
+      100% { box-shadow: 0 0 0 0 rgba(16, 185, 129, 0); }
+    }
+
+    /* Content Layout Split */
+    .content-split {
+      display: grid;
+      grid-template-columns: 1.1fr 0.9fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .content-split h2 {
+      font-size: 1.25rem;
+      color: #0f172a;
+      margin-bottom: 20px;
+      font-weight: 700;
+    }
+
+    /* Left Side Shortcuts */
+    .shortcuts-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .shortcut-box {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 20px;
+      text-decoration: none;
+      display: flex;
+      align-items: flex-start;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .shortcut-box:hover {
+      border-color: #cbd5e1;
+      box-shadow: 0 8px 20px rgba(0, 0, 0, 0.03);
+      transform: translateY(-1px);
+    }
+
+    .shortcut-box i {
+      font-size: 1.8rem;
+      margin-top: 2px;
+    }
+
+    .shortcut-box i.blue { color: #3b82f6; }
+    .shortcut-box i.teal { color: #14b8a6; }
+    .shortcut-box i.orange { color: #f59e0b; }
+
+    .shortcut-box h4 {
+      font-size: 0.98rem;
+      color: #0f172a;
+      margin-bottom: 4px;
+      font-weight: 700;
+    }
+
+    .shortcut-box p {
+      font-size: 0.85rem;
+      color: #64748b;
+      line-height: 1.4;
+    }
+
+    /* Right Side Shadow Card */
+    .shadow-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    .split-right .card-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 20px;
+      border-bottom: 1px solid #f1f5f9;
+      padding-bottom: 12px;
+    }
+
+    .split-right .card-header h2 {
+      margin-bottom: 0;
+    }
+
+    .view-all {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 0.85rem;
+      font-weight: 600;
+    }
+
+    .view-all:hover {
+      text-decoration: underline;
+    }
+
+    .requests-list {
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .req-item {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .req-title-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .req-cat {
+      font-size: 0.72rem;
+      font-weight: 700;
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.08);
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .req-title {
+      font-size: 0.95rem;
+      font-weight: 700;
+      color: #1e293b;
+    }
+
+    .req-date {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    /* Status Badges */
+    .status-badge {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .status-badge.PENDING { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+    .status-badge.OFFER_RECEIVED { background: rgba(59, 130, 246, 0.08); color: #2563eb; }
+    .status-badge.ACCEPTED { background: rgba(16, 185, 129, 0.08); color: #059669; }
+    .status-badge.REJECTED { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+    .status-badge.COMPLETED { background: rgba(100, 116, 139, 0.08); color: #475569; }
+
+    /* Empty State */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      padding: 40px 20px;
+    }
+
+    .empty-icon {
+      font-size: 3rem;
+      color: #cbd5e1;
+    }
+
+    .empty-state p {
+      font-size: 0.9rem;
+      color: #64748b;
+      max-width: 250px;
+      line-height: 1.4;
+    }
+
+    .btn-primary {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 10px 20px;
+      border-radius: 10px;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.2);
+      transition: all 0.2s ease;
+    }
+
+    .btn-primary:hover {
+      background: #2563eb;
+      transform: translateY(-1px);
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .content-split {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+</DashboardLayout>

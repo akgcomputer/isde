@@ -1,0 +1,737 @@
+---
+// src/pages/dashboard/member/requests.astro
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import servicesData from '../../data/services.json';
+import { getMemberApprovalLink } from '../../../utils/whatsapp';
+
+export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 0) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+const r2 = runtime?.env?.R2; // Cloudflare R2 Bucket binding
+
+// Kategorilerin düz bir listesini oluşturalım (dropdown için)
+const flatCategories: string[] = [];
+servicesData.categories.forEach((cat: any) => {
+  cat.services.forEach((sub: string) => {
+    flatCategories.push(`${cat.name}: ${sub}`);
+  });
+});
+
+let successMessage = '';
+let errorMessage = '';
+
+// 1. Yeni Talep Ekleme (POST)
+if (Astro.request.method === 'POST' && db) {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+
+    if (action === 'create_request') {
+      const category = formData.get('category') as string;
+      const title = formData.get('title') as string;
+      const description = formData.get('description') as string;
+      const imageFile = formData.get('image') as File;
+
+      if (!title || !category || !description) {
+        errorMessage = 'Lütfen zorunlu alanları doldurun.';
+      } else {
+        let imageUrl = '';
+
+        // Eğer resim yüklendiyse ve R2 aktifse R2 Bucket'ına kaydet
+        if (imageFile && imageFile.size > 0 && r2) {
+          try {
+            const fileExtension = imageFile.name.split('.').pop() || 'jpg';
+            const objectKey = `requests/${user.id}-${Date.now()}.${fileExtension}`;
+            
+            // Dosyayı R2 Bucket'ına yükle
+            const buffer = Buffer.from(await imageFile.arrayBuffer());
+            await r2.put(objectKey, buffer, {
+              customMetadata: { userId: user.id },
+              httpMetadata: { contentType: imageFile.type }
+            });
+
+            // Resim URL'si (Cloudflare Custom Domain veya R2 public URL şeması)
+            imageUrl = `/api/cdn/${objectKey}`; // Bizim oluşturacağımız local R2 proxy API adresi
+            console.log("R2 CDN yüklemesi başarılı:", objectKey);
+          } catch (r2Err) {
+            console.error("R2 Upload Error:", r2Err);
+            // CDN yüklemesi başarısız olsa da talebi açmaya devam et
+          }
+        }
+
+        // Veritabanına yeni talebi ekle
+        await db.prepare(
+          "INSERT INTO service_requests (client_id, category, title, description, image_url, status) VALUES (?, ?, ?, ?, ?, 'PENDING')"
+        ).bind(user.id, category, title, description, imageUrl).run();
+
+        successMessage = 'Hizmet talebiniz başarıyla oluşturuldu ve iş havuzuna gönderildi! Teklifler yakında gelecektir.';
+      }
+    }
+    
+    // 2. Teklifi Kabul Etme (Onaylama) İşlemi
+    if (action === 'accept_offer') {
+      const offerId = formData.get('offer_id') as string;
+      const requestId = formData.get('request_id') as string;
+
+      if (offerId && requestId) {
+        // Talebin ve teklifin durumunu güncelle (ACCEPTED)
+        // D1 batch işlemi ile atomik güncelleme sağlayalım
+        await db.batch([
+          db.prepare("UPDATE offers SET status = 'ACCEPTED' WHERE id = ?").bind(offerId),
+          db.prepare("UPDATE offers SET status = 'REJECTED' WHERE request_id = ? AND id != ?").bind(requestId, offerId),
+          db.prepare("UPDATE service_requests SET status = 'ACCEPTED' WHERE id = ?").bind(requestId)
+        ]);
+
+        // İş ortağı bilgilerini ve teklif fiyatını al (WhatsApp yönlendirmesi için)
+        const offerDetails = await db.prepare(
+          "SELECT o.*, u.name as partner_name, u.phone as partner_phone FROM offers o JOIN users u ON o.partner_id = u.id WHERE o.id = ?"
+        ).bind(offerId).first() as any;
+
+        // Doğrudan WhatsApp yönlendirmesi yap
+        const waUrl = getMemberApprovalLink(
+          user.id,
+          requestId,
+          offerDetails?.partner_name || '',
+          offerDetails?.price || 0
+        );
+        return Astro.redirect(waUrl);
+      }
+    }
+
+  } catch (e) {
+    console.error("Request controller error:", e);
+    errorMessage = 'İşlem gerçekleştirilirken veritabanı hatası oluştu.';
+  }
+}
+
+// 3. Kullanıcının Tüm Taleplerini ve Onlara Gelen Teklifleri D1'den Çek
+let myRequests: any[] = [];
+if (db) {
+  try {
+    const reqsQuery = await db.prepare(
+      "SELECT * FROM service_requests WHERE client_id = ? ORDER BY created_at DESC"
+    ).bind(user.id).all();
+
+    const rawReqs = reqsQuery.results || [];
+    
+    // Her talep için teklifleri de alalım
+    for (const req of rawReqs) {
+      const offersQuery = await db.prepare(
+        "SELECT o.*, u.name as partner_name FROM offers o JOIN users u ON o.partner_id = u.id WHERE o.request_id = ? ORDER BY o.created_at DESC"
+      ).bind(req.id).all();
+      
+      req.offers = offersQuery.results || [];
+      myRequests.push(req);
+    }
+  } catch (e) {
+    console.error("Fetch requests and bids D1 error:", e);
+  }
+}
+---
+
+<DashboardLayout title="Hizmet Taleplerim | İş De Yeter" activeTab="requests">
+  <div class="requests-area">
+    
+    <div class="area-header">
+      <h1>Hizmet Taleplerim & İlan Ver</h1>
+      <p>Yeni bir hizmet kategorisinde ücretsiz fiyat teklifi toplayabilir veya açtığınız ilanları takip edebilirsiniz.</p>
+    </div>
+
+    {successMessage && (
+      <div class="alert success">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>{successMessage}</span>
+      </div>
+    )}
+
+    {errorMessage && (
+      <div class="alert error">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>{errorMessage}</span>
+      </div>
+    )}
+
+    <div class="requests-layout">
+      
+      <!-- New Request Form -->
+      <form method="POST" enctype="multipart/form-data" class="request-form shadow-card">
+        <input type="hidden" name="action" value="create_request" />
+        <h2><i class="fa-solid fa-square-plus text-blue-500 mr-2"></i>Yeni Hizmet İlanı Oluştur</h2>
+        
+        <div class="form-group">
+          <label for="title">Talep Başlığı *</label>
+          <input 
+            type="text" 
+            name="title" 
+            id="title" 
+            required 
+            placeholder="Örn: Ev boyama işi veya WordPress web sitesi yaptırma"
+          />
+        </div>
+
+        <div class="form-group">
+          <label for="category">Hizmet Kategorisi Seçin *</label>
+          <select name="category" id="category" required class="select-box">
+            <option value="">Lütfen kategori seçin...</option>
+            {flatCategories.map(cat => (
+              <option value={cat}>{cat}</option>
+            ))}
+          </select>
+        </div>
+
+        <div class="form-group">
+          <label for="description">Detaylı İlan Açıklaması *</label>
+          <textarea 
+            name="description" 
+            id="description" 
+            rows="4" 
+            required 
+            placeholder="Yapılacak işin detaylarını, ölçülerini, beklentilerinizi yazın. Ne kadar detaylı yazarsanız o kadar doğru fiyat teklifleri alırsınız."
+          ></textarea>
+        </div>
+
+        <div class="form-group">
+          <label for="image">Görsel / Dosya Yükle (İsteğe Bağlı - R2 CDN)</label>
+          <input 
+            type="file" 
+            name="image" 
+            id="image" 
+            accept="image/*"
+            class="file-input"
+          />
+          <small class="helper-text">Sorunu veya yapılacak alanı gösteren resim yüklemek iş ortaklarının daha iyi teklif vermesini sağlar.</small>
+        </div>
+
+        <button type="submit" class="submit-btn">
+          <i class="fa-solid fa-bullhorn mr-2"></i>
+          <span>Talebi Havuza Gönder (Teklifleri Topla)</span>
+        </button>
+      </form>
+
+      <!-- Tabbed Requests History -->
+      <div class="requests-history shadow-card">
+        <h2><i class="fa-solid fa-clipboard-list text-teal-500 mr-2"></i>Taleplerim & Gelen Teklifler</h2>
+        
+        <!-- 6-Tab Navigation Bar -->
+        <div class="tabs-nav">
+          <button type="button" class="tab-link active" onclick="switchFilter('ALL')">Tüm</button>
+          <button type="button" class="tab-link" onclick="switchFilter('PENDING')">Beklemede</button>
+          <button type="button" class="tab-link" onclick="switchFilter('OFFER_RECEIVED')">Teklif Gelen</button>
+          <button type="button" class="tab-link" onclick="switchFilter('ACCEPTED')">Kabul Edilen</button>
+          <button type="button" class="tab-link" onclick="switchFilter('IN_PROGRESS')">Devam Eden</button>
+          <button type="button" class="tab-link" onclick="switchFilter('COMPLETED')">Tamamlanan</button>
+        </div>
+
+        <!-- Requests Cards Container -->
+        <div class="requests-container">
+          {myRequests.map(req => (
+            <div class="req-card" data-status={req.status}>
+              
+              <!-- Card Header -->
+              <div class="req-card-header">
+                <span class="req-cat">{req.category}</span>
+                <span class={`status-tag ${req.status}`}>{req.status}</span>
+              </div>
+
+              <!-- Content -->
+              <div class="req-card-body">
+                <h3>{req.title}</h3>
+                <p class="desc">{req.description}</p>
+                
+                {req.image_url && (
+                  <a href={req.image_url} target="_blank" class="image-preview-btn">
+                    <i class="fa-solid fa-image mr-1"></i> Yüklenen Görseli Gör
+                  </a>
+                )}
+                
+                <span class="date"><i class="fa-regular fa-calendar-check mr-1"></i> {new Date(req.created_at).toLocaleDateString('tr-TR')}</span>
+              </div>
+
+              <!-- Offers Section (Bids Pool) -->
+              <div class="offers-section">
+                <h4><i class="fa-solid fa-gavel mr-2 text-blue-500"></i>Gelen Teklifler ({req.offers?.length || 0})</h4>
+                
+                <div class="offers-list">
+                  {req.offers?.map((offer: any) => (
+                    <div class="offer-item">
+                      <div class="offer-header">
+                        <span class="partner-name"><i class="fa-solid fa-user-gear mr-1"></i> {offer.partner_name}</span>
+                        <span class="price">{offer.price} TL</span>
+                      </div>
+                      <div class="offer-footer">
+                        <span class="duration"><i class="fa-regular fa-clock mr-1"></i> Süre: {offer.duration}</span>
+                        
+                        {/* Teklif Onay Butonu */}
+                        {req.status !== 'ACCEPTED' && req.status !== 'COMPLETED' ? (
+                          <form method="POST">
+                            <input type="hidden" name="action" value="accept_offer" />
+                            <input type="hidden" name="offer_id" value={offer.id} />
+                            <input type="hidden" name="request_id" value={req.id} />
+                            <button type="submit" class="accept-btn">
+                              <i class="fa-solid fa-circle-check mr-1"></i> Onayla & WhatsApp'a Geç
+                            </button>
+                          </form>
+                        ) : offer.status === 'ACCEPTED' ? (
+                          <span class="status-indicator accepted"><i class="fa-solid fa-circle-check"></i> Kabul Edildi</span>
+                        ) : (
+                          <span class="status-indicator rejected"><i class="fa-solid fa-circle-xmark"></i> Reddedildi</span>
+                        )}
+                      </div>
+                    </div>
+                  ))}
+
+                  {(!req.offers || req.offers.length === 0) && (
+                    <p class="no-offers">Şu an bu ilan için teklif bulunmamaktadır. İş ortaklarımız değerlendiriyor.</p>
+                  )}
+                </div>
+              </div>
+
+            </div>
+          ))}
+
+          {myRequests.length === 0 && (
+            <div class="empty-state">
+              <i class="fa-solid fa-file-invoice empty-icon"></i>
+              <p>Henüz bir hizmet talebiniz bulunmuyor. Soldaki formu kullanarak ilk talebinizi oluşturun.</p>
+            </div>
+          )}
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <style>
+    .requests-area {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .area-header h1 {
+      font-size: 2rem;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .area-header p {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+
+    .alert.success {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #059669;
+    }
+
+    .alert.error {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+    }
+
+    /* Layout */
+    .requests-layout {
+      display: grid;
+      grid-template-columns: 0.95fr 1.05fr;
+      gap: 32px;
+      align-items: start;
+    }
+
+    .shadow-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 32px;
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .requests-layout h2 {
+      font-size: 1.15rem;
+      color: #1e293b;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    input, textarea, select {
+      font-family: inherit;
+      font-size: 0.92rem;
+      padding: 12px 16px;
+      border: 1px solid #cbd5e1;
+      border-radius: 10px;
+      color: #0f172a;
+      outline: none;
+      background: #ffffff;
+      transition: all 0.2s ease;
+    }
+
+    input:focus, textarea:focus, select:focus {
+      border-color: #3b82f6;
+      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
+    }
+
+    .file-input {
+      padding: 8px;
+      font-size: 0.85rem;
+    }
+
+    .helper-text {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    .submit-btn {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 14px;
+      font-size: 0.95rem;
+      font-weight: 600;
+      border-radius: 12px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
+      margin-top: 10px;
+    }
+
+    .submit-btn:hover {
+      background: #2563eb;
+      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Tabbed history */
+    .tabs-nav {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 12px;
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+      gap: 4px;
+    }
+
+    .tab-link {
+      background: transparent;
+      border: none;
+      padding: 10px 16px;
+      border-radius: 8px;
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      white-space: nowrap;
+      transition: all 0.2s ease;
+    }
+
+    .tab-link.active {
+      background: #ffffff;
+      color: #3b82f6;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.08);
+    }
+
+    .requests-container {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .req-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+      transition: all 0.2s ease;
+    }
+
+    .req-card:hover {
+      border-color: #cbd5e1;
+      transform: translateY(-1px);
+    }
+
+    .req-card-header {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .req-cat {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.08);
+      color: #3b82f6;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .status-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .status-tag.PENDING { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+    .status-tag.OFFER_RECEIVED { background: rgba(59, 130, 246, 0.08); color: #2563eb; }
+    .status-tag.ACCEPTED { background: rgba(16, 185, 129, 0.08); color: #059669; }
+    .status-tag.REJECTED { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+    .status-tag.COMPLETED { background: rgba(100, 116, 139, 0.08); color: #475569; }
+
+    .req-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      border-bottom: 1px dashed #e2e8f0;
+    }
+
+    .req-card-body h3 {
+      font-size: 1.1rem;
+      color: #0f172a;
+    }
+
+    .req-card-body .desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .image-preview-btn {
+      width: fit-content;
+      font-size: 0.82rem;
+      font-weight: 600;
+      color: #3b82f6;
+      text-decoration: none;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 6px 12px;
+      border-radius: 8px;
+    }
+
+    .image-preview-btn:hover {
+      background: rgba(59, 130, 246, 0.1);
+    }
+
+    .req-card-body .date {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    /* Offers Section */
+    .offers-section {
+      padding: 20px;
+      background: rgba(255, 255, 255, 0.6);
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+    }
+
+    .offers-section h4 {
+      font-size: 0.9rem;
+      color: #334155;
+      font-weight: 700;
+    }
+
+    .offers-list {
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .offer-item {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 14px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .offer-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .partner-name {
+      font-size: 0.88rem;
+      font-weight: 700;
+      color: #334155;
+    }
+
+    .price {
+      font-size: 1rem;
+      font-weight: 800;
+      color: #059669;
+    }
+
+    .offer-footer {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.8rem;
+    }
+
+    .duration {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    .accept-btn {
+      background: #10b981;
+      color: #ffffff;
+      border: none;
+      padding: 6px 12px;
+      font-size: 0.8rem;
+      font-weight: 700;
+      border-radius: 8px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
+    }
+
+    .accept-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .status-indicator {
+      font-size: 0.8rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 4px;
+    }
+
+    .status-indicator.accepted { color: #059669; }
+    .status-indicator.rejected { color: #dc2626; }
+
+    .no-offers {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-style: italic;
+      text-align: center;
+      padding: 10px 0;
+    }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 40px 20px;
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      color: #cbd5e1;
+    }
+
+    .empty-state p {
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .requests-layout {
+        grid-template-columns: 1fr;
+      }
+    }
+  </style>
+
+  <!-- Client-side 6-Tab Filtering Logic -->
+  <script is:inline>
+    function switchFilter(status) {
+      const tabLinks = document.querySelectorAll('.tab-link');
+      
+      // Update active class on tabs
+      tabLinks.forEach(link => {
+        if (link.textContent.toUpperCase() === status || 
+            (status === 'ALL' && link.textContent === 'Tüm') ||
+            (status === 'IN_PROGRESS' && link.textContent === 'Devam Eden') ||
+            (status === 'OFFER_RECEIVED' && link.textContent === 'Teklif Gelen') ||
+            (status === 'PENDING' && link.textContent === 'Beklemede') ||
+            (status === 'ACCEPTED' && link.textContent === 'Kabul Edilen') ||
+            (status === 'COMPLETED' && link.textContent === 'Tamamlanan')
+        ) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      const cards = document.querySelectorAll('.req-card');
+      cards.forEach(card => {
+        const cardStatus = card.getAttribute('data-status');
+        
+        if (status === 'ALL') {
+          card.style.display = 'flex';
+        } else if (status === 'IN_PROGRESS') {
+          // Devam eden işler ACCEPTED veya IN_PROGRESS durumundadır
+          if (cardStatus === 'ACCEPTED' || cardStatus === 'IN_PROGRESS') {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        } else {
+          if (cardStatus === status) {
+            card.style.display = 'flex';
+          } else {
+            card.style.display = 'none';
+          }
+        }
+      });
+    }
+  </script>
+</DashboardLayout>

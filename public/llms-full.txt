@@ -1,0 +1,81 @@
+# İş De Yeter (Laflaf.net) - Kapsamlı Bilgi ve Sistem Dökümantasyonu (llms-full.txt)
+
+Bu döküman, İş De Yeter portalının tam mimarisini, tüm hizmet kategorilerini, alt uzmanlık kollarını, platform özelliklerini ve rotalama yapısını detaylı bir şekilde listeler. Arama ve bilgi botlarının platformu derinlemesine anlamasını hedefler.
+
+---
+
+## 📂 1. MİMARİ VE DOSYA YAPISI
+
+Proje, Astro Framework 4.0+ tabanlı geliştirilmiş olup hibrit (hybrid) çalışma yapısına sahiptir:
+* **Statik Sayfalar (SSG):** Tüm pazarlama, tanıtım, hizmet sayfaları build esnasında statik olarak üretilir, yüksek SEO ve Lighthouse skoru sağlar.
+* **Dinamik Rotalar (SSR):** `/login`, `/dashboard/*` ve API uç noktaları Cloudflare Pages Workers üzerinde dinamik olarak çalışır.
+* **Veri Katmanı:** Cloudflare D1 SQL Veritabanı ve görseller için Cloudflare R2 CDN/Bucket.
+
+---
+
+## 🗂️ 2. HİZMET KATEGORİLERİ VE HİZMET ALANLARI
+
+İş De Yeter platformundaki tüm uzmanlık dalları ve alt hizmet kolları aşağıda detaylandırılmıştır:
+
+### 🌐 A. DİJİTAL İŞLER, YAZILIM VE TEKNOLOJİ
+* **Yazılım Geliştirme:** Web Yazılım, Mobil Uygulama Geliştirme (iOS, Android), Masaüstü Uygulamaları, Özel Yazılım Çözümleri.
+* **Hazır Altyapı ve CMS:** WordPress Kurulumu, WooCommerce E-Ticaret, Web Sitesi Oluşturucular & CMS, Shopify, Wix Entegrasyonları.
+* **Altyapı ve Server:** Domain & Hosting Hizmetleri, Sunucu Kurulumları, Bulut Server Yönetimi, SSL Sertifikasyonları.
+* **İnternet Reklamcılığı:** Sosyal Medya Yönetimi, Web Analytics (İzleme & Takip), Influencer Marketing, Reklam Yönetimi (Google Ads, Meta Ads), Arama Motoru Optimizasyonu (SEO).
+
+### ⚙️ B. İŞ, YÖNETİM VE DESTEK
+* **Şirket Kurulumu:** Mukellef benzeri sistemle global şirket kurulumu rehberliği.
+* **E-Ticaret & Pazaryeri Destek:** Trendyol, Hepsiburada, N11, Amazon, ÇiçekSepeti, FLO, Modanisa, Getir gibi popüler yerli pazaryerleri; Amazon Global, ETSY, AliExpress, eBay, bol.com gibi global pazaryerlerinde mağaza açma, ürün yükleme ve entegrasyon desteği.
+* **Yönetim Desteği:** Pazar Araştırmaları, Sanal Asistanlık, Ürün & Veri Girişi, Excel İşleri, Satış & Müşteri Bulma, Danışmanlık Hizmetleri.
+
+### 🎨 C. GRAFİK, TASARIM VE İLLÜSTRASYON
+* **Marka Kimliği:** Logo Tasarımı, Kurumsal Kimlik, Kartvizit Tasarımı.
+* **Tanıtım Tasarımları:** Reklam & Banner Tasarımı, Broşür & Katalog, Sosyal Medya Görsel Tasarımları, Davetiyeler, Ambalaj Tasarımı.
+* **İllüstrasyon & Sanat:** 3D Tasarımlar, UI/UX (Arayüz) Tasarımı, İllüstrasyonlar, Fotoğraf Düzenleme, Dövme Tasarımları, Storyboard, Karikatür & Karakalem çizimleri.
+
+### 🎥 D. VİDEO, SES VE MÜZİK PRODÜKSİYONU
+* **Video Üretimi:** Video Reklamlar, Introlar, Tanıtım Videoları, Animasyon & 3D, Kurgu & Post Prodüksiyon, Özel Gün Videoları.
+* **Ses & Müzik:** Seslendirme, Jingle & Reklam Müziği, Mix & Mastering, Beste & Şarkı Yazarlığı, Podcast Düzenleme.
+
+### ✍️ E. YAZI, ÇEVİRİ VE İÇERİK
+* **Çeviri:** Web Sitesi İçeriği Çevirisi (Almanca, İngilizce, Arapça vb.), Teknik & Akademik Çeviriler.
+* **Metin Yazarlığı:** Blog Yazısı Üretimi, Senaryo & Yaratıcı Metin, Basın Bülteni, CV & Ön Yazı Hazırlama, Marka Adı & Slogan Bulma, Redaksiyon ve Deşifre.
+
+### 🧹 F. FİZİKSEL VE EVSEL HİZMETLER (SAHA HİZMETLERİ)
+* **Sağlık & Danışmanlık:** Psikolog Hizmetleri (Bireysel, Online), Diyetisyen, Pedagog Desteği, Fizyoterapi, Pilates Dersleri, Oyun Ablası.
+* **Ev & Ofis Temizliği:** Ev Temizliği, Boş Ev Temizliği, Cam Temizliği, Ofis Temizliği, Apartman Temizliği, Halı/Koltuk Yıkama, Haşere İlaçlama.
+* **Tadilat & Yenileme:** Boya Badana, Ev Tadilatı, Mutfak/Banyo Tadilatı, Isı Yalıtım/Mantolama, Parke Döşeme, Fayans İşleri, Duvar Örme.
+* **Tamirat & Tesisat:** Sıhhi Tesisat, Klozet/Musluk Tamiri, Elektrik Ustası, Kombi/Klima Servisi, Beyaz Eşya Tamiri, Çilingir Hizmeti.
+* **Nakliyat:** Evden Eve Nakliyat, Şehirler Arası Nakliyat, Asansörlü Taşımacılık, Depolama, Parça Eşya Taşıma, Oto Cekici, Moto Kurye.
+* **Organizasyon:** Düğün/Kına Organizasyonu, Catering, Butik Pasta, Bando Takımı, Palyaço Kiralama, Ekipman/Masa-Sandalye Kiralama.
+* **Özel Ders:** Matematik, İngilizce, Sınava Hazırlık (YKS, LGS, ALES, DGS), Dans Dersleri, Direksiyon Dersi.
+
+---
+
+## 🛠️ 3. ÇOKLU KİRACILIK (MULTI-TENANCY) VE ROL YAPISI
+
+Platformda 3 ayrı kullanıcı tipi bulunmaktadır:
+
+1. **Müşteri (Üye - is_partner = 0):**
+   * Profilini düzenleyebilir (ad, telefon, adres, fatura).
+   * Yeni hizmet ilanları/talepleri oluşturur.
+   * Taleplerini durumlarına göre filtreler: *Beklemede*, *Teklif Gelen*, *Kabul Edilen*, *Devam Eden*, *Tamamlanan*.
+   * n8n entegrasyonlu altyapı sayesinde ücretsiz web sitesi kurma sihirbazını kullanır (Domain ve Mod seçimi).
+   * Teklif veren iş ortaklarının detaylarını görüp WhatsApp üzerinden doğrudan iletişime geçebilir.
+
+2. **İş Ortağı (Partner - is_partner = 1):**
+   * Kayıt olduktan sonra 5 adete kadar uzmanlık kategorisi seçer.
+   * Kendi kategorisine uygun yeni bir iş düştüğünde *Teklif Ver* sekmesinde dynamic alert (⚠️) görür.
+   * Taleplere fiyat ve süre teklifi sunar.
+   * İşlerinin durumlarını dinamik sembollerle izler: ⏳ (Beklemede), ✅ (Onaylandı - Aktif İşlerim'e taşınır), ❌ (Reddedildi).
+
+3. **Yönetici (Admin - is_partner = 2):**
+   * Gizli `/admin` rotasından tüm üye, iş ortağı, talep ve teklif süreçlerini koordine eder.
+
+---
+
+## 📞 4. İLETİŞİM VE İNTEGRASYON KANALLARI
+
+* **WhatsApp Hızlı İletişim:** Tüm onaylama ve "İletişime Geç" eylemleri, `https://wa.me/905412465429` resmi hattı üzerinden dinamik oluşturulmuş User ID ve Request ID içeren mesajlarla çalışır.
+* **Site Kurulum Webhook:** Müşteri paneli üzerinden girilen alan adı ve mod tercihleri, n8n webhook servisine otomatik POST edilerek arka planda otomatik kurulum (provisioning) süreçlerini tetikler.
+* **Dinamik Rota Beslemesi:** `sitemap.xml` ve `rss.xml` dinamik sorgu mekanizmasıyla çalışmaktadır.

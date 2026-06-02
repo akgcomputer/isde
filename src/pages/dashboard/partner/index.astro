@@ -1,0 +1,929 @@
+---
+// src/pages/dashboard/partner/index.astro
+import DashboardLayout from '../../../layouts/DashboardLayout.astro';
+import { getPartnerContactLink } from '../../../utils/whatsapp';
+
+export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 1) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+if (!db) {
+  return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
+}
+
+let successMessage = '';
+let errorMessage = '';
+
+// 1. Yeni Teklif Gönderme (POST)
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+
+    if (action === 'submit_offer') {
+      const requestId = formData.get('request_id') as string;
+      const priceStr = formData.get('price') as string;
+      const duration = formData.get('duration') as string;
+
+      const price = parseFloat(priceStr);
+
+      if (!requestId || isNaN(price) || !duration) {
+        errorMessage = 'Lütfen teklif fiyatı ve tamamlanma süresini doğru girin.';
+      } else {
+        // D1 Batch işlemle teklifi ekle ve talebin statüsünü güncelle
+        await db.batch([
+          db.prepare(
+            "INSERT INTO offers (request_id, partner_id, price, duration, status) VALUES (?, ?, ?, ?, 'PENDING')"
+          ).bind(requestId, user.id, price, duration),
+          db.prepare(
+            "UPDATE service_requests SET status = 'OFFER_RECEIVED' WHERE id = ? AND status = 'PENDING'"
+          ).bind(requestId)
+        ]);
+
+        successMessage = 'Teklifiniz başarıyla müşteriye iletildi! Müşteri onayladığında size haber verilecektir.';
+      }
+    }
+  } catch (e) {
+    console.error("Partner offer submission error:", e);
+    errorMessage = 'Teklif gönderilirken veritabanı hatası oluştu.';
+  }
+}
+
+// 2. D1 Veritabanı Sorguları
+let myServices: any[] = [];
+let activeJobs: any[] = [];
+let pastJobs: any[] = [];
+let pendingOffers: any[] = [];
+let availablePool: any[] = [];
+let hasNewLeads = false;
+
+try {
+  // A. İş ortağının uzmanlık dalları
+  const servicesQuery = await db.prepare("SELECT service_category FROM partner_services WHERE partner_id = ?").bind(user.id).all();
+  myServices = servicesQuery.results || [];
+
+  if (myServices.length === 0) {
+    return Astro.redirect('/onboarding');
+  }
+
+  const categoryPlaceholders = myServices.map(s => s.service_category);
+
+  // B. Aktif İşlerim (Kabul edilmiş teklifler)
+  const activeQuery = await db.prepare(
+    "SELECT o.id as offer_id, o.price, o.duration, r.id as request_id, r.title, r.description, r.category, r.image_url, u.id as client_id, u.name as client_name, u.phone as client_phone " +
+    "FROM offers o " +
+    "JOIN service_requests r ON o.request_id = r.id " +
+    "JOIN users u ON r.client_id = u.id " +
+    "WHERE o.partner_id = ? AND o.status = 'ACCEPTED' AND r.status != 'COMPLETED'"
+  ).bind(user.id).all();
+  activeJobs = activeQuery.results || [];
+
+  // C. Eski İşlerim (Reddedilmiş teklifler veya tamamlanmış kabul edilen işler)
+  const pastQuery = await db.prepare(
+    "SELECT o.id as offer_id, o.price, o.status as offer_status, r.id as request_id, r.title, r.category, r.status as req_status " +
+    "FROM offers o " +
+    "JOIN service_requests r ON o.request_id = r.id " +
+    "WHERE o.partner_id = ? AND (o.status = 'REJECTED' OR r.status = 'COMPLETED')"
+  ).bind(user.id).all();
+  pastJobs = pastQuery.results || [];
+
+  // D. Beklemedeki Tekliflerim (Henüz onaylanmamış veya reddedilmemiş)
+  const pendingQuery = await db.prepare(
+    "SELECT o.id as offer_id, o.price, o.duration, o.status as offer_status, r.id as request_id, r.title, r.category " +
+    "FROM offers o " +
+    "JOIN service_requests r ON o.request_id = r.id " +
+    "WHERE o.partner_id = ? AND o.status = 'PENDING' AND r.status != 'ACCEPTED'"
+  ).bind(user.id).all();
+  pendingOffers = pendingQuery.results || [];
+
+  // E. Teklif Ver (Hizmet Havuzu)
+  // Ortak uzmanlık dallarındaki, teklif verilmemiş ve aktif olan talepleri getir
+  // SQL D1 Bindings parametreleri için array desteği sınırları nedeniyle SELECT query ile havuzu çekelim ve JS ile filtreleyelim
+  const rawPool = await db.prepare(
+    "SELECT r.*, u.name as client_name FROM service_requests r " +
+    "JOIN users u ON r.client_id = u.id " +
+    "WHERE r.status IN ('PENDING', 'OFFER_RECEIVED') " +
+    "AND r.id NOT IN (SELECT request_id FROM offers WHERE partner_id = ?) " +
+    "ORDER BY r.created_at DESC"
+  ).bind(user.id).all();
+
+  const poolResults = rawPool.results || [];
+
+  // Sadece iş ortağının seçtiği uzmanlık dallarına uyan talepleri filtrele
+  const selectedCatNames = myServices.map(s => s.service_category);
+  availablePool = poolResults.filter((req: any) => selectedCatNames.includes(req.category));
+
+  // Eğer uzmanlık dallarında henüz teklif verilmemiş yeni iş fırsatları varsa hasNewLeads bayrağını aktif et
+  if (availablePool.length > 0) {
+    hasNewLeads = true;
+  }
+
+} catch (err) {
+  console.error("Partner index data query error:", err);
+}
+---
+
+<DashboardLayout title="İş Ortağı Paneli | İş De Yeter" activeTab="overview">
+  <div class="partner-area">
+    
+    <div class="area-header">
+      <h1>İş Ortağı Çalışma Paneli</h1>
+      <p>Teklif verdiğiniz işleri takip edebilir, tamamlanan işlerinizi görebilir veya uzmanlık alanınıza düşen yeni taleplere hızlıca fiyat verebilirsiniz.</p>
+    </div>
+
+    {successMessage && (
+      <div class="alert success">
+        <i class="fa-solid fa-circle-check"></i>
+        <span>{successMessage}</span>
+      </div>
+    )}
+
+    {errorMessage && (
+      <div class="alert error">
+        <i class="fa-solid fa-triangle-exclamation"></i>
+        <span>{errorMessage}</span>
+      </div>
+    )}
+
+    <!-- Category Badges Bar -->
+    <div class="my-categories shadow-card">
+      <span class="title">Uzmanlık Alanlarım (Maks 5):</span>
+      <div class="badges-wrapper">
+        {myServices.map(s => (
+          <span class="cat-badge">{s.service_category}</span>
+        ))}
+        <a href="/onboarding" class="edit-link"><i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle</a>
+      </div>
+    </div>
+
+    <!-- Tabbed Jobs Center -->
+    <div class="jobs-workspace shadow-card">
+      
+      <!-- Tabs Navigation with Dynamic ⚠️ Indicator -->
+      <div class="tabs-nav">
+        <button type="button" class="tab-link active" onclick="switchTab('active')">
+          <i class="fa-solid fa-briefcase mr-1"></i> Aktif İşlerim ({activeJobs.length})
+        </button>
+        <button type="button" class="tab-link" onclick="switchTab('past')">
+          <i class="fa-solid fa-clock-rotate-left mr-1"></i> Eski İşlerim ({pastJobs.length})
+        </button>
+        <button type="button" class="tab-link" onclick="switchTab('pool')">
+          <i class="fa-solid fa-gavel mr-1"></i> Teklif Ver / İş Havuzu ({availablePool.length})
+          {hasNewLeads && (
+            <span class="blink-badge" title="Uzmanlık alanınızda yeni iş fırsatı var!">⚠️</span>
+          )}
+        </button>
+        <button type="button" class="tab-link" onclick="switchTab('pending')">
+          <i class="fa-solid fa-hourglass-half mr-1"></i> Bekleyen Tekliflerim ({pendingOffers.length})
+        </button>
+      </div>
+
+      <!-- Tab Content Area -->
+      <div class="tab-content-container">
+        
+        <!-- A. AKTİF İŞLERİM (ACCEPTED) -->
+        <div id="tab-active" class="tab-content-panel active">
+          <div class="jobs-grid">
+            {activeJobs.map(job => (
+              <div class="job-card active-job">
+                <div class="job-card-header">
+                  <span class="job-category">{job.category}</span>
+                  <span class="job-status-tag active"><i class="fa-solid fa-circle-check"></i> Kabul Edildi (Aktif)</span>
+                </div>
+                
+                <div class="job-card-body">
+                  <h3>{job.title}</h3>
+                  <p class="desc">{job.description}</p>
+                  
+                  {job.image_url && (
+                    <a href={job.image_url} target="_blank" class="image-btn">
+                      <i class="fa-solid fa-image mr-1"></i> Yüklenen Görseli Gör
+                    </a>
+                  )}
+
+                  <div class="client-details">
+                    <h4>Müşteri Bilgileri</h4>
+                    <p><i class="fa-solid fa-user mr-2 text-blue-500"></i> {job.client_name}</p>
+                    
+                    {/* WhatsApp Entegrasyon İletişim Butonu */}
+                    <a 
+                      href={getPartnerContactLink(job.client_name, job.client_id, job.request_id)} 
+                      target="_blank" 
+                      class="contact-whatsapp-btn"
+                    >
+                      <i class="fa-brands fa-whatsapp"></i>
+                      <span>Müşteriyle WhatsApp'tan Görüş</span>
+                    </a>
+                  </div>
+                </div>
+
+                <div class="job-card-footer">
+                  <span class="price-val">Kazanılan Fiyat: {job.price} TL</span>
+                  <span class="duration-val"><i class="fa-regular fa-clock"></i> Süre: {job.duration}</span>
+                </div>
+              </div>
+            ))}
+
+            {activeJobs.length === 0 && (
+              <div class="empty-state">
+                <i class="fa-solid fa-file-signature empty-icon"></i>
+                <p>Şu an aktif olarak üstlendiğiniz bir iş bulunmamaktadır. İş havuzunu inceleyerek yeni işlere teklif verin!</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- B. ESKİ İŞLERİM (REJECTED veya COMPLETED) -->
+        <div id="tab-past" class="tab-content-panel">
+          <div class="jobs-list">
+            <table>
+              <thead>
+                <tr>
+                  <th>Talep Başlığı</th>
+                  <th>Hizmet Kategorisi</th>
+                  <th>Teklif Fiyatım</th>
+                  <th>Teklif Durumu</th>
+                  <th>Talep Durumu</th>
+                </tr>
+              </thead>
+              <tbody>
+                {pastJobs.map(job => (
+                  <tr>
+                    <td class="font-semibold">{job.title}</td>
+                    <td>{job.category}</td>
+                    <td class="font-semibold">{job.price} TL</td>
+                    <td>
+                      {job.offer_status === 'ACCEPTED' ? (
+                        <span class="tag accepted">✅ Kabul Edildi</span>
+                      ) : (
+                        <span class="tag rejected">❌ Reddedildi</span>
+                      )}
+                    </td>
+                    <td>
+                      <span class={`tag-req ${job.req_status}`}>{job.req_status}</span>
+                    </td>
+                  </tr>
+                ))}
+                {pastJobs.length === 0 && (
+                  <tr><td colspan="5" class="text-center py-6 text-gray-400">Tamamlanan veya reddedilen eski bir iş kaydınız bulunmuyor.</td></tr>
+                )}
+              </tbody>
+            </table>
+          </div>
+        </div>
+
+        <!-- C. TEKLİF VER / İŞ HAVUZU (MATCHING PENDING REQUESTS) -->
+        <div id="tab-pool" class="tab-content-panel">
+          <div class="pool-grid">
+            {availablePool.map(req => (
+              <div class="pool-card">
+                
+                <div class="pool-header">
+                  <span class="cat">{req.category}</span>
+                  <span class="client"><i class="fa-solid fa-user-tie"></i> Müşteri: {req.client_name}</span>
+                </div>
+
+                <div class="pool-body">
+                  <h3>{req.title}</h3>
+                  <p class="desc">{req.description}</p>
+                  
+                  {req.image_url && (
+                    <a href={req.image_url} target="_blank" class="image-btn">
+                      <i class="fa-solid fa-image mr-1"></i> Resim Önizleme
+                    </a>
+                  )}
+                </div>
+
+                {/* Teklif Verme Formu */}
+                <form method="POST" class="bid-form">
+                  <input type="hidden" name="action" value="submit_offer" />
+                  <input type="hidden" name="request_id" value={req.id} />
+                  
+                  <div class="bid-inputs">
+                    <div class="input-group">
+                      <label>Fiyat Teklifi (TL) *</label>
+                      <input type="number" name="price" required min="1" placeholder="Fiyat girin (TL)" />
+                    </div>
+                    
+                    <div class="input-group">
+                      <label>Süre Teklifi *</label>
+                      <select name="duration" required>
+                        <option value="1 Gün">1 Gün</option>
+                        <option value="2 Gün">2 Gün</option>
+                        <option value="3 Gün">3 Gün</option>
+                        <option value="5 Gün">5 Gün</option>
+                        <option value="1 Hafta">1 Hafta</option>
+                        <option value="2 Hafta">2 Hafta</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="bid-submit-btn">
+                    <i class="fa-solid fa-paper-plane mr-2"></i> Teklifi Gönder
+                  </button>
+                </form>
+
+              </div>
+            ))}
+
+            {availablePool.length === 0 && (
+              <div class="empty-state">
+                <i class="fa-solid fa-gavel empty-icon"></i>
+                <p>Şu an uzmanlık kategorilerinizde teklif verebileceğiniz yeni bir talep bulunmamaktadır. Yeni ilanlar açıldığında burada listelenecektir.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+        <!-- D. BEKLEYEN TEKLİFLERİM (PENDING BIDS) -->
+        <div id="tab-pending" class="tab-content-panel">
+          <div class="jobs-grid">
+            {pendingOffers.map(offer => (
+              <div class="job-card pending-job">
+                <div class="job-card-header">
+                  <span class="job-category">{offer.category}</span>
+                  <span class="job-status-tag pending"><i class="fa-solid fa-hourglass-half"></i> Teklif Beklemede (⏳)</span>
+                </div>
+                
+                <div class="job-card-body">
+                  <h3>{offer.title}</h3>
+                  <p class="info-text">Fiyat ve süre teklifiniz müşteriye iletildi. Müşteri teklifleri değerlendiriyor.</p>
+                </div>
+
+                <div class="job-card-footer">
+                  <span class="price-val">Teklifim: {offer.price} TL</span>
+                  <span class="duration-val"><i class="fa-regular fa-clock"></i> Süre: {offer.duration}</span>
+                </div>
+              </div>
+            ))}
+
+            {pendingOffers.length === 0 && (
+              <div class="empty-state">
+                <i class="fa-solid fa-hourglass empty-icon"></i>
+                <p>Beklemede olan herhangi bir fiyat teklifiniz bulunmamaktadır.</p>
+              </div>
+            )}
+          </div>
+        </div>
+
+      </div>
+
+    </div>
+
+  </div>
+
+  <style>
+    .partner-area {
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    .area-header h1 {
+      font-size: 2rem;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .area-header p {
+      font-size: 0.95rem;
+      color: #64748b;
+      margin-top: 4px;
+    }
+
+    /* Alerts */
+    .alert {
+      padding: 16px 20px;
+      border-radius: 12px;
+      font-weight: 500;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.95rem;
+    }
+
+    .alert.success {
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px solid rgba(16, 185, 129, 0.3);
+      color: #059669;
+    }
+
+    .alert.error {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+    }
+
+    .shadow-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 20px;
+      padding: 24px;
+    }
+
+    /* Categories Bar */
+    .my-categories {
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      flex-wrap: wrap;
+    }
+
+    .my-categories .title {
+      font-size: 0.9rem;
+      font-weight: 700;
+      color: #475569;
+    }
+
+    .badges-wrapper {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      flex-wrap: wrap;
+    }
+
+    .cat-badge {
+      background: rgba(59, 130, 246, 0.08);
+      color: #3b82f6;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 14px;
+      border-radius: 20px;
+    }
+
+    .edit-link {
+      color: #64748b;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      margin-left: 10px;
+    }
+
+    .edit-link:hover {
+      color: #3b82f6;
+      text-decoration: underline;
+    }
+
+    /* Tabs workspace */
+    .jobs-workspace {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .tabs-nav {
+      display: flex;
+      background: #f1f5f9;
+      padding: 4px;
+      border-radius: 14px;
+      border: 1px solid #e2e8f0;
+      overflow-x: auto;
+      gap: 4px;
+    }
+
+    .tab-link {
+      background: transparent;
+      border: none;
+      padding: 12px 20px;
+      border-radius: 10px;
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #64748b;
+      cursor: pointer;
+      white-space: nowrap;
+      display: flex;
+      align-items: center;
+      transition: all 0.2s ease;
+    }
+
+    .tab-link.active {
+      background: #ffffff;
+      color: #3b82f6;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.08);
+    }
+
+    /* Flashing alert ⚠️ next to Teklif Ver tab */
+    .blink-badge {
+      display: inline-block;
+      margin-left: 8px;
+      color: #f59e0b;
+      font-size: 0.95rem;
+      animation: blink 1.2s infinite;
+    }
+
+    @keyframes blink {
+      0% { opacity: 0.1; transform: scale(0.9); }
+      50% { opacity: 1; transform: scale(1.1); }
+      100% { opacity: 0.1; transform: scale(0.9); }
+    }
+
+    /* Content panels */
+    .tab-content-panel {
+      display: none;
+    }
+
+    .tab-content-panel.active {
+      display: block;
+      animation: fadeIn 0.3s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; }
+      to { opacity: 1; }
+    }
+
+    /* Jobs grid styling */
+    .jobs-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(320px, 1fr));
+      gap: 24px;
+    }
+
+    .job-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
+      overflow: hidden;
+      display: flex;
+      flex-direction: column;
+    }
+
+    .job-card-header {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-bottom: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+    }
+
+    .job-category {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.08);
+      color: #3b82f6;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .job-status-tag {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .job-status-tag.active { background: rgba(16, 185, 129, 0.08); color: #059669; }
+    .job-status-tag.pending { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+
+    .job-card-body {
+      padding: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      flex: 1;
+    }
+
+    .job-card-body h3 {
+      font-size: 1.05rem;
+      color: #0f172a;
+    }
+
+    .job-card-body .desc {
+      font-size: 0.88rem;
+      color: #475569;
+      line-height: 1.5;
+    }
+
+    .job-card-body .info-text {
+      font-size: 0.85rem;
+      color: #64748b;
+      font-style: italic;
+    }
+
+    .image-btn {
+      width: fit-content;
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px solid rgba(59, 130, 246, 0.15);
+      padding: 6px 12px;
+      border-radius: 8px;
+      text-decoration: none;
+    }
+
+    .client-details {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 12px;
+      padding: 16px;
+      margin-top: 10px;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+    }
+
+    .client-details h4 {
+      font-size: 0.82rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .client-details p {
+      font-size: 0.9rem;
+      font-weight: 600;
+      color: #334155;
+    }
+
+    /* WhatsApp Button inside accepted card */
+    .contact-whatsapp-btn {
+      background: #10b981;
+      color: #ffffff;
+      text-decoration: none;
+      padding: 12px;
+      border-radius: 10px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 4px 10px rgba(16, 185, 129, 0.15);
+      transition: all 0.2s ease;
+    }
+
+    .contact-whatsapp-btn:hover {
+      background: #059669;
+      transform: translateY(-1px);
+    }
+
+    .job-card-footer {
+      padding: 16px 20px;
+      background: #ffffff;
+      border-top: 1px solid #e2e8f0;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-size: 0.88rem;
+    }
+
+    .price-val {
+      font-weight: 800;
+      color: #059669;
+    }
+
+    .duration-val {
+      color: #64748b;
+      font-weight: 500;
+    }
+
+    /* Pool Card design */
+    .pool-grid {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .pool-card {
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      background: #f8fafc;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 16px;
+    }
+
+    .pool-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      border-bottom: 1px solid #cbd5e1;
+      padding-bottom: 12px;
+    }
+
+    .pool-header .cat {
+      font-size: 0.72rem;
+      font-weight: 700;
+      background: rgba(59, 130, 246, 0.08);
+      color: #3b82f6;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .pool-header .client {
+      font-size: 0.85rem;
+      font-weight: 600;
+      color: #475569;
+    }
+
+    .pool-body h3 {
+      font-size: 1.1rem;
+      color: #0f172a;
+    }
+
+    .pool-body .desc {
+      font-size: 0.9rem;
+      color: #334155;
+      line-height: 1.5;
+      margin-top: 8px;
+    }
+
+    /* Bid inline form */
+    .bid-form {
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      border-radius: 12px;
+      padding: 16px;
+      display: flex;
+      justify-content: space-between;
+      align-items: flex-end;
+      gap: 20px;
+      flex-wrap: wrap;
+    }
+
+    .bid-inputs {
+      display: flex;
+      gap: 16px;
+      flex: 1;
+      flex-wrap: wrap;
+    }
+
+    .bid-inputs .input-group {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+      flex: 1;
+      min-width: 140px;
+    }
+
+    .bid-inputs label {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: #64748b;
+      text-transform: uppercase;
+    }
+
+    .bid-inputs input, .bid-inputs select {
+      font-family: inherit;
+      font-size: 0.88rem;
+      padding: 10px 12px;
+      border: 1px solid #cbd5e1;
+      border-radius: 8px;
+      outline: none;
+      background: #ffffff;
+      color: #0f172a;
+    }
+
+    .bid-inputs input:focus, .bid-inputs select:focus {
+      border-color: #3b82f6;
+    }
+
+    .bid-submit-btn {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 12px 24px;
+      font-size: 0.88rem;
+      font-weight: 700;
+      border-radius: 10px;
+      cursor: pointer;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.15);
+      height: 42px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .bid-submit-btn:hover {
+      background: #2563eb;
+      box-shadow: 0 6px 15px rgba(59, 130, 246, 0.25);
+    }
+
+    /* Past jobs list styling */
+    .jobs-list {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      padding: 12px 16px;
+      border-bottom: 2px solid #cbd5e1;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #e2e8f0;
+      font-size: 0.88rem;
+      color: #334155;
+    }
+
+    /* Badges */
+    .tag {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .tag.accepted { background: rgba(16, 185, 129, 0.08); color: #059669; }
+    .tag.rejected { background: rgba(220, 38, 38, 0.08); color: #dc2626; }
+
+    .tag-req {
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 8px;
+      border-radius: 6px;
+      text-transform: uppercase;
+    }
+
+    .tag-req.COMPLETED { background: rgba(100, 116, 139, 0.08); color: #475569; }
+    .tag-req.ACCEPTED { background: rgba(16, 185, 129, 0.08); color: #059669; }
+    .tag-req.PENDING { background: rgba(245, 158, 11, 0.08); color: #d97706; }
+
+    /* Empty state */
+    .empty-state {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 12px;
+      padding: 40px 20px;
+      grid-column: span 3;
+    }
+
+    .empty-icon {
+      font-size: 2.5rem;
+      color: #cbd5e1;
+    }
+
+    .empty-state p {
+      font-size: 0.88rem;
+      color: #64748b;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .bid-form {
+        align-items: stretch;
+        flex-direction: column;
+      }
+      .bid-submit-btn {
+        width: 100%;
+      }
+    }
+  </style>
+
+  <!-- Real-time tab switcher -->
+  <script is:inline>
+    function switchTab(tabId) {
+      const tabLinks = document.querySelectorAll('.tab-link');
+      const panels = document.querySelectorAll('.tab-content-panel');
+
+      // Update active classes on tab headers
+      tabLinks.forEach(link => {
+        if (
+          (tabId === 'active' && link.textContent.includes('Aktif İşlerim')) ||
+          (tabId === 'past' && link.textContent.includes('Eski İşlerim')) ||
+          (tabId === 'pool' && link.textContent.includes('Teklif Ver')) ||
+          (tabId === 'pending' && link.textContent.includes('Bekleyen Tekliflerim'))
+        ) {
+          link.classList.add('active');
+        } else {
+          link.classList.remove('active');
+        }
+      });
+
+      // Update active classes on content panels
+      panels.forEach(panel => {
+        if (panel.id === `tab-${tabId}`) {
+          panel.classList.add('active');
+        } else {
+          panel.classList.remove('active');
+        }
+      });
+    }
+  </script>
+</DashboardLayout>

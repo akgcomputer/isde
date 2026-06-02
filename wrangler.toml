@@ -1,0 +1,15 @@
+# wrangler.toml - Cloudflare Pages Konfigürasyonu (D1 & R2 Bindings)
+
+name = "isdeyeter"
+pages_build_output_dir = "dist"
+
+# 1. Cloudflare D1 Veritabanı Tanımlaması
+[[d1_databases]]
+binding = "DB"                                                 # Kod içerisindeki referans adı (Astro.locals.runtime.env.DB)
+database_name = "isdeyeter-db"                                 # Cloudflare panelindeki veritabanı adı
+database_id = "local-db-placeholder-id-please-replace"        # Canlıda deploy ederken veritabanı ID'si ile değiştirilecektir
+
+# 2. Cloudflare R2 Depolama / CDN Tanımlaması
+[[r2_buckets]]
+binding = "R2"                                                 # Kod içerisindeki referans adı (Astro.locals.runtime.env.R2)
+bucket_name = "isdeyeter-bucket"                               # Cloudflare panelindeki R2 kova adı

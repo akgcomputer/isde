@@ -1,33 +1,33 @@
-// public/robots.txt
+# robots.txt - İş De Yeter SEO ve AI Arama Bot Yönergeleri
+# Web sitemizin tüm ürün, yazı ve hizmet kategorilerinin taranmasına izin verilmiştir.
+# Hassas üye panelleri ve ödeme rotaları taranmaya kapatılmıştır.
+
 User-agent: *
 Allow: /
-Disallow: /private/
+
+# Hassas ve Kullanıcıya Özel Rotalar (Disallow)
 Disallow: /admin/
+Disallow: /checkout/
+Disallow: /sepet
+Disallow: /profil
+Disallow: /dashboard/
+Disallow: /private/
 Disallow: /api/
 
-# Site haritaları
-Sitemap: https://isdeyeter.com/sitemap.xml
-Sitemap: https://isdeyeter.com/sitemap.rss
-
-# Crawl hızı
-Crawl-delay: 1
-
-# Arama motorları için ek ayarlar
-User-agent: Googlebot
-Allow: /
-Disallow: /private/
-Disallow: /admin/
-
-User-agent: Bingbot
-Allow: /
-Disallow: /private/
-Disallow: /admin/
-
-User-agent: Yandex
-Allow: /
-Disallow: /private/
-Disallow: /admin/
-
-# Botlar
+# Yapay Zeka Arama Motorları ve Ajanları İzinleri (LLM Bot Tarama İzinleri)
 User-agent: GPTBot
-Disallow: /
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: ClaudeBot
+Allow: /
+Allow: /llms.txt
+Allow: /llms-full.txt
+
+User-agent: Applebot-Extended
+Allow: /
+
+# Resmi Site Haritaları
+Sitemap: https://isdeyeter.com/sitemap.xml
+Sitemap: https://isdeyeter.com/rss.xml

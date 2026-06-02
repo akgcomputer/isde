@@ -1,0 +1,551 @@
+---
+// src/pages/admin.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+
+export const prerender = false; // Admin paneli sunucu tarafında çalışmalıdır (SSR)
+
+// Kullanıcı bilgileri middleware tarafından enjekte edilmiştir
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 2) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+if (!db) {
+  return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
+}
+
+// 1. İstatistikleri Sorgula
+let stats = {
+  totalMembers: 0,
+  totalPartners: 0,
+  totalRequests: 0,
+  totalOffers: 0,
+  totalSites: 0
+};
+
+let recentUsers: any[] = [];
+let recentRequests: any[] = [];
+let recentSites: any[] = [];
+
+try {
+  // Üye sayısı
+  const membersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 0").first() as any;
+  stats.totalMembers = membersCount?.count || 0;
+
+  // İş ortağı sayısı
+  const partnersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 1").first() as any;
+  stats.totalPartners = partnersCount?.count || 0;
+
+  // Talep sayısı
+  const requestsCount = await db.prepare("SELECT COUNT(*) as count FROM service_requests").first() as any;
+  stats.totalRequests = requestsCount?.count || 0;
+
+  // Teklif sayısı
+  const offersCount = await db.prepare("SELECT COUNT(*) as count FROM offers").first() as any;
+  stats.totalOffers = offersCount?.count || 0;
+
+  // Site sayısı
+  const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites").first() as any;
+  stats.totalSites = sitesCount?.count || 0;
+
+  // Son Kayıt Olan 5 Kullanıcı
+  const usersQuery = await db.prepare("SELECT * FROM users ORDER BY created_at DESC LIMIT 5").all();
+  recentUsers = usersQuery.results || [];
+
+  // Son 5 Hizmet Talebi
+  const requestsQuery = await db.prepare(
+    "SELECT r.*, u.name as client_name FROM service_requests r JOIN users u ON r.client_id = u.id ORDER BY r.created_at DESC LIMIT 5"
+  ).all();
+  recentRequests = requestsQuery.results || [];
+
+  // Son 5 Web Sitesi
+  const sitesQuery = await db.prepare(
+    "SELECT s.*, u.name as owner_name FROM sites s JOIN users u ON s.user_id = u.id ORDER BY s.created_at DESC LIMIT 5"
+  ).all();
+  recentSites = sitesQuery.results || [];
+
+} catch (e) {
+  console.error("Admin dashboard query error:", e);
+}
+---
+
+<BasicLayout title="Yönetim Paneli | İş De Yeter" description="İş De Yeter Platformu Merkezi Yönetim Kontrol Merkezi.">
+  <div class="admin-wrapper">
+    
+    <!-- Top Nav -->
+    <header class="admin-header">
+      <div class="header-left">
+        <span class="badge">SYSTEM ADMIN</span>
+        <h1>Merkezi Kontrol Paneli</h1>
+      </div>
+      <div class="header-right">
+        <div class="admin-profile">
+          <i class="fa-solid fa-user-shield avatar-icon"></i>
+          <div class="profile-details">
+            <span class="admin-name">{user.name}</span>
+            <span class="admin-email">{user.email}</span>
+          </div>
+        </div>
+        <a href="/api/auth/logout" class="logout-btn">
+          <i class="fa-solid fa-right-from-bracket"></i>
+          <span>Güvenli Çıkış</span>
+        </a>
+      </div>
+    </header>
+
+    <!-- Stats Grid -->
+    <section class="stats-grid">
+      
+      <!-- Stat Card -->
+      <div class="stat-card">
+        <div class="stat-icon member-icon">
+          <i class="fa-solid fa-users"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Kayıtlı Üyeler</h3>
+          <p class="stat-value">{stats.totalMembers}</p>
+        </div>
+      </div>
+
+      <!-- Stat Card -->
+      <div class="stat-card">
+        <div class="stat-icon partner-icon">
+          <i class="fa-solid fa-handshake"></i>
+        </div>
+        <div class="stat-info">
+          <h3>İş Ortakları</h3>
+          <p class="stat-value">{stats.totalPartners}</p>
+        </div>
+      </div>
+
+      <!-- Stat Card -->
+      <div class="stat-card">
+        <div class="stat-icon request-icon">
+          <i class="fa-solid fa-file-invoice"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Hizmet Talepleri</h3>
+          <p class="stat-value">{stats.totalRequests}</p>
+        </div>
+      </div>
+
+      <!-- Stat Card -->
+      <div class="stat-card">
+        <div class="stat-icon offer-icon">
+          <i class="fa-solid fa-tags"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Verilen Teklifler</h3>
+          <p class="stat-value">{stats.totalOffers}</p>
+        </div>
+      </div>
+
+      <!-- Stat Card -->
+      <div class="stat-card">
+        <div class="stat-icon site-icon">
+          <i class="fa-solid fa-circle-nodes"></i>
+        </div>
+        <div class="stat-info">
+          <h3>Kurulan Siteler</h3>
+          <p class="stat-value">{stats.totalSites}</p>
+        </div>
+      </div>
+
+    </section>
+
+    <!-- Content Sections -->
+    <div class="tables-layout">
+      
+      <!-- Column 1: Recent Users -->
+      <div class="table-card">
+        <div class="card-title-bar">
+          <h2><i class="fa-solid fa-user-plus text-blue-500 mr-2"></i>Son Kayıtlı Kullanıcılar</h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Ad Soyad</th>
+                <th>E-Posta</th>
+                <th>Rol</th>
+                <th>Tarih</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentUsers.map(u => (
+                <tr>
+                  <td class="font-semibold">{u.name}</td>
+                  <td>{u.email}</td>
+                  <td>
+                    {u.is_partner === 1 ? (
+                      <span class="role-badge partner">İş Ortağı</span>
+                    ) : u.is_partner === 2 ? (
+                      <span class="role-badge admin">Yönetici</span>
+                    ) : (
+                      <span class="role-badge member">Üye</span>
+                    )}
+                  </td>
+                  <td class="text-gray-500">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
+                </tr>
+              ))}
+              {recentUsers.length === 0 && (
+                <tr><td colspan="4" class="text-center py-6 text-gray-400">Kayıtlı kullanıcı bulunamadı.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Column 2: Recent Sites -->
+      <div class="table-card">
+        <div class="card-title-bar">
+          <h2><i class="fa-solid fa-globe text-teal-500 mr-2"></i>Son Kurulan Web Siteleri</h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Alan Adı</th>
+                <th>Kurucu</th>
+                <th>Mod</th>
+                <th>Durum</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentSites.map(s => (
+                <tr>
+                  <td class="font-semibold text-blue-600">
+                    <a href={`http://${s.domain}`} target="_blank" class="hover:underline">{s.domain}</a>
+                  </td>
+                  <td>{s.owner_name}</td>
+                  <td>
+                    <span class={`mode-tag ${s.mode}`}>{s.mode === 'urun' ? '📦 Ürün' : '💼 Hizmet'}</span>
+                  </td>
+                  <td>
+                    <span class={`status-tag ${s.status}`}>{s.status}</span>
+                  </td>
+                </tr>
+              ))}
+              {recentSites.length === 0 && (
+                <tr><td colspan="4" class="text-center py-6 text-gray-400">Kurulmuş site bulunamadı.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Column 3: Recent Requests (Full width) -->
+      <div class="table-card full-width">
+        <div class="card-title-bar">
+          <h2><i class="fa-solid fa-list-check text-purple-500 mr-2"></i>Son Hizmet İlanları & Talepleri</h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>ID</th>
+                <th>Müşteri</th>
+                <th>Hizmet Kategorisi</th>
+                <th>Başlık</th>
+                <th>Durum</th>
+                <th>Tarih</th>
+              </tr>
+            </thead>
+            <tbody>
+              {recentRequests.map(r => (
+                <tr>
+                  <td>#{r.id}</td>
+                  <td class="font-semibold">{r.client_name}</td>
+                  <td class="text-blue-500 font-semibold">{r.category}</td>
+                  <td>{r.title}</td>
+                  <td>
+                    <span class={`status-tag ${r.status}`}>{r.status}</span>
+                  </td>
+                  <td class="text-gray-500">{new Date(r.created_at).toLocaleDateString('tr-TR')}</td>
+                </tr>
+              ))}
+              {recentRequests.length === 0 && (
+                <tr><td colspan="6" class="text-center py-6 text-gray-400">Henüz hizmet talebi açılmamış.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+    </div>
+
+  </div>
+
+  <style>
+    .admin-wrapper {
+      background: #0f172a;
+      min-height: 100vh;
+      color: #e2e8f0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      font-family: 'Inter', sans-serif;
+    }
+
+    /* Top Nav */
+    .admin-header {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 24px 32px;
+      border-radius: 20px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 20px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .header-left {
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .badge {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      font-size: 0.72rem;
+      font-weight: 800;
+      padding: 4px 10px;
+      border-radius: 6px;
+      width: fit-content;
+      letter-spacing: 1px;
+    }
+
+    .header-left h1 {
+      font-size: 1.8rem;
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .header-right {
+      display: flex;
+      align-items: center;
+      gap: 24px;
+    }
+
+    .admin-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      border-right: 1px solid #334155;
+      padding-right: 24px;
+    }
+
+    .avatar-icon {
+      font-size: 1.8rem;
+      color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+      padding: 10px;
+      border-radius: 12px;
+    }
+
+    .profile-details {
+      display: flex;
+      flex-direction: column;
+    }
+
+    .admin-name {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 0.95rem;
+    }
+
+    .admin-email {
+      font-size: 0.8rem;
+      color: #94a3b8;
+    }
+
+    .logout-btn {
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+      border: 1px solid rgba(239, 68, 68, 0.2);
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .logout-btn:hover {
+      background: #ef4444;
+      color: #ffffff;
+      box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
+    }
+
+    /* Stats Grid */
+    .stats-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      gap: 20px;
+    }
+
+    .stat-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 18px;
+      padding: 20px;
+      display: flex;
+      align-items: center;
+      gap: 16px;
+      transition: all 0.2s ease;
+    }
+
+    .stat-card:hover {
+      transform: translateY(-2px);
+      border-color: #475569;
+    }
+
+    .stat-icon {
+      font-size: 1.5rem;
+      width: 48px;
+      height: 48px;
+      border-radius: 12px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+    }
+
+    .member-icon { background: rgba(59, 130, 246, 0.1); color: #3b82f6; }
+    .partner-icon { background: rgba(245, 158, 11, 0.1); color: #f59e0b; }
+    .request-icon { background: rgba(168, 85, 247, 0.1); color: #a855f7; }
+    .offer-icon { background: rgba(236, 72, 153, 0.1); color: #ec4899; }
+    .site-icon { background: rgba(20, 184, 166, 0.1); color: #14b8a6; }
+
+    .stat-info h3 {
+      font-size: 0.8rem;
+      font-weight: 600;
+      color: #94a3b8;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+    }
+
+    .stat-value {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      line-height: 1;
+      margin-top: 4px;
+    }
+
+    /* Tables Layout */
+    .tables-layout {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 24px;
+    }
+
+    .table-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 24px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .table-card.full-width {
+      grid-column: span 2;
+    }
+
+    .card-title-bar h2 {
+      font-size: 1.2rem;
+      color: #ffffff;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+    }
+
+    .table-container {
+      overflow-x: auto;
+    }
+
+    table {
+      width: 100%;
+      border-collapse: collapse;
+      text-align: left;
+    }
+
+    th {
+      font-size: 0.8rem;
+      font-weight: 700;
+      text-transform: uppercase;
+      letter-spacing: 0.5px;
+      color: #64748b;
+      padding: 12px 16px;
+      border-bottom: 2px solid #334155;
+    }
+
+    td {
+      padding: 14px 16px;
+      border-bottom: 1px solid #334155;
+      font-size: 0.88rem;
+      color: #cbd5e1;
+    }
+
+    tr:last-child td {
+      border-bottom: none;
+    }
+
+    /* Custom Badges/Tags */
+    .role-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .role-badge.member { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+    .role-badge.partner { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+    .role-badge.admin { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+    .mode-tag {
+      font-size: 0.75rem;
+      font-weight: 600;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .mode-tag.urun { background: rgba(20, 184, 166, 0.1); color: #2dd4bf; }
+    .mode-tag.hizmet { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
+
+    .status-tag {
+      font-size: 0.75rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+    }
+
+    .status-tag.PENDING { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+    .status-tag.OFFER_RECEIVED { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+    .status-tag.ACCEPTED, .status-tag.ACTIVE { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+    .status-tag.REJECTED { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+    .status-tag.COMPLETED { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+
+    /* Responsive */
+    @media (max-width: 992px) {
+      .tables-layout {
+        grid-template-columns: 1fr;
+      }
+      .table-card.full-width {
+        grid-column: span 1;
+      }
+    }
+  </style>
+</BasicLayout>

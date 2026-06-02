@@ -10,6 +10,7 @@
     "deploy": "npm run build"
   },
   "dependencies": {
+    "@astrojs/cloudflare": "^9.2.1",
     "astro": "^4.0.0"
   },
   "engines": {

@@ -1,0 +1,38 @@
+# İş De Yeter (Laflaf.net) - Yapay Zeka Arama ve Bilgi İndeksi (llms.txt)
+
+> İş De Yeter, Cloudflare D1 ve R2 tabanlı, çoklu kiracılı (multi-tenant) ve son derece hızlı çalışan modern bir hizmet pazaryeri, e-ticaret, kurumsal ve blog platformudur. Bireysel ve kurumsal kullanıcıları, profesyonel iş ortaklarıyla (hizmet verenler) buluşturur.
+
+## 📌 Ana Hizmet Kolları ve Kategoriler
+
+Platform aşağıdaki ana alanlarda binlerce programmatic SEO destekli alt hizmet sayfasına sahiptir:
+- **Sağlık Hizmetleri:** Psikolog, diyetisyen, pedagog, fizyoterapist randevu ve destek hizmetleri.
+- **Tadilat & Yenileme:** Boya badana, ev/ofis yenileme, laminat parke döşeme, banyo/mutfak tadilatı.
+- **Temizlik Hizmetleri:** Ev temizliği, boş ev temizliği, ofis temizliği, koltuk/halı yıkama, haşere ilaçlama.
+- **Tamirat & Onarım:** Elektrik, sıhhi tesisat, kombi/klima tamiri, beyaz eşya tamiri, mobilya montajı.
+- **Nakliyat & Taşımacılık:** Evden eve nakliyat, şehirler arası nakliyat, parça eşya taşıma, oto çekici, moto kurye.
+- **Organizasyon Hizmetleri:** Düğün/kına organizasyonu, catering, bando takımı, doğum günü konseptleri.
+- **Özel Ders & Eğitim:** YKS/LGS sınav hazırlığı, matematik, İngilizce, direksiyon ve dans dersleri.
+- **Dijital İşler & Yazılım:** Web tasarım/yazılım paketleri, bulut muhasebe programı, ERP/CRM çözümleri, SEO hizmetleri.
+- **E-Ticaret & Şirket Kurulumu:** Mukellef benzeri global şirket kurulumu, Trendyol/Amazon/Hepsiburada pazaryeri entegrasyon desteği.
+
+## 📂 Sistem Mimarisi ve Rotalama Şeması
+
+- `/` - Ana Sayfa (Profesyonel Hizmet Arama ve Fiyat Teklifi)
+- `/hizmet-kategorileri` - Tüm ana ve alt hizmet dallarının listesi
+- `/dijital-isler` - Yazılım, e-ticaret, SEO ve muhasebe paketleri
+- `/sirket-kur` - Kolay ve hızlı şirket kurulumu rehberliği
+- `/hizmetler/*` - Konum ve hizmet bazlı dinamik detay sayfaları (Örn: `ankara-boya-badana`, `istanbul-evden-eve-nakliyat`)
+- `/login` - Üye ve İş Ortağı giriş ekranı
+- `/dashboard/member/*` - Müşteri paneli (Talep oluşturma, teklifleri WhatsApp ile onaylama, web sitesi kurma sihirbazı)
+- `/dashboard/partner/*` - İş Ortağı uzmanlık paneli (Teklif verme, iş takibi)
+- `/sitemap.xml` - Gerçek zamanlı dinamik site haritası
+- `/rss.xml` - Dinamik blog akış kanalı
+
+## 🚀 Öne Çıkan Teknolojik Özellikler
+
+1. **İleri Düzey SEO & Programmatic Pages:** Google aramalarında üst sırada listelenen yüksek performanslı, hızlı yüklenen sayfalar.
+2. **Yapay Zeka Hazırlığı:** Tüm servis açıklamaları ve mimari, LLM motorlarının web aramalarında siteyi en doğru şekilde önerebilmesi için semantik olarak yapılandırılmıştır.
+3. **Bulut Veritabanı Entegrasyonu:** Cloudflare D1 SQL veritabanı ile veriler anlık işlenir ve saniyeler içinde dinamik site haritasına yansıtılır.
+4. **WhatsApp İletişim Köprüsü:** Müşteri ile iş ortağı arasındaki iletişim, sipariş ID parametreleriyle WhatsApp üzerinden hızlıca kurulur.
+
+*Daha fazla detaylı bilgi, tam hizmet listesi ve fiyatlandırma tabloları için lütfen [llms-full.txt](file:///C:/Users/dell/.gemini/antigravity/scratch/isdeyeter-Antigravity/public/llms-full.txt) dosyasını inceleyin.*

@@ -1,0 +1,386 @@
+---
+// src/layouts/DashboardLayout.astro
+import BasicLayout from './BasicLayout.astro';
+
+export interface Props {
+  title: string;
+  activeTab: 'overview' | 'profile' | 'sites' | 'requests' | 'jobs';
+}
+
+const { title, activeTab } = Astro.props;
+
+// Oturum ve kullanıcı kontrolü
+const user = Astro.locals.user;
+if (!user) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const isPartner = user.is_partner === 1;
+const isAdmin = user.is_partner === 2;
+
+// Rota belirleme
+const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/dashboard/member';
+---
+
+<BasicLayout title={title} description="İş De Yeter İşletme ve Yönetim Paneli">
+  <div class="dashboard-container">
+    
+    <!-- Sidebar -->
+    <aside class="sidebar" id="sidebar">
+      <div class="sidebar-brand">
+        <span class="logo-text">İŞ DE <span class="accent-text">YETER</span></span>
+      </div>
+
+      <!-- Navigation Menu -->
+      <nav class="sidebar-menu">
+        
+        {/* ÜYE (MÜŞTERİ) SEÇENEKLERİ */}
+        {!isPartner && !isAdmin && (
+          <>
+            <a href="/dashboard/member" class={`menu-link ${activeTab === 'overview' ? 'active' : ''}`}>
+              <i class="fa-solid fa-chart-pie"></i>
+              <span>Genel Bakış</span>
+            </a>
+            <a href="/dashboard/member/profile" class={`menu-link ${activeTab === 'profile' ? 'active' : ''}`}>
+              <i class="fa-solid fa-user-gear"></i>
+              <span>Profil ve Fatura</span>
+            </a>
+            <a href="/dashboard/member/sites" class={`menu-link ${activeTab === 'sites' ? 'active' : ''}`}>
+              <i class="fa-solid fa-laptop-code"></i>
+              <span>Ücretsiz Sitelerim</span>
+            </a>
+            <a href="/dashboard/member/requests" class={`menu-link ${activeTab === 'requests' ? 'active' : ''}`}>
+              <i class="fa-solid fa-file-signature"></i>
+              <span>Hizmet Taleplerim</span>
+            </a>
+          </>
+        )}
+
+        {/* İŞ ORTAĞI SEÇENEKLERİ */}
+        {isPartner && (
+          <>
+            <a href="/dashboard/partner" class={`menu-link ${activeTab === 'overview' ? 'active' : ''}`}>
+              <i class="fa-solid fa-chart-column"></i>
+              <span>İş Ortağı Paneli</span>
+            </a>
+            <a href="/dashboard/partner/profile" class={`menu-link ${activeTab === 'profile' ? 'active' : ''}`}>
+              <i class="fa-solid fa-id-card-clip"></i>
+              <span>Profil ve Fatura</span>
+            </a>
+          </>
+        )}
+
+        {/* ORTAK ALAN: YARDIM & DESTEK */}
+        <a href="https://wa.me/905412465429" target="_blank" class="menu-link support-link">
+          <i class="fa-brands fa-whatsapp text-emerald-500"></i>
+          <span>WhatsApp Destek</span>
+        </a>
+
+      </nav>
+
+      <!-- Sidebar Footer (Profile Summary & Logout) -->
+      <div class="sidebar-footer">
+        <div class="footer-profile">
+          <i class="fa-solid fa-circle-user avatar-icon"></i>
+          <div class="profile-meta">
+            <span class="user-name">{user.name}</span>
+            <span class="user-role">{isPartner ? 'İş Ortağı' : isAdmin ? 'Sistem Yöneticisi' : 'Standart Üye'}</span>
+          </div>
+        </div>
+        <a href="/api/auth/logout" class="sidebar-logout" title="Güvenli Çıkış">
+          <i class="fa-solid fa-power-off"></i>
+        </a>
+      </div>
+    </aside>
+
+    <!-- Mobile Top Bar -->
+    <div class="mobile-top-bar">
+      <button class="hamburger-btn" onclick="toggleSidebar()" aria-label="Menüyü Aç/Kapat">
+        <i class="fa-solid fa-bars" id="hamburger-icon"></i>
+      </button>
+      <span class="mobile-brand">İŞ DE YETER</span>
+      <a href="/api/auth/logout" class="mobile-logout"><i class="fa-solid fa-power-off"></i></a>
+    </div>
+
+    <!-- Main Content Area -->
+    <main class="dashboard-main">
+      <div class="main-inner animate-fade-in">
+        <slot />
+      </div>
+    </main>
+
+  </div>
+
+  <style>
+    .dashboard-container {
+      display: flex;
+      min-height: 100vh;
+      background-color: #f8fafc;
+      position: relative;
+    }
+
+    /* Sidebar Styling */
+    .sidebar {
+      width: 280px;
+      background: #0f172a;
+      color: #94a3b8;
+      display: flex;
+      flex-direction: column;
+      height: 100vh;
+      position: fixed;
+      left: 0;
+      top: 0;
+      z-index: 50;
+      transition: transform 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+      border-right: 1px solid #1e293b;
+    }
+
+    .sidebar-brand {
+      padding: 32px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      border-bottom: 1px solid #1e293b;
+    }
+
+    .logo-text {
+      font-size: 1.6rem;
+      font-weight: 800;
+      color: #ffffff;
+      letter-spacing: -0.5px;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .accent-text {
+      color: #3b82f6;
+    }
+
+    .sidebar-menu {
+      flex: 1;
+      padding: 24px 16px;
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+      overflow-y: auto;
+    }
+
+    .menu-link {
+      display: flex;
+      align-items: center;
+      gap: 14px;
+      padding: 14px 16px;
+      border-radius: 12px;
+      color: #94a3b8;
+      text-decoration: none;
+      font-weight: 600;
+      font-size: 0.95rem;
+      transition: all 0.2s ease;
+    }
+
+    .menu-link i {
+      font-size: 1.15rem;
+      width: 24px;
+      text-align: center;
+      transition: transform 0.2s ease;
+    }
+
+    .menu-link:hover {
+      background: rgba(255, 255, 255, 0.05);
+      color: #ffffff;
+    }
+
+    .menu-link:hover i {
+      transform: scale(1.1);
+    }
+
+    .menu-link.active {
+      background: #3b82f6;
+      color: #ffffff;
+      box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.3);
+    }
+
+    .support-link {
+      margin-top: auto;
+      background: rgba(16, 185, 129, 0.05);
+      border: 1px dashed rgba(16, 185, 129, 0.25);
+    }
+
+    .support-link:hover {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+    }
+
+    /* Sidebar Footer */
+    .sidebar-footer {
+      padding: 20px 24px;
+      border-top: 1px solid #1e293b;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      gap: 12px;
+      background: #090d16;
+    }
+
+    .footer-profile {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      overflow: hidden;
+    }
+
+    .avatar-icon {
+      font-size: 2.2rem;
+      color: #3b82f6;
+    }
+
+    .profile-meta {
+      display: flex;
+      flex-direction: column;
+      overflow: hidden;
+    }
+
+    .user-name {
+      font-weight: 700;
+      color: #ffffff;
+      font-size: 0.88rem;
+      white-space: nowrap;
+      text-overflow: ellipsis;
+      overflow: hidden;
+    }
+
+    .user-role {
+      font-size: 0.72rem;
+      color: #64748b;
+    }
+
+    .sidebar-logout {
+      color: #f87171;
+      font-size: 1.2rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      padding: 8px;
+      border-radius: 8px;
+      transition: all 0.2s ease;
+    }
+
+    .sidebar-logout:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
+    }
+
+    /* Mobile bar styling */
+    .mobile-top-bar {
+      display: none;
+      height: 70px;
+      background: #0f172a;
+      align-items: center;
+      justify-content: space-between;
+      padding: 0 20px;
+      position: fixed;
+      top: 0;
+      left: 0;
+      right: 0;
+      z-index: 40;
+      border-bottom: 1px solid #1e293b;
+      box-shadow: 0 4px 10px rgba(0, 0, 0, 0.15);
+    }
+
+    .mobile-brand {
+      color: #ffffff;
+      font-weight: 800;
+      font-family: 'Poppins', sans-serif;
+      font-size: 1.15rem;
+      letter-spacing: -0.5px;
+    }
+
+    .hamburger-btn {
+      background: transparent;
+      border: none;
+      color: #ffffff;
+      font-size: 1.4rem;
+      cursor: pointer;
+    }
+
+    .mobile-logout {
+      color: #f87171;
+      font-size: 1.3rem;
+    }
+
+    /* Main Dashboard Layout */
+    .dashboard-main {
+      flex: 1;
+      margin-left: 280px;
+      padding: 40px;
+      min-height: 100vh;
+      box-sizing: border-box;
+    }
+
+    .main-inner {
+      max-width: 1200px;
+      margin: 0 auto;
+    }
+
+    /* Animations */
+    .animate-fade-in {
+      animation: fadeIn 0.4s ease-out;
+    }
+
+    @keyframes fadeIn {
+      from { opacity: 0; transform: translateY(10px); }
+      to { opacity: 1; transform: translateY(0); }
+    }
+
+    /* Responsive Design Breakpoints */
+    @media (max-width: 1024px) {
+      .sidebar {
+        transform: translateX(-100%);
+      }
+
+      .sidebar.open {
+        transform: translateX(0);
+      }
+
+      .mobile-top-bar {
+        display: flex;
+      }
+
+      .dashboard-main {
+        margin-left: 0;
+        padding: 100px 20px 40px;
+      }
+    }
+  </style>
+
+  <!-- Sidebar Hamburger toggle script -->
+  <script is:inline>
+    function toggleSidebar() {
+      const sidebar = document.getElementById('sidebar');
+      const icon = document.getElementById('hamburger-icon');
+      
+      sidebar.classList.toggle('open');
+      
+      if (sidebar.classList.contains('open')) {
+        icon.classList.remove('fa-bars');
+        icon.classList.add('fa-xmark');
+      } else {
+        icon.classList.remove('fa-xmark');
+        icon.classList.add('fa-bars');
+      }
+    }
+
+    // Close sidebar on menu clicks for mobile devices
+    document.addEventListener('DOMContentLoaded', () => {
+      const links = document.querySelectorAll('.menu-link');
+      links.forEach(link => {
+        link.addEventListener('click', () => {
+          const sidebar = document.getElementById('sidebar');
+          if (sidebar && sidebar.classList.contains('open')) {
+            toggleSidebar();
+          }
+        });
+      });
+    });
+  </script>
+</BasicLayout>

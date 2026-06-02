@@ -1,0 +1,470 @@
+---
+// src/pages/onboarding.astro
+import BasicLayout from '../layouts/BasicLayout.astro';
+import servicesData from './data/services.json';
+
+export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
+
+const categories = servicesData.categories;
+
+// 1. Kullanıcı ve Oturum Kontrolü
+const sessionToken = Astro.cookies.get('session_token')?.value;
+if (!sessionToken) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+if (!db) {
+  return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
+}
+
+let user: any = null;
+
+try {
+  // Aktif oturum ve kullanıcıyı sorgula
+  const session = await db.prepare(
+    "SELECT u.* FROM sessions s JOIN users u ON s.user_id = u.id WHERE s.id = ? AND s.expires_at > ?"
+  ).bind(sessionToken, Math.floor(Date.now() / 1000)).first();
+
+  if (!session) {
+    Astro.cookies.delete('session_token', { path: '/' });
+    return Astro.redirect('/login?error=session_expired');
+  }
+
+  user = session;
+
+  // Rol kontrolü: Sadece İş Ortakları onboarding ekranına girebilir
+  if (user.is_partner !== 1) {
+    if (user.is_partner === 0) {
+      return Astro.redirect('/dashboard/member');
+    } else if (user.is_partner === 2) {
+      return Astro.redirect('/admin');
+    }
+  }
+} catch (e) {
+  console.error("Onboarding DB auth error:", e);
+  return Astro.redirect('/login?error=db_error');
+}
+
+// 2. Form Gönderim (POST) İşlemi
+let errorMessage = '';
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const selectedServices = formData.getAll('services') as string[];
+
+    if (selectedServices.length === 0) {
+      errorMessage = 'Lütfen en az 1 uzmanlık alanı seçin.';
+    } else if (selectedServices.length > 5) {
+      errorMessage = 'En fazla 5 uzmanlık alanı seçebilirsiniz.';
+    } else {
+      // Önce mevcut seçili uzmanlıkları temizle (idempotent işlem)
+      await db.prepare("DELETE FROM partner_services WHERE partner_id = ?").bind(user.id).run();
+
+      // Yeni uzmanlık alanlarını ekle (D1 Batch insert / Çoklu sorgu)
+      const statements = selectedServices.map(service => 
+        db.prepare("INSERT INTO partner_services (partner_id, service_category) VALUES (?, ?)")
+          .bind(user.id, service)
+      );
+      await db.batch(statements);
+
+      console.log(`İş Ortağı ${user.email} için ${selectedServices.length} uzmanlık alanı kaydedildi.`);
+      return Astro.redirect('/dashboard/partner');
+    }
+  } catch (postErr) {
+    console.error("Onboarding saving error:", postErr);
+    errorMessage = 'Uzmanlık alanları kaydedilirken veritabanı hatası oluştu.';
+  }
+}
+---
+
+<BasicLayout title="Hoş Geldin Sihirbazı | İş De Yeter" description="İş Ortağı uzmanlık alanlarınızı seçin. En fazla 5 uzmanlık alanı belirleyebilirsiniz.">
+  <div class="onboarding-wrapper">
+    <div class="onboarding-container">
+      
+      <!-- Card -->
+      <form method="POST" class="onboarding-card">
+        
+        <!-- Header -->
+        <div class="card-header">
+          <div class="step-badge">ADIM 1 / 1</div>
+          <h1>Hoş Geldin, {user.name}!</h1>
+          <p class="subtitle">Platformda size uygun iş fırsatlarını listeyebilmemiz için uzman olduğunuz alanları (<b>en fazla 5 adet</b>) seçin.</p>
+        </div>
+
+        {errorMessage && (
+          <div class="error-alert">
+            <i class="fa-solid fa-triangle-exclamation"></i>
+            <span>{errorMessage}</span>
+          </div>
+        )}
+
+        <!-- Selection Status Counter -->
+        <div class="selection-counter" id="counter-box">
+          <span>Seçilen Uzmanlık Sayısı:</span>
+          <span class="count-badge" id="count-value">0 / 5</span>
+        </div>
+
+        <!-- Categories Container -->
+        <div class="categories-list">
+          {categories.map((category: any) => (
+            <div class="category-group">
+              <h2 class="category-title">
+                <i class="fa-solid fa-tags mr-2 text-blue-500"></i>
+                {category.name}
+              </h2>
+              <div class="services-grid">
+                {category.services.map((service: string) => (
+                  <label class="service-label">
+                    <input 
+                      type="checkbox" 
+                      name="services" 
+                      value={`${category.name}: ${service}`} 
+                      class="service-checkbox"
+                      onChange="handleServiceSelection(this)"
+                    />
+                    <div class="checkbox-custom">
+                      <i class="fa-solid fa-check check-icon"></i>
+                    </div>
+                    <span class="service-name">{service}</span>
+                  </label>
+                ))}
+              </div>
+            </div>
+          ))}
+        </div>
+
+        <!-- Actions -->
+        <div class="actions-area">
+          <button type="submit" id="submit-btn" class="submit-btn" disabled>
+            <span>Uzmanlıklarımı Kaydet ve Panele Git</span>
+            <i class="fa-solid fa-arrow-right ml-2"></i>
+          </button>
+        </div>
+
+      </form>
+
+    </div>
+  </div>
+
+  <style>
+    .onboarding-wrapper {
+      min-height: calc(100vh - 200px);
+      background: linear-gradient(135deg, #f8fafc 0%, #f1f5f9 100%);
+      padding: 60px 20px;
+      display: flex;
+      justify-content: center;
+      align-items: flex-start;
+    }
+
+    .onboarding-container {
+      width: 100%;
+      max-width: 900px;
+    }
+
+    .onboarding-card {
+      background: #ffffff;
+      border: 1px solid #e2e8f0;
+      border-radius: 24px;
+      box-shadow: 0 15px 35px -10px rgba(15, 23, 42, 0.08);
+      padding: 40px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+    }
+
+    /* Header */
+    .card-header {
+      text-align: center;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .step-badge {
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+      font-size: 0.8rem;
+      font-weight: 700;
+      padding: 6px 16px;
+      border-radius: 20px;
+      letter-spacing: 0.5px;
+    }
+
+    h1 {
+      font-size: 2.2rem;
+      color: #0f172a;
+      letter-spacing: -0.5px;
+    }
+
+    .subtitle {
+      font-size: 1rem;
+      color: #64748b;
+      max-width: 600px;
+      line-height: 1.5;
+    }
+
+    /* Counter Badge */
+    .selection-counter {
+      background: #f8fafc;
+      border: 1px solid #cbd5e1;
+      padding: 16px 24px;
+      border-radius: 14px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      font-weight: 600;
+      color: #334155;
+      font-size: 1.05rem;
+      transition: all 0.3s ease;
+    }
+
+    .selection-counter.warning {
+      background: rgba(245, 158, 11, 0.05);
+      border-color: rgba(245, 158, 11, 0.4);
+      color: #d97706;
+    }
+
+    .count-badge {
+      background: #3b82f6;
+      color: #ffffff;
+      padding: 6px 14px;
+      border-radius: 20px;
+      font-size: 0.95rem;
+      transition: all 0.3s ease;
+    }
+
+    .selection-counter.warning .count-badge {
+      background: #f59e0b;
+    }
+
+    /* Error Alert */
+    .error-alert {
+      background: rgba(239, 68, 68, 0.05);
+      border: 1px solid rgba(239, 68, 68, 0.3);
+      color: #dc2626;
+      padding: 14px 20px;
+      border-radius: 12px;
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-weight: 500;
+    }
+
+    /* Categories List */
+    .categories-list {
+      display: flex;
+      flex-direction: column;
+      gap: 28px;
+    }
+
+    .category-group {
+      background: #f8fafc;
+      border: 1px solid #e2e8f0;
+      border-radius: 16px;
+      padding: 24px;
+    }
+
+    .category-title {
+      font-size: 1.25rem;
+      color: #1e293b;
+      margin-bottom: 20px;
+      border-bottom: 2px solid #e2e8f0;
+      padding-bottom: 10px;
+      display: flex;
+      align-items: center;
+    }
+
+    .services-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(240px, 1fr));
+      gap: 12px;
+    }
+
+    /* Service Checkbox Custom design */
+    .service-label {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      background: #ffffff;
+      border: 1px solid #cbd5e1;
+      padding: 12px 16px;
+      border-radius: 12px;
+      cursor: pointer;
+      user-select: none;
+      transition: all 0.2s ease;
+    }
+
+    .service-checkbox {
+      display: none;
+    }
+
+    .checkbox-custom {
+      width: 22px;
+      height: 22px;
+      border: 2px solid #cbd5e1;
+      border-radius: 6px;
+      display: flex;
+      justify-content: center;
+      align-items: center;
+      transition: all 0.15s ease;
+    }
+
+    .check-icon {
+      font-size: 0.75rem;
+      color: #ffffff;
+      opacity: 0;
+      transition: opacity 0.15s ease;
+    }
+
+    .service-name {
+      font-size: 0.92rem;
+      font-weight: 500;
+      color: #334155;
+    }
+
+    /* Hover and Check states */
+    .service-label:hover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.02);
+    }
+
+    .service-checkbox:checked + .checkbox-custom {
+      background: #3b82f6;
+      border-color: #3b82f6;
+    }
+
+    .service-checkbox:checked + .checkbox-custom .check-icon {
+      opacity: 1;
+    }
+
+    .service-checkbox:checked ~ .service-name {
+      color: #1e3a8a;
+      font-weight: 600;
+    }
+
+    .service-label.selected {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.05);
+      box-shadow: 0 4px 10px rgba(59, 130, 246, 0.05);
+    }
+
+    /* Disabled checkbox state */
+    .service-checkbox:disabled + .checkbox-custom {
+      background: #f1f5f9;
+      border-color: #e2e8f0;
+      cursor: not-allowed;
+    }
+
+    .service-label.disabled {
+      opacity: 0.6;
+      cursor: not-allowed;
+      border-color: #e2e8f0;
+    }
+
+    .service-label.disabled:hover {
+      background: #ffffff;
+      border-color: #e2e8f0;
+    }
+
+    /* Actions Submit */
+    .actions-area {
+      display: flex;
+      justify-content: center;
+      margin-top: 10px;
+    }
+
+    .submit-btn {
+      background: #3b82f6;
+      color: #ffffff;
+      border: none;
+      padding: 16px 40px;
+      font-size: 1.05rem;
+      font-weight: 600;
+      border-radius: 14px;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      transition: all 0.2s ease;
+      box-shadow: 0 10px 20px -5px rgba(59, 130, 246, 0.3);
+    }
+
+    .submit-btn:hover:not(:disabled) {
+      background: #2563eb;
+      transform: translateY(-1px);
+      box-shadow: 0 15px 25px -5px rgba(59, 130, 246, 0.4);
+    }
+
+    .submit-btn:disabled {
+      background: #94a3b8;
+      cursor: not-allowed;
+      box-shadow: none;
+    }
+
+    /* Responsive */
+    @media (max-width: 768px) {
+      .onboarding-card {
+        padding: 30px 20px;
+      }
+      h1 {
+        font-size: 1.8rem;
+      }
+    }
+  </style>
+
+  <!-- Real-time Validation and Count Logic -->
+  <script is:inline>
+    const MAX_SELECTION = 5;
+
+    function handleServiceSelection(checkbox) {
+      const label = checkbox.closest('.service-label');
+      
+      // Update custom visual selected class
+      if (checkbox.checked) {
+        label.classList.add('selected');
+      } else {
+        label.classList.remove('selected');
+      }
+
+      const allCheckboxes = document.querySelectorAll('.service-checkbox');
+      const checkedBoxes = document.querySelectorAll('.service-checkbox:checked');
+      const checkedCount = checkedBoxes.length;
+
+      // Update counters
+      const countValue = document.getElementById('count-value');
+      const counterBox = document.getElementById('counter-box');
+      const submitBtn = document.getElementById('submit-btn');
+
+      countValue.textContent = `${checkedCount} / ${MAX_SELECTION}`;
+
+      if (checkedCount >= MAX_SELECTION) {
+        counterBox.classList.add('warning');
+        // Disable other checkboxes
+        allCheckboxes.forEach(box => {
+          if (!box.checked) {
+            box.disabled = true;
+            box.closest('.service-label').classList.add('disabled');
+          }
+        });
+      } else {
+        counterBox.classList.remove('warning');
+        // Re-enable checkboxes
+        allCheckboxes.forEach(box => {
+          box.disabled = false;
+          box.closest('.service-label').classList.remove('disabled');
+        });
+      }
+
+      // Handle submit button disable state
+      if (checkedCount > 0 && checkedCount <= MAX_SELECTION) {
+        submitBtn.disabled = false;
+      } else {
+        submitBtn.disabled = true;
+      }
+    }
+  </script>
+</BasicLayout>
