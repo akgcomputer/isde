@@ -70,6 +70,21 @@ try {
 } catch (e) {
   console.error("Admin dashboard query error:", e);
 }
+
+// Güvenli tarih formatlama yardımcı fonksiyonu (Cloudflare V8 motoru uyumlu)
+function formatDate(dateStr: string) {
+  if (!dateStr) return "N/A";
+  const safeStr = dateStr.includes(' ') && !dateStr.includes('T') ? dateStr.replace(' ', 'T') + 'Z' : dateStr;
+  const d = new Date(safeStr);
+  if (isNaN(d.getTime())) {
+    const parts = dateStr.split(' ')[0].split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    return dateStr;
+  }
+  return d.toLocaleDateString('tr-TR');
+}
 ---
 
 <BasicLayout title="Yönetim Paneli | İş De Yeter" description="İş De Yeter Platformu Merkezi Yönetim Kontrol Merkezi.">
@@ -188,7 +203,7 @@ try {
                       <span class="role-badge member">Üye</span>
                     )}
                   </td>
-                  <td class="text-gray-500">{new Date(u.created_at).toLocaleDateString('tr-TR')}</td>
+                  <td class="text-gray-500">{formatDate(u.created_at)}</td>
                 </tr>
               ))}
               {recentUsers.length === 0 && (
@@ -264,7 +279,7 @@ try {
                   <td>
                     <span class={`status-tag ${r.status}`}>{r.status}</span>
                   </td>
-                  <td class="text-gray-500">{new Date(r.created_at).toLocaleDateString('tr-TR')}</td>
+                  <td class="text-gray-500">{formatDate(r.created_at)}</td>
                 </tr>
               ))}
               {recentRequests.length === 0 && (

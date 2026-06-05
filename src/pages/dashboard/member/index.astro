@@ -33,6 +33,21 @@ if (db) {
     console.error("Member Overview query error:", e);
   }
 }
+
+// Güvenli tarih formatlama yardımcı fonksiyonu (Cloudflare V8 motoru uyumlu)
+function formatDate(dateStr: string) {
+  if (!dateStr) return "N/A";
+  const safeStr = dateStr.includes(' ') && !dateStr.includes('T') ? dateStr.replace(' ', 'T') + 'Z' : dateStr;
+  const d = new Date(safeStr);
+  if (isNaN(d.getTime())) {
+    const parts = dateStr.split(' ')[0].split('-');
+    if (parts.length === 3) {
+      return `${parts[2]}.${parts[1]}.${parts[0]}`;
+    }
+    return dateStr;
+  }
+  return d.toLocaleDateString('tr-TR');
+}
 ---
 
 <DashboardLayout title="Üye Paneli | İş De Yeter" activeTab="overview">
@@ -138,7 +153,7 @@ if (db) {
                 <span class={`status-badge ${r.status}`}>{r.status}</span>
               </div>
               <h4 class="req-title">{r.title}</h4>
-              <p class="req-date"><i class="fa-regular fa-calendar-check mr-1"></i> {new Date(r.created_at).toLocaleDateString('tr-TR')}</p>
+              <p class="req-date"><i class="fa-regular fa-calendar-check mr-1"></i> {formatDate(r.created_at)}</p>
             </div>
           ))}
 
