@@ -11,41 +11,47 @@ let usersColumns: string[] = [];
 let dbError: string | null = null;
 let setupError: string | null = null;
 
-const runtime = Astro.locals.runtime as any;
-const db = runtime?.env?.DB;
+let db: any = null;
 
-if (!db) {
-  d1BindingStatus = "❌ BULUNAMADI! Cloudflare Pages panelinde D1 veritabanı bağlaması (binding) eksik.";
-} else {
-  d1BindingStatus = "✅ BAŞARILI! D1 veritabanı bağlantısı aktif.";
-  
-  // Önce otomatik kurulumu burada da çalıştırmayı deneyelim
-  try {
-    await ensureDatabaseSetup(db);
-  } catch (se: any) {
-    setupError = se.message || "Kurulum sırasında hata";
-  }
+try {
+  const runtime = Astro.locals.runtime as any;
+  db = runtime?.env?.DB;
 
-  try {
-    // 1. Veritabanındaki tüm tabloları çek
-    const tablesQuery = await db.prepare(
-      "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
-    ).all();
+  if (!db) {
+    d1BindingStatus = "❌ BULUNAMADI! Cloudflare Pages panelinde D1 veritabanı bağlaması (binding) eksik.";
+  } else {
+    d1BindingStatus = "✅ BAŞARILI! D1 veritabanı bağlantısı aktif.";
     
-    if (tablesQuery && tablesQuery.results) {
-      tablesList = tablesQuery.results.map((row: any) => row.name);
+    // Önce otomatik kurulumu burada da çalıştırmayı deneyelim
+    try {
+      await ensureDatabaseSetup(db);
+    } catch (se: any) {
+      setupError = se.message || "Kurulum sırasında hata";
     }
-    
-    // 2. Eğer users tablosu varsa sütunlarını çek
-    if (tablesList.includes('users')) {
-      const columnsQuery = await db.prepare("PRAGMA table_info(users)").all();
-      if (columnsQuery && columnsQuery.results) {
-        usersColumns = columnsQuery.results.map((row: any) => `${row.name} (${row.type})`);
+
+    try {
+      // 1. Veritabanındaki tüm tabloları çek
+      const tablesQuery = await db.prepare(
+        "SELECT name FROM sqlite_master WHERE type='table' AND name NOT LIKE 'sqlite_%'"
+      ).all();
+      
+      if (tablesQuery && tablesQuery.results) {
+        tablesList = tablesQuery.results.map((row: any) => row.name);
       }
+      
+      // 2. Eğer users tablosu varsa sütunlarını çek
+      if (tablesList.includes('users')) {
+        const columnsQuery = await db.prepare("PRAGMA table_info(users)").all();
+        if (columnsQuery && columnsQuery.results) {
+          usersColumns = columnsQuery.results.map((row: any) => `${row.name} (${row.type})`);
+        }
+      }
+    } catch (err: any) {
+      dbError = err.message || "Bilinmeyen SQL hatası";
     }
-  } catch (err: any) {
-    dbError = err.message || "Bilinmeyen SQL hatası";
   }
+} catch (globalErr: any) {
+  dbError = `Global Sayfa Hatası: ${globalErr.message}`;
 }
 ---
 

@@ -5,19 +5,7 @@ import BasicLayout from '../layouts/BasicLayout.astro';
 export const prerender = false; // Admin paneli sunucu tarafında çalışmalıdır (SSR)
 
 // Kullanıcı bilgileri middleware tarafından enjekte edilmiştir
-const user = Astro.locals.user;
-if (!user || user.is_partner !== 2) {
-  return Astro.redirect('/login?error=unauthorized');
-}
-
-const runtime = Astro.locals.runtime as any;
-const db = runtime?.env?.DB;
-
-if (!db) {
-  return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
-}
-
-// 1. İstatistikleri Sorgula
+let user = Astro.locals.user || { name: 'Sistem Yöneticisi', email: 'admin@isdeyeter.com' };
 let stats = {
   totalMembers: 0,
   totalPartners: 0,
@@ -29,46 +17,63 @@ let stats = {
 let recentUsers: any[] = [];
 let recentRequests: any[] = [];
 let recentSites: any[] = [];
+let debugError: string | null = null;
 
 try {
-  // Üye sayısı
-  const membersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 0").first() as any;
-  stats.totalMembers = membersCount?.count || 0;
+  if (!Astro.locals.user || Astro.locals.user.is_partner !== 2) {
+    return Astro.redirect('/login?error=unauthorized');
+  }
 
-  // İş ortağı sayısı
-  const partnersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 1").first() as any;
-  stats.totalPartners = partnersCount?.count || 0;
+  const runtime = Astro.locals.runtime as any;
+  const db = runtime?.env?.DB;
 
-  // Talep sayısı
-  const requestsCount = await db.prepare("SELECT COUNT(*) as count FROM service_requests").first() as any;
-  stats.totalRequests = requestsCount?.count || 0;
+  if (!db) {
+    debugError = "Cloudflare D1 Database binding is missing! Please check Pages settings.";
+  } else {
+    try {
+      // Üye sayısı
+      const membersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 0").first() as any;
+      stats.totalMembers = membersCount?.count || 0;
 
-  // Teklif sayısı
-  const offersCount = await db.prepare("SELECT COUNT(*) as count FROM offers").first() as any;
-  stats.totalOffers = offersCount?.count || 0;
+      // İş ortağı sayısı
+      const partnersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 1").first() as any;
+      stats.totalPartners = partnersCount?.count || 0;
 
-  // Site sayısı
-  const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites").first() as any;
-  stats.totalSites = sitesCount?.count || 0;
+      // Talep sayısı
+      const requestsCount = await db.prepare("SELECT COUNT(*) as count FROM service_requests").first() as any;
+      stats.totalRequests = requestsCount?.count || 0;
 
-  // Son Kayıt Olan 5 Kullanıcı
-  const usersQuery = await db.prepare("SELECT * FROM users ORDER BY created_at DESC LIMIT 5").all();
-  recentUsers = usersQuery.results || [];
+      // Teklif sayısı
+      const offersCount = await db.prepare("SELECT COUNT(*) as count FROM offers").first() as any;
+      stats.totalOffers = offersCount?.count || 0;
 
-  // Son 5 Hizmet Talebi
-  const requestsQuery = await db.prepare(
-    "SELECT r.*, u.name as client_name FROM service_requests r JOIN users u ON r.client_id = u.id ORDER BY r.created_at DESC LIMIT 5"
-  ).all();
-  recentRequests = requestsQuery.results || [];
+      // Site sayısı
+      const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites").first() as any;
+      stats.totalSites = sitesCount?.count || 0;
 
-  // Son 5 Web Sitesi
-  const sitesQuery = await db.prepare(
-    "SELECT s.*, u.name as owner_name FROM sites s JOIN users u ON s.user_id = u.id ORDER BY s.created_at DESC LIMIT 5"
-  ).all();
-  recentSites = sitesQuery.results || [];
+      // Son Kayıt Olan 5 Kullanıcı
+      const usersQuery = await db.prepare("SELECT * FROM users ORDER BY created_at DESC LIMIT 5").all();
+      recentUsers = usersQuery.results || [];
 
-} catch (e) {
-  console.error("Admin dashboard query error:", e);
+      // Son 5 Hizmet Talebi
+      const requestsQuery = await db.prepare(
+        "SELECT r.*, u.name as client_name FROM service_requests r JOIN users u ON r.client_id = u.id ORDER BY r.created_at DESC LIMIT 5"
+      ).all();
+      recentRequests = requestsQuery.results || [];
+
+      // Son 5 Web Sitesi
+      const sitesQuery = await db.prepare(
+        "SELECT s.*, u.name as owner_name FROM sites s JOIN users u ON s.user_id = u.id ORDER BY s.created_at DESC LIMIT 5"
+      ).all();
+      recentSites = sitesQuery.results || [];
+
+    } catch (e: any) {
+      console.error("Admin dashboard query error:", e);
+      debugError = `Veritabanı Sorgu Hatası: ${e.message}`;
+    }
+  }
+} catch (globalErr: any) {
+  debugError = `Global Admin Sayfa Hatası: ${globalErr.message}`;
 }
 
 // Güvenli tarih formatlama yardımcı fonksiyonu (Cloudflare V8 motoru uyumlu)
@@ -89,6 +94,13 @@ function formatDate(dateStr: string) {
 
 <BasicLayout title="Yönetim Paneli | İş De Yeter" description="İş De Yeter Platformu Merkezi Yönetim Kontrol Merkezi.">
   <div class="admin-wrapper">
+    
+    {debugError && (
+      <div class="error-banner" style="background: rgba(239, 68, 68, 0.15); border: 1px solid #ef4444; padding: 20px; border-radius: 12px; margin-bottom: 24px; color: #f87171; font-family: sans-serif;">
+        <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: #f87171;"><i class="fa-solid fa-triangle-exclamation mr-2"></i> Sistem Yönetim Hatası</h2>
+        <p style="font-family: monospace; font-size: 0.9rem; margin: 0;">{debugError}</p>
+      </div>
+    )}
     
     <!-- Top Nav -->
     <header class="admin-header">
