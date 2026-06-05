@@ -23,7 +23,11 @@ export const onRequest = defineMiddleware(async (context, next) => {
   const db = runtime?.env?.DB;
 
   if (db) {
-    await ensureDatabaseSetup(db);
+    try {
+      await ensureDatabaseSetup(db);
+    } catch (e) {
+      console.error("❌ Middleware D1 Setup Error:", e);
+    }
   }
 
   let user: any = null;
