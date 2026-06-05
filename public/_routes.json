@@ -1,0 +1,20 @@
+{
+  "version": 1,
+  "include": [
+    "/admin",
+    "/admin/*",
+    "/dashboard/*",
+    "/onboarding",
+    "/api/*",
+    "/test-db",
+    "/sitemap.xml",
+    "/rss.xml"
+  ],
+  "exclude": [
+    "/_astro/*",
+    "/css/*",
+    "/js/*",
+    "/img/*",
+    "/favicon.ico"
+  ]
+}
