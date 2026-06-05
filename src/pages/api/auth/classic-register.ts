@@ -1,5 +1,6 @@
 // src/pages/api/auth/classic-register.ts
 import type { APIRoute } from 'astro';
+import { ensureDatabaseSetup } from '../../../utils/db-init';
 
 export const prerender = false; // API rotası sunucu tarafında çalışmalıdır (SSR)
 
@@ -23,6 +24,8 @@ export const POST: APIRoute = async (context) => {
     if (!db) {
       return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
     }
+
+    await ensureDatabaseSetup(db);
 
     // Telefon veya e-posta ile zaten kayıtlı bir kullanıcı var mı kontrol et
     let existingUser = await db.prepare("SELECT * FROM users WHERE phone = ?").bind(phone).first();

@@ -1,5 +1,6 @@
 // src/pages/api/auth/callback.ts
 import type { APIRoute } from 'astro';
+import { ensureDatabaseSetup } from '../../../utils/db-init';
 
 export const prerender = false; // API rotası sunucu tarafında çalışmalıdır
 
@@ -30,6 +31,8 @@ export const GET: APIRoute = async (context) => {
   if (!db) {
     return new Response("Cloudflare D1 Database binding is missing! Please configure it.", { status: 500 });
   }
+
+  await ensureDatabaseSetup(db);
 
   // Kullanıcı bilgileri tanımlayıcıları
   let userId = '';

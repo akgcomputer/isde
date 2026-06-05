@@ -1,5 +1,6 @@
 // src/middleware.ts
 import { defineMiddleware } from 'astro:middleware';
+import { ensureDatabaseSetup } from './utils/db-init';
 
 export const onRequest = defineMiddleware(async (context, next) => {
   const url = new URL(context.request.url);
@@ -20,6 +21,10 @@ export const onRequest = defineMiddleware(async (context, next) => {
   // 1. D1 Veritabanı ve Oturum Kontrolü
   const runtime = context.locals.runtime as any;
   const db = runtime?.env?.DB;
+
+  if (db) {
+    await ensureDatabaseSetup(db);
+  }
 
   let user: any = null;
   const sessionToken = context.cookies.get('session_token')?.value;

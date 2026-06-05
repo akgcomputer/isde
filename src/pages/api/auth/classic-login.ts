@@ -1,5 +1,6 @@
 // src/pages/api/auth/classic-login.ts
 import type { APIRoute } from 'astro';
+import { ensureDatabaseSetup } from '../../../utils/db-init';
 
 export const prerender = false; // API rotası sunucu tarafında çalışmalıdır (SSR)
 
@@ -21,6 +22,8 @@ export const POST: APIRoute = async (context) => {
     if (!db) {
       return new Response("Cloudflare D1 Database binding is missing!", { status: 500 });
     }
+
+    await ensureDatabaseSetup(db);
 
     // E-posta veya Telefon numarası ile kullanıcıyı sorgula
     // Hem email hem de phone kolonlarından eşleşme arıyoruz
