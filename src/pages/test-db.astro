@@ -1,6 +1,7 @@
 ---
 // src/pages/test-db.astro
 import BasicLayout from '../layouts/BasicLayout.astro';
+import { ensureDatabaseSetup } from '../utils/db-init';
 
 export const prerender = false; // Teşhis sayfasının anlık çalışması gerekir (SSR)
 
@@ -8,6 +9,7 @@ let d1BindingStatus = "Bilinmiyor";
 let tablesList: string[] = [];
 let usersColumns: string[] = [];
 let dbError: string | null = null;
+let setupError: string | null = null;
 
 const runtime = Astro.locals.runtime as any;
 const db = runtime?.env?.DB;
@@ -17,6 +19,13 @@ if (!db) {
 } else {
   d1BindingStatus = "✅ BAŞARILI! D1 veritabanı bağlantısı aktif.";
   
+  // Önce otomatik kurulumu burada da çalıştırmayı deneyelim
+  try {
+    await ensureDatabaseSetup(db);
+  } catch (se: any) {
+    setupError = se.message || "Kurulum sırasında hata";
+  }
+
   try {
     // 1. Veritabanındaki tüm tabloları çek
     const tablesQuery = await db.prepare(
@@ -56,15 +65,23 @@ if (!db) {
         </div>
       </div>
 
-      <!-- 2. Hata Bildirimi -->
+      <!-- 2. Kurulum Hatası -->
+      {setupError && (
+        <div class="status-section">
+          <h3>❌ Otomatik Kurulum Hatası</h3>
+          <pre class="error-box">{setupError}</pre>
+        </div>
+      )}
+
+      <!-- 3. Hata Bildirimi -->
       {dbError && (
         <div class="status-section">
-          <h3>⚠️ Hata Raporu</h3>
+          <h3>⚠️ SQL Sorgu Hatası</h3>
           <pre class="error-box">{dbError}</pre>
         </div>
       )}
 
-      <!-- 3. Tablolar Listesi -->
+      <!-- 4. Tablolar Listesi -->
       <div class="status-section">
         <h3>2. Veritabanındaki Aktif Tablolar ({tablesList.length})</h3>
         {tablesList.length > 0 ? (
@@ -78,7 +95,7 @@ if (!db) {
         )}
       </div>
 
-      <!-- 4. Users Sütunları -->
+      <!-- 5. Users Sütunları -->
       {tablesList.includes('users') && (
         <div class="status-section">
           <h3>3. 'users' Tablosunun Sütunları ({usersColumns.length})</h3>
@@ -94,7 +111,7 @@ if (!db) {
           </div>
           {!usersColumns.some(c => c.startsWith('password')) && (
             <div class="warning-box mt-3">
-              ❌ HATA: 'users' tablosunda 'password' sütunu eksik! Lütfen ALTER TABLE sorgusunu çalıştırın.
+              ❌ HATA: 'users' tablosunda 'password' sütunu eksik!
             </div>
           )}
         </div>
