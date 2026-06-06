@@ -115,7 +115,7 @@ try {
     )}
 
     <div class="wizard-card">
-      <form method="POST" id="wizard-form">
+      <form method="POST" id="wizard-form" novalidate>
         
         <!-- STEP 1: SELECT USER -->
         <div class="wizard-step active" id="step-1">
@@ -511,7 +511,7 @@ try {
 
     document.getElementById('btn-back-3').addEventListener('click', () => navigateToStep(3));
 
-    // SIMULATED AUTOMATED PROVISIONING LOGIC
+    // REAL AUTOMATED PROVISIONING LOGIC
     const btnStartProv = document.getElementById('btn-start-provisioning');
     const btnFinish = document.getElementById('btn-finish-wizard');
     const btnBack3 = document.getElementById('btn-back-3');
@@ -535,7 +535,7 @@ try {
       provProgress.style.display = 'flex';
       terminalLogs.style.display = 'block';
 
-      runSimulatedProvisioning();
+      runActualProvisioning();
     });
 
     function addLogLine(text, type = 'info') {
@@ -547,76 +547,117 @@ try {
       logsBody.scrollTop = logsBody.scrollHeight;
     }
 
-    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+    async function runActualProvisioning() {
+      const domainVal = domainInput.value.trim() || 'internal-service';
+      const serviceTypeVal = serviceType.value;
+      let d1Uuid = '';
 
-    async function runSimulatedProvisioning() {
-      // Adım 1: Repo Klonlama
-      addLogLine(">> Klonlama işlemi başlatılıyor: https://github.com/akgcomputer/laflaf.git", 'command');
-      await sleep(1500);
-      addLogLine("Klonlama başarıyla tamamlandı. Repo boyutu: 14.2 MB", 'success');
-      markStepSuccess(0);
+      try {
+        // Adım 1: GitHub Repo
+        addLogLine(">> GitHub deposu oluşturuluyor: akgcomputer/laflaf şablonu kopyalanıyor...", 'command');
+        let res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 1, domain: domainVal, service_type: serviceTypeVal })
+        });
+        let data = await res.json();
+        if (!res.ok) throw new Error(data.error || "GitHub deposu oluşturulamadı.");
+        addLogLine(`GitHub: ${data.message}`, 'success');
+        markStepSuccess(0);
 
-      // Adım 2: Cloudflare Pages
-      provSteps[1].className = 'prov-step';
-      provSteps[1].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine(">> npx wrangler pages project create isdeyeter-web-apps --production-branch main", 'command');
-      await sleep(2000);
-      addLogLine("Cloudflare Pages projesi 'isdeyeter-web-apps' başarıyla oluşturuldu.", 'success');
-      markStepSuccess(1);
+        // Adım 2: Cloudflare Pages
+        provSteps[1].className = 'prov-step';
+        provSteps[1].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Cloudflare Pages projesi tanımlanıyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 2, domain: domainVal, service_type: serviceTypeVal })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Pages projesi oluşturulamadı.");
+        addLogLine(`CF Pages: ${data.message}`, 'success');
+        markStepSuccess(1);
 
-      // Adım 3: D1 Database
-      provSteps[2].className = 'prov-step';
-      provSteps[2].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine(">> npx wrangler d1 create isdeyeter-db-prod", 'command');
-      await sleep(1800);
-      addLogLine("D1 Veritabanı başarıyla oluşturuldu. ID: cf-d1-8d2a4c92", 'success');
-      addLogLine("D1 bind işlemi yapılıyor...", 'info');
-      await sleep(1000);
-      addLogLine("Pages ve D1 bağlantısı başarıyla tamamlandı.", 'success');
-      markStepSuccess(2);
+        // Adım 3: D1 Database
+        provSteps[2].className = 'prov-step';
+        provSteps[2].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Cloudflare D1 veritabanı tahsis ediliyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 3, domain: domainVal, service_type: serviceTypeVal })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "D1 veritabanı oluşturulamadı.");
+        d1Uuid = data.d1_uuid;
+        addLogLine(`CF D1: ${data.message}`, 'success');
+        markStepSuccess(2);
 
-      // Adım 4: R2 Storage
-      provSteps[3].className = 'prov-step';
-      provSteps[3].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine(">> npx wrangler r2 bucket create isdeyeter-cdn-bucket", 'command');
-      await sleep(1500);
-      addLogLine("R2 Storage Bucket 'isdeyeter-cdn-bucket' oluşturuldu.", 'success');
-      addLogLine("Pages ve R2 bağlantısı yapıldı.", 'success');
-      markStepSuccess(3);
+        // Adım 4: R2 Bucket
+        provSteps[3].className = 'prov-step';
+        provSteps[3].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Cloudflare R2 Bucket depolama alanı açılıyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 4, domain: domainVal, service_type: serviceTypeVal })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "R2 Bucket oluşturulamadı.");
+        addLogLine(`CF R2: ${data.message}`, 'success');
+        markStepSuccess(3);
 
-      // Adım 5: Seed
-      provSteps[4].className = 'prov-step';
-      provSteps[4].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine("SQL göç dosyaları çalıştırılıyor...", 'info');
-      await sleep(1200);
-      addLogLine("Tohumlama (schema.sql) başarıyla tamamlandı. 12 tablo yapılandırıldı.", 'success');
-      markStepSuccess(4);
+        // Adım 5: Bind D1 & R2
+        provSteps[4].className = 'prov-step';
+        provSteps[4].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Pages projesine D1 ve R2 bağlanıyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 5, domain: domainVal, service_type: serviceTypeVal, d1_uuid: d1Uuid })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Bindings yapılandırılamadı.");
+        addLogLine(`CF Bindings: ${data.message}`, 'success');
+        markStepSuccess(4);
 
-      // Adım 6: Build & Deploy
-      provSteps[5].className = 'prov-step';
-      provSteps[5].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine(">> npm run build (Astro Production Build)", 'command');
-      await sleep(2000);
-      addLogLine("Astro build tamamlandı. Dağıtıma hazır dosya boyutu: 1.8MB", 'success');
-      addLogLine("Bulut CDN sunucularına senkronizasyon yapılıyor...", 'info');
-      await sleep(1500);
-      addLogLine("Sayfalar 275 edge lokasyonuna başarıyla deploy edildi.", 'success');
-      markStepSuccess(5);
+        // Adım 6: Deploy
+        provSteps[5].className = 'prov-step';
+        provSteps[5].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Bulut CDN dağıtımı tetikleniyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 6, domain: domainVal, service_type: serviceTypeVal })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Deploy işlemi başlatılamadı.");
+        addLogLine(`Deploy: ${data.message}`, 'success');
+        markStepSuccess(5);
 
-      // Adım 7: SSL & Verify
-      provSteps[6].className = 'prov-step';
-      provSteps[6].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
-      addLogLine("Domain DNS doğrulama başlatıldı...", 'info');
-      await sleep(1000);
-      addLogLine("SSL/TLS Sertifikası başarıyla alındı ve aktif edildi.", 'success');
-      addLogLine("Durum kontrolü: HTTP 200 OK. Sunucu yanıt süresi: 48ms", 'success');
-      markStepSuccess(6);
+        // Adım 7: SSL & Verify
+        provSteps[6].className = 'prov-step';
+        provSteps[6].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+        addLogLine(">> Hizmet durumu ve SSL/HTTPS doğrulanıyor...", 'command');
+        res = await fetch('/api/admin/provision', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ step: 7, domain: domainVal, service_type: serviceTypeVal })
+        });
+        data = await res.json();
+        if (!res.ok) throw new Error(data.error || "Hizmet doğrulaması başarısız.");
+        addLogLine(`Doğrulama: ${data.message}`, 'success');
+        markStepSuccess(6);
 
-      // Kurulum Bitti
-      addLogLine("🎉 TEBRİKLER! Kurulum başarıyla tamamlandı. Artık hizmeti aktifleştirebilirsiniz.", 'info');
-      
-      // Butonları güncelle
-      btnFinish.style.display = 'flex';
+        addLogLine("🎉 TEBRİKLER! Bulut kurulumu ve yapılandırması başarıyla tamamlandı. Artık hizmeti veritabanında aktifleştirebilirsiniz.", 'info');
+        btnFinish.style.display = 'flex';
+
+      } catch (err) {
+        addLogLine(`❌ KURULUM HATASI: ${err.message}`, 'error');
+        addLogLine("Lütfen girdiğiniz API anahtarlarını kontrol edin veya daha sonra tekrar deneyin.", 'info');
+        btnBack3.style.display = 'flex';
+      }
     }
 
     function markStepSuccess(index) {

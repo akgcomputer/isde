@@ -18,6 +18,7 @@ let recentUsers: any[] = [];
 let recentRequests: any[] = [];
 let recentSites: any[] = [];
 let partnersList: any[] = [];
+let settingsMap: any = {};
 let debugError: string | null = null;
 let successMessage: string | null = null;
 
@@ -32,7 +33,7 @@ try {
   if (!db) {
     debugError = "Cloudflare D1 Database binding is missing! Please check Pages settings.";
   } else {
-    // POST İsteklerini Yönet (Onay ve Durum Değişiklikleri)
+    // POST İsteklerini Yönet (Onay ve Durum Değişiklikleri ve Ayarlar)
     if (Astro.request.method === 'POST') {
       try {
         const formData = await Astro.request.formData();
@@ -50,6 +51,19 @@ try {
           const newStatus = currentStatus === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE';
           await db.prepare("UPDATE sites SET status = ? WHERE id = ?").bind(newStatus, siteId).run();
           successMessage = `Hizmet aktiflik durumu başarıyla güncellendi.`;
+        } else if (action === 'update-system-settings') {
+          const githubPat = (formData.get('github_pat') as string || '').trim();
+          const cfToken = (formData.get('cloudflare_token') as string || '').trim();
+          const cfAccountId = (formData.get('cloudflare_account_id') as string || '').trim();
+
+          await db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('github_pat', ?)")
+            .bind(githubPat).run();
+          await db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('cloudflare_token', ?)")
+            .bind(cfToken).run();
+          await db.prepare("INSERT OR REPLACE INTO system_settings (key, value) VALUES ('cloudflare_account_id', ?)")
+            .bind(cfAccountId).run();
+
+          successMessage = "Sistem API anahtarları başarıyla güncellendi.";
         }
       } catch (postErr: any) {
         console.error("POST action error:", postErr);
@@ -105,6 +119,13 @@ try {
         "SELECT * FROM users WHERE is_partner = 1 ORDER BY created_at DESC"
       ).all();
       partnersList = partnersQuery.results || [];
+
+      // Sistem Ayarlarını Oku
+      const settingsQuery = await db.prepare("SELECT * FROM system_settings").all();
+      const settingsList = settingsQuery.results || [];
+      settingsList.forEach((s: any) => {
+        settingsMap[s.key] = s.value;
+      });
 
     } catch (e: any) {
       console.error("Admin dashboard query error:", e);
@@ -317,6 +338,9 @@ function formatDate(dateStr: string) {
                         {s.status === 'ACTIVE' ? 'Durdur' : 'Aktif Et'}
                       </button>
                     </form>
+                    <a href={`/admin/edit-service?id=${s.id}`} class="action-btn activate" style="text-decoration:none; margin-left:6px; display:inline-block; line-height:1.2; padding:6px 12px;">
+                      <i class="fa-solid fa-edit"></i> Düzenle
+                    </a>
                   </td>
                 </tr>
               ))}
@@ -377,7 +401,38 @@ function formatDate(dateStr: string) {
         </div>
       </div>
 
-      <!-- Column 4: Recent Requests (Full width) -->
+      <!-- Column 4: System Credentials Settings (Full width) -->
+      <div class="table-card full-width">
+        <div class="card-title-bar">
+          <h2><i class="fa-solid fa-key text-rose-500 mr-2"></i>GitHub & Cloudflare API Ayarları</h2>
+        </div>
+        <form method="POST" class="settings-form" style="display: flex; flex-direction: column; gap: 16px;">
+          <input type="hidden" name="action" value="update-system-settings" />
+          
+          <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 20px;">
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">GitHub Personal Access Token (PAT) *</label>
+              <input type="password" name="github_pat" value={settingsMap['github_pat'] || ''} placeholder="ghp_..." required style="background: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px; border-radius: 10px;" />
+            </div>
+            
+            <div class="form-group" style="display: flex; flex-direction: column; gap: 6px;">
+              <label style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Cloudflare Account ID *</label>
+              <input type="text" name="cloudflare_account_id" value={settingsMap['cloudflare_account_id'] || ''} placeholder="CF Account ID" required style="background: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px; border-radius: 10px;" />
+            </div>
+          </div>
+
+          <div class="form-group" style="display: flex; flex-direction: column; gap: 6px;">
+            <label style="font-size: 0.82rem; font-weight: 700; color: #cbd5e1;">Cloudflare API Token *</label>
+            <input type="password" name="cloudflare_token" value={settingsMap['cloudflare_token'] || ''} placeholder="CF API Token" required style="background: #0f172a; border: 1px solid #334155; color: #fff; padding: 12px; border-radius: 10px;" />
+          </div>
+
+          <button type="submit" class="action-btn approve" style="width: fit-content; padding: 12px 24px; font-size: 0.88rem; display: flex; align-items: center; gap: 8px;">
+            <i class="fa-solid fa-floppy-disk"></i> API Ayarlarını Kaydet
+          </button>
+        </form>
+      </div>
+
+      <!-- Column 5: Recent Requests (Full width) -->
       <div class="table-card full-width">
         <div class="card-title-bar">
           <h2><i class="fa-solid fa-list-check text-purple-500 mr-2"></i>Son Hizmet İlanları & Talepleri</h2>

@@ -134,6 +134,15 @@ export async function ensureDatabaseSetup(db: any) {
       )
     `).run();
 
+    // 7b. system_settings tablosunu oluştur
+    await db.prepare(`
+      CREATE TABLE IF NOT EXISTS system_settings (
+          key TEXT PRIMARY KEY,
+          value TEXT,
+          updated_at DATETIME DEFAULT CURRENT_TIMESTAMP
+      )
+    `).run();
+
     // 8. İndeksleri tek tek oluştur
     const indexes = [
       "CREATE INDEX IF NOT EXISTS idx_users_email ON users(email)",
