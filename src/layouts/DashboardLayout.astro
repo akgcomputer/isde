@@ -47,7 +47,7 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
             </a>
             <a href="/dashboard/member/sites" class={`menu-link ${activeTab === 'sites' ? 'active' : ''}`}>
               <i class="fa-solid fa-laptop-code"></i>
-              <span>Ücretsiz Sitelerim</span>
+              <span>Ücretsiz Hizmetlerim</span>
             </a>
             <a href="/dashboard/member/requests" class={`menu-link ${activeTab === 'requests' ? 'active' : ''}`}>
               <i class="fa-solid fa-file-signature"></i>
@@ -62,6 +62,10 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
             <a href="/dashboard/partner" class={`menu-link ${activeTab === 'overview' ? 'active' : ''}`}>
               <i class="fa-solid fa-chart-column"></i>
               <span>İş Ortağı Paneli</span>
+            </a>
+            <a href="/dashboard/partner/sites" class={`menu-link ${activeTab === 'sites' ? 'active' : ''}`}>
+              <i class="fa-solid fa-laptop-code"></i>
+              <span>Ücretsiz Hizmetlerim</span>
             </a>
             <a href="/dashboard/partner/profile" class={`menu-link ${activeTab === 'profile' ? 'active' : ''}`}>
               <i class="fa-solid fa-id-card-clip"></i>

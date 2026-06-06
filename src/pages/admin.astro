@@ -17,7 +17,9 @@ let stats = {
 let recentUsers: any[] = [];
 let recentRequests: any[] = [];
 let recentSites: any[] = [];
+let partnersList: any[] = [];
 let debugError: string | null = null;
+let successMessage: string | null = null;
 
 try {
   if (!Astro.locals.user || Astro.locals.user.is_partner !== 2) {
@@ -30,7 +32,38 @@ try {
   if (!db) {
     debugError = "Cloudflare D1 Database binding is missing! Please check Pages settings.";
   } else {
+    // POST İsteklerini Yönet (Onay ve Durum Değişiklikleri)
+    if (Astro.request.method === 'POST') {
+      try {
+        const formData = await Astro.request.formData();
+        const action = formData.get('action');
+
+        if (action === 'toggle-partner-approval') {
+          const partnerId = formData.get('partner_id') as string;
+          const currentApproved = parseInt(formData.get('current_approved') as string || '0');
+          const newApproved = currentApproved === 1 ? 0 : 1;
+          await db.prepare("UPDATE users SET is_approved = ? WHERE id = ?").bind(newApproved, partnerId).run();
+          successMessage = `İş ortağı onay durumu başarıyla güncellendi.`;
+        } else if (action === 'toggle-service-status') {
+          const siteId = formData.get('site_id') as string;
+          const currentStatus = formData.get('current_status') as string;
+          const newStatus = currentStatus === 'ACTIVE' ? 'PASSIVE' : 'ACTIVE';
+          await db.prepare("UPDATE sites SET status = ? WHERE id = ?").bind(newStatus, siteId).run();
+          successMessage = `Hizmet aktiflik durumu başarıyla güncellendi.`;
+        }
+      } catch (postErr: any) {
+        console.error("POST action error:", postErr);
+        debugError = `İşlem Başarısız: ${postErr.message}`;
+      }
+    }
+
     try {
+      // Otomatik Süre Kontrolü: Bitiş tarihi geçmiş ve ACTIVE olan tüm hizmetleri pasifleştir
+      const nowLocal = new Date().toISOString();
+      await db.prepare(
+        "UPDATE sites SET status = 'PASSIVE' WHERE status = 'ACTIVE' AND end_date IS NOT NULL AND end_date < ?"
+      ).bind(nowLocal).run();
+
       // Üye sayısı
       const membersCount = await db.prepare("SELECT COUNT(*) as count FROM users WHERE is_partner = 0").first() as any;
       stats.totalMembers = membersCount?.count || 0;
@@ -47,8 +80,8 @@ try {
       const offersCount = await db.prepare("SELECT COUNT(*) as count FROM offers").first() as any;
       stats.totalOffers = offersCount?.count || 0;
 
-      // Site sayısı
-      const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites").first() as any;
+      // Aktif Hizmet sayısı
+      const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites WHERE status = 'ACTIVE'").first() as any;
       stats.totalSites = sitesCount?.count || 0;
 
       // Son Kayıt Olan 5 Kullanıcı
@@ -61,11 +94,17 @@ try {
       ).all();
       recentRequests = requestsQuery.results || [];
 
-      // Son 5 Web Sitesi
+      // Son 10 Web Sitesi / Hizmet
       const sitesQuery = await db.prepare(
-        "SELECT s.*, u.name as owner_name FROM sites s JOIN users u ON s.user_id = u.id ORDER BY s.created_at DESC LIMIT 5"
+        "SELECT s.*, u.name as owner_name FROM sites s JOIN users u ON s.user_id = u.id ORDER BY s.created_at DESC LIMIT 10"
       ).all();
       recentSites = sitesQuery.results || [];
+
+      // Tüm İş Ortakları (Onay Paneli İçin)
+      const partnersQuery = await db.prepare(
+        "SELECT * FROM users WHERE is_partner = 1 ORDER BY created_at DESC"
+      ).all();
+      partnersList = partnersQuery.results || [];
 
     } catch (e: any) {
       console.error("Admin dashboard query error:", e);
@@ -76,7 +115,7 @@ try {
   debugError = `Global Admin Sayfa Hatası: ${globalErr.message}`;
 }
 
-// Güvenli tarih formatlama yardımcı fonksiyonu (Cloudflare V8 motoru uyumlu)
+// Güvenli tarih formatlama yardımcı fonksiyonu
 function formatDate(dateStr: string) {
   if (!dateStr) return "N/A";
   const safeStr = dateStr.includes(' ') && !dateStr.includes('T') ? dateStr.replace(' ', 'T') + 'Z' : dateStr;
@@ -101,6 +140,13 @@ function formatDate(dateStr: string) {
         <p style="font-family: monospace; font-size: 0.9rem; margin: 0;">{debugError}</p>
       </div>
     )}
+
+    {successMessage && (
+      <div class="success-banner" style="background: rgba(16, 185, 129, 0.15); border: 1px solid #10b981; padding: 20px; border-radius: 12px; margin-bottom: 24px; color: #34d399; font-family: sans-serif;">
+        <h2 style="font-size: 1.15rem; font-weight: 700; margin-bottom: 8px; color: #34d399;"><i class="fa-solid fa-circle-check mr-2"></i> Başarılı İşlem</h2>
+        <p style="font-size: 0.9rem; margin: 0;">{successMessage}</p>
+      </div>
+    )}
     
     <!-- Top Nav -->
     <header class="admin-header">
@@ -109,6 +155,10 @@ function formatDate(dateStr: string) {
         <h1>Merkezi Kontrol Paneli</h1>
       </div>
       <div class="header-right">
+        <a href="/admin/start-service" class="start-service-btn">
+          <i class="fa-solid fa-plus-circle"></i>
+          <span>Hizmet Başlat</span>
+        </a>
         <div class="admin-profile">
           <i class="fa-solid fa-user-shield avatar-icon"></i>
           <div class="profile-details">
@@ -176,7 +226,7 @@ function formatDate(dateStr: string) {
           <i class="fa-solid fa-circle-nodes"></i>
         </div>
         <div class="stat-info">
-          <h3>Kurulan Siteler</h3>
+          <h3>Aktif Hizmetler</h3>
           <p class="stat-value">{stats.totalSites}</p>
         </div>
       </div>
@@ -226,45 +276,108 @@ function formatDate(dateStr: string) {
         </div>
       </div>
 
-      <!-- Column 2: Recent Sites -->
+      <!-- Column 2: Recent/Active Services -->
       <div class="table-card">
         <div class="card-title-bar">
-          <h2><i class="fa-solid fa-globe text-teal-500 mr-2"></i>Son Kurulan Web Siteleri</h2>
+          <h2><i class="fa-solid fa-globe text-teal-500 mr-2"></i>Aktif / Son Kurulan Hizmetler</h2>
         </div>
         <div class="table-container">
           <table>
             <thead>
               <tr>
-                <th>Alan Adı</th>
-                <th>Kurucu</th>
-                <th>Mod</th>
+                <th>Hizmet / Domain</th>
+                <th>Müşteri</th>
+                <th>Bitiş Tarihi</th>
                 <th>Durum</th>
+                <th>İşlem</th>
               </tr>
             </thead>
             <tbody>
               {recentSites.map(s => (
                 <tr>
                   <td class="font-semibold text-blue-600">
-                    <a href={`http://${s.domain}`} target="_blank" class="hover:underline">{s.domain}</a>
+                    <div style="font-size: 0.9rem;">{s.service_type === 'web_sitesi' ? '🌐 Web Sitesi' : '📦 ' + s.service_type}</div>
+                    <a href={`http://${s.domain}`} target="_blank" class="hover:underline" style="font-size: 0.8rem; color:#94a3b8;">{s.domain}</a>
                   </td>
                   <td>{s.owner_name}</td>
                   <td>
-                    <span class={`mode-tag ${s.mode}`}>{s.mode === 'urun' ? '📦 Ürün' : '💼 Hizmet'}</span>
+                    <span class="text-gray-400" style="font-size: 0.82rem;">
+                      {s.end_date ? formatDate(s.end_date) : 'Sınırsız'}
+                    </span>
                   </td>
                   <td>
                     <span class={`status-tag ${s.status}`}>{s.status}</span>
                   </td>
+                  <td>
+                    <form method="POST" style="display:inline;">
+                      <input type="hidden" name="action" value="toggle-service-status" />
+                      <input type="hidden" name="site_id" value={s.id} />
+                      <input type="hidden" name="current_status" value={s.status} />
+                      <button type="submit" class={`action-btn ${s.status === 'ACTIVE' ? 'suspend' : 'activate'}`}>
+                        {s.status === 'ACTIVE' ? 'Durdur' : 'Aktif Et'}
+                      </button>
+                    </form>
+                  </td>
                 </tr>
               ))}
               {recentSites.length === 0 && (
-                <tr><td colspan="4" class="text-center py-6 text-gray-400">Kurulmuş site bulunamadı.</td></tr>
+                <tr><td colspan="5" class="text-center py-6 text-gray-400">Kurulmuş site veya hizmet bulunamadı.</td></tr>
               )}
             </tbody>
           </table>
         </div>
       </div>
 
-      <!-- Column 3: Recent Requests (Full width) -->
+      <!-- Column 3: Partner Approval Section (Full width) -->
+      <div class="table-card full-width">
+        <div class="card-title-bar">
+          <h2><i class="fa-solid fa-user-check text-yellow-500 mr-2"></i>İş Ortağı Onay ve Yetkilendirme Paneli</h2>
+        </div>
+        <div class="table-container">
+          <table>
+            <thead>
+              <tr>
+                <th>Ad Soyad / Firma</th>
+                <th>E-Posta</th>
+                <th>Telefon</th>
+                <th>Durum</th>
+                <th>İşlem</th>
+              </tr>
+            </thead>
+            <tbody>
+              {partnersList.map(p => (
+                <tr>
+                  <td class="font-semibold">{p.name}</td>
+                  <td>{p.email}</td>
+                  <td>{p.phone || 'Girilmemiş'}</td>
+                  <td>
+                    {p.is_approved === 1 ? (
+                      <span class="status-tag ACTIVE">ONAYLI</span>
+                    ) : (
+                      <span class="status-tag PENDING">ONAY BEKLİYOR</span>
+                    )}
+                  </td>
+                  <td>
+                    <form method="POST" style="display:inline;">
+                      <input type="hidden" name="action" value="toggle-partner-approval" />
+                      <input type="hidden" name="partner_id" value={p.id} />
+                      <input type="hidden" name="current_approved" value={p.is_approved || 0} />
+                      <button type="submit" class={`action-btn ${p.is_approved === 1 ? 'suspend' : 'approve'}`}>
+                        {p.is_approved === 1 ? 'Onayı Kaldır' : 'Onayla'}
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+              {partnersList.length === 0 && (
+                <tr><td colspan="5" class="text-center py-6 text-gray-400">Kayıtlı iş ortağı bulunamadı.</td></tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+
+      <!-- Column 4: Recent Requests (Full width) -->
       <div class="table-card full-width">
         <div class="card-title-bar">
           <h2><i class="fa-solid fa-list-check text-purple-500 mr-2"></i>Son Hizmet İlanları & Talepleri</h2>
@@ -367,7 +480,8 @@ function formatDate(dateStr: string) {
       align-items: center;
       gap: 12px;
       border-right: 1px solid #334155;
-      padding-right: 24px;
+      border-left: 1px solid #334155;
+      padding: 0 24px;
     }
 
     .avatar-icon {
@@ -415,10 +529,31 @@ function formatDate(dateStr: string) {
       box-shadow: 0 4px 15px rgba(239, 68, 68, 0.2);
     }
 
+    .start-service-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 12px 20px;
+      border-radius: 12px;
+      text-decoration: none;
+      font-size: 0.92rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s ease;
+      border: none;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .start-service-btn:hover {
+      transform: translateY(-1px);
+      box-shadow: 0 6px 20px rgba(16, 185, 129, 0.3);
+    }
+
     /* Stats Grid */
     .stats-grid {
       display: grid;
-      grid-template-columns: repeat(auto-fit, minmax(170px, 1fr));
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
       gap: 20px;
     }
 
@@ -542,28 +677,55 @@ function formatDate(dateStr: string) {
     .role-badge.partner { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
     .role-badge.admin { background: rgba(239, 68, 68, 0.1); color: #f87171; }
 
-    .mode-tag {
-      font-size: 0.75rem;
-      font-weight: 600;
-      padding: 4px 8px;
-      border-radius: 6px;
-    }
-
-    .mode-tag.urun { background: rgba(20, 184, 166, 0.1); color: #2dd4bf; }
-    .mode-tag.hizmet { background: rgba(168, 85, 247, 0.1); color: #c084fc; }
-
     .status-tag {
       font-size: 0.75rem;
       font-weight: 700;
       padding: 4px 8px;
       border-radius: 6px;
+      display: inline-block;
+      text-align: center;
     }
 
     .status-tag.PENDING { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
-    .status-tag.OFFER_RECEIVED { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
-    .status-tag.ACCEPTED, .status-tag.ACTIVE { background: rgba(16, 185, 129, 0.1); color: #34d399; }
-    .status-tag.REJECTED { background: rgba(239, 68, 68, 0.1); color: #f87171; }
-    .status-tag.COMPLETED { background: rgba(148, 163, 184, 0.1); color: #94a3b8; }
+    .status-tag.ACTIVE { background: rgba(16, 185, 129, 0.1); color: #34d399; }
+    .status-tag.PASSIVE { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+
+    .action-btn {
+      padding: 6px 12px;
+      border-radius: 8px;
+      font-size: 0.75rem;
+      font-weight: 700;
+      border: 1px solid transparent;
+      cursor: pointer;
+      transition: all 0.2s ease;
+    }
+    .action-btn.approve {
+      background: rgba(16, 185, 129, 0.1);
+      color: #34d399;
+      border-color: rgba(16, 185, 129, 0.2);
+    }
+    .action-btn.approve:hover {
+      background: #10b981;
+      color: white;
+    }
+    .action-btn.suspend {
+      background: rgba(239, 68, 68, 0.1);
+      color: #f87171;
+      border-color: rgba(239, 68, 68, 0.2);
+    }
+    .action-btn.suspend:hover {
+      background: #ef4444;
+      color: white;
+    }
+    .action-btn.activate {
+      background: rgba(59, 130, 246, 0.1);
+      color: #60a5fa;
+      border-color: rgba(59, 130, 246, 0.2);
+    }
+    .action-btn.activate:hover {
+      background: #3b82f6;
+      color: white;
+    }
 
     /* Responsive */
     @media (max-width: 992px) {

@@ -16,6 +16,7 @@ export async function ensureDatabaseSetup(db: any) {
           email TEXT UNIQUE NOT NULL,
           name TEXT NOT NULL,
           is_partner INTEGER DEFAULT 0,
+          is_approved INTEGER DEFAULT 0,
           phone TEXT,
           address TEXT,
           billing_info TEXT,
@@ -23,7 +24,7 @@ export async function ensureDatabaseSetup(db: any) {
       )
     `).run();
 
-    // 2. password sütununun var olup olmadığını kontrol et, yoksa ekle (Migration)
+    // 2. password ve is_approved sütunlarının var olup olmadığını kontrol et, yoksa ekle (Migration)
     try {
       const info = await db.prepare("PRAGMA table_info(users)").all();
       if (info && info.results) {
@@ -31,6 +32,11 @@ export async function ensureDatabaseSetup(db: any) {
         if (!hasPassword) {
           await db.prepare("ALTER TABLE users ADD COLUMN password TEXT").run();
           console.log("✅ 'users' tablosuna 'password' sütunu eklendi.");
+        }
+        const hasIsApproved = info.results.some((col: any) => col.name === 'is_approved');
+        if (!hasIsApproved) {
+          await db.prepare("ALTER TABLE users ADD COLUMN is_approved INTEGER DEFAULT 0").run();
+          console.log("✅ 'users' tablosuna 'is_approved' sütunu eklendi.");
         }
       }
     } catch (colErr) {
@@ -66,10 +72,37 @@ export async function ensureDatabaseSetup(db: any) {
           domain TEXT UNIQUE NOT NULL,
           mode TEXT NOT NULL,
           status TEXT DEFAULT 'PENDING',
+          service_type TEXT DEFAULT 'web_sitesi',
+          start_date DATETIME,
+          end_date DATETIME,
           created_at DATETIME DEFAULT CURRENT_TIMESTAMP,
           FOREIGN KEY (user_id) REFERENCES users(id) ON DELETE CASCADE
       )
     `).run();
+
+    // 5b. sites tablosu yeni kolon göçleri (Migration)
+    try {
+      const sitesInfo = await db.prepare("PRAGMA table_info(sites)").all();
+      if (sitesInfo && sitesInfo.results) {
+        const hasServiceType = sitesInfo.results.some((col: any) => col.name === 'service_type');
+        if (!hasServiceType) {
+          await db.prepare("ALTER TABLE sites ADD COLUMN service_type TEXT DEFAULT 'web_sitesi'").run();
+          console.log("✅ 'sites' tablosuna 'service_type' sütunu eklendi.");
+        }
+        const hasStartDate = sitesInfo.results.some((col: any) => col.name === 'start_date');
+        if (!hasStartDate) {
+          await db.prepare("ALTER TABLE sites ADD COLUMN start_date DATETIME").run();
+          console.log("✅ 'sites' tablosuna 'start_date' sütunu eklendi.");
+        }
+        const hasEndDate = sitesInfo.results.some((col: any) => col.name === 'end_date');
+        if (!hasEndDate) {
+          await db.prepare("ALTER TABLE sites ADD COLUMN end_date DATETIME").run();
+          console.log("✅ 'sites' tablosuna 'end_date' sütunu eklendi.");
+        }
+      }
+    } catch (sitesColErr) {
+      console.error("❌ 'sites' tablosu kolon kontrolü sırasında hata:", sitesColErr);
+    }
 
     // 6. service_requests tablosunu oluştur
     await db.prepare(`
@@ -116,13 +149,14 @@ export async function ensureDatabaseSetup(db: any) {
 
     // 9. Admin kullanıcısını ekle veya güncelle
     await db.prepare(`
-      INSERT OR REPLACE INTO users (id, email, name, is_partner, phone, password)
-      VALUES (?, ?, ?, ?, ?, ?)
+      INSERT OR REPLACE INTO users (id, email, name, is_partner, is_approved, phone, password)
+      VALUES (?, ?, ?, ?, ?, ?, ?)
     `).bind(
       'admin-user-id-999', 
       'admin@isdeyeter.com', 
       'Admin Yönetici', 
       2, 
+      1,
       '5325000999', 
       'admin@isdeyeter.com500'
     ).run();

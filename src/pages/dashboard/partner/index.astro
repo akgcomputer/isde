@@ -27,26 +27,31 @@ if (Astro.request.method === 'POST') {
     const action = formData.get('action') as string;
 
     if (action === 'submit_offer') {
-      const requestId = formData.get('request_id') as string;
-      const priceStr = formData.get('price') as string;
-      const duration = formData.get('duration') as string;
-
-      const price = parseFloat(priceStr);
-
-      if (!requestId || isNaN(price) || !duration) {
-        errorMessage = 'Lütfen teklif fiyatı ve tamamlanma süresini doğru girin.';
+      // Sadece onaylı partnerler teklif gönderebilir
+      if (user.is_approved !== 1) {
+        errorMessage = 'Teklif gönderebilmek için hesabınızın onaylanmış olması gerekmektedir.';
       } else {
-        // D1 Batch işlemle teklifi ekle ve talebin statüsünü güncelle
-        await db.batch([
-          db.prepare(
-            "INSERT INTO offers (request_id, partner_id, price, duration, status) VALUES (?, ?, ?, ?, 'PENDING')"
-          ).bind(requestId, user.id, price, duration),
-          db.prepare(
-            "UPDATE service_requests SET status = 'OFFER_RECEIVED' WHERE id = ? AND status = 'PENDING'"
-          ).bind(requestId)
-        ]);
+        const requestId = formData.get('request_id') as string;
+        const priceStr = formData.get('price') as string;
+        const duration = formData.get('duration') as string;
 
-        successMessage = 'Teklifiniz başarıyla müşteriye iletildi! Müşteri onayladığında size haber verilecektir.';
+        const price = parseFloat(priceStr);
+
+        if (!requestId || isNaN(price) || !duration) {
+          errorMessage = 'Lütfen teklif fiyatı ve tamamlanma süresini doğru girin.';
+        } else {
+          // D1 Batch işlemle teklifi ekle ve talebin statüsünü güncelle
+          await db.batch([
+            db.prepare(
+              "INSERT INTO offers (request_id, partner_id, price, duration, status) VALUES (?, ?, ?, ?, 'PENDING')"
+            ).bind(requestId, user.id, price, duration),
+            db.prepare(
+              "UPDATE service_requests SET status = 'OFFER_RECEIVED' WHERE id = ? AND status = 'PENDING'"
+            ).bind(requestId)
+          ]);
+
+          successMessage = 'Teklifiniz başarıyla müşteriye iletildi! Müşteri onayladığında size haber verilecektir.';
+        }
       }
     }
   } catch (e) {
@@ -71,8 +76,6 @@ try {
   if (myServices.length === 0) {
     return Astro.redirect('/onboarding');
   }
-
-  const categoryPlaceholders = myServices.map(s => s.service_category);
 
   // B. Aktif İşlerim (Kabul edilmiş teklifler)
   const activeQuery = await db.prepare(
@@ -102,26 +105,25 @@ try {
   ).bind(user.id).all();
   pendingOffers = pendingQuery.results || [];
 
-  // E. Teklif Ver (Hizmet Havuzu)
-  // Ortak uzmanlık dallarındaki, teklif verilmemiş ve aktif olan talepleri getir
-  // SQL D1 Bindings parametreleri için array desteği sınırları nedeniyle SELECT query ile havuzu çekelim ve JS ile filtreleyelim
-  const rawPool = await db.prepare(
-    "SELECT r.*, u.name as client_name FROM service_requests r " +
-    "JOIN users u ON r.client_id = u.id " +
-    "WHERE r.status IN ('PENDING', 'OFFER_RECEIVED') " +
-    "AND r.id NOT IN (SELECT request_id FROM offers WHERE partner_id = ?) " +
-    "ORDER BY r.created_at DESC"
-  ).bind(user.id).all();
+  // E. Teklif Ver (Hizmet Havuzu) - Sadece Onaylıysa çek
+  if (user.is_approved === 1) {
+    const rawPool = await db.prepare(
+      "SELECT r.*, u.name as client_name FROM service_requests r " +
+      "JOIN users u ON r.client_id = u.id " +
+      "WHERE r.status IN ('PENDING', 'OFFER_RECEIVED') " +
+      "AND r.id NOT IN (SELECT request_id FROM offers WHERE partner_id = ?) " +
+      "ORDER BY r.created_at DESC"
+    ).bind(user.id).all();
 
-  const poolResults = rawPool.results || [];
+    const poolResults = rawPool.results || [];
 
-  // Sadece iş ortağının seçtiği uzmanlık dallarına uyan talepleri filtrele
-  const selectedCatNames = myServices.map(s => s.service_category);
-  availablePool = poolResults.filter((req: any) => selectedCatNames.includes(req.category));
+    // Sadece iş ortağının seçtiği uzmanlık dallarına uyan talepleri filtrele
+    const selectedCatNames = myServices.map(s => s.service_category);
+    availablePool = poolResults.filter((req: any) => selectedCatNames.includes(req.category));
 
-  // Eğer uzmanlık dallarında henüz teklif verilmemiş yeni iş fırsatları varsa hasNewLeads bayrağını aktif et
-  if (availablePool.length > 0) {
-    hasNewLeads = true;
+    if (availablePool.length > 0) {
+      hasNewLeads = true;
+    }
   }
 
 } catch (err) {
@@ -132,6 +134,14 @@ try {
 <DashboardLayout title="İş Ortağı Paneli | İş De Yeter" activeTab="overview">
   <div class="partner-area">
     
+    <!-- Prominent "Start Free Service" Button At The Very Top -->
+    <div class="top-action-bar">
+      <a href="/dashboard/partner/sites" class="start-service-btn">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Ücretsiz Hizmet Başlat</span>
+      </a>
+    </div>
+
     <div class="area-header">
       <h1>İş Ortağı Çalışma Paneli</h1>
       <p>Teklif verdiğiniz işleri takip edebilir, tamamlanan işlerinizi görebilir veya uzmanlık alanınıza düşen yeni taleplere hızlıca fiyat verebilirsiniz.</p>
@@ -153,7 +163,7 @@ try {
 
     <!-- Category Badges Bar -->
     <div class="my-categories shadow-card">
-      <span class="title">Uzmanlık Alanlarım (Maks 5):</span>
+      <span class="title">Uzmanlık Alanlarım (Maks 3):</span>
       <div class="badges-wrapper">
         {myServices.map(s => (
           <span class="cat-badge">{s.service_category}</span>
@@ -161,6 +171,17 @@ try {
         <a href="/onboarding" class="edit-link"><i class="fa-solid fa-pen-to-square mr-1"></i> Düzenle</a>
       </div>
     </div>
+
+    <!-- Onay Bekliyor Uyarısı (Eğer Admin Onaylamadıysa en üste göster) -->
+    {user.is_approved !== 1 && (
+      <div class="unapproved-alert-box">
+        <i class="fa-solid fa-circle-exclamation alert-icon"></i>
+        <div class="alert-content">
+          <h3>Hesabınız Onay Bekliyor</h3>
+          <p>İş ortağı profiliniz sistem yöneticisi (admin) tarafından inceleniyor. Admin onayından sonra uzmanlık alanınızdaki müşteri taleplerine teklif vermeye başlayabilirsiniz. Bu süreçte sizin ek bir işlem yapmanıza gerek yoktur.</p>
+        </div>
+      </div>
+    )}
 
     <!-- Tabbed Jobs Center -->
     <div class="jobs-workspace shadow-card">
@@ -174,8 +195,8 @@ try {
           <i class="fa-solid fa-clock-rotate-left mr-1"></i> Eski İşlerim ({pastJobs.length})
         </button>
         <button type="button" class="tab-link" onclick="switchTab('pool')">
-          <i class="fa-solid fa-gavel mr-1"></i> Teklif Ver / İş Havuzu ({availablePool.length})
-          {hasNewLeads && (
+          <i class="fa-solid fa-gavel mr-1"></i> Teklif Ver / İş Havuzu ({user.is_approved === 1 ? availablePool.length : 0})
+          {hasNewLeads && user.is_approved === 1 && (
             <span class="blink-badge" title="Uzmanlık alanınızda yeni iş fırsatı var!">⚠️</span>
           )}
         </button>
@@ -280,65 +301,73 @@ try {
 
         <!-- C. TEKLİF VER / İŞ HAVUZU (MATCHING PENDING REQUESTS) -->
         <div id="tab-pool" class="tab-content-panel">
-          <div class="pool-grid">
-            {availablePool.map(req => (
-              <div class="pool-card">
-                
-                <div class="pool-header">
-                  <span class="cat">{req.category}</span>
-                  <span class="client"><i class="fa-solid fa-user-tie"></i> Müşteri: {req.client_name}</span>
-                </div>
-
-                <div class="pool-body">
-                  <h3>{req.title}</h3>
-                  <p class="desc">{req.description}</p>
+          {user.is_approved === 1 ? (
+            <div class="pool-grid">
+              {availablePool.map(req => (
+                <div class="pool-card">
                   
-                  {req.image_url && (
-                    <a href={req.image_url} target="_blank" class="image-btn">
-                      <i class="fa-solid fa-image mr-1"></i> Resim Önizleme
-                    </a>
-                  )}
-                </div>
-
-                {/* Teklif Verme Formu */}
-                <form method="POST" class="bid-form">
-                  <input type="hidden" name="action" value="submit_offer" />
-                  <input type="hidden" name="request_id" value={req.id} />
-                  
-                  <div class="bid-inputs">
-                    <div class="input-group">
-                      <label>Fiyat Teklifi (TL) *</label>
-                      <input type="number" name="price" required min="1" placeholder="Fiyat girin (TL)" />
-                    </div>
-                    
-                    <div class="input-group">
-                      <label>Süre Teklifi *</label>
-                      <select name="duration" required>
-                        <option value="1 Gün">1 Gün</option>
-                        <option value="2 Gün">2 Gün</option>
-                        <option value="3 Gün">3 Gün</option>
-                        <option value="5 Gün">5 Gün</option>
-                        <option value="1 Hafta">1 Hafta</option>
-                        <option value="2 Hafta">2 Hafta</option>
-                      </select>
-                    </div>
+                  <div class="pool-header">
+                    <span class="cat">{req.category}</span>
+                    <span class="client"><i class="fa-solid fa-user-tie"></i> Müşteri: {req.client_name}</span>
                   </div>
 
-                  <button type="submit" class="bid-submit-btn">
-                    <i class="fa-solid fa-paper-plane mr-2"></i> Teklifi Gönder
-                  </button>
-                </form>
+                  <div class="pool-body">
+                    <h3>{req.title}</h3>
+                    <p class="desc">{req.description}</p>
+                    
+                    {req.image_url && (
+                      <a href={req.image_url} target="_blank" class="image-btn">
+                        <i class="fa-solid fa-image mr-1"></i> Resim Önizleme
+                      </a>
+                    )}
+                  </div>
 
-              </div>
-            ))}
+                  {/* Teklif Verme Formu */}
+                  <form method="POST" class="bid-form">
+                    <input type="hidden" name="action" value="submit_offer" />
+                    <input type="hidden" name="request_id" value={req.id} />
+                    
+                    <div class="bid-inputs">
+                      <div class="input-group">
+                        <label>Fiyat Teklifi (TL) *</label>
+                        <input type="number" name="price" required min="1" placeholder="Fiyat girin (TL)" />
+                      </div>
+                      
+                      <div class="input-group">
+                        <label>Süre Teklifi *</label>
+                        <select name="duration" required>
+                          <option value="1 Gün">1 Gün</option>
+                          <option value="2 Gün">2 Gün</option>
+                          <option value="3 Gün">3 Gün</option>
+                          <option value="5 Gün">5 Gün</option>
+                          <option value="1 Hafta">1 Hafta</option>
+                          <option value="2 Hafta">2 Hafta</option>
+                        </select>
+                      </div>
+                    </div>
 
-            {availablePool.length === 0 && (
-              <div class="empty-state">
-                <i class="fa-solid fa-gavel empty-icon"></i>
-                <p>Şu an uzmanlık kategorilerinizde teklif verebileceğiniz yeni bir talep bulunmamaktadır. Yeni ilanlar açıldığında burada listelenecektir.</p>
-              </div>
-            )}
-          </div>
+                    <button type="submit" class="bid-submit-btn">
+                      <i class="fa-solid fa-paper-plane mr-2"></i> Teklifi Gönder
+                    </button>
+                  </form>
+
+                </div>
+              ))}
+
+              {availablePool.length === 0 && (
+                <div class="empty-state">
+                  <i class="fa-solid fa-gavel empty-icon"></i>
+                  <p>Şu an uzmanlık kategorilerinizde teklif verebileceğiniz yeni bir talep bulunmamaktadır. Yeni ilanlar açıldığında burada listelenecektir.</p>
+                </div>
+              )}
+            </div>
+          ) : (
+            <div class="lock-state-box">
+              <i class="fa-solid fa-lock lock-icon"></i>
+              <h3>Hizmet Havuzu Kilitli</h3>
+              <p>Müşterilerin güncel hizmet ilanlarını görebilmek ve teklif vererek iş alabilmek için hesabınızın admin tarafından onaylanması gerekmektedir. Profil bilgilerinizi eksiksiz doldurarak bekleyin.</p>
+            </div>
+          )}
         </div>
 
         <!-- D. BEKLEYEN TEKLİFLERİM (PENDING BIDS) -->
@@ -385,6 +414,33 @@ try {
       gap: 32px;
     }
 
+    /* Top Action Bar & Button styling */
+    .top-action-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: -12px;
+    }
+
+    .start-service-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: #ffffff;
+      padding: 16px 32px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .start-service-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(16, 185, 129, 0.3);
+    }
+
     .area-header h1 {
       font-size: 2rem;
       color: #0f172a;
@@ -418,6 +474,35 @@ try {
       background: rgba(239, 68, 68, 0.05);
       border: 1px solid rgba(239, 68, 68, 0.3);
       color: #dc2626;
+    }
+
+    /* Onay Bekliyor Uyarısı */
+    .unapproved-alert-box {
+      background: rgba(245, 158, 11, 0.05);
+      border: 1px solid #f59e0b;
+      border-radius: 16px;
+      padding: 20px;
+      display: flex;
+      gap: 16px;
+      align-items: flex-start;
+      color: #b45309;
+    }
+
+    .unapproved-alert-box .alert-icon {
+      font-size: 1.6rem;
+      color: #d97706;
+    }
+
+    .unapproved-alert-box h3 {
+      font-size: 1.05rem;
+      font-weight: 700;
+      margin-bottom: 6px;
+    }
+
+    .unapproved-alert-box p {
+      font-size: 0.88rem;
+      line-height: 1.5;
+      margin: 0;
     }
 
     .shadow-card {
@@ -685,6 +770,37 @@ try {
     .duration-val {
       color: #64748b;
       font-weight: 500;
+    }
+
+    /* Lock State warning box */
+    .lock-state-box {
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      text-align: center;
+      gap: 16px;
+      padding: 60px 40px;
+      background: #f8fafc;
+      border: 1px dashed #cbd5e1;
+      border-radius: 16px;
+    }
+
+    .lock-icon {
+      font-size: 3rem;
+      color: #94a3b8;
+    }
+
+    .lock-state-box h3 {
+      font-size: 1.15rem;
+      color: #1e293b;
+      font-weight: 700;
+    }
+
+    .lock-state-box p {
+      font-size: 0.9rem;
+      color: #64748b;
+      max-width: 480px;
+      line-height: 1.5;
     }
 
     /* Pool Card design */

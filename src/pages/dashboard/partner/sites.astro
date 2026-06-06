@@ -1,11 +1,11 @@
 ---
-// src/pages/dashboard/member/sites.astro
+// src/pages/dashboard/partner/sites.astro
 import DashboardLayout from '../../../layouts/DashboardLayout.astro';
 
 export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
 
 const user = Astro.locals.user;
-if (!user || user.is_partner !== 0) {
+if (!user || user.is_partner !== 1) {
   return Astro.redirect('/login?error=unauthorized');
 }
 
@@ -63,7 +63,7 @@ if (Astro.request.method === 'POST' && db) {
             "INSERT INTO sites (user_id, domain, mode, status, service_type) VALUES (?, ?, ?, 'PENDING', 'web_sitesi')"
           ).bind(user.id, finalDomain, mode).run();
 
-          // 2. n8n Webhook Tetikleme (Mock / Test amaçlı çalışır)
+          // 2. Webhook Tetikleme
           const n8nUrl = runtime.env.N8N_WEBHOOK_URL || 'https://n8n.isdeyeter.com/webhook/mock-site-builder';
           const payload = {
             user_id: user.id,
@@ -88,7 +88,7 @@ if (Astro.request.method === 'POST' && db) {
               console.log(`n8n webhook tetiklendi. Durum: ${res.status}`);
             }).catch(err => {
               clearTimeout(timeoutId);
-              console.error("n8n Webhook HTTP Hatası:", err.message);
+              console.error("Webhook HTTP Hatası:", err.message);
             });
           } catch (webhookErr) {
             console.error("Webhook Trigger Fail:", webhookErr);
@@ -121,7 +121,7 @@ if (db) {
     
     <div class="wizard-header">
       <h1>Ücretsiz Hizmetlerim & Sitelerim</h1>
-      <p>Web altyapısını kullanarak kendi markanıza özel profesyonel hizmet veya ürün katalog sitenizi saniyeler içinde kurma talebi gönderin.</p>
+      <p>İş ortaklarımıza özel web altyapısını kullanarak kendi markanıza özel profesyonel hizmet sitenizi saniyeler içinde kurun.</p>
     </div>
 
     <!-- Alerts -->
@@ -161,7 +161,7 @@ if (db) {
         </div>
 
         <div class="form-group">
-          <label for="domain" id="domain-label">Alan Adı (Subdomain)</label>
+          <label for="domain" id="domain-label">Alt Alan Adı (Subdomain)</label>
           <div class="domain-input-group">
             <input 
               type="text" 
@@ -179,7 +179,7 @@ if (db) {
         <div class="form-group">
           <label for="mode">Web Sitesi Çalışma Modu (Model)</label>
           <select name="mode" id="mode" class="mode-select" required>
-            <option value="hizmet">💼 Hizmet Kataloğu Modu (Servis odaklı firmalar için)</option>
+            <option value="hizmet" selected>💼 Hizmet Kataloğu Modu (Servis odaklı firmalar için)</option>
             <option value="urun">📦 E-Ticaret / Ürün Kataloğu Modu (Ürün odaklı satıcılar için)</option>
           </select>
           <small class="helper-text">Mod seçimi sitenizin menü yapısını otomatik belirler.</small>

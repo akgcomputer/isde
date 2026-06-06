@@ -57,8 +57,8 @@ if (Astro.request.method === 'POST') {
 
     if (selectedServices.length === 0) {
       errorMessage = 'Lütfen en az 1 uzmanlık alanı seçin.';
-    } else if (selectedServices.length > 5) {
-      errorMessage = 'En fazla 5 uzmanlık alanı seçebilirsiniz.';
+    } else if (selectedServices.length > 3) {
+      errorMessage = 'En fazla 3 uzmanlık alanı seçebilirsiniz.';
     } else {
       // Önce mevcut seçili uzmanlıkları temizle (idempotent işlem)
       await db.prepare("DELETE FROM partner_services WHERE partner_id = ?").bind(user.id).run();
@@ -80,7 +80,7 @@ if (Astro.request.method === 'POST') {
 }
 ---
 
-<BasicLayout title="Hoş Geldin Sihirbazı | İş De Yeter" description="İş Ortağı uzmanlık alanlarınızı seçin. En fazla 5 uzmanlık alanı belirleyebilirsiniz.">
+<BasicLayout title="Hoş Geldin Sihirbazı | İş De Yeter" description="İş Ortağı uzmanlık alanlarınızı seçin. En fazla 3 uzmanlık alanı belirleyebilirsiniz.">
   <div class="onboarding-wrapper">
     <div class="onboarding-container">
       
@@ -91,7 +91,7 @@ if (Astro.request.method === 'POST') {
         <div class="card-header">
           <div class="step-badge">ADIM 1 / 1</div>
           <h1>Hoş Geldin, {user.name}!</h1>
-          <p class="subtitle">Platformda size uygun iş fırsatlarını listeyebilmemiz için uzman olduğunuz alanları (<b>en fazla 5 adet</b>) seçin.</p>
+          <p class="subtitle">Platformda size uygun iş fırsatlarını listeyebilmemiz için uzman olduğunuz alanları (<b>en fazla 3 adet</b>) seçin.</p>
         </div>
 
         {errorMessage && (
@@ -104,7 +104,7 @@ if (Astro.request.method === 'POST') {
         <!-- Selection Status Counter -->
         <div class="selection-counter" id="counter-box">
           <span>Seçilen Uzmanlık Sayısı:</span>
-          <span class="count-badge" id="count-value">0 / 5</span>
+          <span class="count-badge" id="count-value">0 / 3</span>
         </div>
 
         <!-- Categories Container -->
@@ -418,7 +418,7 @@ if (Astro.request.method === 'POST') {
 
   <!-- Real-time Validation and Count Logic -->
   <script is:inline>
-    const MAX_SELECTION = 5;
+    const MAX_SELECTION = 3;
 
     function handleServiceSelection(checkbox) {
       const label = checkbox.closest('.service-label');

@@ -1,0 +1,1111 @@
+---
+// src/pages/admin/start-service.astro
+import BasicLayout from '../../layouts/BasicLayout.astro';
+
+export const prerender = false; // Sunucu tarafında çalışmalıdır (SSR)
+
+let user = Astro.locals.user;
+let debugError: string | null = null;
+let successMessage: string | null = null;
+let usersData: string = "[]";
+
+try {
+  if (!Astro.locals.user || Astro.locals.user.is_partner !== 2) {
+    return Astro.redirect('/login?error=unauthorized');
+  }
+
+  const runtime = Astro.locals.runtime as any;
+  const db = runtime?.env?.DB;
+
+  if (!db) {
+    debugError = "Veritabanı bağlantısı kurulamadı.";
+  } else {
+    // Tüm kullanıcıları getir (Arama/Seçim için)
+    const usersQuery = await db.prepare("SELECT id, name, email, phone, is_partner FROM users ORDER BY name ASC").all();
+    usersData = JSON.stringify(usersQuery.results || []);
+
+    // Form POST Edildiğinde (Kurulum Tamamlandığında)
+    if (Astro.request.method === 'POST') {
+      try {
+        const formData = await Astro.request.formData();
+        const selectedUserId = formData.get('user_id') as string;
+        const serviceType = formData.get('service_type') as string;
+        const duration = formData.get('duration') as string;
+        const startDate = formData.get('start_date') as string;
+        const endDate = formData.get('end_date') as string;
+        const domain = (formData.get('domain') as string || '').trim().toLowerCase();
+        const mode = formData.get('mode') as string || 'hizmet';
+
+        if (!selectedUserId) {
+          throw new Error("Lütfen bir kullanıcı seçin.");
+        }
+        if (!serviceType) {
+          throw new Error("Lütfen bir hizmet seçin.");
+        }
+
+        // Domain kontrolü (Web Sitesi için)
+        if (serviceType === 'web_sitesi') {
+          if (!domain) {
+            throw new Error("Web sitesi hizmeti için alan adı (domain) zorunludur.");
+          }
+          // Alt alan adı (subdomain) kontrolü: İki veya daha fazla nokta varsa (com.tr / org.tr istisnası ile)
+          const dotCount = (domain.match(/\./g) || []).length;
+          const isTrExtension = domain.endsWith('.com.tr') || domain.endsWith('.net.tr') || domain.endsWith('.org.tr');
+          if ((dotCount > 1 && !isTrExtension) || (dotCount > 2 && isTrExtension)) {
+            throw new Error("Web paketleri sadece ana alan adı (domain) için kurulabilir. Alt alan adı (subdomain) girilemez!");
+          }
+
+          // Domain çakışma kontrolü
+          const existingDomain = await db.prepare("SELECT * FROM sites WHERE domain = ?").bind(domain).first();
+          if (existingDomain) {
+            throw new Error(`'${domain}' alan adı zaten başka bir hizmet için tanımlanmış.`);
+          }
+        }
+
+        // D1 veritabanına kaydet
+        // Tabloda domain UNIQUE NOT NULL olduğundan, web sitesi dışındaki hizmetler için geçici/tekil bir kimlik üretiyoruz.
+        const finalDomain = serviceType === 'web_sitesi' ? domain : `${serviceType}-${crypto.randomUUID().slice(0, 8)}.internal`;
+
+        await db.prepare(`
+          INSERT INTO sites (user_id, domain, mode, status, service_type, start_date, end_date)
+          VALUES (?, ?, ?, ?, ?, ?, ?)
+        `).bind(
+          selectedUserId,
+          finalDomain,
+          mode,
+          'ACTIVE', // Kurulum tamamlandığı için aktif
+          serviceType,
+          startDate || null,
+          endDate || null
+        ).run();
+
+        return Astro.redirect('/admin?success=' + encodeURIComponent(`${serviceType === 'web_sitesi' ? 'Web sitesi' : 'Hizmet'} kurulumu başarıyla tamamlandı ve aktif edildi.`));
+      } catch (err: any) {
+        console.error("Save service error:", err);
+        debugError = err.message;
+      }
+    }
+  }
+} catch (globalErr: any) {
+  console.error("Start Service page error:", globalErr);
+  debugError = `Beklenmedik Hata: ${globalErr.message}`;
+}
+---
+
+<BasicLayout title="Yeni Hizmet Başlat | Yönetici" description="Kullanıcılar için GitHub ve Cloudflare altyapılı yeni hizmet/web sitesi başlat.">
+  <div class="wizard-wrapper">
+    
+    <header class="admin-header">
+      <div class="header-left">
+        <a href="/admin" class="back-link"><i class="fa-solid fa-arrow-left"></i> Kontrol Paneline Dön</a>
+        <h1>Hizmet Başlatma Sihirbazı</h1>
+      </div>
+      <div class="wizard-steps-indicator">
+        <div class="step-indicator active" id="ind-1">1. Müşteri</div>
+        <div class="step-indicator" id="ind-2">2. Hizmet & Süre</div>
+        <div class="step-indicator" id="ind-3">3. Domain / Detay</div>
+        <div class="step-indicator" id="ind-4">4. Otomatik Kurulum</div>
+      </div>
+    </header>
+
+    {debugError && (
+      <div class="error-banner">
+        <i class="fa-solid fa-triangle-exclamation mr-2"></i> {debugError}
+      </div>
+    )}
+
+    <div class="wizard-card">
+      <form method="POST" id="wizard-form">
+        
+        <!-- STEP 1: SELECT USER -->
+        <div class="wizard-step active" id="step-1">
+          <h2><i class="fa-solid fa-user-circle mr-2"></i> Adım 1: Kullanıcı / Müşteri Seçimi</h2>
+          <p class="step-desc">Hizmetin atanacağı üyeyi arayarak seçin. Aradığınız kullanıcı listede yoksa yeni bir kullanıcı ekleyebilirsiniz.</p>
+          
+          <div class="search-container">
+            <div class="search-input-wrapper">
+              <i class="fa-solid fa-search search-icon"></i>
+              <input type="text" id="user-search" placeholder="İsim, e-posta veya telefon ile arayın..." autocomplete="off" />
+            </div>
+            <div class="search-results" id="search-results"></div>
+          </div>
+
+          <div class="selected-user-card" id="selected-user-card" style="display: none;">
+            <div class="user-card-header">
+              <i class="fa-solid fa-user-check checked-icon"></i>
+              <div>
+                <h4 id="sel-user-name"></h4>
+                <p id="sel-user-email"></p>
+                <p id="sel-user-phone"></p>
+                <span class="role-badge" id="sel-user-role"></span>
+              </div>
+            </div>
+            <input type="hidden" name="user_id" id="hidden-user-id" />
+          </div>
+
+          <div class="quick-add-box">
+            <span>Aradığınız kullanıcıyı bulamadınız mı?</span>
+            <a href="/admin/add-user?from=start-service" class="quick-add-link">
+              <i class="fa-solid fa-user-plus"></i> Hızlıca Yeni Kullanıcı Ekle
+            </a>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-next" id="btn-to-2" disabled>İleri: Hizmet Seçimi <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 2: SELECT SERVICE & DURATION -->
+        <div class="wizard-step" id="step-2">
+          <h2><i class="fa-solid fa-cubes mr-2"></i> Adım 2: Hizmet Tipi & Süre Sınırı</h2>
+          <p class="step-desc">Kullanıcıya atanacak hizmet tipini belirleyin ve kullanım süresini ayarlayın.</p>
+
+          <div class="form-group">
+            <label for="service_type">Hizmet Tipi</label>
+            <select id="service_type" name="service_type" class="form-select">
+              <option value="web_sitesi">🌐 Web Sitesi Kurulumu (akgcomputer/laflaf)</option>
+              <option value="muhasebe_paketi">📊 Ön Muhasebe Paketi</option>
+              <option value="eticaret_paketi">🛍️ E-Ticaret Yönetim Paneli</option>
+              <option value="diger_hizmet">⚙️ Diğer Özel Hizmetler</option>
+            </select>
+          </div>
+
+          <div class="form-group">
+            <label>Hizmet Süresi</label>
+            <div class="duration-buttons">
+              <button type="button" class="duration-btn" data-val="1_ay">1 Ay</button>
+              <button type="button" class="duration-btn active" data-val="1_yil">1 Yıl (Önerilen)</button>
+              <button type="button" class="duration-btn" data-val="ozel">Özel Seçim</button>
+            </div>
+            <input type="hidden" name="duration" id="hidden-duration" value="1_yil" />
+          </div>
+
+          <div class="dates-row">
+            <div class="form-group">
+              <label for="start_date">Başlangıç Tarihi</label>
+              <input type="date" id="start_date" name="start_date" required />
+            </div>
+            <div class="form-group">
+              <label for="end_date">Bitiş Tarihi</label>
+              <input type="date" id="end_date" name="end_date" required />
+            </div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-prev" id="btn-back-1"><i class="fa-solid fa-arrow-left"></i> Geri</button>
+            <button type="button" class="btn-next" id="btn-to-3">İleri: Domain Tanımı <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 3: DOMAIN & MODE -->
+        <div class="wizard-step" id="step-3">
+          <h2><i class="fa-solid fa-globe mr-2"></i> Adım 3: Alan Adı (Domain) ve Çalışma Modu</h2>
+          <p class="step-desc">Web sitenizin kurulacağı alan adını ve başlangıç çalışma modunu yapılandırın.</p>
+
+          <div class="form-group" id="domain-group">
+            <label for="domain">Alan Adı (Domain) *</label>
+            <input type="text" id="domain" name="domain" placeholder="Örn: sirketiniz.com" autocomplete="off" />
+            <span class="input-hint">Önemli: Alt alan adı (subdomain) eklenemez. Sadece ana alan adı (domain) girişi yapın.</span>
+            <div class="domain-error" id="domain-validation-error" style="display: none; color: #f87171; font-size: 0.82rem; margin-top: 6px;"></div>
+          </div>
+
+          <div class="form-group">
+            <label for="mode">Açılış Modu</label>
+            <select id="mode" name="mode" class="form-select">
+              <option value="hizmet">💼 Hizmet / Portfolyo Modu</option>
+              <option value="urun">📦 Ürün / Katalog Satış Modu</option>
+            </select>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-prev" id="btn-back-2"><i class="fa-solid fa-arrow-left"></i> Geri</button>
+            <button type="button" class="btn-next" id="btn-to-4">İleri: Kurulumu Başlat <i class="fa-solid fa-arrow-right"></i></button>
+          </div>
+        </div>
+
+        <!-- STEP 4: PROVISIONING SIMULATOR -->
+        <div class="wizard-step" id="step-4">
+          <h2><i class="fa-solid fa-rocket mr-2"></i> Adım 4: Bulut Hizmetleri Otomatik Yapılandırma</h2>
+          <p class="step-desc">Kurulum başlatıldığında GitHub kaynak kodumuzdan projeyi çekip, Cloudflare altyapısında Pages, D1 Database ve R2 Storage servislerini oluşturacağız.</p>
+
+          <div class="setup-summary">
+            <h4>Kurulum Özeti</h4>
+            <div class="summary-details">
+              <div><strong>Kullanıcı:</strong> <span id="sum-user"></span></div>
+              <div><strong>Hizmet Tipi:</strong> <span id="sum-service"></span></div>
+              <div><strong>Domain / Adres:</strong> <span id="sum-domain"></span></div>
+              <div><strong>Bitiş Tarihi:</strong> <span id="sum-date"></span></div>
+            </div>
+          </div>
+
+          <!-- Provisioning Steps List -->
+          <div class="provisioning-progress" style="display: none;">
+            <div class="prov-step" id="prov-1">
+              <div class="prov-status"><i class="fa-solid fa-circle-notch fa-spin"></i></div>
+              <div class="prov-text">GitHub deposu hazırlanıyor (akgcomputer/laflaf)</div>
+            </div>
+            <div class="prov-step pending" id="prov-2">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Cloudflare Pages Projesi oluşturuluyor</div>
+            </div>
+            <div class="prov-step pending" id="prov-3">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Cloudflare D1 SQL Veritabanı oluşturuluyor ve bağlanıyor</div>
+            </div>
+            <div class="prov-step pending" id="prov-4">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Cloudflare R2 Bucket depolama alanı oluşturuluyor</div>
+            </div>
+            <div class="prov-step pending" id="prov-5">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Site ayarları veritabanı tohumlaması (Seed) yapılıyor</div>
+            </div>
+            <div class="prov-step pending" id="prov-6">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Astro projesi Pages Edge CDN üzerinde yayına alınıyor</div>
+            </div>
+            <div class="prov-step pending" id="prov-7">
+              <div class="prov-status"><i class="fa-solid fa-circle"></i></div>
+              <div class="prov-text">Web sitesi aktiflik ve SSL bağlantı doğrulaması çalışıyor</div>
+            </div>
+          </div>
+
+          <div class="terminal-logs" id="terminal-logs" style="display: none;">
+            <div class="logs-header">TERMINAL DEPLOYMENT LOGS</div>
+            <div class="logs-body" id="logs-body"></div>
+          </div>
+
+          <div class="wizard-actions">
+            <button type="button" class="btn-prev" id="btn-back-3"><i class="fa-solid fa-arrow-left"></i> Geri</button>
+            <button type="button" class="start-prov-btn" id="btn-start-provisioning">
+              <i class="fa-solid fa-play"></i> Kurulumu Başlat (Otomatik Deploy)
+            </button>
+            <button type="submit" class="finish-btn" id="btn-finish-wizard" style="display: none;">
+              <i class="fa-solid fa-check-circle"></i> Kurulumu Bitir & Hizmeti Aktifleştir
+            </button>
+          </div>
+        </div>
+
+      </form>
+    </div>
+
+  </div>
+
+  <script define:vars={{ usersData }}>
+    // Kullanıcılar JSON verisini çöz
+    const allUsers = JSON.parse(usersData);
+
+    // DOM Elemanları
+    const indicators = {
+      1: document.getElementById('ind-1'),
+      2: document.getElementById('ind-2'),
+      3: document.getElementById('ind-3'),
+      4: document.getElementById('ind-4'),
+    };
+
+    const steps = {
+      1: document.getElementById('step-1'),
+      2: document.getElementById('step-2'),
+      3: document.getElementById('step-3'),
+      4: document.getElementById('step-4'),
+    };
+
+    let currentStep = 1;
+
+    function navigateToStep(stepNum) {
+      // Adımları gizle/göster
+      Object.keys(steps).forEach(s => {
+        steps[s].classList.remove('active');
+        indicators[s].classList.remove('active');
+      });
+      steps[stepNum].classList.add('active');
+      indicators[stepNum].classList.add('active');
+      currentStep = stepNum;
+    }
+
+    // Step 1: Kullanıcı Arama & Autocomplete
+    const userSearch = document.getElementById('user-search');
+    const searchResults = document.getElementById('search-results');
+    const selectedUserCard = document.getElementById('selected-user-card');
+    const hiddenUserId = document.getElementById('hidden-user-id');
+    const selName = document.getElementById('sel-user-name');
+    const selEmail = document.getElementById('sel-user-email');
+    const selPhone = document.getElementById('sel-user-phone');
+    const selRole = document.getElementById('sel-user-role');
+    const btnTo2 = document.getElementById('btn-to-2');
+
+    userSearch.addEventListener('input', () => {
+      const q = userSearch.value.trim().toLowerCase();
+      if (!q) {
+        searchResults.innerHTML = '';
+        return;
+      }
+
+      const filtered = allUsers.filter(u => 
+        u.name.toLowerCase().includes(q) || 
+        u.email.toLowerCase().includes(q) || 
+        (u.phone && u.phone.includes(q))
+      ).slice(0, 5);
+
+      searchResults.innerHTML = '';
+      if (filtered.length === 0) {
+        searchResults.innerHTML = '<div class="search-item-empty">Kullanıcı bulunamadı</div>';
+      } else {
+        filtered.forEach(u => {
+          const div = document.createElement('div');
+          div.className = 'search-item';
+          div.innerHTML = `
+            <strong>${u.name}</strong>
+            <span class="item-meta">${u.email} | ${u.phone || 'Tel yok'}</span>
+          `;
+          div.addEventListener('click', () => {
+            selectUser(u);
+          });
+          searchResults.appendChild(div);
+        });
+      }
+    });
+
+    function selectUser(userObj) {
+      hiddenUserId.value = userObj.id;
+      selName.textContent = userObj.name;
+      selEmail.textContent = userObj.email;
+      selPhone.textContent = userObj.phone || 'Telefon belirtilmemiş';
+      selRole.textContent = userObj.is_partner === 1 ? 'İş Ortağı' : userObj.is_partner === 2 ? 'Admin' : 'Müşteri';
+      selRole.className = `role-badge ${userObj.is_partner === 1 ? 'partner' : userObj.is_partner === 2 ? 'admin' : 'member'}`;
+      
+      selectedUserCard.style.display = 'block';
+      searchResults.innerHTML = '';
+      userSearch.value = '';
+      btnTo2.removeAttribute('disabled');
+    }
+
+    // Step 2: Tarih Hesaplayıcı
+    const serviceType = document.getElementById('service_type');
+    const startInput = document.getElementById('start_date');
+    const endInput = document.getElementById('end_date');
+    const durationBtn = document.querySelectorAll('.duration-btn');
+    const hiddenDuration = document.getElementById('hidden-duration');
+
+    // Tarihleri bugüne göre ayarla
+    const today = new Date();
+    const formatDateForInput = (d) => {
+      const year = d.getFullYear();
+      const month = String(d.getMonth() + 1).padStart(2, '0');
+      const day = String(d.getDate()).padStart(2, '0');
+      return `${year}-${month}-${day}`;
+    };
+
+    // İlk yükleme varsayılan tarihleri (1 yıl)
+    startInput.value = formatDateForInput(today);
+    const oneYearLater = new Date();
+    oneYearLater.setFullYear(today.getFullYear() + 1);
+    endInput.value = formatDateForInput(oneYearLater);
+
+    durationBtn.forEach(btn => {
+      btn.addEventListener('click', () => {
+        durationBtn.forEach(b => b.classList.remove('active'));
+        btn.classList.add('active');
+        const val = btn.getAttribute('data-val');
+        hiddenDuration.value = val;
+
+        if (val === '1_ay') {
+          startInput.value = formatDateForInput(today);
+          const oneMonthLater = new Date();
+          oneMonthLater.setMonth(today.getMonth() + 1);
+          endInput.value = formatDateForInput(oneMonthLater);
+          startInput.setAttribute('readonly', 'true');
+          endInput.setAttribute('readonly', 'true');
+        } else if (val === '1_yil') {
+          startInput.value = formatDateForInput(today);
+          const oneYear = new Date();
+          oneYear.setFullYear(today.getFullYear() + 1);
+          endInput.value = formatDateForInput(oneYear);
+          startInput.setAttribute('readonly', 'true');
+          endInput.setAttribute('readonly', 'true');
+        } else {
+          // Özel Seçim
+          startInput.removeAttribute('readonly');
+          endInput.removeAttribute('readonly');
+        }
+      });
+    });
+
+    // Step 3: Domain & Mod ve Gösterim Mantığı
+    const domainInput = document.getElementById('domain');
+    const domainGroup = document.getElementById('domain-group');
+    const domainValError = document.getElementById('domain-validation-error');
+
+    serviceType.addEventListener('change', () => {
+      if (serviceType.value === 'web_sitesi') {
+        domainGroup.style.display = 'flex';
+        domainInput.setAttribute('required', 'true');
+      } else {
+        domainGroup.style.display = 'none';
+        domainInput.removeAttribute('required');
+      }
+    });
+
+    // Domain validation checker (subdomain engelleme)
+    function validateDomain(dom) {
+      if (serviceType.value !== 'web_sitesi') return true;
+      const clean = dom.trim().toLowerCase();
+      if (!clean) return false;
+
+      // Basit domain regex
+      const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/;
+      if (!domainRegex.test(clean)) {
+        return "Geçersiz alan adı formatı (Örn: firmaniz.com)";
+      }
+
+      // Nokta sayısı kontrolü
+      const dots = (clean.match(/\./g) || []).length;
+      const isTr = clean.endsWith('.com.tr') || clean.endsWith('.net.tr') || clean.endsWith('.org.tr');
+      if ((dots > 1 && !isTr) || (dots > 2 && isTr)) {
+        return "Yalnızca ana domain formatında kurulum yapılabilir. Alt alan adı (subdomain) yasaktır!";
+      }
+
+      return true;
+    }
+
+    // Step 4: Kurulum Özeti & Simülasyon
+    const sumUser = document.getElementById('sum-user');
+    const sumService = document.getElementById('sum-service');
+    const sumDomain = document.getElementById('sum-domain');
+    const sumDate = document.getElementById('sum-date');
+
+    // Navigasyon Olayları
+    document.getElementById('btn-to-2').addEventListener('click', () => navigateToStep(2));
+    document.getElementById('btn-back-1').addEventListener('click', () => navigateToStep(1));
+    
+    document.getElementById('btn-to-3').addEventListener('click', () => {
+      // Step 3'e geçiş
+      navigateToStep(3);
+    });
+    
+    document.getElementById('btn-back-2').addEventListener('click', () => navigateToStep(2));
+    
+    document.getElementById('btn-to-4').addEventListener('click', () => {
+      // Alan adı doğrula (Eğer Web Sitesi ise)
+      if (serviceType.value === 'web_sitesi') {
+        const dom = domainInput.value.trim();
+        const check = validateDomain(dom);
+        if (check !== true) {
+          domainValError.textContent = check || "Alan adı hatası.";
+          domainValError.style.display = 'block';
+          domainInput.classList.add('error');
+          return;
+        }
+      }
+      domainValError.style.display = 'none';
+      domainInput.classList.remove('error');
+
+      // Özeti doldur
+      sumUser.textContent = selName.textContent;
+      sumService.textContent = serviceType.options[serviceType.selectedIndex].text;
+      sumDomain.textContent = serviceType.value === 'web_sitesi' ? domainInput.value.trim() : 'Hizmete özel iç domain';
+      sumDate.textContent = endInput.value;
+
+      navigateToStep(4);
+    });
+
+    document.getElementById('btn-back-3').addEventListener('click', () => navigateToStep(3));
+
+    // SIMULATED AUTOMATED PROVISIONING LOGIC
+    const btnStartProv = document.getElementById('btn-start-provisioning');
+    const btnFinish = document.getElementById('btn-finish-wizard');
+    const btnBack3 = document.getElementById('btn-back-3');
+    const provProgress = document.querySelector('.provisioning-progress');
+    const terminalLogs = document.getElementById('terminal-logs');
+    const logsBody = document.getElementById('logs-body');
+
+    const provSteps = [
+      document.getElementById('prov-1'),
+      document.getElementById('prov-2'),
+      document.getElementById('prov-3'),
+      document.getElementById('prov-4'),
+      document.getElementById('prov-5'),
+      document.getElementById('prov-6'),
+      document.getElementById('prov-7')
+    ];
+
+    btnStartProv.addEventListener('click', () => {
+      btnStartProv.style.display = 'none';
+      btnBack3.style.display = 'none';
+      provProgress.style.display = 'flex';
+      terminalLogs.style.display = 'block';
+
+      runSimulatedProvisioning();
+    });
+
+    function addLogLine(text, type = 'info') {
+      const p = document.createElement('p');
+      p.className = `log-line ${type}`;
+      const time = new Date().toLocaleTimeString('tr-TR');
+      p.innerHTML = `<span class="log-time">[${time}]</span> ${text}`;
+      logsBody.appendChild(p);
+      logsBody.scrollTop = logsBody.scrollHeight;
+    }
+
+    const sleep = (ms) => new Promise(resolve => setTimeout(resolve, ms));
+
+    async function runSimulatedProvisioning() {
+      // Adım 1: Repo Klonlama
+      addLogLine(">> Klonlama işlemi başlatılıyor: https://github.com/akgcomputer/laflaf.git", 'command');
+      await sleep(1500);
+      addLogLine("Klonlama başarıyla tamamlandı. Repo boyutu: 14.2 MB", 'success');
+      markStepSuccess(0);
+
+      // Adım 2: Cloudflare Pages
+      provSteps[1].className = 'prov-step';
+      provSteps[1].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine(">> npx wrangler pages project create isdeyeter-web-apps --production-branch main", 'command');
+      await sleep(2000);
+      addLogLine("Cloudflare Pages projesi 'isdeyeter-web-apps' başarıyla oluşturuldu.", 'success');
+      markStepSuccess(1);
+
+      // Adım 3: D1 Database
+      provSteps[2].className = 'prov-step';
+      provSteps[2].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine(">> npx wrangler d1 create isdeyeter-db-prod", 'command');
+      await sleep(1800);
+      addLogLine("D1 Veritabanı başarıyla oluşturuldu. ID: cf-d1-8d2a4c92", 'success');
+      addLogLine("D1 bind işlemi yapılıyor...", 'info');
+      await sleep(1000);
+      addLogLine("Pages ve D1 bağlantısı başarıyla tamamlandı.", 'success');
+      markStepSuccess(2);
+
+      // Adım 4: R2 Storage
+      provSteps[3].className = 'prov-step';
+      provSteps[3].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine(">> npx wrangler r2 bucket create isdeyeter-cdn-bucket", 'command');
+      await sleep(1500);
+      addLogLine("R2 Storage Bucket 'isdeyeter-cdn-bucket' oluşturuldu.", 'success');
+      addLogLine("Pages ve R2 bağlantısı yapıldı.", 'success');
+      markStepSuccess(3);
+
+      // Adım 5: Seed
+      provSteps[4].className = 'prov-step';
+      provSteps[4].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine("SQL göç dosyaları çalıştırılıyor...", 'info');
+      await sleep(1200);
+      addLogLine("Tohumlama (schema.sql) başarıyla tamamlandı. 12 tablo yapılandırıldı.", 'success');
+      markStepSuccess(4);
+
+      // Adım 6: Build & Deploy
+      provSteps[5].className = 'prov-step';
+      provSteps[5].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine(">> npm run build (Astro Production Build)", 'command');
+      await sleep(2000);
+      addLogLine("Astro build tamamlandı. Dağıtıma hazır dosya boyutu: 1.8MB", 'success');
+      addLogLine("Bulut CDN sunucularına senkronizasyon yapılıyor...", 'info');
+      await sleep(1500);
+      addLogLine("Sayfalar 275 edge lokasyonuna başarıyla deploy edildi.", 'success');
+      markStepSuccess(5);
+
+      // Adım 7: SSL & Verify
+      provSteps[6].className = 'prov-step';
+      provSteps[6].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-circle-notch fa-spin"></i>';
+      addLogLine("Domain DNS doğrulama başlatıldı...", 'info');
+      await sleep(1000);
+      addLogLine("SSL/TLS Sertifikası başarıyla alındı ve aktif edildi.", 'success');
+      addLogLine("Durum kontrolü: HTTP 200 OK. Sunucu yanıt süresi: 48ms", 'success');
+      markStepSuccess(6);
+
+      // Kurulum Bitti
+      addLogLine("🎉 TEBRİKLER! Kurulum başarıyla tamamlandı. Artık hizmeti aktifleştirebilirsiniz.", 'info');
+      
+      // Butonları güncelle
+      btnFinish.style.display = 'flex';
+    }
+
+    function markStepSuccess(index) {
+      provSteps[index].className = 'prov-step success';
+      provSteps[index].querySelector('.prov-status').innerHTML = '<i class="fa-solid fa-check-circle"></i>';
+    }
+  </script>
+
+  <style>
+    .wizard-wrapper {
+      background: #0f172a;
+      min-height: 100vh;
+      color: #e2e8f0;
+      padding: 40px 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 32px;
+      font-family: 'Inter', sans-serif;
+      align-items: center;
+    }
+
+    /* Header & Steps Indicator */
+    .admin-header {
+      background: #1e293b;
+      border: 1px solid #334155;
+      padding: 24px 32px;
+      border-radius: 20px;
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .back-link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-size: 0.88rem;
+      font-weight: 600;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: color 0.2s;
+    }
+
+    .back-link:hover {
+      color: #60a5fa;
+    }
+
+    .admin-header h1 {
+      font-size: 1.6rem;
+      color: #ffffff;
+      font-weight: 800;
+    }
+
+    .wizard-steps-indicator {
+      display: flex;
+      justify-content: space-between;
+      gap: 8px;
+      border-top: 1px solid #334155;
+      padding-top: 20px;
+      flex-wrap: wrap;
+    }
+
+    .step-indicator {
+      font-size: 0.82rem;
+      color: #64748b;
+      font-weight: 600;
+      position: relative;
+      padding-bottom: 4px;
+    }
+
+    .step-indicator.active {
+      color: #3b82f6;
+      border-bottom: 2px solid #3b82f6;
+    }
+
+    /* Wizard Card & Layout */
+    .error-banner {
+      background: rgba(239, 68, 68, 0.15);
+      border: 1px solid #ef4444;
+      padding: 16px;
+      border-radius: 12px;
+      color: #f87171;
+      width: 100%;
+      max-width: 800px;
+      font-size: 0.9rem;
+    }
+
+    .wizard-card {
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 20px;
+      padding: 32px;
+      width: 100%;
+      max-width: 800px;
+      box-shadow: 0 10px 30px rgba(0, 0, 0, 0.2);
+    }
+
+    .wizard-step {
+      display: none;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .wizard-step.active {
+      display: flex;
+    }
+
+    .wizard-step h2 {
+      font-size: 1.35rem;
+      color: #ffffff;
+      font-weight: 700;
+    }
+
+    .step-desc {
+      font-size: 0.9rem;
+      color: #94a3b8;
+      line-height: 1.5;
+    }
+
+    /* Form Fields */
+    .form-group {
+      display: flex;
+      flex-direction: column;
+      gap: 8px;
+    }
+
+    .form-group label {
+      font-size: 0.88rem;
+      font-weight: 600;
+      color: #94a3b8;
+    }
+
+    .form-select, .form-group input {
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #ffffff;
+      padding: 12px 16px;
+      border-radius: 10px;
+      font-size: 0.95rem;
+      transition: all 0.2s;
+    }
+
+    .form-group input.error {
+      border-color: #ef4444;
+      box-shadow: 0 0 0 3px rgba(239, 68, 68, 0.15);
+    }
+
+    .input-hint {
+      font-size: 0.78rem;
+      color: #64748b;
+    }
+
+    /* Local Autocomplete */
+    .search-container {
+      position: relative;
+    }
+
+    .search-input-wrapper {
+      position: relative;
+    }
+
+    .search-input-wrapper input {
+      width: 100%;
+      padding-left: 44px;
+    }
+
+    .search-icon {
+      position: absolute;
+      left: 16px;
+      top: 50%;
+      transform: translateY(-50%);
+      color: #64748b;
+    }
+
+    .search-results {
+      position: absolute;
+      top: 100%;
+      left: 0;
+      right: 0;
+      background: #1e293b;
+      border: 1px solid #334155;
+      border-radius: 10px;
+      margin-top: 4px;
+      max-height: 220px;
+      overflow-y: auto;
+      z-index: 100;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.3);
+    }
+
+    .search-item {
+      padding: 12px 16px;
+      border-bottom: 1px solid #334155;
+      cursor: pointer;
+      display: flex;
+      flex-direction: column;
+      gap: 4px;
+      transition: background 0.2s;
+    }
+
+    .search-item:hover {
+      background: #0f172a;
+    }
+
+    .search-item:last-child {
+      border-bottom: none;
+    }
+
+    .search-item-empty {
+      padding: 12px 16px;
+      color: #64748b;
+      font-size: 0.88rem;
+      text-align: center;
+    }
+
+    .item-meta {
+      font-size: 0.78rem;
+      color: #94a3b8;
+    }
+
+    .selected-user-card {
+      background: rgba(59, 130, 246, 0.05);
+      border: 1px dashed #3b82f6;
+      border-radius: 12px;
+      padding: 20px;
+    }
+
+    .user-card-header {
+      display: flex;
+      gap: 16px;
+      align-items: center;
+    }
+
+    .checked-icon {
+      font-size: 2.2rem;
+      color: #3b82f6;
+    }
+
+    .user-card-header h4 {
+      font-size: 1.05rem;
+      color: #ffffff;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .user-card-header p {
+      font-size: 0.82rem;
+      color: #94a3b8;
+      margin: 2px 0;
+    }
+
+    .quick-add-box {
+      background: rgba(15, 23, 42, 0.5);
+      border: 1px solid #334155;
+      padding: 14px 20px;
+      border-radius: 10px;
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      flex-wrap: wrap;
+      gap: 10px;
+      font-size: 0.88rem;
+    }
+
+    .quick-add-link {
+      color: #3b82f6;
+      text-decoration: none;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+
+    .quick-add-link:hover {
+      color: #60a5fa;
+    }
+
+    /* Duration Picker & Dates */
+    .duration-buttons {
+      display: flex;
+      gap: 12px;
+    }
+
+    .duration-btn {
+      flex: 1;
+      background: #0f172a;
+      border: 1px solid #334155;
+      color: #cbd5e1;
+      padding: 12px;
+      border-radius: 10px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all 0.2s;
+    }
+
+    .duration-btn.active, .duration-btn:hover {
+      border-color: #3b82f6;
+      background: rgba(59, 130, 246, 0.1);
+      color: #3b82f6;
+    }
+
+    .dates-row {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 16px;
+    }
+
+    /* Step 4: Provisioning & Terminal Logs */
+    .setup-summary {
+      background: #0f172a;
+      border: 1px solid #334155;
+      padding: 20px;
+      border-radius: 12px;
+    }
+
+    .setup-summary h4 {
+      font-size: 0.95rem;
+      color: #ffffff;
+      font-weight: 700;
+      border-bottom: 1px solid #334155;
+      padding-bottom: 8px;
+      margin-bottom: 12px;
+    }
+
+    .summary-details {
+      display: grid;
+      grid-template-columns: 1fr 1fr;
+      gap: 12px;
+      font-size: 0.88rem;
+    }
+
+    .provisioning-progress {
+      display: flex;
+      flex-direction: column;
+      gap: 14px;
+      background: #0f172a;
+      padding: 24px;
+      border-radius: 12px;
+      border: 1px solid #334155;
+    }
+
+    .prov-step {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      font-size: 0.9rem;
+      color: #ffffff;
+      font-weight: 600;
+    }
+
+    .prov-step.pending {
+      color: #64748b;
+    }
+
+    .prov-step.success {
+      color: #34d399;
+    }
+
+    .prov-status {
+      font-size: 1.15rem;
+      color: #3b82f6;
+      width: 20px;
+      display: flex;
+      justify-content: center;
+    }
+
+    .prov-step.pending .prov-status {
+      color: #475569;
+    }
+
+    .prov-step.success .prov-status {
+      color: #10b981;
+    }
+
+    .terminal-logs {
+      border-radius: 12px;
+      overflow: hidden;
+      border: 1px solid #334155;
+    }
+
+    .logs-header {
+      background: #0f172a;
+      padding: 10px 16px;
+      font-size: 0.72rem;
+      font-weight: 800;
+      color: #64748b;
+      letter-spacing: 1px;
+      border-bottom: 1px solid #334155;
+    }
+
+    .logs-body {
+      background: #020617;
+      padding: 16px;
+      font-family: 'Fira Code', monospace;
+      font-size: 0.82rem;
+      height: 180px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 6px;
+    }
+
+    .log-line {
+      margin: 0;
+      line-height: 1.4;
+    }
+
+    .log-line.command { color: #3b82f6; }
+    .log-line.success { color: #10b981; }
+    .log-line.info { color: #cbd5e1; }
+    .log-line.error { color: #f87171; }
+    .log-time { color: #475569; margin-right: 4px; }
+
+    /* Actions */
+    .wizard-actions {
+      display: flex;
+      justify-content: space-between;
+      gap: 16px;
+      border-top: 1px solid #334155;
+      padding-top: 24px;
+      margin-top: 12px;
+    }
+
+    .btn-next, .btn-prev, .start-prov-btn, .finish-btn {
+      padding: 12px 24px;
+      border-radius: 10px;
+      font-weight: 700;
+      font-size: 0.92rem;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      transition: all 0.2s;
+      border: none;
+    }
+
+    .btn-next {
+      background: #3b82f6;
+      color: white;
+      margin-left: auto;
+    }
+
+    .btn-next:disabled {
+      background: #475569;
+      color: #94a3b8;
+      cursor: not-allowed;
+    }
+
+    .btn-prev {
+      background: #334155;
+      color: #cbd5e1;
+    }
+
+    .start-prov-btn {
+      background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+      color: white;
+      margin-left: auto;
+      box-shadow: 0 4px 15px rgba(16, 185, 129, 0.2);
+    }
+
+    .finish-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: white;
+      margin-left: auto;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .btn-next:not(:disabled):hover, .start-prov-btn:hover, .finish-btn:hover {
+      transform: translateY(-1px);
+    }
+
+    .btn-prev:hover {
+      background: #475569;
+    }
+
+    /* Custom Badges/Tags */
+    .role-badge {
+      font-size: 0.72rem;
+      font-weight: 700;
+      padding: 4px 8px;
+      border-radius: 6px;
+      display: inline-block;
+      margin-top: 6px;
+    }
+
+    .role-badge.member { background: rgba(59, 130, 246, 0.1); color: #60a5fa; }
+    .role-badge.partner { background: rgba(245, 158, 11, 0.1); color: #fbbf24; }
+    .role-badge.admin { background: rgba(239, 68, 68, 0.1); color: #f87171; }
+  </style>
+</BasicLayout>

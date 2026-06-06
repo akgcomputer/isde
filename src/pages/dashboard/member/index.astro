@@ -22,7 +22,7 @@ if (db) {
     const reqCount = await db.prepare("SELECT COUNT(*) as count FROM service_requests WHERE client_id = ?").bind(user.id).first() as any;
     totalRequests = reqCount?.count || 0;
 
-    // Toplam Site sayısı
+    // Toplam Hizmet (Site) sayısı
     const sitesCount = await db.prepare("SELECT COUNT(*) as count FROM sites WHERE user_id = ?").bind(user.id).first() as any;
     totalSites = sitesCount?.count || 0;
 
@@ -34,7 +34,7 @@ if (db) {
   }
 }
 
-// Güvenli tarih formatlama yardımcı fonksiyonu (Cloudflare V8 motoru uyumlu)
+// Güvenli tarih formatlama yardımcı fonksiyonu
 function formatDate(dateStr: string) {
   if (!dateStr) return "N/A";
   const safeStr = dateStr.includes(' ') && !dateStr.includes('T') ? dateStr.replace(' ', 'T') + 'Z' : dateStr;
@@ -53,11 +53,19 @@ function formatDate(dateStr: string) {
 <DashboardLayout title="Üye Paneli | İş De Yeter" activeTab="overview">
   <div class="overview-content">
     
+    <!-- Prominent "Start Free Service" Button At The Very Top -->
+    <div class="top-action-bar">
+      <a href="/dashboard/member/sites" class="start-service-btn">
+        <i class="fa-solid fa-wand-magic-sparkles"></i>
+        <span>Ücretsiz Hizmet Başlat</span>
+      </a>
+    </div>
+
     <!-- Welcome Header -->
     <div class="welcome-banner">
       <div class="welcome-text">
         <h1>Merhaba, {user.name}! 👋</h1>
-        <p>İş De Yeter panelinize hoş geldiniz. Taleplerinizi yönetebilir, teklifleri inceleyebilir veya sitelerinizi koordine edebilirsiniz.</p>
+        <p>İş De Yeter panelinize hoş geldiniz. Taleplerinizi yönetebilir, teklifleri inceleyebilir veya hizmetlerinizi koordine edebilirsiniz.</p>
       </div>
       <div class="welcome-ill">
         <i class="fa-solid fa-laptop-house banner-icon"></i>
@@ -73,7 +81,7 @@ function formatDate(dateStr: string) {
           <i class="fa-solid fa-file-signature"></i>
         </div>
         <div class="card-details">
-          <h3>Açtığım Talepler</h3>
+          <h3>Toplam Talep Sayısı</h3>
           <p class="val">{totalRequests}</p>
         </div>
       </div>
@@ -84,7 +92,7 @@ function formatDate(dateStr: string) {
           <i class="fa-solid fa-globe"></i>
         </div>
         <div class="card-details">
-          <h3>Aktif Web Sitelerim</h3>
+          <h3>Aldığım Hizmet Sayısı</h3>
           <p class="val">{totalSites}</p>
         </div>
       </div>
@@ -124,7 +132,7 @@ function formatDate(dateStr: string) {
             <i class="fa-solid fa-wand-magic-sparkles teal"></i>
             <div>
               <h4>Ücretsiz Web Sitesi Kur</h4>
-              <p>laflaf.net altyapısı ile dakikalar içinde markanızı dijitale taşıyın.</p>
+              <p>Web altyapımız ile dakikalar içinde markanızı dijitale taşıyın.</p>
             </div>
           </a>
 
@@ -178,16 +186,44 @@ function formatDate(dateStr: string) {
       gap: 32px;
     }
 
+    /* Top Action Bar & Button styling */
+    .top-action-bar {
+      display: flex;
+      justify-content: flex-start;
+      margin-bottom: -12px;
+    }
+
+    .start-service-btn {
+      background: linear-gradient(135deg, #3b82f6 0%, #2563eb 100%);
+      color: #ffffff;
+      padding: 16px 32px;
+      border-radius: 16px;
+      text-decoration: none;
+      font-size: 1.05rem;
+      font-weight: 700;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.2s ease;
+      box-shadow: 0 4px 15px rgba(59, 130, 246, 0.2);
+    }
+
+    .start-service-btn:hover {
+      transform: translateY(-2px);
+      box-shadow: 0 8px 25px rgba(59, 130, 246, 0.3);
+    }
+
     /* Welcome Banner */
     .welcome-banner {
-      background: linear-gradient(135deg, #1e3a8a 0%, #3b82f6 100%);
+      background: linear-gradient(135deg, #0f172a 0%, #1e293b 100%);
       color: #ffffff;
       border-radius: 20px;
       padding: 32px 40px;
       display: flex;
       justify-content: space-between;
       align-items: center;
-      box-shadow: 0 10px 25px rgba(59, 130, 246, 0.15);
+      border: 1px solid #334155;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.1);
       position: relative;
       overflow: hidden;
     }
@@ -197,7 +233,7 @@ function formatDate(dateStr: string) {
       position: absolute;
       width: 200px;
       height: 200px;
-      background: rgba(255, 255, 255, 0.05);
+      background: rgba(255, 255, 255, 0.02);
       border-radius: 50%;
       top: -50px;
       right: -20px;
@@ -230,7 +266,7 @@ function formatDate(dateStr: string) {
 
     .banner-icon {
       font-size: 5rem;
-      color: rgba(255, 255, 255, 0.15);
+      color: rgba(255, 255, 255, 0.05);
     }
 
     /* Stats Grid */
