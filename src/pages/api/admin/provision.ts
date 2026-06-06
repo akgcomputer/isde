@@ -49,6 +49,26 @@ export const POST: APIRoute = async (context) => {
     // ADIM 1: GITHUB REPO OLUŞTURMA
     // ----------------------------------------------------
     if (step === 1) {
+      // Önce reponun zaten var olup olmadığını kontrol et
+      try {
+        const checkRepo = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `token ${githubPat}`,
+            'Accept': 'application/vnd.github+json',
+            'User-Agent': 'IsDeYeter-Portal-App'
+          }
+        });
+        if (checkRepo.status === 200) {
+          return new Response(JSON.stringify({ 
+            success: true, 
+            message: `GitHub deposu zaten mevcut: akgcomputer/${repoName} (kopyalama atlandı)`
+          }));
+        }
+      } catch (err) {
+        console.warn("GitHub checkRepo check error:", err);
+      }
+
       const response = await fetch(`https://api.github.com/repos/akgcomputer/laflaf/generate`, {
         method: 'POST',
         headers: {
@@ -86,6 +106,25 @@ export const POST: APIRoute = async (context) => {
     // ADIM 2: CLOUDFLARE PAGES PROJECT OLUŞTURMA
     // ----------------------------------------------------
     if (step === 2) {
+      // Önce projenin zaten var olup olmadığını kontrol et
+      try {
+        const checkProject = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/pages/projects/pages-${repoName}`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cfToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (checkProject.status === 200) {
+          return new Response(JSON.stringify({ 
+            success: true, 
+            message: `Cloudflare Pages projesi 'pages-${repoName}' zaten mevcut. (oluşturma atlandı)`
+          }));
+        }
+      } catch (err) {
+        console.warn("Cloudflare checkProject error:", err);
+      }
+
       const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/pages/projects`, {
         method: 'POST',
         headers: {
@@ -130,6 +169,30 @@ export const POST: APIRoute = async (context) => {
     // ADIM 3: CLOUDFLARE D1 DATABASE OLUŞTURMA
     // ----------------------------------------------------
     if (step === 3) {
+      // Önce veritabanının zaten var olup olmadığını kontrol et
+      try {
+        const listD1 = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/d1/database`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cfToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (listD1.ok) {
+          const listData: any = await listD1.json();
+          const existingDb = (listData.result || []).find((db: any) => db.name === `db-${repoName}`);
+          if (existingDb) {
+            return new Response(JSON.stringify({ 
+              success: true, 
+              message: `D1 Veritabanı zaten mevcut (UUID: ${existingDb.uuid}). (oluşturma atlandı)`,
+              d1_uuid: existingDb.uuid
+            }));
+          }
+        }
+      } catch (err) {
+        console.warn("Cloudflare D1 check error:", err);
+      }
+
       const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/d1/database`, {
         method: 'POST',
         headers: {
@@ -160,6 +223,29 @@ export const POST: APIRoute = async (context) => {
     // ADIM 4: CLOUDFLARE R2 BUCKET OLUŞTURMA
     // ----------------------------------------------------
     if (step === 4) {
+      // Önce R2 Bucket'ın zaten var olup olmadığını kontrol et
+      try {
+        const listR2 = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/r2/buckets`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cfToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        if (listR2.ok) {
+          const listData: any = await listR2.json();
+          const existingBucket = (listData.result?.buckets || []).find((b: any) => b.name === `r2-${repoName}`);
+          if (existingBucket) {
+            return new Response(JSON.stringify({ 
+              success: true, 
+              message: `R2 Storage Bucket 'r2-${repoName}' zaten mevcut. (oluşturma atlandı)`
+            }));
+          }
+        }
+      } catch (err) {
+        console.warn("Cloudflare R2 check error:", err);
+      }
+
       const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/r2/buckets`, {
         method: 'POST',
         headers: {
