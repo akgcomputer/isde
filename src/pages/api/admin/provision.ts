@@ -67,7 +67,12 @@ export const POST: APIRoute = async (context) => {
 
       const resData: any = await response.json();
       if (!response.ok) {
-        throw new Error(`GitHub Hata: ${resData.message || response.statusText}`);
+        let errMsg = resData.message || response.statusText;
+        // Eğer 422 ise veya hata mesajında template geçiyorsa, şablon deposu hatası olduğunu belirt
+        if (response.status === 422 || (errMsg && errMsg.toLowerCase().includes('template'))) {
+          errMsg = "'akgcomputer/laflaf' deposu GitHub üzerinde Şablon (Template) olarak işaretlenmemiş. Lütfen GitHub'da laflaf deposuna gidin, Settings -> General menüsünden 'Template repository' kutucuğunu işaretleyip kaydedin ve kurulumu tekrar deneyin.";
+        }
+        throw new Error(`GitHub Hata: ${errMsg}`);
       }
 
       return new Response(JSON.stringify({ 
