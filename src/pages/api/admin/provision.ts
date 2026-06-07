@@ -1,6 +1,55 @@
 import type { APIRoute } from 'astro';
 
-export const prerender = false; // API rotası sunucu tarafında çalışmalıdır (SSR)
+async function initializeD1Schema(uuid: string, githubPat: string, cfAccountId: string, cfToken: string) {
+  try {
+    const schemaRes = await fetch(`https://api.github.com/repos/akgcomputer/laflaf/contents/schema.sql`, {
+      headers: {
+        'Authorization': `token ${githubPat}`,
+        'Accept': 'application/vnd.github+json',
+        'User-Agent': 'IsDeYeter-Portal-App'
+      }
+    });
+    
+    if (!schemaRes.ok) {
+      console.error(`[D1 Setup] Failed to fetch schema.sql: ${schemaRes.status}`);
+      return;
+    }
+    
+    const schemaData: any = await schemaRes.json();
+    const schemaSql = Buffer.from(schemaData.content, 'base64').toString('utf8');
+    
+    const rawLines = schemaSql.split(';');
+    const statements = [];
+    for (let line of rawLines) {
+      line = line.split('\n')
+        .map(l => l.trim())
+        .filter(l => !l.startsWith('--') && !l.startsWith('//'))
+        .join('\n')
+        .trim();
+      if (line.length > 0) {
+        statements.push(line);
+      }
+    }
+    
+    console.log(`[D1 Setup] Running ${statements.length} schema statements on DB ${uuid}...`);
+    for (const stmt of statements) {
+      const res = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/d1/database/${uuid}/query`, {
+        method: 'POST',
+        headers: {
+          'Authorization': `Bearer ${cfToken}`,
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify({ sql: stmt })
+      });
+      if (!res.ok) {
+        console.error(`[D1 Setup] Statement failed: ${stmt.substring(0, 50)}... Status: ${res.status}`);
+      }
+    }
+    console.log(`[D1 Setup] D1 database schema successfully initialized!`);
+  } catch (err) {
+    console.error(`[D1 Setup] Database schema initialization failed:`, err);
+  }
+}
 
 export const POST: APIRoute = async (context) => {
   try {
@@ -182,9 +231,12 @@ export const POST: APIRoute = async (context) => {
           const listData: any = await listD1.json();
           const existingDb = (listData.result || []).find((db: any) => db.name === `db-${repoName}`);
           if (existingDb) {
+            // Şemayı otomatik doğrula/güncelle (boş kurulum için tablo kontrolü)
+            await initializeD1Schema(existingDb.uuid, githubPat, cfAccountId, cfToken);
+            
             return new Response(JSON.stringify({ 
               success: true, 
-              message: `D1 Veritabanı zaten mevcut (UUID: ${existingDb.uuid}). (oluşturma atlandı)`,
+              message: `D1 Veritabanı zaten mevcut (UUID: ${existingDb.uuid}). (tablolar kuruldu)`,
               d1_uuid: existingDb.uuid
             }));
           }
@@ -212,9 +264,12 @@ export const POST: APIRoute = async (context) => {
 
       const uuid = resData.result.uuid;
 
+      // Veritabanı tablolarını şablondan çekip otomatik oluştur (Boş veritabanı şeması)
+      await initializeD1Schema(uuid, githubPat, cfAccountId, cfToken);
+
       return new Response(JSON.stringify({ 
         success: true, 
-        message: `D1 Veritabanı oluşturuldu. UUID: ${uuid}`,
+        message: `D1 Veritabanı başarıyla oluşturuldu ve boş tablolar kuruldu. UUID: ${uuid}`,
         d1_uuid: uuid 
       }));
     }
@@ -295,7 +350,7 @@ export const POST: APIRoute = async (context) => {
           tomlContent = tomlContent.replace(/database_id\s*=\s*"[^"]*"/g, `database_id = "${d1_uuid}"`);
           tomlContent = tomlContent.replace(/database_name\s*=\s*"[^"]*"/g, `database_name = "db-${repoName}"`);
           tomlContent = tomlContent.replace(/bucket_name\s*=\s*"[^"]*"/g, `bucket_name = "r2-${repoName}"`);
-          tomlContent = tomlContent.replace(/name\s*=\s*"[^"]*"/g, `name = "${repoName}"`);
+          tomlContent = tomlContent.replace(/^name\s*=\s*"[^"]*"/m, `name = "${repoName}"`);
 
           const base64Toml = btoa(unescape(encodeURIComponent(tomlContent)));
 
