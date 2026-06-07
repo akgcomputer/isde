@@ -341,6 +341,17 @@ function formatDate(dateStr: string) {
                     <a href={`/admin/edit-service?id=${s.id}`} class="action-btn activate" style="text-decoration:none; margin-left:6px; display:inline-block; line-height:1.2; padding:6px 12px;">
                       <i class="fa-solid fa-edit"></i> Düzenle
                     </a>
+                    {s.service_type === 'web_sitesi' && (
+                      <button 
+                        type="button" 
+                        class="action-btn update" 
+                        data-site-id={s.id} 
+                        style="margin-left:6px; display:inline-block; line-height:1.2; padding:6px 12px;"
+                        onclick="triggerUpdate(this)"
+                      >
+                        <i class="fa-solid fa-arrows-rotate"></i> Güncelle
+                      </button>
+                    )}
                   </td>
                 </tr>
               ))}
@@ -781,6 +792,15 @@ function formatDate(dateStr: string) {
       background: #3b82f6;
       color: white;
     }
+    .action-btn.update {
+      background: rgba(168, 85, 247, 0.1);
+      color: #c084fc;
+      border-color: rgba(168, 85, 247, 0.2);
+    }
+    .action-btn.update:hover {
+      background: #a855f7;
+      color: white;
+    }
 
     /* Responsive */
     @media (max-width: 992px) {
@@ -792,4 +812,37 @@ function formatDate(dateStr: string) {
       }
     }
   </style>
+
+  <script is:inline>
+    async function triggerUpdate(btn) {
+      const siteId = btn.getAttribute('data-site-id');
+      if (!siteId) return;
+
+      const originalHtml = btn.innerHTML;
+      btn.disabled = true;
+      btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Güncelleniyor...';
+      btn.style.opacity = '0.7';
+
+      try {
+        const res = await fetch('/api/admin/sync-template', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({ site_id: siteId })
+        });
+        const data = await res.json();
+        
+        if (res.ok && data.success) {
+          alert(data.message);
+        } else {
+          alert("Hata: " + (data.error || "Güncelleme tetiklenemedi."));
+        }
+      } catch (err) {
+        alert("Bağlantı hatası: " + err.message);
+      } finally {
+        btn.disabled = false;
+        btn.innerHTML = originalHtml;
+        btn.style.opacity = '1';
+      }
+    }
+  </script>
 </BasicLayout>

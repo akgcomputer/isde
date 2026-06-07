@@ -485,16 +485,30 @@ try {
     
     document.getElementById('btn-back-2').addEventListener('click', () => navigateToStep(2));
     
-    document.getElementById('btn-to-4').addEventListener('click', () => {
+    document.getElementById('btn-to-4').addEventListener('click', async () => {
       // Alan adı doğrula (Eğer Web Sitesi ise)
       if (serviceType.value === 'web_sitesi') {
-        const dom = domainInput.value.trim();
+        const dom = domainInput.value.trim().toLowerCase();
         const check = validateDomain(dom);
         if (check !== true) {
           domainValError.textContent = check || "Alan adı hatası.";
           domainValError.style.display = 'block';
           domainInput.classList.add('error');
           return;
+        }
+
+        // Sunucudan çakışma kontrolü yap
+        try {
+          const res = await fetch(`/api/admin/check-domain?domain=${encodeURIComponent(dom)}`);
+          const data = await res.json();
+          if (data.exists) {
+            domainValError.textContent = `Bu alan adı ('${dom}') için zaten kurulu bir hizmet bulunuyor! Lütfen başka bir alan adı girin veya mevcut hizmeti düzenleyin/silin.`;
+            domainValError.style.display = 'block';
+            domainInput.classList.add('error');
+            return;
+          }
+        } catch (err) {
+          console.warn("Domain check failed, proceeding anyway:", err);
         }
       }
       domainValError.style.display = 'none';
