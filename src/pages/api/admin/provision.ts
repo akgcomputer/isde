@@ -270,13 +270,60 @@ export const POST: APIRoute = async (context) => {
     }
 
     // ----------------------------------------------------
-    // ADIM 5: PAGES BINDINGS TANIMLAMA
+    // ADIM 5: PAGES BINDINGS TANIMLAMA & WRANGLER TOML GÜNCELLEME
     // ----------------------------------------------------
     if (step === 5) {
       if (!d1_uuid) {
         throw new Error("D1 Veritabanı UUID'si Adım 5 için gereklidir.");
       }
 
+      // 1. GitHub reposundaki wrangler.toml dosyasını dinamik olarak güncelle
+      try {
+        const getToml = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/contents/wrangler.toml`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `token ${githubPat}`,
+            'Accept': 'application/vnd.github+json',
+            'User-Agent': 'IsDeYeter-Portal-App'
+          }
+        });
+        if (getToml.ok) {
+          const tomlData: any = await getToml.json();
+          let tomlContent = Buffer.from(tomlData.content, 'base64').toString('utf8');
+          
+          // database_id, database_name, bucket_name ve name değerlerini o siteye özel verilerle güncelle
+          tomlContent = tomlContent.replace(/database_id\s*=\s*"[^"]*"/g, `database_id = "${d1_uuid}"`);
+          tomlContent = tomlContent.replace(/database_name\s*=\s*"[^"]*"/g, `database_name = "db-${repoName}"`);
+          tomlContent = tomlContent.replace(/bucket_name\s*=\s*"[^"]*"/g, `bucket_name = "r2-${repoName}"`);
+          tomlContent = tomlContent.replace(/name\s*=\s*"[^"]*"/g, `name = "${repoName}"`);
+
+          const base64Toml = btoa(unescape(encodeURIComponent(tomlContent)));
+
+          const updateToml = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/contents/wrangler.toml`, {
+            method: 'PUT',
+            headers: {
+              'Authorization': `token ${githubPat}`,
+              'Accept': 'application/vnd.github+json',
+              'Content-Type': 'application/json',
+              'User-Agent': 'IsDeYeter-Portal-App'
+            },
+            body: JSON.stringify({
+              message: 'chore: update wrangler.toml D1/R2 bindings dynamically for tenant',
+              content: base64Toml,
+              sha: tomlData.sha
+            })
+          });
+          
+          if (!updateToml.ok) {
+            const updErr = await updateToml.json();
+            console.error("Failed to commit wrangler.toml updates:", updErr);
+          }
+        }
+      } catch (err) {
+        console.error("Wrangler.toml update process failed:", err);
+      }
+
+      // 2. Cloudflare Pages projesine binding tanımlamalarını yap (MEDIA_BUCKET ve DB)
       const response = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/pages/projects/pages-${repoName}`, {
         method: 'PATCH',
         headers: {
@@ -292,7 +339,7 @@ export const POST: APIRoute = async (context) => {
                 }
               },
               r2_buckets: {
-                R2: {
+                MEDIA_BUCKET: {
                   name: `r2-${repoName}`
                 }
               }
@@ -304,7 +351,7 @@ export const POST: APIRoute = async (context) => {
                 }
               },
               r2_buckets: {
-                R2: {
+                MEDIA_BUCKET: {
                   name: `r2-${repoName}`
                 }
               }
