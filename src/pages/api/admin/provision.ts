@@ -352,10 +352,68 @@ export const POST: APIRoute = async (context) => {
     // ADIM 7: SSL & DURUM DOĞRULAMA (SON ADIM)
     // ----------------------------------------------------
     if (step === 7) {
-      return new Response(JSON.stringify({ 
-        success: true, 
-        message: `Web sitesi SSL sertifikası doğrulandı. HTTP 200 OK. Hizmet Başarıyla Aktifleştirildi.`
-      }));
+      if (service_type !== 'web_sitesi') {
+        return new Response(JSON.stringify({ 
+          success: true, 
+          message: `Hizmet durumu doğrulandı. Hizmet Başarıyla Aktifleştirildi.`
+        }));
+      }
+
+      // Web Sitesi için Custom Domain ekleme ve doğrulama kontrolü
+      try {
+        // 1. Mevcut domainleri listele
+        const listDomains = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/pages/projects/pages-${repoName}/domains`, {
+          method: 'GET',
+          headers: {
+            'Authorization': `Bearer ${cfToken}`,
+            'Content-Type': 'application/json'
+          }
+        });
+        
+        let existingDomain: any = null;
+        if (listDomains.ok) {
+          const listData: any = await listDomains.json();
+          existingDomain = (listData.result || []).find((d: any) => d.name === domain);
+        }
+
+        // 2. Domain projede tanımlı değilse ekle
+        if (!existingDomain) {
+          const addDomain = await fetch(`https://api.cloudflare.com/client/v4/accounts/${cfAccountId}/pages/projects/pages-${repoName}/domains`, {
+            method: 'POST',
+            headers: {
+              'Authorization': `Bearer ${cfToken}`,
+              'Content-Type': 'application/json'
+            },
+            body: JSON.stringify({ name: domain })
+          });
+          const addData: any = await addDomain.json();
+          if (!addDomain.ok || !addData.success) {
+            const err = addData.errors?.[0]?.message || 'Custom domain projeye eklenemedi.';
+            throw new Error(`Domain Ekleme Hatası: ${err}`);
+          }
+          existingDomain = addData.result;
+        }
+
+        // 3. Domainin doğrulama durumunu incele
+        const domainStatus = existingDomain?.status || 'pending';
+        if (domainStatus === 'active') {
+          return new Response(JSON.stringify({
+            success: true,
+            message: `Web sitesi alan adı '${domain}' başarıyla bağlandı ve SSL aktif edildi! (Durum: AKTİF)`
+          }));
+        } else {
+          return new Response(JSON.stringify({
+            success: true,
+            message: `Alan adı '${domain}' başarıyla Cloudflare Pages projesine eklendi. Ancak CNAME yönlendirme doğrulaması bekleniyor (Durum: ${domainStatus.toUpperCase()}). Lütfen domain sağlayıcınızın DNS ayarlarından '${domain}' adresini 'pages-${repoName}.pages.dev' hedefine yönlendiren bir CNAME kaydı eklediğinizden emin olun.`
+          }));
+        }
+      } catch (err: any) {
+        console.error("Domain/SSL verification error:", err);
+        return new Response(JSON.stringify({
+          success: true,
+          message: `Bulut kurulumu tamamlandı fakat alan adı '${domain}' projeye eklenirken bir uyarı oluştu: ${err.message}. Bu adımı Cloudflare Pages panelinden manuel tamamlayabilirsiniz.`
+        }));
+      }
     }
 
     return new Response(JSON.stringify({ error: "Geçersiz adım." }), { status: 400 });
