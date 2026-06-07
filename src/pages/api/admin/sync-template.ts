@@ -52,9 +52,7 @@ export const POST: APIRoute = async (context) => {
       }
     });
 
-    // Eğer workflow dosyası yoksa (404), oluştur
-    if (checkRes.status === 404) {
-      const workflowYaml = `name: Sync Template
+    const workflowYaml = `name: Sync Template
 on:
   workflow_dispatch:
 
@@ -71,18 +69,57 @@ jobs:
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
       - name: Add template remote
-        run: git remote add template https://github.com/akgcomputer/laflaf.git
+        run: git remote add template https://github.com/akgcomputer/laflaf.git || true
       - name: Fetch template
         run: git fetch template main
       - name: Merge template
         run: |
-          git merge template/main --allow-unrelated-histories -m "chore: sync with template repository"
+          # Try to merge template main, allowing unrelated histories
+          # We use '|| true' to catch conflicts so we can resolve them in the next steps
+          git merge template/main --allow-unrelated-histories -m "chore: sync with template repository" || true
+          
+          # If wrangler.toml has conflicts or was modified, restore the tenant's version
+          if git status --porcelain | grep -q "wrangler.toml"; then
+            echo "Resolving conflict on wrangler.toml by keeping tenant configuration"
+            git checkout --ours wrangler.toml || true
+            git add wrangler.toml || true
+          fi
+          
+          # Keep tenant's workflow file
+          if git status --porcelain | grep -q "sync-template.yml"; then
+            echo "Resolving conflict on sync-template.yml by keeping tenant workflow"
+            git checkout --ours .github/workflows/sync-template.yml || true
+            git add .github/workflows/sync-template.yml || true
+          fi
+          
+          # Commit the merge if it was in a merging state
+          if [ -f .git/MERGE_HEAD ]; then
+            git commit -m "chore: resolve merge conflicts keeping tenant configurations" || true
+          fi
       - name: Push changes
         run: git push origin main
 `;
 
-      const base64Content = btoa(unescape(encodeURIComponent(workflowYaml)));
+    const base64Content = btoa(unescape(encodeURIComponent(workflowYaml)));
 
+    let needUpdate = false;
+    let existingSha: string | undefined = undefined;
+
+    if (checkRes.status === 200) {
+      const existingData = await checkRes.json();
+      existingSha = existingData.sha;
+      const decodedContent = decodeURIComponent(escape(atob(existingData.content.replace(/\s/g, ''))));
+      if (decodedContent.trim() !== workflowYaml.trim()) {
+        needUpdate = true;
+      }
+    } else if (checkRes.status === 404) {
+      needUpdate = true;
+    } else {
+      const errData = await checkRes.json().catch(() => ({}));
+      throw new Error(`Senkronizasyon dosyası kontrol edilemedi: ${errData.message || checkRes.statusText}`);
+    }
+
+    if (needUpdate) {
       const createRes = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/contents/${workflowPath}`, {
         method: 'PUT',
         headers: {
@@ -92,15 +129,19 @@ jobs:
           'User-Agent': 'IsDeYeter-Portal-App'
         },
         body: JSON.stringify({
-          message: 'chore: add sync-template workflow',
-          content: base64Content
+          message: 'chore: update sync-template workflow with robust merge conflict handling',
+          content: base64Content,
+          sha: existingSha
         })
       });
 
       const createData = await createRes.json();
       if (!createRes.ok) {
-        throw new Error(`Senkronizasyon dosyası oluşturulamadı: ${createData.message}`);
+        throw new Error(`Senkronizasyon dosyası güncellenemedi: ${createData.message}`);
       }
+      
+      // Wait a moment for GitHub to process the workflow update commit before dispatching
+      await new Promise(resolve => setTimeout(resolve, 3000));
     }
 
     // 2. Workflow'u tetikle (Workflow Dispatch)
