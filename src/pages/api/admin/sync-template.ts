@@ -56,6 +56,9 @@ export const POST: APIRoute = async (context) => {
 on:
   workflow_dispatch:
 
+permissions:
+  contents: write
+
 jobs:
   sync:
     runs-on: ubuntu-latest
