@@ -46,7 +46,7 @@ export const POST: APIRoute = async (context) => {
     const checkRes = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/contents/${workflowPath}`, {
       method: 'GET',
       headers: {
-        'Authorization': `Bearer ${githubPat}`,
+        'Authorization': `token ${githubPat}`,
         'Accept': 'application/vnd.github+json',
         'User-Agent': 'IsDeYeter-Portal-App'
       }
@@ -123,7 +123,7 @@ jobs:
       const createRes = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/contents/${workflowPath}`, {
         method: 'PUT',
         headers: {
-          'Authorization': `Bearer ${githubPat}`,
+          'Authorization': `token ${githubPat}`,
           'Accept': 'application/vnd.github+json',
           'Content-Type': 'application/json',
           'User-Agent': 'IsDeYeter-Portal-App'
@@ -148,7 +148,7 @@ jobs:
     const triggerRes = await fetch(`https://api.github.com/repos/akgcomputer/${repoName}/actions/workflows/sync-template.yml/dispatches`, {
       method: 'POST',
       headers: {
-        'Authorization': `Bearer ${githubPat}`,
+        'Authorization': `token ${githubPat}`,
         'Accept': 'application/vnd.github+json',
         'Content-Type': 'application/json',
         'User-Agent': 'IsDeYeter-Portal-App'
