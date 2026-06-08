@@ -22,3 +22,10 @@ pnpm-debug.log*
 
 # jetbrains setting folder
 .idea/
+
+# Local scratch scripts (may contain API tokens)
+scratch/
+login.html
+
+# Wrangler local state / temp bundles
+.wrangler/

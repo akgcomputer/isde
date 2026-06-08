@@ -5,7 +5,7 @@ import BasicLayout from '../layouts/BasicLayout.astro';
 export const prerender = true; // Login sayfası statik olarak önceden derlenir
 ---
 
-<BasicLayout title="Giriş Yap veya Kayıt Ol | İş De Yeter" description="İş De Yeter platformuna üye veya iş ortağı olarak giriş yapın ya da kolayca kayıt olun.">
+<BasicLayout title="Giriş Yap veya Kayıt Ol | İş De Yeter" description="İş De Yeter platformuna üye veya iş ortağı olarak giriş yapın ya da kolayca kayıt olun." hideHeaderFooter={true}>
   <div class="login-wrapper" id="login-wrapper">
     <div class="login-container">
       
@@ -224,7 +224,7 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
     }
 
     .login-wrapper {
-      min-height: calc(100vh - 120px);
+      min-height: 100vh;
       display: flex;
       align-items: center;
       justify-content: center;

@@ -63,54 +63,68 @@ jobs:
   sync:
     runs-on: ubuntu-latest
     steps:
-      - name: Checkout
+      - name: Checkout tenant repo
         uses: actions/checkout@v4
         with:
           fetch-depth: 0
+          token: \${{ secrets.GITHUB_TOKEN }}
+
       - name: Configure Git
         run: |
           git config --global user.name "github-actions[bot]"
           git config --global user.email "github-actions[bot]@users.noreply.github.com"
-      - name: Add template remote
-        run: git remote add template https://github.com/akgcomputer/laflaf.git || true
-      - name: Fetch template
-        run: git fetch template main
-      - name: Merge template
+
+      - name: Backup protected tenant files
         run: |
-          # Try to merge template main, allowing unrelated histories
-          # We use '|| true' to catch conflicts so we can resolve them in the next steps
-          git merge template/main --allow-unrelated-histories -m "chore: sync with template repository" || true
-          
-          # Resolve conflicts
-          # 1. Keep tenant's wrangler.toml and sync-template.yml (ours)
-          if git status --porcelain | grep -q "wrangler.toml"; then
-            echo "Resolving conflict on wrangler.toml by keeping tenant configuration"
-            git checkout --ours wrangler.toml || true
-            git add wrangler.toml || true
-          fi
-          
-          if git status --porcelain | grep -q "sync-template.yml"; then
-            echo "Resolving conflict on sync-template.yml by keeping tenant workflow"
-            git checkout --ours .github/workflows/sync-template.yml || true
-            git add .github/workflows/sync-template.yml || true
-          fi
-          
-          # 2. For all other conflicted/unmerged files, use the template's version (theirs)
-          conflicted_files=$(git diff --name-only --diff-filter=U)
-          for file in $conflicted_files; do
-            if [ "$file" != "wrangler.toml" ] && [ "$file" != ".github/workflows/sync-template.yml" ]; then
-              echo "Resolving conflict on $file by keeping template version"
-              git checkout --theirs "$file" || true
-              git add "$file" || true
+          mkdir -p /tmp/tenant-backup
+          [ -f wrangler.toml ] && cp wrangler.toml /tmp/tenant-backup/wrangler.toml || true
+          [ -f .github/workflows/sync-template.yml ] && mkdir -p /tmp/tenant-backup/.github/workflows && cp .github/workflows/sync-template.yml /tmp/tenant-backup/sync-template.yml || true
+          [ -f .dev.vars ] && cp .dev.vars /tmp/tenant-backup/.dev.vars || true
+          [ -f .env ] && cp .env /tmp/tenant-backup/.env || true
+
+      - name: Fetch template files
+        run: |
+          git remote add template https://github.com/akgcomputer/laflaf.git || true
+          git fetch template main --depth=1
+
+      - name: Copy template files over tenant (excluding protected files)
+        run: |
+          # Get list of all files from template/main
+          git ls-tree -r --name-only template/main | while read filepath; do
+            # Skip protected tenant-specific files
+            if [ "$filepath" = "wrangler.toml" ] || \
+               [ "$filepath" = ".github/workflows/sync-template.yml" ] || \
+               [ "$filepath" = ".dev.vars" ] || \
+               [ "$filepath" = ".env" ]; then
+              echo "SKIP (protected): $filepath"
+              continue
             fi
+
+            # Create parent directory if needed
+            dir=$(dirname "$filepath")
+            [ "$dir" != "." ] && mkdir -p "$dir" || true
+
+            # Copy file from template
+            git show "template/main:$filepath" > "$filepath" 2>/dev/null && echo "COPIED: $filepath" || echo "WARN: could not copy $filepath"
           done
-          
-          # Commit the merge if it was in a merging state
-          if [ -f .git/MERGE_HEAD ]; then
-            git commit -m "chore: resolve merge conflicts keeping tenant configurations" || true
+
+      - name: Restore protected tenant files
+        run: |
+          [ -f /tmp/tenant-backup/wrangler.toml ] && cp /tmp/tenant-backup/wrangler.toml wrangler.toml || true
+          [ -f /tmp/tenant-backup/sync-template.yml ] && cp /tmp/tenant-backup/sync-template.yml .github/workflows/sync-template.yml || true
+          [ -f /tmp/tenant-backup/.dev.vars ] && cp /tmp/tenant-backup/.dev.vars .dev.vars || true
+          [ -f /tmp/tenant-backup/.env ] && cp /tmp/tenant-backup/.env .env || true
+
+      - name: Commit and push if there are changes
+        run: |
+          git add -A
+          if git diff --staged --quiet; then
+            echo "No changes to commit — template is already up-to-date."
+          else
+            git commit -m "chore: sync with template repository [skip ci]"
+            git push origin main
+            echo "Changes pushed successfully."
           fi
-      - name: Push changes
-        run: git push origin main
 `;
 
     const base64Content = btoa(unescape(encodeURIComponent(workflowYaml)));

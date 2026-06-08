@@ -4,9 +4,10 @@ export interface Props {
   title: string;
   description?: string;
   canonical?: string;
+  hideHeaderFooter?: boolean;
 }
 
-const { title, description = "İş de Yeter! - İşinizi büyüten tüm çözümler tek platformda", canonical } = Astro.props;
+const { title, description = "İş de Yeter! - İşinizi büyüten tüm çözümler tek platformda", canonical, hideHeaderFooter = false } = Astro.props;
 import siteConfig from '../pages/data/config.json';
 
 // Header ve Footer componentlerini import et
@@ -185,15 +186,15 @@ const fullCanonical = canonical ? `${siteUrl}${canonical}` : siteUrl;
     </script>
     
     <!-- Header Component -->
-    <Header />
+    {!hideHeaderFooter && <Header />}
     
     <!-- Main Content -->
-    <main>
+    <main style={hideHeaderFooter ? "margin-top: 0; min-height: 100vh;" : ""}>
         <slot />
     </main>
     
     <!-- Footer Component -->
-    <Footer />
+    {!hideHeaderFooter && <Footer />}
     
     <!-- Yapılandırılmış Veri için ek alan -->
     <div class="seo-hidden">

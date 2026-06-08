@@ -4,7 +4,7 @@ import BasicLayout from './BasicLayout.astro';
 
 export interface Props {
   title: string;
-  activeTab: 'overview' | 'profile' | 'sites' | 'requests' | 'jobs';
+  activeTab: string;
 }
 
 const { title, activeTab } = Astro.props;
@@ -20,9 +20,22 @@ const isAdmin = user.is_partner === 2;
 
 // Rota belirleme
 const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/dashboard/member';
+
+const menuItems = [
+  { label: 'Giriş/Dashboard', icon: 'fa-solid fa-chart-pie', path: dashboardPath, tab: 'overview' },
+  { label: 'Hizmetlerim', icon: 'fa-solid fa-laptop-code', path: isPartner ? '/dashboard/partner/sites' : '/dashboard/member/sites', tab: 'sites' },
+  { label: 'Siparişlerim', icon: 'fa-solid fa-basket-shopping', path: '/dashboard/member/orders', tab: 'orders' },
+  { label: 'Faturalarım', icon: 'fa-solid fa-file-invoice-dollar', path: '/dashboard/member/invoices', tab: 'invoices' },
+  { label: 'Destek (ticket sistemi)', icon: 'fa-solid fa-headset', path: '/dashboard/member/support', tab: 'support' },
+  { label: 'Profilim', icon: 'fa-solid fa-user-gear', path: isPartner ? '/dashboard/partner/profile' : '/dashboard/member/profile', tab: 'profile' },
+  { label: 'Sepetim', icon: 'fa-solid fa-cart-shopping', path: '/dashboard/member/cart', tab: 'cart' },
+  { label: 'Hesabınız', icon: 'fa-solid fa-circle-user', path: '/dashboard/member/account', tab: 'account' },
+  { label: 'Cari Hesap Bilgilerim', icon: 'fa-solid fa-calculator', path: '/dashboard/member/cari', tab: 'cari' },
+  { label: 'Şifre Değiştir', icon: 'fa-solid fa-key', path: '/dashboard/member/change-password', tab: 'change-password' }
+];
 ---
 
-<BasicLayout title={title} description="İş De Yeter İşletme ve Yönetim Paneli">
+<BasicLayout title={title} description="İş De Yeter İşletme ve Yönetim Paneli" hideHeaderFooter={true}>
   <div class="dashboard-container">
     
     <!-- Sidebar -->
@@ -33,67 +46,30 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
 
       <!-- Navigation Menu -->
       <nav class="sidebar-menu">
+        {menuItems.map(item => (
+          <a href={item.path} class={`menu-link ${activeTab === item.tab ? 'active' : ''}`}>
+            <i class={item.icon}></i>
+            <span>{item.label}</span>
+          </a>
+        ))}
         
-        {/* ÜYE (MÜŞTERİ) SEÇENEKLERİ */}
-        {!isPartner && !isAdmin && (
-          <>
-            <a href="/dashboard/member" class={`menu-link ${activeTab === 'overview' ? 'active' : ''}`}>
-              <i class="fa-solid fa-chart-pie"></i>
-              <span>Genel Bakış</span>
-            </a>
-            <a href="/dashboard/member/profile" class={`menu-link ${activeTab === 'profile' ? 'active' : ''}`}>
-              <i class="fa-solid fa-user-gear"></i>
-              <span>Profil ve Fatura</span>
-            </a>
-            <a href="/dashboard/member/sites" class={`menu-link ${activeTab === 'sites' ? 'active' : ''}`}>
-              <i class="fa-solid fa-laptop-code"></i>
-              <span>Ücretsiz Hizmetlerim</span>
-            </a>
-            <a href="/dashboard/member/requests" class={`menu-link ${activeTab === 'requests' ? 'active' : ''}`}>
-              <i class="fa-solid fa-file-signature"></i>
-              <span>Hizmet Taleplerim</span>
-            </a>
-          </>
-        )}
-
-        {/* İŞ ORTAĞI SEÇENEKLERİ */}
-        {isPartner && (
-          <>
-            <a href="/dashboard/partner" class={`menu-link ${activeTab === 'overview' ? 'active' : ''}`}>
-              <i class="fa-solid fa-chart-column"></i>
-              <span>İş Ortağı Paneli</span>
-            </a>
-            <a href="/dashboard/partner/sites" class={`menu-link ${activeTab === 'sites' ? 'active' : ''}`}>
-              <i class="fa-solid fa-laptop-code"></i>
-              <span>Ücretsiz Hizmetlerim</span>
-            </a>
-            <a href="/dashboard/partner/profile" class={`menu-link ${activeTab === 'profile' ? 'active' : ''}`}>
-              <i class="fa-solid fa-id-card-clip"></i>
-              <span>Profil ve Fatura</span>
-            </a>
-          </>
-        )}
-
-        {/* ORTAK ALAN: YARDIM & DESTEK */}
-        <a href="https://wa.me/905412465429" target="_blank" class="menu-link support-link">
-          <i class="fa-brands fa-whatsapp text-emerald-500"></i>
-          <span>WhatsApp Destek</span>
+        <hr class="menu-divider" />
+        
+        <a href="/api/auth/logout" class="menu-link logout-menu-link">
+          <i class="fa-solid fa-power-off"></i>
+          <span>Oturumu Kapat</span>
         </a>
-
       </nav>
 
-      <!-- Sidebar Footer (Profile Summary & Logout) -->
+      <!-- Sidebar Footer (Profile Summary) -->
       <div class="sidebar-footer">
         <div class="footer-profile">
           <i class="fa-solid fa-circle-user avatar-icon"></i>
           <div class="profile-meta">
             <span class="user-name">{user.name}</span>
-            <span class="user-role">{isPartner ? 'İş Ortağı' : isAdmin ? 'Sistem Yöneticisi' : 'Standart Üye'}</span>
+            <span class="user-role">{isAdmin ? 'Sistem Yöneticisi' : isPartner ? 'İş Ortağı' : 'Müşteri'}</span>
           </div>
         </div>
-        <a href="/api/auth/logout" class="sidebar-logout" title="Güvenli Çıkış">
-          <i class="fa-solid fa-power-off"></i>
-        </a>
       </div>
     </aside>
 
@@ -108,6 +84,23 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
 
     <!-- Main Content Area -->
     <main class="dashboard-main">
+      <!-- Desktop Top Bar -->
+      <div class="desktop-top-bar">
+        <span class="desktop-panel-title">
+          {isAdmin ? 'Yönetim Paneli' : isPartner ? 'İş Ortağı Paneli' : 'Müşteri Paneli'}
+        </span>
+        <div class="desktop-top-actions">
+          <a href="/" target="_blank" class="top-action-link">
+            <i class="fa-solid fa-square-arrow-up-right"></i>
+            <span>Siteyi Aç</span>
+          </a>
+          <a href="/api/auth/logout" class="top-action-link logout-action">
+            <i class="fa-solid fa-power-off"></i>
+            <span>Oturumu Kapat</span>
+          </a>
+        </div>
+      </div>
+
       <div class="main-inner animate-fade-in">
         <slot />
       </div>
@@ -140,7 +133,7 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
     }
 
     .sidebar-brand {
-      padding: 32px 24px;
+      padding: 24px;
       display: flex;
       align-items: center;
       justify-content: center;
@@ -161,10 +154,10 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
 
     .sidebar-menu {
       flex: 1;
-      padding: 24px 16px;
+      padding: 20px 16px;
       display: flex;
       flex-direction: column;
-      gap: 8px;
+      gap: 6px;
       overflow-y: auto;
     }
 
@@ -172,17 +165,17 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
       display: flex;
       align-items: center;
       gap: 14px;
-      padding: 14px 16px;
-      border-radius: 12px;
+      padding: 12px 16px;
+      border-radius: 10px;
       color: #94a3b8;
       text-decoration: none;
       font-weight: 600;
-      font-size: 0.95rem;
+      font-size: 0.9rem;
       transition: all 0.2s ease;
     }
 
     .menu-link i {
-      font-size: 1.15rem;
+      font-size: 1.1rem;
       width: 24px;
       text-align: center;
       transition: transform 0.2s ease;
@@ -200,27 +193,31 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
     .menu-link.active {
       background: #3b82f6;
       color: #ffffff;
-      box-shadow: 0 8px 16px -4px rgba(59, 130, 246, 0.3);
+      box-shadow: 0 4px 12px -2px rgba(59, 130, 246, 0.25);
     }
 
-    .support-link {
-      margin-top: auto;
-      background: rgba(16, 185, 129, 0.05);
-      border: 1px dashed rgba(16, 185, 129, 0.25);
+    .menu-divider {
+      border: 0;
+      height: 1px;
+      background: #1e293b;
+      margin: 12px 16px;
     }
 
-    .support-link:hover {
-      background: rgba(16, 185, 129, 0.1);
-      color: #34d399;
+    .logout-menu-link {
+      color: #f87171;
+    }
+
+    .logout-menu-link:hover {
+      background: rgba(239, 68, 68, 0.1);
+      color: #ef4444;
     }
 
     /* Sidebar Footer */
     .sidebar-footer {
-      padding: 20px 24px;
+      padding: 16px 24px;
       border-top: 1px solid #1e293b;
       display: flex;
       align-items: center;
-      justify-content: space-between;
       gap: 12px;
       background: #090d16;
     }
@@ -233,7 +230,7 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
     }
 
     .avatar-icon {
-      font-size: 2.2rem;
+      font-size: 2rem;
       color: #3b82f6;
     }
 
@@ -246,32 +243,71 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
     .user-name {
       font-weight: 700;
       color: #ffffff;
-      font-size: 0.88rem;
+      font-size: 0.85rem;
       white-space: nowrap;
       text-overflow: ellipsis;
       overflow: hidden;
     }
 
     .user-role {
-      font-size: 0.72rem;
+      font-size: 0.7rem;
       color: #64748b;
     }
 
-    .sidebar-logout {
-      color: #f87171;
+    /* Desktop Top Bar Styling */
+    .desktop-top-bar {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      background: #ffffff;
+      padding: 20px 40px;
+      border-bottom: 1px solid #e2e8f0;
+      position: sticky;
+      top: 0;
+      z-index: 30;
+      box-shadow: 0 1px 3px rgba(0, 0, 0, 0.05);
+    }
+
+    .desktop-panel-title {
       font-size: 1.2rem;
-      cursor: pointer;
+      font-weight: 700;
+      color: #0f172a;
+      font-family: 'Poppins', sans-serif;
+    }
+
+    .desktop-top-actions {
       display: flex;
       align-items: center;
-      justify-content: center;
-      padding: 8px;
+      gap: 12px;
+    }
+
+    .top-action-link {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+      padding: 8px 16px;
       border-radius: 8px;
+      font-size: 0.85rem;
+      font-weight: 600;
+      text-decoration: none;
+      color: #475569;
+      background: #f1f5f9;
       transition: all 0.2s ease;
     }
 
-    .sidebar-logout:hover {
-      background: rgba(239, 68, 68, 0.1);
+    .top-action-link:hover {
+      background: #e2e8f0;
+      color: #0f172a;
+    }
+
+    .top-action-link.logout-action {
+      background: #fef2f2;
       color: #ef4444;
+    }
+
+    .top-action-link.logout-action:hover {
+      background: #fee2e2;
+      color: #dc2626;
     }
 
     /* Mobile bar styling */
@@ -316,14 +352,20 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
     .dashboard-main {
       flex: 1;
       margin-left: 280px;
-      padding: 40px;
       min-height: 100vh;
       box-sizing: border-box;
+      background-color: #f8fafc;
+      display: flex;
+      flex-direction: column;
     }
 
     .main-inner {
+      flex: 1;
+      width: 100%;
       max-width: 1200px;
       margin: 0 auto;
+      padding: 40px;
+      box-sizing: border-box;
     }
 
     /* Animations */
@@ -350,9 +392,16 @@ const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/
         display: flex;
       }
 
+      .desktop-top-bar {
+        display: none;
+      }
+
       .dashboard-main {
         margin-left: 0;
-        padding: 100px 20px 40px;
+      }
+
+      .main-inner {
+        padding: 90px 20px 40px;
       }
     }
   </style>
