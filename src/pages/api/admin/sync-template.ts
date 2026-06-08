@@ -81,19 +81,29 @@ jobs:
           # We use '|| true' to catch conflicts so we can resolve them in the next steps
           git merge template/main --allow-unrelated-histories -m "chore: sync with template repository" || true
           
-          # If wrangler.toml has conflicts or was modified, restore the tenant's version
+          # Resolve conflicts
+          # 1. Keep tenant's wrangler.toml and sync-template.yml (ours)
           if git status --porcelain | grep -q "wrangler.toml"; then
             echo "Resolving conflict on wrangler.toml by keeping tenant configuration"
             git checkout --ours wrangler.toml || true
             git add wrangler.toml || true
           fi
           
-          # Keep tenant's workflow file
           if git status --porcelain | grep -q "sync-template.yml"; then
             echo "Resolving conflict on sync-template.yml by keeping tenant workflow"
             git checkout --ours .github/workflows/sync-template.yml || true
             git add .github/workflows/sync-template.yml || true
           fi
+          
+          # 2. For all other conflicted/unmerged files, use the template's version (theirs)
+          conflicted_files=$(git diff --name-only --diff-filter=U)
+          for file in $conflicted_files; do
+            if [ "$file" != "wrangler.toml" ] && [ "$file" != ".github/workflows/sync-template.yml" ]; then
+              echo "Resolving conflict on $file by keeping template version"
+              git checkout --theirs "$file" || true
+              git add "$file" || true
+            fi
+          done
           
           # Commit the merge if it was in a merging state
           if [ -f .git/MERGE_HEAD ]; then
