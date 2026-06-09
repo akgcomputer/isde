@@ -1,0 +1,532 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { 
+  getProducts, deleteProduct, duplicateProduct, getCategories, getBrands, getAllReviews, getAllQA, getBadges, updateProduct,
+  createProduct, createProductVariant, createWholesalePrice, createCategory, createBrand, clearProductVariants, clearProductWholesalePrices
+} from '../../../../lib/db';
+import * as XLSX from 'xlsx';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+
+let mesaj = '';
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+    
+    if (action === 'import_products') {
+      const file = formData.get('file') as File;
+      if (!file || file.size === 0) {
+        mesaj = 'Hata: Lütfen geçerli bir Excel dosyası yükleyin.';
+      } else {
+        const buffer = await file.arrayBuffer();
+        const workbook = XLSX.read(buffer, { type: 'array' });
+        const sheetName = workbook.SheetNames[0];
+        const sheet = workbook.Sheets[sheetName];
+        const rows = XLSX.utils.sheet_to_json(sheet) as any[];
+        
+        if (rows.length === 0) {
+          mesaj = 'Hata: Yüklenen dosya boş veya okunamadı.';
+        } else {
+          // Fetch existing categories, brands and products for mapping
+          let allCategories = await getCategories(dbBinding, 'product');
+          let allCategoriesForSlugCheck = await getCategories(dbBinding, null);
+          let allBrands = await getBrands(dbBinding);
+          let allProducts = await getProducts(dbBinding);
+          
+          let importCount = 0;
+          
+          // Slugify helper
+          const slugify = (text: string): string => {
+            const trMap: Record<string, string> = {
+              'ç': 'c', 'Ç': 'C', 'ğ': 'g', 'Ğ': 'G', 'ı': 'i', 'İ': 'I',
+              'ö': 'o', 'Ö': 'O', 'ş': 's', 'Ş': 'S', 'ü': 'u', 'Ü': 'U'
+            };
+            return text
+              .replace(/[çÇğĞıİöÖşŞüÜ]/g, match => trMap[match])
+              .toLowerCase()
+              .replace(/[^a-z0-9 -]/g, '')
+              .replace(/\s+/g, '-')
+              .replace(/-+/g, '-')
+              .trim();
+          };
+
+          // Safe float/money parser
+          const parseMoney = (val: any): number => {
+            if (val === undefined || val === null || val === '') return 0;
+            if (typeof val === 'number') return val;
+            let str = val.toString().trim().replace(/[^\d.,-]/g, '');
+            // Handle Turkish currency format (e.g., 299,90 or 1.299,90)
+            if (str.includes(',') && (!str.includes('.') || str.indexOf('.') < str.indexOf(','))) {
+              str = str.replace(/\./g, '').replace(/,/g, '.');
+            } else {
+              // Handle standard English format (e.g., 299.90 or 1,299.90)
+              str = str.replace(/,/g, '');
+            }
+            const parsed = parseFloat(str);
+            return isNaN(parsed) ? 0 : parsed;
+          };
+
+          // Safe integer parser
+          const parseIntSafe = (val: any, fallback = 0): number => {
+            if (val === undefined || val === null || val === '') return fallback;
+            if (typeof val === 'number') return Math.floor(val);
+            const parsed = parseInt(val.toString().replace(/[^0-9-]/g, ''));
+            return isNaN(parsed) ? fallback : parsed;
+          };
+
+          for (const row of rows) {
+            const name = row["Ürün Adı"]?.toString().trim();
+            if (!name) continue;
+            
+            // 1. Resolve Category
+            let category_id: number | null = null;
+            const categoryInput = row["Kategori"]?.toString().trim();
+            if (categoryInput) {
+              const numericId = parseInt(categoryInput);
+              if (!isNaN(numericId)) {
+                category_id = numericId;
+              } else {
+                let cat = allCategories.find(c => c && c.name && c.name.toString().toLowerCase() === categoryInput.toLowerCase());
+                if (!cat) {
+                  let catSlug = slugify(categoryInput);
+                  if (allCategoriesForSlugCheck.some(c => c && c.slug === catSlug)) {
+                    catSlug = `${catSlug}-urun`;
+                  }
+                  if (allCategoriesForSlugCheck.some(c => c && c.slug === catSlug)) {
+                    catSlug = `${catSlug}-${Date.now()}-${Math.floor(Math.random() * 100)}`;
+                  }
+                  const newCat = await createCategory({
+                    name: categoryInput,
+                    slug: catSlug || `cat-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                    type: 'product'
+                  }, dbBinding);
+                  if (newCat) {
+                    category_id = newCat.id;
+                    allCategories = await getCategories(dbBinding, 'product');
+                    allCategoriesForSlugCheck = await getCategories(dbBinding, null);
+                  }
+                } else {
+                  category_id = cat.id;
+                }
+              }
+            }
+            
+            // 2. Resolve Brand
+            let brand_id: number | null = null;
+            const brandInput = row["Marka"]?.toString().trim();
+            if (brandInput) {
+              const numericId = parseInt(brandInput);
+              if (!isNaN(numericId)) {
+                brand_id = numericId;
+              } else {
+                let brand = allBrands.find(b => b && b.name && b.name.toString().toLowerCase() === brandInput.toLowerCase());
+                if (!brand) {
+                  let brandSlug = slugify(brandInput);
+                  if (allBrands.some(b => b && b.slug === brandSlug)) {
+                    brandSlug = `${brandSlug}-${Date.now()}-${Math.floor(Math.random() * 100)}`;
+                  }
+                  const newBrand = await createBrand({
+                    name: brandInput,
+                    slug: brandSlug || `brand-${Date.now()}-${Math.floor(Math.random() * 1000)}`
+                  }, dbBinding);
+                  if (newBrand) {
+                    brand_id = newBrand.id;
+                    allBrands = await getBrands(dbBinding);
+                  }
+                } else {
+                  brand_id = brand.id;
+                }
+              }
+            }
+
+            // 3. Extract Main Image & Gallery
+            const image_url = row["Ana Görsel URL"]?.toString().trim() || null;
+            const gallery_images: string[] = [];
+            for (let i = 1; i <= 5; i++) {
+              const gUrl = row[`Görsel ${i} URL`]?.toString().trim();
+              if (gUrl) gallery_images.push(gUrl);
+            }
+
+            // 4. Extract Features (5 pairs)
+            const features: Record<string, string> = {};
+            for (let i = 1; i <= 5; i++) {
+              const fKey = row[`Özellik Adı ${i}`]?.toString().trim();
+              const fVal = row[`Özellik Değeri ${i}`]?.toString().trim();
+              if (fKey) {
+                features[fKey] = fVal || '';
+              }
+            }
+            
+            // Support Barkod and SKU in features dynamically
+            const excelSku = row["Stok Kodu (SKU)"]?.toString().trim();
+            const excelBarcode = row["Barkod"]?.toString().trim();
+            if (excelSku) features["Stok Kodu (SKU)"] = excelSku;
+            if (excelBarcode) features["Barkod"] = excelBarcode;
+
+            const badgeTL = row["Sol Üst Rozet"]?.toString().trim();
+            const badgeTR = row["Sağ Üst Rozet"]?.toString().trim();
+            
+            const price = parseMoney(row["Satış Fiyatı"]);
+            const compare_at_price = row["Eski Fiyat"] ? parseMoney(row["Eski Fiyat"]) : null;
+            
+            let slug = row["URL (Slug)"]?.toString().trim() || slugify(name);
+            if (!slug) slug = `urun-${Date.now()}-${Math.floor(Math.random() * 1000)}`;
+            
+            const existingProduct = allProducts.find(p => p.slug === slug);
+            let productResult = null;
+
+            const productData = {
+              category_id,
+              brand_id,
+              name,
+              slug,
+              excerpt: row["Kısa Açıklama"]?.toString().trim() || null,
+              description: row["Detaylı Açıklama"]?.toString().trim() || null,
+              price,
+              compare_at_price,
+              currency: '₺',
+              unit: row["Satış Birimi"]?.toString().trim() || 'Adet',
+              min_order_qty: parseIntSafe(row["Min. Sipariş Miktarı"], 1),
+              image_url,
+              badge_top_left: badgeTL || null,
+              badge_top_right: badgeTR || null,
+              status: row["Durum (aktif/pasif)"]?.toString().trim() === 'pasif' ? 'pasif' : 'aktif',
+              badges: null,
+              seller_name: row["Satıcı Adı"]?.toString().trim() || null,
+              shipping_time: null,
+              features: Object.keys(features).length > 0 ? features : null,
+              gallery_images: gallery_images.length > 0 ? gallery_images : null,
+              tags: row["Etiketler"]?.toString().trim() || null,
+              stock: parseIntSafe(row["Stok Miktarı"], 0),
+              video_url: row["Video URL"]?.toString().trim() || null,
+              allow_backorder: parseIntSafe(row["Stoksuz Sat (0/1)"], 0) === 1 ? 1 : 0
+            };
+
+            if (existingProduct) {
+              await clearProductVariants(existingProduct.id, dbBinding);
+              await clearProductWholesalePrices(existingProduct.id, dbBinding);
+              productResult = await updateProduct(existingProduct.id, productData, dbBinding);
+            } else {
+              productResult = await createProduct(productData, dbBinding);
+            }
+
+            if (productResult) {
+              importCount++;
+              
+              // 6. Create Variants (5 groups)
+              for (let i = 1; i <= 5; i++) {
+                const vName = row[`Varyasyon Adı ${i}`]?.toString().trim();
+                const vStock = parseIntSafe(row[`Varyasyon Stok ${i}`], 0);
+                const vPrice = parseMoney(row[`Varyasyon Fiyat ${i}`]);
+                if (vName) {
+                  await createProductVariant({
+                    product_id: productResult.id,
+                    name: vName,
+                    sku: slugify(vName) || `var-${Date.now()}-${Math.floor(Math.random() * 1000)}`,
+                    price: vPrice,
+                    stock: vStock,
+                    image_url: null
+                  }, dbBinding);
+                }
+              }
+
+              // 7. Create Wholesale Prices (3 groups)
+              for (let i = 1; i <= 3; i++) {
+                const wQty = parseIntSafe(row[`Toptan Min. Miktar ${i}`], 0);
+                const wDiscount = parseMoney(row[`Toptan İndirim Oranı % ${i}`]);
+                if (wQty > 0 && wDiscount > 0) {
+                  await createWholesalePrice({
+                    product_id: productResult.id,
+                    min_qty: wQty,
+                    discount_percentage: wDiscount
+                  }, dbBinding);
+                }
+              }
+              // Refresh products list to keep it up to date for subsequent rows
+              allProducts = await getProducts(dbBinding);
+            }
+          }
+          mesaj = `${importCount} adet ürün ve ilişkili varyasyon/toptan satış baremleri başarıyla içe aktarıldı.`;
+        }
+      }
+    } else {
+      const id = parseInt(formData.get('id') as string);
+      if (id) {
+        if (action === 'delete') {
+          await deleteProduct(id, dbBinding);
+          mesaj = 'Ürün başarıyla silindi.';
+        } else if (action === 'duplicate') {
+          await duplicateProduct(id, dbBinding);
+          mesaj = 'Ürün başarıyla kopyalandı.';
+        } else if (action === 'toggle_backorder') {
+          const product = await getProducts(dbBinding).then(res => res.find(p => p.id === id));
+          if (product) {
+            const newStatus = product.allow_backorder === 1 ? 0 : 1;
+            await updateProduct(id, { allow_backorder: newStatus }, dbBinding);
+            mesaj = 'Stoksuz sat durumu güncellendi.';
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.error('Action error:', err);
+    mesaj = `Hata: İşlem sırasında bir hata oluştu: ${err instanceof Error ? err.message : String(err)}`;
+  }
+}
+
+const products = await getProducts(dbBinding);
+const categories = await getCategories(dbBinding, 'product');
+const brands = await getBrands(dbBinding);
+const allReviews = await getAllReviews(dbBinding);
+const allQA = await getAllQA(dbBinding);
+const allBadges = await getBadges(dbBinding);
+
+// Helper functions
+function getCategoryName(id: number) {
+  return categories.find(c => c.id === id)?.name || '-';
+}
+function getBrandName(id: number) {
+  return brands.find(b => b.id === id)?.name || '-';
+}
+function getBadgeNames(badgesJson: string | null) {
+  if (!badgesJson) return [];
+  try {
+    const parsed = JSON.parse(badgesJson);
+    return parsed.map((p: any) => {
+      const b = allBadges.find(x => x.id === p.badge_id);
+      return b ? b.name : null;
+    }).filter(Boolean);
+  } catch(e) { return []; }
+}
+---
+
+<BaseLayout title="Ürünler - Admin" isAdmin={true}>
+  <div class="p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Ürün Yönetimi</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">E-ticaret sisteminizdeki ürünleri ekleyin ve düzenleyin</p>
+      </div>
+      <div class="flex gap-2">
+        <button type="button" onclick="document.getElementById('importModal').classList.remove('hidden')" class="bg-gray-100 hover:bg-gray-200 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-700 dark:text-gray-200 px-4 py-2.5 rounded-lg transition font-medium shadow-sm flex items-center gap-2 text-sm">
+          <i class="fas fa-file-excel"></i> Dışa/İçe Aktar
+        </button>
+        <a href="/admin/ecommerce/products/new" class="bg-orange-600 hover:bg-orange-700 text-white px-5 py-2.5 rounded-lg transition font-medium shadow-md flex items-center gap-2">
+          <i class="fas fa-plus"></i>
+          Yeni Ürün Ekle
+        </a>
+      </div>
+    </div>
+
+    {mesaj && (
+      <div class={`p-4 rounded-xl border mb-6 flex justify-between items-center ${mesaj.includes('Hata') || mesaj.includes('hata') ? 'bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 border-red-200 dark:border-red-800' : 'bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 border-green-200 dark:border-green-800'}`}>
+        <span>{mesaj.includes('Hata') || mesaj.includes('hata') ? '🛑' : '✅'} {mesaj}</span>
+        <button onclick="this.parentElement.remove()" class={mesaj.includes('Hata') || mesaj.includes('hata') ? 'text-red-700 dark:text-red-300' : 'text-green-700 dark:text-green-300'}>✕</button>
+      </div>
+    )}
+
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <div class="overflow-x-auto">
+        <table class="w-full">
+          <thead class="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+            <tr>
+              <th class="px-3 py-3 text-left">Görsel</th>
+              <th class="px-3 py-4 text-left">Ürün Adı</th>
+              <th class="px-3 py-4 text-left">Fiyat</th>
+              <th class="px-3 py-4 text-left hidden md:table-cell">Kategori/Marka</th>
+              <th class="px-3 py-4 text-left">Stok / Varyant</th>
+              <th class="px-3 py-4 text-center">Stoksuz Sat</th>
+              <th class="px-3 py-4 text-left hidden lg:table-cell">Rozetler</th>
+              <th class="px-3 py-4 text-left">Puan/Soru/Beğeni</th>
+              <th class="px-3 py-4 text-left">Durum</th>
+              <th class="px-3 py-4 text-right">İşlem</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-gray-700 dark:text-gray-200 text-sm">
+            {products.map(product => {
+              const pReviews = allReviews.filter(r => r.product_id === product.id && r.status === 'approved');
+              const thumbsUp = pReviews.filter(r => r.rating >= 2).length;
+              const thumbsDown = pReviews.filter(r => r.rating === 1).length;
+              const pQA = allQA.filter(q => q.product_id === product.id && q.status === 'answered');
+              const bNames = getBadgeNames(product.badges);
+              
+              return (
+              <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+                <td class="px-3 py-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+                  {product.image_url ? <img src={product.image_url} class="w-10 h-14 object-cover rounded shadow-sm" /> : <div class="w-10 h-14 bg-gray-200 dark:bg-gray-700 rounded flex items-center justify-center"><i class="fas fa-image text-gray-400"></i></div>}
+                </td>
+                <td class="px-3 py-4">
+                  <div class="font-medium text-gray-900 dark:text-white line-clamp-1">{product.name}</div>
+                  <div class="text-xs text-gray-500 mt-0.5">/{product.slug}</div>
+                </td>
+                <td class="px-3 py-4 whitespace-nowrap">
+                  <div class="font-bold text-gray-900 dark:text-white">{product.price.toLocaleString('tr-TR', { style: 'currency', currency: 'TRY', minimumFractionDigits: 0, maximumFractionDigits: 0 })}</div>
+                </td>
+                <td class="px-3 py-4 hidden md:table-cell text-sm text-gray-500 dark:text-gray-400">
+                  <div class="line-clamp-1">{getCategoryName(product.category_id || 0)}</div>
+                  <div class="text-xs mt-1 bg-gray-100 dark:bg-gray-700 px-2 py-0.5 rounded inline-block">{getBrandName(product.brand_id || 0)}</div>
+                </td>
+                <td class="px-3 py-4">
+                  {product.variants && product.variants.length > 0 ? (
+                    <div class="text-xs">
+                      {product.variants.map(v => (
+                        <div class="mb-0.5"><span class="text-gray-500">{v.name}:</span> <span class="font-semibold">{v.stock}</span></div>
+                      ))}
+                    </div>
+                  ) : (
+                    <div class="font-semibold">{product.stock || 0} Adet</div>
+                  )}
+                </td>
+                <td class="px-3 py-4 text-center">
+                  <form method="POST" class="inline">
+                    <input type="hidden" name="action" value="toggle_backorder" />
+                    <input type="hidden" name="id" value={product.id} />
+                    <button type="submit" class={`px-3 py-1 rounded-full text-xs font-bold transition ${product.allow_backorder === 1 ? 'bg-orange-100 text-orange-700 dark:bg-orange-900/50 dark:text-orange-400' : 'bg-gray-100 text-gray-500 dark:bg-gray-700 dark:text-gray-400'}`}>
+                      {product.allow_backorder === 1 ? 'Açık' : 'Kapalı'}
+                    </button>
+                  </form>
+                </td>
+                <td class="px-3 py-4 hidden lg:table-cell text-xs text-gray-500">
+                  <div class="flex flex-wrap gap-1 w-24">
+                    {bNames.map((n: string) => <span class="bg-blue-50 text-blue-600 border border-blue-100 px-1 rounded dark:bg-blue-900/30 dark:border-blue-800 dark:text-blue-300">{n}</span>)}
+                  </div>
+                </td>
+                <td class="px-3 py-4 text-xs whitespace-nowrap">
+                  <div class="text-yellow-500">{product.rating} ⭐</div>
+                  <div class="mt-1">{thumbsUp} 👍 | {thumbsDown} 👎</div>
+                  <div class="mt-1">💬 {pQA.length} | ❤️ {product.likes || 0}</div>
+                </td>
+                <td class="px-3 py-4 whitespace-nowrap">
+                  <span class={`px-2.5 py-1 text-xs font-medium rounded-full ${product.status === 'aktif' ? 'bg-green-100 text-green-800 dark:bg-green-900/40 dark:text-green-300' : 'bg-gray-100 text-gray-800 dark:bg-gray-700 dark:text-gray-300'}`}>
+                    {product.status === 'aktif' ? 'Aktif' : 'Pasif'}
+                  </span>
+                </td>
+                <td class="px-3 py-4 text-right">
+                  <div class="flex items-center justify-end gap-1">
+                    <a href={`/urunler/${product.slug}`} target="_blank" title="Görüntüle" class="p-1.5 text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/50 rounded transition">
+                      <i class="fas fa-external-link-alt"></i>
+                    </a>
+                    <form method="POST" class="inline" onsubmit="return confirm('Bu ürünü kopyalamak istiyor musunuz?');">
+                      <input type="hidden" name="action" value="duplicate" />
+                      <input type="hidden" name="id" value={product.id} />
+                      <button type="submit" title="Kopyala/Çoğalt" class="p-1.5 text-green-600 hover:bg-green-50 dark:hover:bg-green-900/50 rounded transition">
+                        <i class="fas fa-copy"></i>
+                      </button>
+                    </form>
+                    <a href={`/admin/ecommerce/products/${product.id}`} title="Düzenle" class="p-1.5 text-gray-500 hover:text-orange-600 hover:bg-orange-50 dark:hover:bg-gray-700 rounded transition">
+                      <i class="fas fa-edit"></i>
+                    </a>
+                    <form method="POST" class="inline" onsubmit="return confirm('Bu ürünü silmek istediğinize emin misiniz?');">
+                      <input type="hidden" name="action" value="delete" />
+                      <input type="hidden" name="id" value={product.id} />
+                      <button type="submit" title="Sil" class="p-1.5 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-gray-700 rounded transition">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </div>
+                </td>
+              </tr>
+              )}
+            )}
+            
+            {products.length === 0 && (
+              <tr>
+                <td colspan="7" class="px-6 py-12 text-center text-gray-500 dark:text-gray-400">
+                  <div class="text-4xl mb-4">📦</div>
+                  <p class="text-lg">Henüz hiç ürün eklenmemiş.</p>
+                  <a href="/admin/ecommerce/products/new" class="text-orange-600 hover:underline mt-2 inline-block">İlk ürününüzü ekleyin</a>
+                </td>
+              </tr>
+            )}
+          </tbody>
+        </table>
+      </div>
+    </div>
+  </div>
+
+  <!-- İçe / Dışa Aktar Modal -->
+  <div id="importModal" class="fixed inset-0 bg-black/50 backdrop-blur-sm z-50 hidden flex items-center justify-center p-4 animate-fadeIn">
+    <div class="bg-white dark:bg-gray-800 rounded-2xl shadow-xl max-w-4xl w-full overflow-hidden border border-gray-100 dark:border-gray-700">
+      <div class="flex justify-between items-center p-6 border-b border-gray-100 dark:border-gray-700 bg-gray-50 dark:bg-gray-800/50">
+        <h3 class="text-xl font-bold text-gray-900 dark:text-white flex items-center gap-2">
+          <i class="fas fa-file-excel text-green-600"></i> Toplu Ürün İçe/Dışa Aktar
+        </h3>
+        <button type="button" onclick="document.getElementById('importModal').classList.add('hidden')" class="text-gray-400 hover:text-gray-600 dark:hover:text-gray-300">
+          <i class="fas fa-times text-lg"></i>
+        </button>
+      </div>
+      <div class="grid grid-cols-1 md:grid-cols-2 gap-6 p-6">
+        <!-- Sol Kolon: Dosya Yükleme & Şablon -->
+        <div class="space-y-6">
+          <!-- Örnek Şablon -->
+          <div class="bg-blue-50 dark:bg-blue-900/30 border border-blue-100 dark:border-blue-800 p-4 rounded-xl flex items-start gap-3">
+            <i class="fas fa-info-circle text-blue-500 mt-1"></i>
+            <div>
+              <h4 class="font-bold text-blue-800 dark:text-blue-300 mb-1">Örnek Şablonu İndirin</h4>
+              <p class="text-sm text-blue-600 dark:text-blue-400 mb-3">Sisteme ürün yükleyebilmek için lütfen aşağıdaki güncellenmiş Excel şablonunu kullanın. Tüm yeni kolonlar (özellikler, varyasyonlar, toptan satış vb.) şablonda mevcuttur.</p>
+              <a href="/downloads/ornek-urun-sablonu.xlsx" download class="inline-flex items-center gap-2 bg-white dark:bg-gray-800 text-blue-600 border border-blue-200 dark:border-blue-700 px-4 py-2.5 rounded shadow-sm text-sm font-bold hover:bg-blue-50 dark:hover:bg-gray-700 transition">
+                <i class="fas fa-download"></i> Şablonu İndir (.xlsx)
+              </a>
+            </div>
+          </div>
+
+          <!-- Yükleme Formu -->
+          <form method="POST" enctype="multipart/form-data">
+            <input type="hidden" name="action" value="import_products" />
+            <h4 class="font-bold text-gray-800 dark:text-gray-200 mb-3">Excel Dosyası Yükleyin</h4>
+            <div class="border-2 border-dashed border-gray-300 dark:border-gray-600 rounded-xl p-6 text-center hover:bg-gray-50 dark:hover:bg-gray-700/50 transition cursor-pointer" onclick="document.getElementById('fileUpload').click()">
+              <i class="fas fa-cloud-upload-alt text-4xl text-gray-400 mb-3 animate-bounce"></i>
+              <p class="text-gray-600 dark:text-gray-400 mb-1 font-medium">Excel dosyasını sürükleyin veya seçin</p>
+              <input type="file" name="file" accept=".xlsx, .xls" class="hidden" id="fileUpload" onchange="document.getElementById('fileName').textContent = this.files[0] ? this.files[0].name : ''" required />
+              <button type="button" class="mt-3 bg-gray-200 dark:bg-gray-700 text-gray-800 dark:text-gray-200 px-4 py-2 rounded text-sm font-medium hover:bg-gray-300 dark:hover:bg-gray-600 transition">
+                Dosya Seç
+              </button>
+              <p id="fileName" class="mt-3 text-sm font-bold text-orange-600"></p>
+            </div>
+            
+            <button type="submit" class="w-full mt-4 bg-green-600 hover:bg-green-700 text-white py-3 rounded-xl font-bold shadow-md hover:shadow-lg transition flex items-center justify-center gap-2">
+              <i class="fas fa-check"></i> Ürünleri İçe Aktar
+            </button>
+          </form>
+        </div>
+
+        <!-- Sağ Kolon: Kategori ve Marka Listesi -->
+        <div class="border-t md:border-t-0 md:border-l border-gray-100 dark:border-gray-700 pt-6 md:pt-0 md:pl-6 space-y-4">
+          <h4 class="font-bold text-gray-800 dark:text-gray-200 flex items-center gap-2">
+            <i class="fas fa-list text-orange-600"></i> Sistem Kategori & Marka Bilgileri
+          </h4>
+          <p class="text-xs text-gray-500 dark:text-gray-400">Excel şablonunda <b>Kategori</b> ve <b>Marka</b> kolonlarına aşağıdaki sayısal ID'leri veya tam isimleri yazabilirsiniz. İsim yazdığınızda sistemde mevcut değilse otomatik olarak oluşturulur.</p>
+          
+          <div class="grid grid-cols-2 gap-4">
+            <!-- Kategoriler -->
+            <div>
+              <span class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-2">Kategoriler</span>
+              <div class="max-h-[220px] overflow-y-auto border border-gray-100 dark:border-gray-700 rounded-lg p-2 space-y-1 bg-gray-50 dark:bg-gray-900/50">
+                {categories.map(c => (
+                  <div class="text-xs flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800/80 last:border-0">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium truncate pr-1" title={c.name}>{c.name}</span>
+                    <span class="bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded font-mono text-[10px]">ID: {c.id}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            <!-- Markalar -->
+            <div>
+              <span class="text-xs font-bold text-gray-400 dark:text-gray-500 uppercase tracking-wider block mb-2">Markalar</span>
+              <div class="max-h-[220px] overflow-y-auto border border-gray-100 dark:border-gray-700 rounded-lg p-2 space-y-1 bg-gray-50 dark:bg-gray-900/50">
+                {brands.map(b => (
+                  <div class="text-xs flex justify-between items-center py-1 border-b border-gray-100 dark:border-gray-800/80 last:border-0">
+                    <span class="text-gray-700 dark:text-gray-300 font-medium truncate pr-1" title={b.name}>{b.name}</span>
+                    <span class="bg-gray-200 dark:bg-gray-800 text-gray-600 dark:text-gray-400 px-1.5 py-0.5 rounded font-mono text-[10px]">ID: {b.id}</span>
+                  </div>
+                ))}
+              </div>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,624 @@
+---
+import BaseLayout from '../../../layouts/BaseLayout.astro';
+import { getSettings, updateSetting } from '../../../lib/db';
+import { uploadFile } from '../../../lib/storage';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const mediaBinding = Astro.locals.runtime?.env?.MEDIA_BUCKET;
+const dbSettings = await getSettings(dbBinding);
+
+// Default social media structures
+const defaultSocials = [
+  { id: 'x', name: 'X (Twitter)', url: '', active: false },
+  { id: 'facebook', name: 'Facebook', url: '', active: false },
+  { id: 'instagram', name: 'Instagram', url: '', active: false },
+  { id: 'linkedin', name: 'LinkedIn', url: '', active: false },
+  { id: 'pinterest', name: 'Pinterest', url: '', active: false },
+  { id: 'youtube', name: 'YouTube', url: '', active: false },
+  { id: 'tiktok', name: 'TikTok', url: '', active: false },
+  { id: 'medium', name: 'Medium', url: '', active: false },
+  { id: 'whatsapp', name: 'WhatsApp', url: '', active: false },
+  { id: 'telegram', name: 'Telegram', url: '', active: false },
+  { id: 'phone', name: 'Telefon', url: '', active: false },
+  { id: 'email', name: 'E-Posta', url: '', active: false }
+];
+let dbSocials = [];
+try {
+  dbSocials = dbSettings.social_media_links ? JSON.parse(dbSettings.social_media_links) : [];
+} catch (e) {
+  console.error('Error parsing social_media_links', e);
+}
+// Merge database configuration with defaults so any new platform is represented
+const socialMediaLinks = defaultSocials.map(def => {
+  const dbVal = dbSocials.find((item: any) => item.id === def.id);
+  return dbVal ? { ...def, ...dbVal } : def;
+});
+
+let ayarlar = {
+  site_title: dbSettings.site_title || 'Laflaf',
+  site_description: dbSettings.site_description || 'Meraklı İçerikleri Keşfet',
+  site_keywords: dbSettings.site_keywords || 'içerik, blog, keşfet, meraklı',
+  site_language: dbSettings.site_language || 'tr',
+  site_mode: dbSettings.site_mode || 'blog',
+  site_logo: dbSettings.site_logo || 'LAFLAF',
+  site_favicon: dbSettings.site_favicon || '',
+  return_shipping_info: dbSettings.return_shipping_info || '',
+  popup_active: dbSettings.popup_active || 'false',
+  popup_image: dbSettings.popup_image || '',
+  popup_link: dbSettings.popup_link || '',
+  cookie_banner_active: dbSettings.cookie_banner_active || 'true',
+  cookie_text: dbSettings.cookie_text || 'Bu site size daha iyi bir deneyim sunmak için çerezleri kullanır. Bildirimlere izin vererek en yeni içeriklerden haberdar olabilirsiniz.',
+  primary_color: dbSettings.primary_color || '#f97316',
+  header_bg: dbSettings.header_bg || '#ffffff',
+  footer_bg: dbSettings.footer_bg || '#1f2937',
+  text_color: dbSettings.text_color || '#111827',
+  link_color: dbSettings.link_color || '#f97316',
+  border_color: dbSettings.border_color || '#e5e7eb',
+  font_family: dbSettings.font_family || "'Inter', system-ui, sans-serif",
+  font_size: dbSettings.font_size || '16',
+  menu_items: dbSettings.menu_items ? JSON.parse(dbSettings.menu_items) : [
+    { title: 'Ana Sayfa', url: '/' },
+    { title: 'Yaşam', url: '/yasam' },
+    { title: 'Teknoloji', url: '/teknoloji' }
+  ],
+  fab_widget_active: dbSettings.fab_widget_active || 'false',
+  fab_active_channels: dbSettings.fab_active_channels ? JSON.parse(dbSettings.fab_active_channels) : [],
+  fab_whatsapp_number: dbSettings.fab_whatsapp_number || '',
+  fab_telegram_username: dbSettings.fab_telegram_username || '',
+  fab_instagram_username: dbSettings.fab_instagram_username || '',
+  fab_phone_number: dbSettings.fab_phone_number || '',
+  fab_email_address: dbSettings.fab_email_address || '',
+  fab_widget_position: dbSettings.fab_widget_position || 'right-bottom',
+  social_media_links: socialMediaLinks
+};
+
+let mesaj = '';
+let aktifSekme = 'general';
+
+if (Astro.request.method === 'POST') {
+  const formData = await Astro.request.formData();
+  const action = formData.get('action');
+
+  const handleUpload = async (fileKey: string) => {
+    const file = formData.get(fileKey);
+    if (file && file instanceof File && file.size > 0) {
+      return await uploadFile(file, mediaBinding, 'site');
+    }
+    return null;
+  };
+  
+  if (action === 'save_general') {
+    let siteLogoVal = formData.get('site_logo') as string;
+    const uploadedLogo = await handleUpload('site_logo_file');
+    if (uploadedLogo) siteLogoVal = uploadedLogo;
+
+    let siteFaviconVal = formData.get('site_favicon') as string;
+    const uploadedFavicon = await handleUpload('site_favicon_file');
+    if (uploadedFavicon) siteFaviconVal = uploadedFavicon;
+
+    const fieldsToSave = {
+      site_title: formData.get('site_title') as string,
+      site_description: formData.get('site_description') as string,
+      site_keywords: formData.get('site_keywords') as string,
+      site_language: formData.get('site_language') as string,
+      site_mode: formData.get('site_mode') as string,
+      site_logo: siteLogoVal || '',
+      site_favicon: siteFaviconVal || ''
+    };
+
+    for (const [key, val] of Object.entries(fieldsToSave)) {
+      await updateSetting(key, val, dbBinding);
+      (ayarlar as any)[key] = val;
+    }
+    mesaj = 'Genel ayarlar ve SEO kaydedildi';
+  } else if (action === 'save_popup') {
+    let popupImageVal = formData.get('popup_image') as string;
+    const uploadedPopup = await handleUpload('popup_image_file');
+    if (uploadedPopup) popupImageVal = uploadedPopup;
+
+    const fieldsToSave = {
+      popup_active: formData.get('popup_active') ? formData.get('popup_active') as string : 'false',
+      popup_image: popupImageVal || '',
+      popup_link: formData.get('popup_link') as string || ''
+    };
+
+    for (const [key, val] of Object.entries(fieldsToSave)) {
+      await updateSetting(key, val, dbBinding);
+      (ayarlar as any)[key] = val;
+    }
+    mesaj = 'Pop-up ayarları kaydedildi';
+  } else if (action === 'save_notifications') {
+    const fields = ['cookie_banner_active', 'cookie_text'];
+    for (const field of fields) {
+      const val = formData.get(field) ? formData.get(field) as string : (field === 'cookie_banner_active' ? 'false' : '');
+      await updateSetting(field, val, dbBinding);
+      (ayarlar as any)[field] = val;
+    }
+    mesaj = 'Çerez ve Bildirim ayarları kaydedildi';
+  } else if (action === 'save_menu') {
+    const titles = formData.getAll('menu_title[]');
+    const urls = formData.getAll('menu_url[]');
+    const menuItems = titles.map((t, i) => ({ title: t, url: urls[i] }));
+    await updateSetting('menu_items', JSON.stringify(menuItems), dbBinding);
+    ayarlar.menu_items = menuItems;
+    mesaj = 'Menü ayarları başarıyla kaydedildi';
+  } else if (action === 'save_tema') {
+    const fieldsToSave = {
+      primary_color: formData.get('primary_color') as string,
+      header_bg: formData.get('header_bg') as string,
+      footer_bg: formData.get('footer_bg') as string,
+      text_color: formData.get('text_color') as string,
+      link_color: formData.get('link_color') as string,
+      border_color: formData.get('border_color') as string,
+      font_family: formData.get('font_family') as string,
+      font_size: formData.get('font_size') as string
+    };
+
+    for (const [key, val] of Object.entries(fieldsToSave)) {
+      await updateSetting(key, val, dbBinding);
+      (ayarlar as any)[key] = val;
+    }
+    mesaj = 'Tema ayarları başarıyla kaydedildi';
+  } else if (action === 'save_fab') {
+    const activeChannels = formData.getAll('active_channels[]') as string[];
+    const fieldsToSave = {
+      fab_widget_active: formData.get('fab_widget_active') ? 'true' : 'false',
+      fab_active_channels: JSON.stringify(activeChannels),
+      fab_whatsapp_number: formData.get('fab_whatsapp_number') as string || '',
+      fab_telegram_username: formData.get('fab_telegram_username') as string || '',
+      fab_instagram_username: formData.get('fab_instagram_username') as string || '',
+      fab_phone_number: formData.get('fab_phone_number') as string || '',
+      fab_email_address: formData.get('fab_email_address') as string || '',
+      fab_widget_position: formData.get('fab_widget_position') as string || 'right-bottom'
+    };
+
+    for (const [key, val] of Object.entries(fieldsToSave)) {
+      await updateSetting(key, val, dbBinding);
+      (ayarlar as any)[key] = val;
+    }
+    mesaj = 'İletişim Balonu (FAB) ayarları başarıyla kaydedildi';
+  } else if (action === 'save_social') {
+    const platforms = ['x', 'facebook', 'instagram', 'linkedin', 'pinterest', 'youtube', 'tiktok', 'medium', 'whatsapp', 'telegram', 'phone', 'email'];
+    const socialLinks = platforms.map(platform => {
+      const active = formData.get(`active_${platform}`) === 'true';
+      const url = formData.get(`url_${platform}`) as string || '';
+      return {
+        id: platform,
+        name: platform === 'x' ? 'X (Twitter)' : 
+              platform === 'facebook' ? 'Facebook' :
+              platform === 'instagram' ? 'Instagram' :
+              platform === 'linkedin' ? 'LinkedIn' :
+              platform === 'pinterest' ? 'Pinterest' :
+              platform === 'youtube' ? 'YouTube' :
+              platform === 'tiktok' ? 'TikTok' :
+              platform === 'medium' ? 'Medium' :
+              platform === 'whatsapp' ? 'WhatsApp' :
+              platform === 'telegram' ? 'Telegram' :
+              platform === 'phone' ? 'Telefon' :
+              platform === 'email' ? 'E-Posta' : platform,
+        url,
+        active
+      };
+    });
+    
+    await updateSetting('social_media_links', JSON.stringify(socialLinks), dbBinding);
+    ayarlar.social_media_links = socialLinks;
+    mesaj = 'Sosyal medya ayarları başarıyla kaydedildi';
+  }
+}
+
+const urlParams = Astro.url.searchParams;
+if (urlParams.has('tab')) {
+  aktifSekme = urlParams.get('tab');
+}
+---
+
+<BaseLayout title="Ayarlar" isAdmin={true}>
+  <div class="space-y-6">
+    <div>
+      <h1 class="text-2xl font-bold">Ayarlar</h1>
+      <p class="text-sm text-gray-500">Site ayarlarını yapılandırın</p>
+    </div>
+
+    {mesaj && <div class="bg-green-100 text-green-700 p-3 rounded">{mesaj}</div>}
+
+    <!-- Sekmeler -->
+    <div class="flex flex-wrap border-b border-gray-200 dark:border-gray-700 gap-1">
+      <a href="/admin/settings?tab=general" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'general' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>⚙️ Genel & SEO</a>
+      <a href="/admin/settings?tab=tema" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'tema' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>🎨 Tema</a>
+      <a href="/admin/settings?tab=menu" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'menu' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>🍔 Menü</a>
+      <a href="/admin/settings?tab=popup" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'popup' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>🎆 Pop-up</a>
+      <a href="/admin/settings?tab=notifications" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'notifications' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>🔔 Çerez & Bildirim</a>
+      <a href="/admin/settings?tab=fab" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'fab' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>💬 İletişim Balonu</a>
+      <a href="/admin/settings?tab=social" class={`px-4 py-2 text-sm font-medium rounded-t-lg transition ${aktifSekme === 'social' ? 'bg-orange-50 text-orange-600 border-b-2 border-orange-500' : 'text-gray-500 hover:text-gray-700'}`}>📱 Sosyal Medya</a>
+    </div>
+
+    <!-- Tema Sekmesi -->
+    {aktifSekme === 'tema' && (
+      <form method="POST" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_tema" />
+        
+        <h2 class="text-lg font-semibold border-b pb-2">Renk ve Font Ayarları</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2">Ana Renk</label>
+            <input type="color" name="primary_color" value={ayarlar.primary_color} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Header Arka Plan</label>
+            <input type="color" name="header_bg" value={ayarlar.header_bg} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Footer Arka Plan</label>
+            <input type="color" name="footer_bg" value={ayarlar.footer_bg} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Yazı Rengi</label>
+            <input type="color" name="text_color" value={ayarlar.text_color} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Link Rengi</label>
+            <input type="color" name="link_color" value={ayarlar.link_color} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Border Rengi</label>
+            <input type="color" name="border_color" value={ayarlar.border_color} class="w-full h-10 rounded border cursor-pointer" />
+          </div>
+        </div>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+          <div>
+            <label class="block text-sm font-medium mb-2">Font Ailesi</label>
+            <select name="font_family" class="w-full px-3 py-2 border rounded dark:bg-gray-700">
+              <option value="'Inter', sans-serif" selected={ayarlar.font_family.includes('Inter')}>Inter</option>
+              <option value="'Roboto', sans-serif" selected={ayarlar.font_family.includes('Roboto')}>Roboto</option>
+              <option value="'Poppins', sans-serif" selected={ayarlar.font_family.includes('Poppins')}>Poppins</option>
+            </select>
+          </div>
+          <div>
+            <label class="block text-sm font-medium mb-2">Yazı Boyutu (px)</label>
+            <select name="font_size" class="w-full px-3 py-2 border rounded dark:bg-gray-700">
+              <option value="14" selected={ayarlar.font_size === '14'}>14px</option>
+              <option value="16" selected={ayarlar.font_size === '16'}>16px</option>
+              <option value="18" selected={ayarlar.font_size === '18'}>18px</option>
+              <option value="20" selected={ayarlar.font_size === '20'}>20px</option>
+            </select>
+          </div>
+        </div>
+        
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700">Temayı Kaydet</button>
+      </form>
+    )}
+
+    <!-- Genel Ayarlar Sekmesi -->
+    {aktifSekme === 'general' && (
+      <form method="POST" enctype="multipart/form-data" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_general" />
+        
+        <h2 class="text-lg font-semibold border-b pb-2">Temel Ayarlar & SEO</h2>
+        
+        <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div class="md:col-span-2">
+            <label class="block text-sm font-medium mb-1">Site Başlığı</label>
+            <input type="text" name="site_title" value={ayarlar.site_title} class="w-full px-3 py-2 border rounded dark:bg-gray-700" />
+          </div>
+
+          <div class="md:col-span-2 bg-orange-50 dark:bg-orange-900/20 border border-orange-200 dark:border-orange-800 p-4 rounded-lg mb-2">
+            <label class="block text-base font-bold mb-2 text-orange-800 dark:text-orange-300">Sitenin Ana Modu (Router)</label>
+            <select name="site_mode" class="w-full px-4 py-3 border border-orange-300 rounded-lg bg-white dark:bg-gray-800 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500 font-semibold text-sm">
+              <option value="blog" selected={ayarlar.site_mode === 'blog'}>Sadece Blog</option>
+              <option value="corporate" selected={ayarlar.site_mode === 'corporate'}>Sadece Kurumsal</option>
+              <option value="ecommerce" selected={ayarlar.site_mode === 'ecommerce'}>Sadece E-Ticaret</option>
+              <option value="mixed1" selected={ayarlar.site_mode === 'mixed1'}>Karma 1: Kurumsal + Blog + E-Ticaret (Üçlü)</option>
+              <option value="mixed2a" selected={ayarlar.site_mode === 'mixed2a'}>Karma 2 (A): Kurumsal + Blog (İkili)</option>
+              <option value="mixed2b" selected={ayarlar.site_mode === 'mixed2b'}>Karma 2 (B): Blog + E-Ticaret (İkili)</option>
+              <option value="mixed2c" selected={ayarlar.site_mode === 'mixed2c'}>Karma 2 (C): Kurumsal + E-Ticaret (İkili)</option>
+            </select>
+            <p class="text-xs text-orange-600 dark:text-orange-400 mt-2">Bu seçim ana sayfanızın (vitrinin) düzenini anında değiştirecektir.</p>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-medium mb-1">Logo</label>
+            <input type="text" name="site_logo" value={ayarlar.site_logo} class="w-full px-3 py-2 border rounded dark:bg-gray-700" placeholder="Örn: LAF veya https://site.com/logo.png" />
+            <input type="file" name="site_logo_file" accept="image/*" class="w-full text-sm" />
+            <p class="text-xs text-gray-500">Not: Cihazdan yükleyebilir veya URL girebilirsiniz. Önerilen ebat: 250px X 100px (veya maks 3 harf).</p>
+          </div>
+          
+          <div class="space-y-2">
+            <label class="block text-sm font-medium mb-1">Favicon</label>
+            <input type="text" name="site_favicon" value={ayarlar.site_favicon} class="w-full px-3 py-2 border rounded dark:bg-gray-700" placeholder="https://site.com/favicon.png" />
+            <input type="file" name="site_favicon_file" accept="image/*,.ico" class="w-full text-sm" />
+            <p class="text-xs text-gray-500">Not: Cihazdan yükleyebilir veya URL girebilirsiniz. Önerilen ebat: 32px X 32px veya 64px X 64px (.ico, .png, .svg).</p>
+          </div>
+
+          <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">Site Açıklaması (Meta Description)</label><input type="text" name="site_description" value={ayarlar.site_description} class="w-full px-3 py-2 border rounded dark:bg-gray-700" /></div>
+          <div class="md:col-span-2"><label class="block text-sm font-medium mb-1">Anahtar Kelimeler (Meta Keywords)</label><input type="text" name="site_keywords" value={ayarlar.site_keywords} class="w-full px-3 py-2 border rounded dark:bg-gray-700" placeholder="haber, güncel, teknoloji" /></div>
+          
+          <div><label class="block text-sm font-medium mb-1">Varsayılan Dil</label><select name="site_language" class="w-full px-3 py-2 border rounded dark:bg-gray-700"><option value="tr" selected={ayarlar.site_language === 'tr'}>Türkçe</option><option value="en" selected={ayarlar.site_language === 'en'}>English</option></select></div>
+        </div>
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 w-full md:w-auto">Kaydet</button>
+      </form>
+    )}
+
+    <!-- Pop-up Sekmesi -->
+    {aktifSekme === 'popup' && (
+      <form method="POST" enctype="multipart/form-data" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_popup" />
+        
+        <h2 class="text-lg font-semibold border-b pb-2">Pop-up Yapılandırması</h2>
+        <p class="text-sm text-gray-500 mb-4">Siteye ilk girişte kullanıcılara gösterilecek tanıtım veya reklam pop-up'ı.</p>
+
+        <div class="space-y-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="popup_active" value="true" checked={ayarlar.popup_active === 'true'} class="w-5 h-5 rounded text-orange-600" />
+            <span class="font-medium">Pop-up'ı Aktifleştir</span>
+          </label>
+
+          <div class="space-y-2">
+            <label class="block text-sm font-medium mb-1">Pop-up Görseli</label>
+            <input type="text" name="popup_image" value={ayarlar.popup_image} class="w-full px-3 py-2 border rounded dark:bg-gray-700" placeholder="https://site.com/kampanya.jpg" />
+            <input type="file" name="popup_image_file" accept="image/*" class="w-full text-sm" />
+            <p class="text-xs text-gray-500">Not: Cihazdan yükleyebilir veya URL girebilirsiniz. Önerilen ebat: 800px X 800px veya 600px X 600px (Kare veya dikey formda).</p>
+          </div>
+          
+          <div><label class="block text-sm font-medium mb-1">Tıklanınca Gidilecek Link (Opsiyonel)</label><input type="text" name="popup_link" value={ayarlar.popup_link} class="w-full px-3 py-2 border rounded dark:bg-gray-700" placeholder="https://hedefsite.com/kampanya" /></div>
+        </div>
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700">Kaydet</button>
+      </form>
+    )}
+
+    <!-- Çerez ve Bildirim Sekmesi -->
+    {aktifSekme === 'notifications' && (
+      <form method="POST" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_notifications" />
+        
+        <h2 class="text-lg font-semibold border-b pb-2">Çerez ve Tarayıcı Bildirimleri</h2>
+        <p class="text-sm text-gray-500 mb-4">Ziyaretçilerden çerez ve bildirim onayı almak için kullanılacak uyarı barı.</p>
+
+        <div class="space-y-4">
+          <label class="flex items-center gap-2 cursor-pointer">
+            <input type="checkbox" name="cookie_banner_active" value="true" checked={ayarlar.cookie_banner_active === 'true'} class="w-5 h-5 rounded text-orange-600" />
+            <span class="font-medium">Çerez ve Bildirim Barını Göster</span>
+          </label>
+
+          <div>
+            <label class="block text-sm font-medium mb-1">Bilgilendirme Metni</label>
+            <textarea name="cookie_text" rows="3" class="w-full px-3 py-2 border rounded dark:bg-gray-700">{ayarlar.cookie_text}</textarea>
+          </div>
+        </div>
+        
+        <div class="bg-blue-50 dark:bg-blue-900/20 p-4 rounded-lg mt-4">
+          <h3 class="font-medium text-blue-800 dark:text-blue-300">Push Bildirimleri Hakkında</h3>
+          <p class="text-sm text-blue-600 dark:text-blue-400 mt-1">Kullanıcılar "Kabul Et" butonuna bastıklarında çerezleri kabul etmiş sayılırlar ve eşzamanlı olarak tarayıcının bildirim izni isteme penceresi açılır. Kullanıcı tarayıcı üzerinden onay verirse sisteminize abone olur.</p>
+        </div>
+
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700">Kaydet</button>
+      </form>
+    )}
+
+    <!-- İletişim Balonu (FAB) Sekmesi -->
+    {aktifSekme === 'fab' && (
+      <form method="POST" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_fab" />
+        
+        <h2 class="text-lg font-semibold border-b pb-2">Çoklu İletişim Balonu (FAB) Ayarları</h2>
+        <p class="text-sm text-gray-500 mb-4">Sitenin sağ/sol alt köşesinde yer alacak iletişim balonunu ve aktif kanalları ayarlayın.</p>
+
+        <div class="space-y-4">
+          <label class="flex items-center gap-2 cursor-pointer bg-orange-50 dark:bg-orange-950/20 border border-orange-200 dark:border-orange-900 p-4 rounded-lg">
+            <input type="checkbox" name="fab_widget_active" value="true" checked={ayarlar.fab_widget_active === 'true'} class="w-5 h-5 rounded text-orange-600" />
+            <div>
+              <span class="font-bold text-orange-850 dark:text-orange-300">İletişim Balonunu Aktifleştir</span>
+              <p class="text-xs text-orange-600 dark:text-orange-400 mt-1">Bu ayar işaretlendiğinde iletişim balonu sitenin alt köşesinde görünecektir.</p>
+            </div>
+          </label>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <div>
+              <label class="block text-sm font-medium mb-1">Balon Konumu</label>
+              <select name="fab_widget_position" class="w-full px-3 py-2 border rounded dark:bg-gray-700">
+                <option value="right-bottom" selected={ayarlar.fab_widget_position === 'right-bottom'}>Sağ Alt Köşe (Önerilen)</option>
+                <option value="left-bottom" selected={ayarlar.fab_widget_position === 'left-bottom'}>Sol Alt Köşe</option>
+              </select>
+            </div>
+          </div>
+
+          <h3 class="font-bold text-sm border-b pt-4 pb-1">Aktif İletişim Kanalları</h3>
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-6">
+            <!-- WhatsApp -->
+            <div class="space-y-2 border dark:border-gray-700 p-4 rounded-lg">
+              <label class="flex items-center gap-2 cursor-pointer font-semibold text-green-600 dark:text-green-400">
+                <input type="checkbox" name="active_channels[]" value="WhatsApp" checked={ayarlar.fab_active_channels.includes('WhatsApp')} class="w-4 h-4 rounded text-green-600" />
+                <i class="fab fa-whatsapp"></i> WhatsApp
+              </label>
+              <input type="text" name="fab_whatsapp_number" value={ayarlar.fab_whatsapp_number} class="w-full px-3 py-2 border rounded dark:bg-gray-700 text-sm" placeholder="Telefon numarası (örn: 905XXXXXXXXX)" />
+              <p class="text-xs text-gray-500">Telefon numarası ülke kodu ile birlikte boşluksuz yazılmalıdır.</p>
+            </div>
+
+            <!-- Telegram -->
+            <div class="space-y-2 border dark:border-gray-700 p-4 rounded-lg">
+              <label class="flex items-center gap-2 cursor-pointer font-semibold text-sky-600 dark:text-sky-400">
+                <input type="checkbox" name="active_channels[]" value="Telegram" checked={ayarlar.fab_active_channels.includes('Telegram')} class="w-4 h-4 rounded text-sky-600" />
+                <i class="fab fa-telegram-plane"></i> Telegram
+              </label>
+              <input type="text" name="fab_telegram_username" value={ayarlar.fab_telegram_username} class="w-full px-3 py-2 border rounded dark:bg-gray-700 text-sm" placeholder="Kullanıcı adı veya kanal linki (örn: kanaladi)" />
+            </div>
+
+            <!-- Instagram -->
+            <div class="space-y-2 border dark:border-gray-700 p-4 rounded-lg">
+              <label class="flex items-center gap-2 cursor-pointer font-semibold text-pink-600 dark:text-pink-400">
+                <input type="checkbox" name="active_channels[]" value="Instagram" checked={ayarlar.fab_active_channels.includes('Instagram')} class="w-4 h-4 rounded text-pink-600" />
+                <i class="fab fa-instagram"></i> Instagram
+              </label>
+              <input type="text" name="fab_instagram_username" value={ayarlar.fab_instagram_username} class="w-full px-3 py-2 border rounded dark:bg-gray-700 text-sm" placeholder="Instagram kullanıcı adı (örn: profiladi)" />
+            </div>
+
+            <!-- Telefon -->
+            <div class="space-y-2 border dark:border-gray-700 p-4 rounded-lg">
+              <label class="flex items-center gap-2 cursor-pointer font-semibold text-emerald-600 dark:text-emerald-400">
+                <input type="checkbox" name="active_channels[]" value="Telefon" checked={ayarlar.fab_active_channels.includes('Telefon')} class="w-4 h-4 rounded text-emerald-600" />
+                <i class="fas fa-phone-alt"></i> Telefon (Arama)
+              </label>
+              <input type="text" name="fab_phone_number" value={ayarlar.fab_phone_number} class="w-full px-3 py-2 border rounded dark:bg-gray-700 text-sm" placeholder="Aranacak numara (örn: +905XXXXXXXXX)" />
+            </div>
+
+            <!-- E-Posta -->
+            <div class="space-y-2 border dark:border-gray-700 p-4 rounded-lg md:col-span-2">
+              <label class="flex items-center gap-2 cursor-pointer font-semibold text-red-600 dark:text-red-400">
+                <input type="checkbox" name="active_channels[]" value="E-Posta" checked={ayarlar.fab_active_channels.includes('E-Posta')} class="w-4 h-4 rounded text-red-600" />
+                <i class="far fa-envelope"></i> E-Posta (Mail)
+              </label>
+              <input type="email" name="fab_email_address" value={ayarlar.fab_email_address} class="w-full px-3 py-2 border rounded dark:bg-gray-700 text-sm" placeholder="E-posta adresi (örn: info@firma.com.tr)" />
+            </div>
+          </div>
+        </div>
+
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 w-full md:w-auto shadow-md">Kaydet</button>
+      </form>
+    )}
+
+    <!-- Sosyal Medya Sekmesi -->
+    {aktifSekme === 'social' && (
+      <form method="POST" data-astro-reload class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <input type="hidden" name="action" value="save_social" />
+        
+        <div class="border-b pb-4">
+          <h2 class="text-xl font-semibold">Sosyal Medya İkon Yönetimi</h2>
+          <p class="text-sm text-gray-500 mt-1">Sitenin üst menüsünde (Header) gösterilecek sosyal medya hesaplarınızı yönetin. 5'ten fazla aktif platform girildiğinde otomatik olarak "Daha Fazla (+)" ikonu görünür ve kullanıcıları tüm hesapların listelendiği sayfaya yönlendirir.</p>
+        </div>
+
+        <div class="space-y-4">
+          {ayarlar.social_media_links.map((item: any) => {
+            const bgClasses = {
+              x: 'bg-black text-white',
+              facebook: 'bg-[#1877F2] text-white',
+              instagram: 'bg-gradient-to-tr from-[#f9ce34] via-[#ee2a7b] to-[#6228d7] text-white',
+              linkedin: 'bg-[#0A66C2] text-white',
+              pinterest: 'bg-[#BD081C] text-white',
+              youtube: 'bg-[#FF0000] text-white',
+              tiktok: 'bg-black text-white',
+              medium: 'bg-black text-white',
+              whatsapp: 'bg-[#25D366] text-white',
+              telegram: 'bg-[#0088cc] text-white',
+              phone: 'bg-emerald-500 text-white',
+              email: 'bg-red-500 text-white'
+            };
+            return (
+              <div class="flex flex-col md:flex-row md:items-center gap-4 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700">
+                <div class="flex items-center gap-3 md:w-1/4">
+                  <span class={`w-10 h-10 rounded-full flex items-center justify-center ${bgClasses[item.id] || 'bg-gray-500 text-white'}`}>
+                    {item.id === 'x' && <i class="fab fa-x-twitter"></i>}
+                    {item.id === 'facebook' && <i class="fab fa-facebook-f"></i>}
+                    {item.id === 'instagram' && <i class="fab fa-instagram"></i>}
+                    {item.id === 'linkedin' && <i class="fab fa-linkedin-in"></i>}
+                    {item.id === 'pinterest' && <i class="fab fa-pinterest-p"></i>}
+                    {item.id === 'youtube' && <i class="fab fa-youtube"></i>}
+                    {item.id === 'tiktok' && <i class="fab fa-tiktok"></i>}
+                    {item.id === 'medium' && <i class="fab fa-medium"></i>}
+                    {item.id === 'whatsapp' && <i class="fab fa-whatsapp"></i>}
+                    {item.id === 'telegram' && <i class="fab fa-telegram-plane"></i>}
+                    {item.id === 'phone' && <i class="fas fa-phone-alt"></i>}
+                    {item.id === 'email' && <i class="far fa-envelope"></i>}
+                  </span>
+                  <span class="font-semibold text-gray-800 dark:text-gray-200">{item.name}</span>
+                </div>
+                
+                <div class="flex-1">
+                  <input type="url" name={`url_${item.id}`} value={item.url} placeholder={item.id === 'phone' ? 'tel:+90...' : item.id === 'email' ? 'mailto:info@...' : 'https://...'} class="w-full px-3 py-2 border rounded dark:bg-gray-800 dark:border-gray-700 focus:ring-2 focus:ring-orange-500 focus:border-orange-500 text-gray-900 dark:text-white" />
+                </div>
+                
+                <div class="flex items-center gap-2">
+                  <label class="relative inline-flex items-center cursor-pointer">
+                    <input type="checkbox" name={`active_${item.id}`} value="true" checked={item.active} class="sr-only peer" />
+                    <div class="w-11 h-6 bg-gray-200 peer-focus:outline-none peer-focus:ring-4 peer-focus:ring-orange-300 dark:peer-focus:ring-orange-850 rounded-full peer dark:bg-gray-700 peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-5 after:w-5 after:transition-all dark:border-gray-600 peer-checked:bg-orange-500"></div>
+                    <span class="ml-2 text-sm font-medium text-gray-900 dark:text-gray-300">Aktif</span>
+                  </label>
+                </div>
+              </div>
+            );
+          })}
+        </div>
+
+        <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 shadow-md">Sosyal Medya Ayarlarını Kaydet</button>
+      </form>
+    )}
+
+    <!-- Menü Sekmesi -->
+    {aktifSekme === 'menu' && (
+      <div class="bg-white dark:bg-gray-800 rounded-lg shadow p-6 space-y-6">
+        <div class="flex justify-between items-center border-b dark:border-gray-700 pb-4">
+          <h2 class="text-xl font-semibold">Menü Yapılandırması</h2>
+          <button id="addMenuBtn" class="bg-purple-600 hover:bg-purple-700 text-white px-4 py-2 rounded-lg text-sm transition">
+            <i class="fas fa-plus mr-2"></i> Yeni Eleman Ekle
+          </button>
+        </div>
+        
+        <form method="POST" data-astro-reload class="space-y-6">
+          <input type="hidden" name="action" value="save_menu" />
+          
+          <div class="space-y-3" id="menuList">
+            <!-- Menü Öğeleri Listesi -->
+            {ayarlar.menu_items.map((item: any) => (
+              <div class="menu-item flex items-center gap-4 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 cursor-move">
+                <i class="fas fa-grip-vertical text-gray-400"></i>
+                <div class="grid grid-cols-2 gap-4 flex-1">
+                  <input type="text" name="menu_title[]" value={item.title} class="w-full px-3 py-2 border rounded dark:bg-gray-800" placeholder="Bağlantı Başlığı" />
+                  <input type="text" name="menu_url[]" value={item.url} class="w-full px-3 py-2 border rounded dark:bg-gray-800" placeholder="URL (örn: /iletisim)" />
+                </div>
+                <button type="button" class="btn-remove-menu text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+              </div>
+            ))}
+          </div>
+
+          <button type="submit" class="bg-orange-600 text-white px-6 py-2 rounded hover:bg-orange-700 shadow-lg">Değişiklikleri Kaydet</button>
+        </form>
+      </div>
+    )}
+  </div>
+  
+  <script is:inline>
+    function initSettingsPage() {
+      const addMenuBtn = document.getElementById('addMenuBtn');
+      const menuList = document.getElementById('menuList');
+      
+      if (addMenuBtn && menuList && !addMenuBtn.dataset.bound) {
+        addMenuBtn.dataset.bound = 'true';
+        addMenuBtn.addEventListener('click', () => {
+          const div = document.createElement('div');
+          div.className = 'menu-item flex items-center gap-4 bg-gray-50 dark:bg-gray-900 p-4 rounded-lg border border-gray-200 dark:border-gray-700 cursor-move';
+          div.innerHTML = `
+            <i class="fas fa-grip-vertical text-gray-400"></i>
+            <div class="grid grid-cols-2 gap-4 flex-1">
+              <input type="text" name="menu_title[]" value="" class="w-full px-3 py-2 border rounded dark:bg-gray-800 focus:border-purple-500 focus:outline-none" placeholder="Bağlantı Başlığı" />
+              <input type="text" name="menu_url[]" value="/" class="w-full px-3 py-2 border rounded dark:bg-gray-800 focus:border-purple-500 focus:outline-none" placeholder="URL (örn: /iletisim)" />
+            </div>
+            <button type="button" class="btn-remove-menu text-red-500 hover:text-red-700 p-2"><i class="fas fa-trash"></i></button>
+          `;
+          menuList.appendChild(div);
+          
+          div.querySelector('.btn-remove-menu')?.addEventListener('click', () => {
+            div.remove();
+          });
+        });
+      }
+      
+      document.querySelectorAll('.btn-remove-menu').forEach(btn => {
+        if (!btn.dataset.bound) {
+          btn.dataset.bound = 'true';
+          btn.addEventListener('click', (e) => {
+            e.currentTarget.closest('.menu-item')?.remove();
+          });
+        }
+      });
+    }
+
+    document.addEventListener('astro:page-load', initSettingsPage);
+    
+    if (document.readyState === 'complete' || document.readyState === 'interactive') {
+      setTimeout(initSettingsPage, 100);
+    } else {
+      document.addEventListener('DOMContentLoaded', initSettingsPage);
+    }
+  </script>
+</BaseLayout>

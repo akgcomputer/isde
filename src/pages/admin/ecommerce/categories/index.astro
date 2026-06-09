@@ -1,0 +1,192 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getCategories, createCategory, updateCategory, deleteCategory } from '../../../../lib/db';
+import MediaPicker from '../../../../components/admin/MediaPicker.astro';
+import CategoryRow from '../../../../components/admin/CategoryRow.astro';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+
+let mesaj = '';
+
+// Turkish Slugification Helper for Category Slugs
+function slugify(text: string): string {
+  const trMap: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C', 'ğ': 'g', 'Ğ': 'G', 'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O', 'ş': 's', 'Ş': 'S', 'ü': 'u', 'Ü': 'U'
+  };
+  return text
+    .replace(/[çÇğĞıİöÖşŞüÜ]/g, match => trMap[match])
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+}
+
+// Handle Form Submissions (Create, Update, Delete)
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const islem = formData.get('islem') as string;
+    
+    if (islem === 'ekle') {
+      const name = formData.get('ad') as string;
+      const parent_id = formData.get('ust_id') === 'null' ? null : parseInt(formData.get('ust_id') as string);
+      const image_url = formData.get('image_url') as string;
+      if (name) {
+        const slug = slugify(name);
+        await createCategory({ name, slug, parent_id, icon: parent_id ? 'fa-tag' : 'fa-shopping-bag', type: 'product', image_url }, dbBinding);
+        mesaj = 'Kategori başarıyla eklendi.';
+      }
+    } else if (islem === 'sil') {
+      const id = parseInt(formData.get('id') as string);
+      await deleteCategory(id, dbBinding);
+      mesaj = 'Kategori silindi.';
+    } else if (islem === 'guncelle') {
+      const id = parseInt(formData.get('id') as string);
+      const name = formData.get('ad') as string;
+      const image_url = formData.get('image_url') as string;
+      if (name) {
+        const slug = slugify(name);
+        await updateCategory(id, { name, slug, type: 'product', image_url }, dbBinding);
+        mesaj = 'Kategori başarıyla güncellendi.';
+      }
+    }
+  } catch (err) {
+    console.error('Category action error:', err);
+    mesaj = 'Bir hata oluştu.';
+  }
+}
+
+// Load categories from database
+const kategoriler = await getCategories(dbBinding, 'product');
+
+// Filter main and subcategories
+const anaKategoriler = kategoriler.filter(k => k.parent_id === null || k.parent_id === undefined);
+function altKategoriler(parent_id: number) {
+  return kategoriler.filter(k => k.parent_id === parent_id);
+}
+---
+
+<BaseLayout title="Ürün Kategorileri - Admin" isAdmin={true}>
+  <div class="p-6">
+    <div class="mb-6">
+      <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Ürün Kategorileri</h1>
+      <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Hiyerarşik kategori yapısını yönetin</p>
+    </div>
+
+    {mesaj && (
+      <div class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-4 rounded-xl border border-green-200 dark:border-green-800 mb-6 flex justify-between items-center">
+        <span>✅ {mesaj}</span>
+        <button onclick="this.parentElement.remove()" class="text-green-700 dark:text-green-300">✕</button>
+      </div>
+    )}
+
+    <!-- Kategori Ekleme Formu -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6 mb-6">
+      <h2 class="text-lg font-semibold mb-4 text-gray-900 dark:text-white">Yeni Kategori Ekle</h2>
+      <form method="POST" class="flex flex-wrap gap-3">
+        <input type="hidden" name="islem" value="ekle" />
+        <input 
+          type="text" 
+          name="ad" 
+          placeholder="Kategori adı" 
+          required 
+          class="flex-1 min-w-[200px] px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500"
+        />
+        <div class="flex gap-2">
+          <input type="text" id="add_image_url" name="image_url" placeholder="Görsel URL" class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500" />
+          <MediaPicker inputId="add_image_url" />
+        </div>
+        <select name="ust_id" class="px-4 py-2.5 border border-gray-300 dark:border-gray-600 rounded-lg bg-white dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500">
+          <option value="null">Üst kategori (YOK)</option>
+          {kategoriler.map(kat => (
+            <option value={kat.id}>{kat.parent_id ? '— ' : ''}{kat.name}</option>
+          ))}
+        </select>
+        <button type="submit" class="bg-orange-600 hover:bg-orange-700 text-white px-6 py-2.5 rounded-lg transition font-medium shadow-md">Kaydet</button>
+      </form>
+    </div>
+
+    <!-- Kategori Listesi (Hiyerarşik) -->
+    <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+      <table class="w-full">
+        <thead class="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase tracking-wider">
+          <tr>
+            <th class="w-10 px-4 py-3"><input type="checkbox" id="selectAll" class="w-4 h-4 rounded border-gray-300"></th>
+            <th class="w-16 px-4 py-3 text-left">Görsel</th>
+            <th class="px-6 py-4 text-left">Kategori Adı</th>
+            <th class="px-6 py-4 text-left">Üst Kategori</th>
+            <th class="px-6 py-4 text-center">İşlem</th>
+          </tr>
+        </thead>
+        <tbody class="divide-y divide-gray-200 dark:divide-gray-700 text-gray-700 dark:text-gray-200">
+          {anaKategoriler.map(ust => (
+            <CategoryRow category={ust} categories={kategoriler} depth={0} />
+          ))}
+        </tbody>
+      </table>
+    </div>
+  </div>
+
+  <!-- Düzenleme Modalı -->
+  <div id="editModal" class="hidden fixed inset-0 bg-black/60 flex items-center justify-center z-50 backdrop-blur-sm">
+    <div class="bg-white dark:bg-gray-800 rounded-xl p-6 w-full max-w-md border border-gray-200 dark:border-gray-700 shadow-2xl">
+      <h2 class="text-xl font-bold mb-4 text-gray-900 dark:text-white">Kategori Düzenle</h2>
+      <form method="POST" class="space-y-4">
+        <input type="hidden" name="islem" value="guncelle" />
+        <input type="hidden" name="id" id="editId" />
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">Kategori Adı</label>
+          <input type="text" name="ad" id="editAd" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500" />
+        </div>
+        <div>
+          <label class="block text-sm font-medium mb-1.5 text-gray-700 dark:text-gray-300">Görsel URL</label>
+          <div class="flex gap-2">
+            <input type="text" name="image_url" id="editImg" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-3 py-2 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500" />
+            <MediaPicker inputId="editImg" />
+          </div>
+        </div>
+        <div class="flex gap-3 pt-2">
+          <button type="submit" class="bg-orange-600 text-white px-4 py-2.5 rounded-lg hover:bg-orange-700 flex-1 font-semibold transition">Kaydet</button>
+          <button type="button" id="closeModalBtn" class="bg-gray-200 dark:bg-gray-700 text-gray-700 dark:text-gray-200 px-4 py-2.5 rounded-lg hover:bg-gray-300 dark:hover:bg-gray-600 flex-1 font-semibold transition">İptal</button>
+        </div>
+      </form>
+    </div>
+  </div>
+
+  <script>
+    // Safe modern script to attach event listeners and open modal
+    document.querySelectorAll('.edit-category-btn').forEach(btn => {
+      btn.addEventListener('click', () => {
+        const id = btn.getAttribute('data-id');
+        const ad = btn.getAttribute('data-ad');
+        const img = btn.getAttribute('data-img');
+        
+        const inputId = document.getElementById('editId') as HTMLInputElement;
+        const inputAd = document.getElementById('editAd') as HTMLInputElement;
+        const inputImg = document.getElementById('editImg') as HTMLInputElement;
+        const modal = document.getElementById('editModal');
+        
+        if (inputId && inputAd && modal) {
+          inputId.value = id || '';
+          inputAd.value = ad || '';
+          if (inputImg) inputImg.value = img || '';
+          modal.classList.remove('hidden');
+        }
+      });
+    });
+
+    // Close Modal Button
+    document.getElementById('closeModalBtn')?.addEventListener('click', () => {
+      document.getElementById('editModal')?.classList.add('hidden');
+    });
+
+    // Close on outside click
+    document.getElementById('editModal')?.addEventListener('click', (e) => {
+      if (e.target === e.currentTarget) {
+        document.getElementById('editModal')?.classList.add('hidden');
+      }
+    });
+  </script>
+</BaseLayout>

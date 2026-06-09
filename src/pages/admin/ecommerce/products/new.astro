@@ -1,0 +1,588 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getCategories, getBrands, createProduct, createProductVariant, createWholesalePrice } from '../../../../lib/db';
+import MediaPicker from '../../../../components/admin/MediaPicker.astro';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const mediaBinding = Astro.locals.runtime?.env?.MEDIA_BUCKET;
+
+let hata = '';
+let basari = '';
+
+function slugify(text: string): string {
+  const trMap: Record<string, string> = {
+    'ç': 'c', 'Ç': 'C', 'ğ': 'g', 'Ğ': 'G', 'ı': 'i', 'İ': 'I',
+    'ö': 'o', 'Ö': 'O', 'ş': 's', 'Ş': 'S', 'ü': 'u', 'Ü': 'U'
+  };
+  return text
+    .replace(/[çÇğĞıİöÖşŞüÜ]/g, match => trMap[match])
+    .toLowerCase()
+    .replace(/[^a-z0-9 -]/g, '')
+    .replace(/\s+/g, '-')
+    .replace(/-+/g, '-')
+    .trim();
+}
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const name = formData.get('name') as string;
+    let slug = slugify(name); // Özel URL (Slug) olmasın kaldıralım başlık ne ise slug da o olsun
+    
+    const category_id = parseInt(formData.get('category_id') as string) || null;
+    const brand_id = parseInt(formData.get('brand_id') as string) || null;
+    const excerpt = formData.get('excerpt') as string;
+    const description = formData.get('description') as string;
+    const price = parseFloat(formData.get('price') as string) || 0;
+    const rawCompare = formData.get('compare_at_price') as string;
+    const parsedCompare = rawCompare && rawCompare.trim() !== '' ? parseFloat(rawCompare) : null;
+    const compare_at_price = isNaN(parsedCompare as any) ? null : parsedCompare;
+    
+    const currency = formData.get('currency') as string || '₺';
+    const unit = formData.get('unit') as string || 'Adet';
+    const min_order_qty = parseInt(formData.get('min_order_qty') as string) || 1;
+    
+    // Main Image
+    let image_url = formData.get('image_url') as string;
+
+    // Gallery
+    const gallery_images = [];
+    const galleryUrls = formData.get('gallery_urls') as string;
+    if (galleryUrls) {
+      gallery_images.push(...galleryUrls.split(',').filter(u => u.trim() !== ''));
+    }
+
+    const video_url = formData.get('video_url') as string || null;
+    
+    // Badges (4 textboxes + 4 MediaPickers)
+    const badge_tl_text = formData.get('badge_tl_text') as string;
+    const badge_tl_img = formData.get('badge_tl_img') as string;
+    const badge_tr_text = formData.get('badge_tr_text') as string;
+    const badge_tr_img = formData.get('badge_tr_img') as string;
+    const badge_bl_text = formData.get('badge_bl_text') as string;
+    const badge_bl_img = formData.get('badge_bl_img') as string;
+    const badge_br_text = formData.get('badge_br_text') as string;
+    const badge_br_img = formData.get('badge_br_img') as string;
+
+    const badge_top_left = badge_tl_img || badge_tl_text || null;
+    const badge_top_right = badge_tr_img || badge_tr_text || null;
+    
+    const badges = [];
+    if (badge_bl_img || badge_bl_text) badges.push({ content: badge_bl_img || badge_bl_text, position: 'bottom-left', type: badge_bl_img ? 'image' : 'text' });
+    if (badge_br_img || badge_br_text) badges.push({ content: badge_br_img || badge_br_text, position: 'bottom-right', type: badge_br_img ? 'image' : 'text' });
+
+    const status = formData.get('status') as string || 'aktif';
+    const seller_name = formData.get('seller_name') as string || '';
+    const shipping_time = formData.get('shipping_time') as string || '';
+    
+    // Features
+    const features: any = {};
+    const featureKeys = formData.getAll('feature_key[]');
+    const featureVals = formData.getAll('feature_val[]');
+    featureKeys.forEach((key, index) => {
+      if (key && key.toString().trim() !== '') {
+        features[key.toString().trim()] = featureVals[index] ? featureVals[index].toString().trim() : '';
+      }
+    });
+
+    const tags = formData.get('tags') as string || '';
+    const stock = parseInt(formData.get('stock') as string) || 0;
+    const allow_backorder = formData.get('allow_backorder') === 'on' ? 1 : 0;
+
+    if (!name) {
+      hata = 'Ürün adı zorunludur.';
+    } else {
+      const newProduct = await createProduct({
+        category_id, brand_id, name, slug, excerpt, description,
+        price, compare_at_price, currency, unit, min_order_qty, image_url, badge_top_left, badge_top_right,
+        status,
+        badges: badges.length > 0 ? badges : null,
+        seller_name, shipping_time,
+        features: Object.keys(features).length > 0 ? features : null,
+        gallery_images: gallery_images.length > 0 ? gallery_images : null,
+        tags, stock, video_url, allow_backorder
+      }, dbBinding);
+      
+      if (newProduct) {
+        // Variants
+        const vNames = formData.getAll('v_name[]');
+        const vStocks = formData.getAll('v_stock[]');
+        const vPrices = formData.getAll('v_price[]');
+        
+        for (let i = 0; i < vNames.length; i++) {
+          const vName = vNames[i]?.toString().trim();
+          if (vName) {
+            const rawVPrice = vPrices[i]?.toString();
+            const parsedVPrice = rawVPrice && rawVPrice.trim() !== '' ? parseFloat(rawVPrice) : null;
+            const finalVPrice = isNaN(parsedVPrice as any) ? null : parsedVPrice;
+
+            const rawVStock = vStocks[i]?.toString();
+            const parsedVStock = rawVStock && rawVStock.trim() !== '' ? parseInt(rawVStock) : 0;
+            const finalVStock = isNaN(parsedVStock) ? 0 : parsedVStock;
+
+            await createProductVariant({
+              product_id: newProduct.id,
+              name: vName,
+              sku: slugify(vName),
+              price: finalVPrice,
+              stock: finalVStock,
+              image_url: null
+            }, dbBinding);
+          }
+        }
+
+        // Wholesale Prices
+        const wQtys = formData.getAll('w_qty[]');
+        const wDiscounts = formData.getAll('w_discount[]');
+        for (let i = 0; i < wQtys.length; i++) {
+          const rawWQty = wQtys[i]?.toString();
+          const rawWDiscount = wDiscounts[i]?.toString();
+          const qty = rawWQty && rawWQty.trim() !== '' ? parseInt(rawWQty) : 0;
+          const discount = rawWDiscount && rawWDiscount.trim() !== '' ? parseFloat(rawWDiscount) : 0;
+
+          if (!isNaN(qty) && !isNaN(discount) && qty > 0 && discount > 0) {
+            await createWholesalePrice({
+              product_id: newProduct.id,
+              min_qty: qty,
+              discount_percentage: discount
+            }, dbBinding);
+          }
+        }
+        
+        basari = 'Ürün başarıyla eklendi! Düzenleme sayfasına yönlendiriliyorsunuz...';
+        return Astro.redirect(`/admin/ecommerce/products/${newProduct.id}`);
+      }
+    }
+  } catch (err: any) {
+    hata = err.message || 'İşlem sırasında bir hata oluştu. Lütfen bilgileri kontrol edin.';
+    console.error(err);
+  }
+}
+
+const categories = await getCategories(dbBinding, 'product');
+const brands = await getBrands(dbBinding);
+---
+
+<BaseLayout title="Yeni Ürün Ekle - Admin" isAdmin={true}>
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" />
+
+  <div class="p-6">
+    <div class="mb-6 flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Yeni Ürün Ekle</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">E-ticaret mağazanız için yeni bir ürün oluşturun</p>
+      </div>
+      <a href="/admin/ecommerce/products" class="bg-gray-200 hover:bg-gray-300 dark:bg-gray-700 dark:hover:bg-gray-600 text-gray-800 dark:text-gray-200 px-4 py-2 rounded-lg transition text-sm font-medium flex items-center">
+        <i class="fas fa-arrow-left mr-2"></i> Geri Dön
+      </a>
+    </div>
+
+    {hata && (
+      <div class="bg-red-100 border border-red-400 text-red-700 px-4 py-3 rounded relative mb-6">
+        <span class="block sm:inline">{hata}</span>
+      </div>
+    )}
+
+    {basari && (
+      <div class="bg-green-100 border border-green-400 text-green-700 px-4 py-3 rounded relative mb-6">
+        <span class="block sm:inline">{basari}</span>
+      </div>
+    )}
+
+    <form method="POST" id="productForm" class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <div class="lg:col-span-2 space-y-6">
+        
+        <!-- Temel Bilgiler -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Temel Bilgiler</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Ürün Adı *</label>
+            <input type="text" name="name" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500" placeholder="Örn: Siyah Pamuklu Tişört" />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Kısa Açıklama (Excerpt)</label>
+            <textarea name="excerpt" rows="2" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-3 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white focus:ring-2 focus:ring-orange-500" placeholder="Ürün listelerinde görünecek kısa özet metin..."></textarea>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Detaylı Açıklama (HTML)</label>
+            <input type="hidden" name="description" id="description" />
+            <div id="editor-container" class="h-64 bg-white dark:bg-gray-800 text-gray-900 dark:text-white rounded-b-lg border-gray-300 dark:border-gray-600"></div>
+            <p class="text-xs text-gray-500 mt-1">Renk, link, liste, resim ekleme gibi tüm detaylı özellikleri bu editörden kullanabilirsiniz.</p>
+          </div>
+        </div>
+
+        <!-- Kategorizasyon -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Kategori ve Marka</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Kategori</label>
+            <select name="category_id" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
+              <option value="">Kategori Seçin</option>
+              {categories.map((c: any) => (
+                <option value={c.id}>{c.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Marka</label>
+            <select name="brand_id" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white">
+              <option value="">Marka Seçin</option>
+              {brands.map((b: any) => (
+                <option value={b.id}>{b.name}</option>
+              ))}
+            </select>
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Satıcı Adı</label>
+            <input type="text" name="seller_name" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Ör.DepodanDirekt" />
+          </div>
+          
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Etiketler</label>
+            <input type="text" name="tags" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Virgülle ayırın" />
+          </div>
+        </div>
+
+        <!-- Medya Yönetimi -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Medya Yönetimi</h2>
+          
+          <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Ana Görsel (Kapak)</label>
+            <div class="flex flex-col gap-2">
+              <input type="text" id="image_url" name="image_url" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700" placeholder="Görsel URL'si" readonly />
+              <div><MediaPicker inputId="image_url" /></div>
+            </div>
+          </div>
+
+          <div class="mb-6">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Video URL</label>
+            <input type="text" name="video_url" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="https://youtube.com/watch?v=..." />
+          </div>
+
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Diğer Görseller (Çoklu Seçim)</label>
+            <div class="flex flex-col gap-2">
+              <input type="text" id="gallery_urls" name="gallery_urls" class="w-full border border-gray-300 dark:border-gray-600 rounded px-3 py-2 text-sm bg-gray-50 dark:bg-gray-700" placeholder="Galeri URL'leri (Virgülle ayrılmış)" readonly />
+              <div><MediaPicker inputId="gallery_urls" multiple={true} /></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Fiyat ve Stok -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Fiyat ve Stok</h2>
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Satış Fiyatı</label>
+              <div class="flex gap-2">
+                <input type="number" step="0.01" name="price" required class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700" placeholder="0.00" />
+                <input type="text" name="currency" class="w-20 border border-gray-300 dark:border-gray-600 rounded-lg px-2 py-2 text-center bg-gray-50 dark:bg-gray-700" value="₺" placeholder="₺, $, €" />
+              </div>
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Piyasa Fiyatı (Üstü Çizili)</label>
+              <div class="flex gap-2">
+                <input type="number" step="0.01" name="compare_at_price" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700" placeholder="0.00" />
+              </div>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4 mb-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Ana Stok (Adet)</label>
+              <input type="number" name="stock" value="10" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" />
+            </div>
+            <div class="flex flex-col justify-end">
+              <label class="flex items-center gap-2 cursor-pointer p-2 border border-gray-300 dark:border-gray-600 rounded-lg bg-gray-50 dark:bg-gray-700">
+                <input type="checkbox" name="allow_backorder" class="w-5 h-5 rounded text-orange-500 focus:ring-orange-500" />
+                <span class="text-sm font-medium text-gray-700 dark:text-gray-300">Stoksuz Satış Kontrolü (Sınırsız Satış)</span>
+              </label>
+            </div>
+          </div>
+
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Satış Birimi</label>
+              <input type="text" name="unit" value="Adet" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Örn: Adet, Kutu, Litre" />
+            </div>
+            <div>
+              <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Minimum Sipariş Miktarı</label>
+              <input type="number" name="min_order_qty" value="1" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="En az XX tane alınabilir" />
+            </div>
+          </div>
+        </div>
+
+        <!-- Köşe Rozetleri -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Köşe Rozetleri</h2>
+          <p class="text-xs text-gray-500 mb-4">Her köşe için ister metin (Örn: YENİ), ister rozet resmi seçebilirsiniz.</p>
+
+          <div class="space-y-4">
+            <div class="p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900">
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Sol Üst (Top-Left)</label>
+              <input type="text" name="badge_tl_text" placeholder="Rozet Adı (Metin)" class="w-full text-sm mb-2 px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <div class="flex gap-2"><input type="text" id="badge_tl_img" name="badge_tl_img" placeholder="Resim URL" class="w-full text-sm px-2 py-1 border rounded bg-white dark:bg-gray-800" readonly /><div><MediaPicker inputId="badge_tl_img" /></div></div>
+            </div>
+            
+            <div class="p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900">
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Sağ Üst (Top-Right)</label>
+              <input type="text" name="badge_tr_text" placeholder="Rozet Adı (Metin)" class="w-full text-sm mb-2 px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <div class="flex gap-2"><input type="text" id="badge_tr_img" name="badge_tr_img" placeholder="Resim URL" class="w-full text-sm px-2 py-1 border rounded bg-white dark:bg-gray-800" readonly /><div><MediaPicker inputId="badge_tr_img" /></div></div>
+            </div>
+
+            <div class="p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900">
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Sol Alt (Bottom-Left)</label>
+              <input type="text" name="badge_bl_text" placeholder="Rozet Adı (Metin)" class="w-full text-sm mb-2 px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <div class="flex gap-2"><input type="text" id="badge_bl_img" name="badge_bl_img" placeholder="Resim URL" class="w-full text-sm px-2 py-1 border rounded bg-white dark:bg-gray-800" readonly /><div><MediaPicker inputId="badge_bl_img" /></div></div>
+            </div>
+
+            <div class="p-3 border border-gray-200 dark:border-gray-700 rounded bg-gray-50 dark:bg-gray-900">
+              <label class="block text-xs font-bold text-gray-700 dark:text-gray-300 mb-1">Sağ Alt (Bottom-Right)</label>
+              <input type="text" name="badge_br_text" placeholder="Rozet Adı (Metin)" class="w-full text-sm mb-2 px-2 py-1 border rounded bg-white dark:bg-gray-800" />
+              <div class="flex gap-2"><input type="text" id="badge_br_img" name="badge_br_img" placeholder="Resim URL" class="w-full text-sm px-2 py-1 border rounded bg-white dark:bg-gray-800" readonly /><div><MediaPicker inputId="badge_br_img" /></div></div>
+            </div>
+          </div>
+        </div>
+
+        <!-- Ürün Özellikleri -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Ürün Özellikleri</h2>
+          <div id="features-container" class="space-y-3 mb-3">
+            <div class="flex gap-2 feature-row">
+              <input type="text" name="feature_key[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Özellik Adı (Örn: Kumaş türü)" />
+              <input type="text" name="feature_val[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Açıklaması (Örn: Pamuklu)" />
+              <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" id="add-feature-btn" class="text-sm bg-blue-100 text-blue-700 px-4 py-2 rounded font-medium hover:bg-blue-200">
+            + Özellik Ekle
+          </button>
+        </div>
+
+        <!-- Varyasyonlar -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Varyasyonlar (Renk, Beden vb.)</h2>
+          <div id="variants-container" class="space-y-3 mb-3">
+            <div class="flex flex-wrap md:flex-nowrap gap-2 variant-row">
+              <input type="text" name="v_name[]" class="flex-1 min-w-[200px] border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Varyasyon Adı (Örn: Siyah - XL)" />
+              <input type="number" name="v_stock[]" class="w-24 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Stok" />
+              <input type="number" step="0.01" name="v_price[]" class="w-32 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Ek Fiyat" />
+              <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" id="add-variant-btn" class="text-sm bg-blue-100 text-blue-700 px-4 py-2 rounded font-medium hover:bg-blue-200">
+            + Varyasyon Ekle
+          </button>
+          <p class="text-xs text-gray-500 mt-2">Para birimi, ürünün ana satış fiyatındaki birimi kullanır.</p>
+        </div>
+
+        <!-- Toptan Satış -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Toptan Satış (% İndirim)</h2>
+          <div id="wholesale-container" class="space-y-3 mb-3">
+            <div class="flex gap-2 wholesale-row">
+              <input type="number" name="w_qty[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="Adet (Örn: 22)" />
+              <input type="number" step="0.01" name="w_discount[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700" placeholder="İskonto Oranı % (Örn: 22)" />
+              <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn">
+                <i class="fas fa-trash"></i>
+              </button>
+            </div>
+          </div>
+          <button type="button" id="add-wholesale-btn" class="text-sm bg-blue-100 text-blue-700 px-4 py-2 rounded font-medium hover:bg-blue-200">
+            + Toptan Satış Ekle
+          </button>
+        </div>
+
+      </div>
+      
+      <!-- Sağ Sütun -->
+      <div class="space-y-6">
+
+        <!-- Aksiyon -->
+        <div class="sticky top-6">
+          <button type="submit" id="submitBtn" class="w-full bg-red-600 hover:bg-red-700 text-white font-bold py-4 px-4 rounded-lg shadow-lg transform transition active:scale-95 text-lg flex justify-center items-center">
+            <i class="fas fa-save mr-2"></i> Ürünü Kaydet
+          </button>
+        </div>
+
+        <!-- Yayın Durumu ve Kargo -->
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold mb-4 text-gray-900 dark:text-white border-b border-gray-200 dark:border-gray-700 pb-2">Diğer Ayarlar</h2>
+          
+          <div class="mb-4">
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Yayın Durumu</label>
+            <select name="status" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white font-semibold">
+              <option value="aktif">Aktif</option>
+              <option value="pasif">Pasif</option>
+              <option value="taslak">Taslak</option>
+            </select>
+          </div>
+
+          <div>
+            <label class="block text-sm font-semibold mb-2 text-gray-700 dark:text-gray-300">Kargo Süresi</label>
+            <input type="text" name="shipping_time" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Örn: Ertesi gün, 3 gün içinde..." />
+          </div>
+        </div>
+
+      </div>
+    </form>
+  </div>
+
+  <!-- Quill CSS & JS -->
+  <link href="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.snow.css" rel="stylesheet" is:inline />
+  <script src="https://cdn.jsdelivr.net/npm/quill@2.0.2/dist/quill.js" is:inline></script>
+
+  <!-- Quill JS -->
+  <!-- Quill JS -->
+  <script is:inline>
+  document.addEventListener('astro:page-load', () => {
+    // 1. Quill Initialization
+    const initQuill = () => {
+      const editorEl = document.getElementById('editor-container');
+      if (!editorEl) return;
+
+      if (typeof window.Quill === 'undefined') {
+        setTimeout(initQuill, 50);
+        return;
+      }
+      
+      // Guard custom format registration from crashing on multiple transitions
+      if (!window.QuillLinkRegistered) {
+        try {
+          const Link = window.Quill.import('formats/link');
+          class MyLink extends Link {
+            static create(value) {
+              if (value && !value.startsWith('http://') && !value.startsWith('https://') && !value.startsWith('/') && !value.startsWith('mailto:')) {
+                value = 'https://' + value;
+              }
+              return super.create(value);
+            }
+          }
+          window.Quill.register(MyLink, true);
+          window.QuillLinkRegistered = true;
+        } catch (e) {
+          console.warn("Quill link registration warning:", e);
+        }
+      }
+
+      if (!editorEl.classList.contains('ql-container')) {
+        window.quillInstance = new window.Quill('#editor-container', {
+          theme: 'snow',
+          modules: {
+            toolbar: [
+              [{ 'header': [1, 2, 3, false] }],
+              ['bold', 'italic', 'underline', 'strike'],
+              [{ 'color': [] }, { 'background': [] }],
+              [{ 'list': 'ordered'}, { 'list': 'bullet' }],
+              ['link', 'image', 'video'],
+              ['clean']
+            ]
+          },
+          placeholder: 'Ürün detaylarını buraya yazabilirsiniz...'
+        });
+      }
+
+      const form = document.getElementById('productForm');
+      if (form && !form.dataset.bound) {
+        form.dataset.bound = 'true';
+        form.addEventListener('submit', function() {
+          const editorEl = document.getElementById('editor-container');
+          const quill = editorEl ? (window.Quill?.find?.(editorEl) || window.quillInstance) : null;
+          if (quill) {
+            let html = quill.root.innerHTML;
+            html = html.replace(/href="([^"]+)"/g, function(match, url) {
+              if (url && !url.startsWith('http') && !url.startsWith('/') && !url.startsWith('mailto:')) {
+                 return 'href="https://' + url + '"';
+              }
+              return match;
+            });
+            document.getElementById('description').value = html;
+          }
+          const btn = document.getElementById('submitBtn');
+          if (btn) {
+            btn.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Kaydediliyor...';
+            btn.classList.add('opacity-50', 'pointer-events-none');
+          }
+        });
+      }
+    };
+    initQuill();
+
+    // 2. Dinamik Satır Ekleme Olaylarının Delegasyonu (View Transitions ile Sorunsuz Uyumlu)
+    if (!window.adminProductEventsBound) {
+      window.adminProductEventsBound = true;
+      document.addEventListener('click', (e) => {
+        const target = e.target;
+        
+        // 1. Özellik Ekle
+        if (target.closest('#add-feature-btn')) {
+          const container = document.getElementById('features-container');
+          if (container) {
+            const div = document.createElement('div');
+            div.innerHTML = `
+              <div class="flex gap-2 feature-row">
+                <input type="text" name="feature_key[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Özellik Adı" />
+                <input type="text" name="feature_val[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Açıklaması" />
+                <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn"><i class="fas fa-trash"></i></button>
+              </div>
+            `;
+            container.appendChild(div.firstElementChild);
+          }
+        }
+        
+        // 2. Varyasyon Ekle
+        if (target.closest('#add-variant-btn')) {
+          const container = document.getElementById('variants-container');
+          if (container) {
+            const div = document.createElement('div');
+            div.innerHTML = `
+              <div class="flex flex-wrap md:flex-nowrap gap-2 variant-row">
+                <input type="text" name="v_name[]" class="flex-1 min-w-[200px] border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Varyasyon Adı" />
+                <input type="number" name="v_stock[]" class="w-24 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Stok" />
+                <input type="number" step="0.01" name="v_price[]" class="w-32 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Ek Fiyat" />
+                <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn"><i class="fas fa-trash"></i></button>
+              </div>
+            `;
+            container.appendChild(div.firstElementChild);
+          }
+        }
+        
+        // 3. Toptan Satış Ekle
+        if (target.closest('#add-wholesale-btn')) {
+          const container = document.getElementById('wholesale-container');
+          if (container) {
+            const div = document.createElement('div');
+            div.innerHTML = `
+              <div class="flex gap-2 wholesale-row">
+                <input type="number" name="w_qty[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="Adet" />
+                <input type="number" step="0.01" name="w_discount[]" class="flex-1 border border-gray-300 dark:border-gray-600 rounded px-3 py-2 bg-gray-50 dark:bg-gray-700 text-gray-900 dark:text-white" placeholder="İskonto Oranı %" />
+                <button type="button" class="px-3 py-2 bg-red-100 text-red-600 rounded hover:bg-red-200 remove-btn"><i class="fas fa-trash"></i></button>
+              </div>
+            `;
+            container.appendChild(div.firstElementChild);
+          }
+        }
+        
+        // 4. Satır Sil
+        const removeBtn = target.closest('.remove-btn');
+        if (removeBtn) {
+          removeBtn.parentElement.remove();
+        }
+      });
+    }
+  });
+  </script>
+</BaseLayout>

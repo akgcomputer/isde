@@ -1,0 +1,169 @@
+---
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getBadges, createBadge, deleteBadge } from '../../../../lib/db';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+
+let mesaj = '';
+let hata = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+
+    if (action === 'create') {
+      const name = formData.get('name') as string;
+      const type = formData.get('type') as string;
+      const content = formData.get('content') as string;
+      const bg_color = formData.get('bg_color') as string || null;
+      const text_color = formData.get('text_color') as string || null;
+
+      if (name && type && content) {
+        await createBadge({ name, type, content, bg_color, text_color }, dbBinding);
+        mesaj = 'Rozet başarıyla eklendi.';
+      } else {
+        hata = 'Lütfen zorunlu alanları doldurun.';
+      }
+    } else if (action === 'delete') {
+      const id = parseInt(formData.get('id') as string);
+      if (id) {
+        await deleteBadge(id, dbBinding);
+        mesaj = 'Rozet silindi.';
+      }
+    }
+  } catch (err) {
+    console.error('Badge error:', err);
+    hata = 'İşlem sırasında bir hata oluştu.';
+  }
+}
+
+const badges = await getBadges(dbBinding);
+---
+<BaseLayout title="Rozet Yönetimi - Admin" isAdmin={true}>
+  <div class="p-6">
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center mb-6 gap-4">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900 dark:text-white">Rozet Yönetimi</h1>
+        <p class="text-sm text-gray-500 dark:text-gray-400 mt-1">Ürün detay sayfasında köşelere yerleştirilecek sabit rozetleri belirleyin</p>
+      </div>
+    </div>
+
+    {mesaj && (
+      <div class="bg-green-100 dark:bg-green-900/30 text-green-700 dark:text-green-300 p-4 rounded-xl border border-green-200 dark:border-green-800 mb-6 flex justify-between items-center">
+        <span>✅ {mesaj}</span>
+        <button onclick="this.parentElement.remove()" class="text-green-700 dark:text-green-300">✕</button>
+      </div>
+    )}
+    
+    {hata && (
+      <div class="bg-red-100 dark:bg-red-900/30 text-red-700 dark:text-red-300 p-4 rounded-xl border border-red-200 dark:border-red-800 mb-6 flex justify-between items-center">
+        <span>❌ {hata}</span>
+        <button onclick="this.parentElement.remove()" class="text-red-700 dark:text-red-300">✕</button>
+      </div>
+    )}
+
+    <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+      
+      <div class="lg:col-span-1">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 p-6">
+          <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4">Yeni Rozet Ekle</h2>
+          <form method="POST" class="space-y-4">
+            <input type="hidden" name="action" value="create" />
+            
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rozet Adı <span class="text-red-500">*</span></label>
+              <input type="text" name="name" required placeholder="Örn: Süper Fiyat" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+            </div>
+
+            <div>
+              <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rozet Tipi <span class="text-red-500">*</span></label>
+              <select name="type" required onchange="document.getElementById('content-label').innerText = this.value === 'text' ? 'Rozet Metni' : 'Görsel URL'; document.getElementById('color-fields').style.display = this.value === 'text' ? 'block' : 'none';" class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white">
+                <option value="text">Yazı (Text)</option>
+                <option value="image">Görsel (Image URL)</option>
+              </select>
+            </div>
+
+            <div>
+              <label id="content-label" class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Rozet Metni <span class="text-red-500">*</span></label>
+              <input type="text" name="content" required placeholder="İçerik..." class="w-full border border-gray-300 dark:border-gray-600 rounded-lg px-4 py-2.5 bg-white dark:bg-gray-700 text-gray-900 dark:text-white" />
+            </div>
+
+            <div id="color-fields" class="space-y-4">
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Arkaplan Rengi (Örn: #ff0000 veya red)</label>
+                <div class="flex gap-2">
+                  <input type="color" name="bg_color" value="#ef4444" class="h-11 w-11 rounded cursor-pointer border border-gray-300 dark:border-gray-600" />
+                </div>
+              </div>
+              
+              <div>
+                <label class="block text-sm font-medium text-gray-700 dark:text-gray-300 mb-1">Yazı Rengi</label>
+                <div class="flex gap-2">
+                  <input type="color" name="text_color" value="#ffffff" class="h-11 w-11 rounded cursor-pointer border border-gray-300 dark:border-gray-600" />
+                </div>
+              </div>
+            </div>
+
+            <button type="submit" class="w-full bg-orange-600 hover:bg-orange-700 text-white font-medium py-2.5 rounded-lg transition shadow-md">
+              <i class="fas fa-plus mr-2"></i> Ekle
+            </button>
+          </form>
+        </div>
+      </div>
+
+      <div class="lg:col-span-2">
+        <div class="bg-white dark:bg-gray-800 rounded-xl shadow border border-gray-200 dark:border-gray-700 overflow-hidden">
+          <table class="w-full">
+            <thead class="bg-gray-50 dark:bg-gray-700 border-b border-gray-200 dark:border-gray-600 text-xs font-semibold text-gray-500 dark:text-gray-400 uppercase">
+              <tr>
+                <th class="px-6 py-4 text-left">Önizleme</th>
+                <th class="px-6 py-4 text-left">Adı</th>
+                <th class="px-6 py-4 text-left">Tipi</th>
+                <th class="px-6 py-4 text-right">İşlem</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-200 dark:divide-gray-700">
+              {badges.map(badge => (
+                <tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50">
+                  <td class="px-6 py-4">
+                    {badge.type === 'text' ? (
+                      <span class="px-3 py-1 text-sm font-bold rounded shadow-sm" style={`background-color: ${badge.bg_color || '#ef4444'}; color: ${badge.text_color || '#ffffff'};`}>
+                        {badge.content}
+                      </span>
+                    ) : (
+                      <img src={badge.content} alt={badge.name} class="h-8 object-contain rounded" />
+                    )}
+                  </td>
+                  <td class="px-6 py-4 font-medium text-gray-900 dark:text-white">
+                    {badge.name}
+                  </td>
+                  <td class="px-6 py-4 text-sm text-gray-500 dark:text-gray-400">
+                    {badge.type === 'text' ? 'Yazı' : 'Görsel'}
+                  </td>
+                  <td class="px-6 py-4 text-right">
+                    <form method="POST" class="inline" onsubmit="return confirm('Bu rozeti silmek istediğinize emin misiniz? Ürünlerde kayıtlı olsa da gösterilmeyebilir.');">
+                      <input type="hidden" name="action" value="delete" />
+                      <input type="hidden" name="id" value={badge.id} />
+                      <button type="submit" class="p-2 text-gray-500 hover:text-red-600 hover:bg-red-50 dark:hover:bg-gray-700 rounded-lg transition">
+                        <i class="fas fa-trash"></i>
+                      </button>
+                    </form>
+                  </td>
+                </tr>
+              ))}
+              {badges.length === 0 && (
+                <tr>
+                  <td colspan="4" class="px-6 py-8 text-center text-gray-500 dark:text-gray-400">
+                    Henüz rozet eklenmemiş.
+                  </td>
+                </tr>
+              )}
+            </tbody>
+          </table>
+        </div>
+      </div>
+      
+    </div>
+  </div>
+</BaseLayout>

@@ -1,0 +1,211 @@
+---
+// src/pages/admin/ecommerce/orders/[id].astro
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getOrderById, updateOrderStatus } from '../../../../lib/db';
+
+const { id } = Astro.params;
+const dbBinding = Astro.locals.runtime?.env?.DB;
+
+let basari = '';
+let hata = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+    
+    if (action === 'update_status') {
+      const status = formData.get('status') as string;
+      const notes = formData.get('notes') as string;
+      if (status) {
+        await updateOrderStatus(parseInt(id as string), status, notes, dbBinding);
+        basari = 'Sipariş durumu güncellendi.';
+      }
+    }
+  } catch(e: any) {
+    hata = e.message || 'Hata oluştu.';
+  }
+}
+
+const order = await getOrderById(parseInt(id as string), dbBinding);
+
+if (!order) {
+  return Astro.redirect('/admin/ecommerce/orders');
+}
+
+const getPaymentMethod = (method: string) => {
+  switch (method) {
+    case 'havale': return 'Havale/EFT';
+    case 'kapida': return 'Kapıda Ödeme';
+    case 'kredi_karti': return 'Kredi Kartı';
+    case 'banka_kredisi': return 'Banka Kredisi';
+    default: return method;
+  }
+};
+---
+
+<BaseLayout title={`Sipariş Detayı #${order.id} | Laflaf Admin`}>
+  <div class="mb-6 flex items-center justify-between">
+    <div class="flex items-center gap-4">
+      <a href="/admin/ecommerce/orders" class="text-gray-500 hover:text-gray-900 dark:hover:text-white">
+        <i class="fas fa-arrow-left"></i>
+      </a>
+      <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Sipariş #LAF{order.id}</h1>
+      {order.user_id ? (
+        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs font-medium rounded border border-blue-200">Kayıtlı Kullanıcı</span>
+      ) : (
+        <span class="px-2 py-1 bg-gray-100 text-gray-800 text-xs font-medium rounded border border-gray-200">Ziyaretçi Siparişi</span>
+      )}
+    </div>
+    <div class="text-sm text-gray-500">
+      <i class="far fa-clock mr-1"></i> {new Date(order.createdAt).toLocaleString('tr-TR')}
+    </div>
+  </div>
+
+  {basari && (
+    <div class="p-4 mb-6 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 border border-green-200" role="alert">
+      {basari}
+    </div>
+  )}
+  {hata && (
+    <div class="p-4 mb-6 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-200" role="alert">
+      {hata}
+    </div>
+  )}
+
+  <div class="grid grid-cols-1 lg:grid-cols-3 gap-6">
+    <!-- Sol Kolon: Sipariş Kalemleri ve Durum -->
+    <div class="lg:col-span-2 space-y-6">
+      
+      <!-- Sipariş Kalemleri -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Sipariş Edilen Ürünler</h2>
+        
+        <div class="overflow-x-auto">
+          <table class="w-full text-sm text-left">
+            <thead class="text-xs text-gray-500 uppercase border-b border-gray-200 dark:border-gray-700">
+              <tr>
+                <th class="pb-3">Ürün</th>
+                <th class="pb-3">Fiyat</th>
+                <th class="pb-3">Adet</th>
+                <th class="pb-3 text-right">Toplam</th>
+              </tr>
+            </thead>
+            <tbody class="divide-y divide-gray-100 dark:divide-gray-700">
+              {order.items && order.items.length > 0 ? (
+                order.items.map(item => (
+                  <tr>
+                    <td class="py-4">
+                      <div class="font-medium text-gray-900 dark:text-white">{item.product_name}</div>
+                      {item.variant_name && <div class="text-xs text-gray-500">{item.variant_name}</div>}
+                      <a href={`/urunler/detay/${item.product_id}`} target="_blank" class="text-[10px] text-blue-500 hover:underline">Sitede Gör</a>
+                    </td>
+                    <td class="py-4">{item.unit_price.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺</td>
+                    <td class="py-4">{item.quantity}</td>
+                    <td class="py-4 text-right font-medium">{item.total_price.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺</td>
+                  </tr>
+                ))
+              ) : (
+                <tr><td colspan="4" class="py-4 text-center text-gray-500">Ürün bulunamadı.</td></tr>
+              )}
+            </tbody>
+            <tfoot class="border-t border-gray-200 dark:border-gray-700 text-gray-900 dark:text-white">
+              <tr>
+                <td colspan="3" class="pt-4 text-right">Ara Toplam:</td>
+                <td class="pt-4 text-right">{order.subtotal.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="pt-2 text-right">Kargo:</td>
+                <td class="pt-2 text-right">{order.shipping_fee > 0 ? order.shipping_fee.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 }) + ' ₺' : 'Ücretsiz'}</td>
+              </tr>
+              <tr>
+                <td colspan="3" class="pt-2 pb-2 text-right font-bold text-lg">Genel Toplam:</td>
+                <td class="pt-2 pb-2 text-right font-bold text-lg text-orange-600">{order.total_amount.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺</td>
+              </tr>
+            </tfoot>
+          </table>
+        </div>
+      </div>
+
+      <!-- Durum Güncelleme -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Sipariş İşlemleri</h2>
+        
+        <form method="POST" class="space-y-4">
+          <input type="hidden" name="action" value="update_status" />
+          
+          <div class="grid grid-cols-1 md:grid-cols-2 gap-4">
+            <div>
+              <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Sipariş Durumu</label>
+              <select name="status" class="bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 block w-full p-2.5 dark:bg-gray-700 dark:border-gray-600 dark:text-white">
+                <option value="bekliyor" selected={order.status === 'bekliyor'}>Bekliyor</option>
+                <option value="onaylandi" selected={order.status === 'onaylandi'}>Onaylandı</option>
+                <option value="kargolandi" selected={order.status === 'kargolandi'}>Kargolandı</option>
+                <option value="tamamlandi" selected={order.status === 'tamamlandi'}>Tamamlandı</option>
+                <option value="iptal" selected={order.status === 'iptal'}>İptal Edildi</option>
+              </select>
+            </div>
+          </div>
+          
+          <div>
+            <label class="block mb-2 text-sm font-medium text-gray-900 dark:text-white">Yönetici Notu (Müşteri Görmez)</label>
+            <textarea name="notes" rows="3" class="block p-2.5 w-full text-sm text-gray-900 bg-gray-50 rounded-lg border border-gray-300 focus:ring-blue-500 focus:border-blue-500 dark:bg-gray-700 dark:border-gray-600 dark:placeholder-gray-400 dark:text-white" placeholder="Siparişle ilgili notlar...">{order.notes}</textarea>
+          </div>
+          
+          <button type="submit" class="text-white bg-blue-700 hover:bg-blue-800 focus:ring-4 focus:ring-blue-300 font-medium rounded-lg text-sm px-5 py-2.5 dark:bg-blue-600 dark:hover:bg-blue-700 focus:outline-none">
+            Durumu Güncelle
+          </button>
+        </form>
+      </div>
+
+    </div>
+
+    <!-- Sağ Kolon: Müşteri ve Ödeme -->
+    <div class="space-y-6">
+      
+      <!-- Müşteri Bilgileri -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Müşteri Bilgileri</h2>
+        <div class="space-y-3 text-sm">
+          <div>
+            <span class="block text-gray-500 text-xs">Ad Soyad</span>
+            <span class="font-medium text-gray-900 dark:text-white">{order.customer_name}</span>
+          </div>
+          <div>
+            <span class="block text-gray-500 text-xs">E-Posta</span>
+            <a href={`mailto:${order.customer_email}`} class="font-medium text-blue-600 hover:underline">{order.customer_email}</a>
+          </div>
+          <div>
+            <span class="block text-gray-500 text-xs">Telefon</span>
+            <span class="font-medium text-gray-900 dark:text-white">{order.customer_phone || '-'}</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Teslimat Adresi -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Teslimat Adresi</h2>
+        <p class="text-sm text-gray-700 dark:text-gray-300 whitespace-pre-wrap">{order.shipping_address}</p>
+      </div>
+
+      <!-- Ödeme Yöntemi -->
+      <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 p-6">
+        <h2 class="text-lg font-bold text-gray-900 dark:text-white mb-4 border-b border-gray-100 dark:border-gray-700 pb-2">Ödeme Bilgisi</h2>
+        <div class="flex items-center gap-3">
+          <div class="w-10 h-10 rounded bg-gray-100 dark:bg-gray-700 flex items-center justify-center text-gray-500">
+            {order.payment_method === 'havale' ? <i class="fas fa-university"></i> : 
+             order.payment_method === 'kapida' ? <i class="fas fa-box"></i> : 
+             <i class="fas fa-credit-card"></i>}
+          </div>
+          <div>
+            <div class="font-bold text-gray-900 dark:text-white">{getPaymentMethod(order.payment_method)}</div>
+            {order.payment_method === 'havale' && order.status === 'bekliyor' && (
+              <div class="text-xs text-orange-600 mt-1">Ödeme onayı bekleniyor</div>
+            )}
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </div>
+</BaseLayout>

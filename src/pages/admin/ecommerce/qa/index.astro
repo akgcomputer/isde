@@ -1,0 +1,99 @@
+---
+// src/pages/admin/ecommerce/qa/index.astro
+import BaseLayout from '../../../../layouts/BaseLayout.astro';
+import { getAllQA, answerQuestion, deleteQuestion } from '../../../../lib/db';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+
+let basari = '';
+let hata = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+    const id = parseInt(formData.get('id') as string);
+
+    if (action === 'answer') {
+      const answer = formData.get('answer') as string;
+      if (!answer) throw new Error("Lütfen bir cevap yazın.");
+      await answerQuestion(id, answer, dbBinding);
+      basari = 'Soru cevaplandı ve yayına alındı.';
+    } else if (action === 'delete') {
+      await deleteQuestion(id, dbBinding);
+      basari = 'Soru silindi.';
+    }
+  } catch (err: any) {
+    hata = err.message || 'Bir hata oluştu.';
+  }
+}
+
+const qas = await getAllQA(dbBinding);
+---
+
+<BaseLayout title="Ürün Soru ve Cevapları | Laflaf Admin">
+  <div class="mb-6 flex justify-between items-center">
+    <h1 class="text-2xl font-bold text-gray-800 dark:text-white">Ürün Soru ve Cevapları</h1>
+  </div>
+
+  {basari && (
+    <div class="p-4 mb-6 text-sm text-green-800 rounded-lg bg-green-50 dark:bg-gray-800 dark:text-green-400 border border-green-200">
+      {basari}
+    </div>
+  )}
+  {hata && (
+    <div class="p-4 mb-6 text-sm text-red-800 rounded-lg bg-red-50 dark:bg-gray-800 dark:text-red-400 border border-red-200">
+      {hata}
+    </div>
+  )}
+
+  <div class="bg-white dark:bg-gray-800 rounded-xl shadow-sm border border-gray-200 dark:border-gray-700 overflow-hidden">
+    <table class="w-full text-sm text-left text-gray-500 dark:text-gray-400">
+      <thead class="text-xs text-gray-700 uppercase bg-gray-50 dark:bg-gray-700 dark:text-gray-300">
+        <tr>
+          <th scope="col" class="px-6 py-3">Ürün ID</th>
+          <th scope="col" class="px-6 py-3 w-1/4">Soru (Müşteri)</th>
+          <th scope="col" class="px-6 py-3 w-1/4">Cevap (Mağaza)</th>
+          <th scope="col" class="px-6 py-3 text-right">İşlem</th>
+        </tr>
+      </thead>
+      <tbody>
+        {qas.length === 0 ? (
+          <tr><td colspan="4" class="px-6 py-8 text-center text-gray-500">Henüz soru bulunmuyor.</td></tr>
+        ) : (
+          qas.map(qa => (
+            <tr class="bg-white border-b dark:bg-gray-800 dark:border-gray-700 hover:bg-gray-50 dark:hover:bg-gray-700">
+              <td class="px-6 py-4 font-bold align-top">
+                <a href={`/urunler/detay/${qa.product_id}`} target="_blank" class="text-blue-600 hover:underline">#{qa.product_id}</a>
+              </td>
+              <td class="px-6 py-4 align-top">
+                <div class="font-bold text-gray-900 dark:text-white mb-1">{qa.user_name}</div>
+                <div class="whitespace-pre-wrap">{qa.question}</div>
+                {qa.status === 'pending' && <span class="inline-block mt-2 bg-yellow-100 text-yellow-800 text-[10px] font-bold px-2 py-0.5 rounded border border-yellow-200">Cevap Bekliyor</span>}
+              </td>
+              <td class="px-6 py-4 align-top">
+                {qa.status === 'answered' ? (
+                  <div class="whitespace-pre-wrap text-gray-900 dark:text-white">{qa.answer}</div>
+                ) : (
+                  <form method="POST" class="flex flex-col gap-2">
+                    <input type="hidden" name="action" value="answer" />
+                    <input type="hidden" name="id" value={qa.id} />
+                    <textarea name="answer" required rows="2" class="w-full bg-gray-50 border border-gray-300 text-gray-900 text-sm rounded-lg focus:ring-blue-500 focus:border-blue-500 p-2 dark:bg-gray-700 dark:border-gray-600 dark:text-white" placeholder="Müşteriye cevabınızı yazın..."></textarea>
+                    <button type="submit" class="self-end text-white bg-blue-700 hover:bg-blue-800 font-medium rounded-lg text-xs px-3 py-1.5 dark:bg-blue-600 dark:hover:bg-blue-700">Cevapla & Yayınla</button>
+                  </form>
+                )}
+              </td>
+              <td class="px-6 py-4 text-right align-top">
+                <form method="POST" class="inline" onsubmit="return confirm('Silmek istediğinize emin misiniz?');">
+                  <input type="hidden" name="action" value="delete" />
+                  <input type="hidden" name="id" value={qa.id} />
+                  <button type="submit" class="text-red-600 hover:text-red-900 dark:text-red-400 font-medium ml-2">Sil</button>
+                </form>
+              </td>
+            </tr>
+          ))
+        )}
+      </tbody>
+    </table>
+  </div>
+</BaseLayout>
