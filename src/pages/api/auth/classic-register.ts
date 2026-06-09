@@ -78,7 +78,7 @@ export const POST: APIRoute = async (context) => {
     if (isPartnerValue === 1) {
       return context.redirect('/onboarding');
     } else {
-      return context.redirect('/dashboard/member');
+      return context.redirect('/user');
     }
 
   } catch (err: any) {
@@ -86,3 +86,4 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(`/login?error=server_error&message=${encodeURIComponent(err.message)}`);
   }
 };
+

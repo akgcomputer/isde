@@ -1,11 +1,11 @@
 ---
-// src/pages/dashboard/member/profile.astro
+// src/pages/business/profile.astro
 import DashboardLayout from '../../../layouts/DashboardLayout.astro';
 
 export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
 
 const user = Astro.locals.user;
-if (!user || user.is_partner !== 0) {
+if (!user || user.is_partner !== 1) {
   return Astro.redirect('/login?error=unauthorized');
 }
 
@@ -24,7 +24,7 @@ if (Astro.request.method === 'POST') {
     const billingInfo = formData.get('billing_info') as string;
 
     if (!name || name.trim() === '') {
-      errorMessage = 'Ad Soyad / Firma Adı alanı boş bırakılamaz.';
+      errorMessage = 'Firma Unvanı / Ad Soyad alanı boş bırakılamaz.';
     } else {
       if (db) {
         // Profil bilgilerini veritabanında güncelle
@@ -32,19 +32,19 @@ if (Astro.request.method === 'POST') {
           "UPDATE users SET name = ?, phone = ?, address = ?, billing_info = ? WHERE id = ?"
         ).bind(name, phone, address, billingInfo, user.id).run();
         
-        // locals.user bilgisini de güncelleyelim ki yeni bilgiler ekrana yansısın
+        // locals.user bilgisini de güncelleyelim
         user.name = name;
         user.phone = phone;
         user.address = address;
         user.billing_info = billingInfo;
 
-        successMessage = 'Profil ve fatura bilgileriniz başarıyla güncellendi.';
+        successMessage = 'Profil ve kurumsal fatura bilgileriniz başarıyla güncellendi.';
       } else {
         errorMessage = 'Veritabanı bağlantısı yok.';
       }
     }
   } catch (e) {
-    console.error("Profile update error:", e);
+    console.error("Partner profile update error:", e);
     errorMessage = 'Profil bilgileri güncellenirken bir hata oluştu.';
   }
 }
@@ -54,8 +54,8 @@ if (Astro.request.method === 'POST') {
   <div class="profile-editor">
     
     <div class="editor-header">
-      <h1>Profil & Fatura Ayarları</h1>
-      <p>Kişisel bilgilerinizi ve fatura detaylarınızı buradan düzenleyebilirsiniz.</p>
+      <h1>İş Ortağı Profil & Kurumsal Ayarlar</h1>
+      <p>Müşterilere teklif verirken görünecek firma veya şahıs unvanınızı, telefon numaranızı ve fatura detaylarınızı buradan düzenleyebilirsiniz.</p>
     </div>
 
     <!-- Alert Messages -->
@@ -77,23 +77,23 @@ if (Astro.request.method === 'POST') {
     <form method="POST" class="profile-form shadow-card">
       
       <div class="form-section">
-        <h2><i class="fa-solid fa-user-tie text-blue-500 mr-2"></i>Kişisel Bilgiler</h2>
+        <h2><i class="fa-solid fa-building text-blue-500 mr-2"></i>Kurumsal Firma Bilgileri</h2>
         <div class="grid-2">
           
           <div class="form-group">
-            <label for="name">Ad Soyad / Firma Adı *</label>
+            <label for="name">Firma Unvanı / Ad Soyad *</label>
             <input 
               type="text" 
               name="name" 
               id="name" 
               value={user.name} 
               required 
-              placeholder="Adınızı ve soyadınızı girin"
+              placeholder="Tekliflerde görünecek firma veya şahıs adınız"
             />
           </div>
 
           <div class="form-group">
-            <label for="phone">Telefon Numarası</label>
+            <label for="phone">İrtibat Telefon Numarası</label>
             <input 
               type="tel" 
               name="phone" 
@@ -104,7 +104,7 @@ if (Astro.request.method === 'POST') {
           </div>
 
           <div class="form-group full-width">
-            <label for="email">E-Posta Adresi (Değiştirilemez)</label>
+            <label for="email">Sistem E-Posta Adresi (Değiştirilemez)</label>
             <input 
               type="email" 
               id="email" 
@@ -115,12 +115,12 @@ if (Astro.request.method === 'POST') {
           </div>
 
           <div class="form-group full-width">
-            <label for="address">Adres Bilgisi</label>
+            <label for="address">Firma Merkez / Hizmet Bölgesi Adresi</label>
             <textarea 
               name="address" 
               id="address" 
               rows="3" 
-              placeholder="Hizmet alırken kullanılacak varsayılan adresinizi girin"
+              placeholder="Firmanızın yasal adresi veya hizmet verdiğiniz merkez bölgesi"
             >{user.address || ''}</textarea>
           </div>
 
@@ -130,14 +130,14 @@ if (Astro.request.method === 'POST') {
       <hr class="divider" />
 
       <div class="form-section">
-        <h2><i class="fa-solid fa-file-invoice text-orange-500 mr-2"></i>Fatura & Vergi Detayları</h2>
+        <h2><i class="fa-solid fa-file-invoice text-orange-500 mr-2"></i>Kurumsal Fatura & Vergi Detayları</h2>
         <div class="form-group full-width">
-          <label for="billing_info">Fatura Detayları</label>
+          <label for="billing_info">Vergi Dairesi, Vergi Numarası & Mersis No</label>
           <textarea 
             name="billing_info" 
             id="billing_info" 
             rows="3" 
-            placeholder="Vergi Dairesi, Vergi No, Şirket Unvanı veya T.C. Kimlik numaranızı girin"
+            placeholder="Vergi Dairesi, Vergi No, Şirket Türü (LTD/A.Ş./Şahıs), MERSIS No detaylarınızı girin"
           >{user.billing_info || ''}</textarea>
         </div>
       </div>
@@ -311,3 +311,4 @@ if (Astro.request.method === 'POST') {
     }
   </style>
 </DashboardLayout>
+

@@ -143,13 +143,13 @@ export const GET: APIRoute = async (context) => {
         // Uzmanlık alanı seçmemişse onboarding sihirbazına yönlendir
         return context.redirect('/onboarding');
       }
-      return context.redirect('/dashboard/partner');
+      return context.redirect('/business');
     } else if (user.is_partner === 2) {
       // Admin ise admin paneline yönlendir
       return context.redirect('/admin');
     } else {
       // Standart Üye ise müşteri paneline yönlendir
-      return context.redirect('/dashboard/member');
+      return context.redirect('/user');
     }
 
   } catch (dbErr) {
@@ -157,3 +157,4 @@ export const GET: APIRoute = async (context) => {
     return context.redirect('/login?error=db_error');
   }
 };
+

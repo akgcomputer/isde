@@ -38,7 +38,7 @@ try {
   // Rol kontrolü: Sadece İş Ortakları onboarding ekranına girebilir
   if (user.is_partner !== 1) {
     if (user.is_partner === 0) {
-      return Astro.redirect('/dashboard/member');
+      return Astro.redirect('/user');
     } else if (user.is_partner === 2) {
       return Astro.redirect('/admin');
     }
@@ -71,7 +71,7 @@ if (Astro.request.method === 'POST') {
       await db.batch(statements);
 
       console.log(`İş Ortağı ${user.email} için ${selectedServices.length} uzmanlık alanı kaydedildi.`);
-      return Astro.redirect('/dashboard/partner');
+      return Astro.redirect('/business');
     }
   } catch (postErr) {
     console.error("Onboarding saving error:", postErr);
@@ -468,3 +468,4 @@ if (Astro.request.method === 'POST') {
     }
   </script>
 </BasicLayout>
+

@@ -1,5 +1,5 @@
 ---
-// src/pages/dashboard/member/index.astro
+// src/pages/user/index.astro
 import DashboardLayout from '../../../layouts/DashboardLayout.astro';
 
 export const prerender = false; // Sunucu tarafında anlık çalışmalıdır (SSR)
@@ -55,7 +55,7 @@ function formatDate(dateStr: string) {
     
     <!-- Prominent "Start Free Service" Button At The Very Top -->
     <div class="top-action-bar">
-      <a href="/dashboard/member/sites" class="start-service-btn">
+      <a href="/user/sites" class="start-service-btn">
         <i class="fa-solid fa-wand-magic-sparkles"></i>
         <span>Ücretsiz Hizmet Başlat</span>
       </a>
@@ -120,7 +120,7 @@ function formatDate(dateStr: string) {
         <h2>Hızlı İşlemler</h2>
         <div class="shortcuts-grid">
           
-          <a href="/dashboard/member/requests" class="shortcut-box">
+          <a href="/user/requests" class="shortcut-box">
             <i class="fa-solid fa-circle-plus blue"></i>
             <div>
               <h4>Yeni Hizmet Talebi Gir</h4>
@@ -128,7 +128,7 @@ function formatDate(dateStr: string) {
             </div>
           </a>
 
-          <a href="/dashboard/member/sites" class="shortcut-box">
+          <a href="/user/sites" class="shortcut-box">
             <i class="fa-solid fa-wand-magic-sparkles teal"></i>
             <div>
               <h4>Ücretsiz Web Sitesi Kur</h4>
@@ -136,7 +136,7 @@ function formatDate(dateStr: string) {
             </div>
           </a>
 
-          <a href="/dashboard/member/profile" class="shortcut-box">
+          <a href="/user/profile" class="shortcut-box">
             <i class="fa-solid fa-address-card orange"></i>
             <div>
               <h4>Profil Bilgilerini Düzenle</h4>
@@ -151,7 +151,7 @@ function formatDate(dateStr: string) {
       <div class="split-right shadow-card">
         <div class="card-header">
           <h2>Son Açtığım Talepler</h2>
-          <a href="/dashboard/member/requests" class="view-all">Tümünü Gör</a>
+          <a href="/user/requests" class="view-all">Tümünü Gör</a>
         </div>
         <div class="requests-list">
           {recentRequests.map(r => (
@@ -169,7 +169,7 @@ function formatDate(dateStr: string) {
             <div class="empty-state">
               <i class="fa-solid fa-clipboard-question empty-icon"></i>
               <p>Henüz bir hizmet ilanı veya talebi oluşturmadınız.</p>
-              <a href="/dashboard/member/requests" class="btn-primary">İlk Talebini Oluştur</a>
+              <a href="/user/requests" class="btn-primary">İlk Talebini Oluştur</a>
             </div>
           )}
         </div>
@@ -538,3 +538,4 @@ function formatDate(dateStr: string) {
     }
   </style>
 </DashboardLayout>
+

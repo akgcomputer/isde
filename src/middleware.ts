@@ -56,28 +56,28 @@ export const onRequest = defineMiddleware(async (context, next) => {
 
     // 2. Rol Tabanlı Rota İzolasyon Kontrolleri (Panel Güvenliği)
 
-    // A. Üye Paneli Koruması (/dashboard/member/*)
-    if (pathname.startsWith('/dashboard/member')) {
+    // A. Üye Paneli Koruması (/user/*)
+    if (pathname.startsWith('/user')) {
       if (!user) {
         return context.redirect('/login?error=unauthorized');
       }
       if (user.is_partner === 1) {
         // İş ortağı üye paneline girmeye çalışırsa kendi paneline fırlat
-        return context.redirect('/dashboard/partner');
+        return context.redirect('/business');
       }
       if (user.is_partner === 2) {
         return context.redirect('/admin');
       }
     }
 
-    // B. İş Ortağı Paneli Koruması (/dashboard/partner/*)
-    if (pathname.startsWith('/dashboard/partner')) {
+    // B. İş Ortağı Paneli Koruması (/business/*)
+    if (pathname.startsWith('/business')) {
       if (!user) {
         return context.redirect('/login?error=unauthorized');
       }
       if (user.is_partner === 0) {
         // Sıradan üye iş ortağı paneline girmeye çalışırsa kendi paneline fırlat
-        return context.redirect('/dashboard/member');
+        return context.redirect('/user');
       }
       if (user.is_partner === 2) {
         return context.redirect('/admin');
@@ -92,9 +92,9 @@ export const onRequest = defineMiddleware(async (context, next) => {
       if (user.is_partner !== 2) {
         // Admin olmayanları rollerine göre panellerine geri püskürt
         if (user.is_partner === 1) {
-          return context.redirect('/dashboard/partner');
+          return context.redirect('/business');
         } else {
-          return context.redirect('/dashboard/member');
+          return context.redirect('/user');
         }
       }
     }
@@ -109,7 +109,7 @@ export const onRequest = defineMiddleware(async (context, next) => {
         if (user.is_partner === 2) {
           return context.redirect('/admin');
         } else {
-          return context.redirect('/dashboard/member');
+          return context.redirect('/user');
         }
       }
     }

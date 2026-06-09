@@ -71,13 +71,13 @@ export const POST: APIRoute = async (context) => {
       if (!services.results || services.results.length === 0) {
         return context.redirect('/onboarding');
       }
-      return context.redirect('/dashboard/partner');
+      return context.redirect('/business');
     } else if (user.is_partner === 2) {
       // Admin ise admin paneline yönlendir
       return context.redirect('/admin');
     } else {
       // Standart Üye ise müşteri paneline yönlendir
-      return context.redirect('/dashboard/member');
+      return context.redirect('/user');
     }
 
   } catch (err: any) {
@@ -85,3 +85,4 @@ export const POST: APIRoute = async (context) => {
     return context.redirect(`/login?error=server_error&message=${encodeURIComponent(err.message)}`);
   }
 };
+

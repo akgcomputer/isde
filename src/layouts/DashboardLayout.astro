@@ -19,19 +19,19 @@ const isPartner = user.is_partner === 1;
 const isAdmin = user.is_partner === 2;
 
 // Rota belirleme
-const dashboardPath = isPartner ? '/dashboard/partner' : isAdmin ? '/admin' : '/dashboard/member';
+const dashboardPath = isPartner ? '/business' : isAdmin ? '/admin' : '/user';
 
 const menuItems = [
   { label: 'Giriş/Dashboard', icon: 'fa-solid fa-chart-pie', path: dashboardPath, tab: 'overview' },
-  { label: 'Hizmetlerim', icon: 'fa-solid fa-laptop-code', path: isPartner ? '/dashboard/partner/sites' : '/dashboard/member/sites', tab: 'sites' },
-  { label: 'Siparişlerim', icon: 'fa-solid fa-basket-shopping', path: '/dashboard/member/orders', tab: 'orders' },
-  { label: 'Faturalarım', icon: 'fa-solid fa-file-invoice-dollar', path: '/dashboard/member/invoices', tab: 'invoices' },
-  { label: 'Destek (ticket sistemi)', icon: 'fa-solid fa-headset', path: '/dashboard/member/support', tab: 'support' },
-  { label: 'Profilim', icon: 'fa-solid fa-user-gear', path: isPartner ? '/dashboard/partner/profile' : '/dashboard/member/profile', tab: 'profile' },
-  { label: 'Sepetim', icon: 'fa-solid fa-cart-shopping', path: '/dashboard/member/cart', tab: 'cart' },
-  { label: 'Hesabınız', icon: 'fa-solid fa-circle-user', path: '/dashboard/member/account', tab: 'account' },
-  { label: 'Cari Hesap Bilgilerim', icon: 'fa-solid fa-calculator', path: '/dashboard/member/cari', tab: 'cari' },
-  { label: 'Şifre Değiştir', icon: 'fa-solid fa-key', path: '/dashboard/member/change-password', tab: 'change-password' }
+  { label: 'Hizmetlerim', icon: 'fa-solid fa-laptop-code', path: isPartner ? '/business/sites' : '/user/sites', tab: 'sites' },
+  { label: 'Siparişlerim', icon: 'fa-solid fa-basket-shopping', path: '/user/orders', tab: 'orders' },
+  { label: 'Faturalarım', icon: 'fa-solid fa-file-invoice-dollar', path: '/user/invoices', tab: 'invoices' },
+  { label: 'Destek (ticket sistemi)', icon: 'fa-solid fa-headset', path: '/user/support', tab: 'support' },
+  { label: 'Profilim', icon: 'fa-solid fa-user-gear', path: isPartner ? '/business/profile' : '/user/profile', tab: 'profile' },
+  { label: 'Sepetim', icon: 'fa-solid fa-cart-shopping', path: '/user/cart', tab: 'cart' },
+  { label: 'Hesabınız', icon: 'fa-solid fa-circle-user', path: '/user/account', tab: 'account' },
+  { label: 'Cari Hesap Bilgilerim', icon: 'fa-solid fa-calculator', path: '/user/cari', tab: 'cari' },
+  { label: 'Şifre Değiştir', icon: 'fa-solid fa-key', path: '/user/change-password', tab: 'change-password' }
 ];
 ---
 
@@ -437,3 +437,4 @@ const menuItems = [
     });
   </script>
 </BasicLayout>
+
