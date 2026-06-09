@@ -1,0 +1,62 @@
+---
+// src/pages/business/cari.astro
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 1) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const mockTransactions = [
+  { id: 'TRX-98230', type: 'Hizmet Bedeli Tahsilatı (Aylık SEO)', amount: '+1.250 TL', balance: '1.250 TL', date: '2026-06-10' }
+];
+---
+
+<DashboardLayout title="Partner Cari Hesap | İş De Yeter İş Ortağı" activeTab="cari">
+  <div class="max-w-6xl mx-auto space-y-6">
+    <div class="flex justify-between items-end">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Partner Cari Hesabı</h1>
+        <p class="text-gray-500 mt-1">İş De Yeter bakiyeniz ve hakediş transferleriniz.</p>
+      </div>
+      <div class="bg-green-50 border border-green-200 px-6 py-4 rounded-xl text-right">
+        <p class="text-sm text-green-700 font-medium">Çekilebilir Bakiye</p>
+        <p class="text-3xl font-bold text-green-900">1.250,00 TL</p>
+      </div>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {mockTransactions.length > 0 ? (
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-600">
+              <th class="py-4 px-6 font-semibold">İşlem No</th>
+              <th class="py-4 px-6 font-semibold">Tarih</th>
+              <th class="py-4 px-6 font-semibold">İşlem Tipi</th>
+              <th class="py-4 px-6 font-semibold text-right">Tutar</th>
+              <th class="py-4 px-6 font-semibold text-right">Kalan Bakiye</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm">
+            {mockTransactions.map(trx => (
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="py-4 px-6 font-medium text-gray-900">{trx.id}</td>
+                <td class="py-4 px-6 text-gray-600">{trx.date}</td>
+                <td class="py-4 px-6 text-gray-800">{trx.type}</td>
+                <td class={`py-4 px-6 text-right font-semibold ${trx.amount.startsWith('-') ? 'text-red-600' : 'text-green-600'}`}>{trx.amount}</td>
+                <td class="py-4 px-6 text-right font-bold text-gray-900">{trx.balance}</td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div class="p-12 text-center text-gray-500">
+          <i class="fa-solid fa-coins text-4xl mb-4 text-gray-300"></i>
+          <p>Henüz bir hesap hareketiniz bulunmamaktadır.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</DashboardLayout>

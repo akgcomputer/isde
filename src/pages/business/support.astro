@@ -1,0 +1,66 @@
+---
+// src/pages/business/support.astro
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 1) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const mockTickets = [
+];
+---
+
+<DashboardLayout title="Partner Destek | İş De Yeter İş Ortağı" activeTab="support">
+  <div class="max-w-6xl mx-auto space-y-6">
+    <div class="flex justify-between items-center">
+      <div>
+        <h1 class="text-2xl font-bold text-gray-900">Partner Destek</h1>
+        <p class="text-gray-500">Müşterilerle veya sistemle ilgili karşılaştığınız sorunlar için yönetime ulaşın.</p>
+      </div>
+      <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
+        <i class="fa-solid fa-plus"></i> Yeni Bildirim
+      </button>
+    </div>
+
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+      {mockTickets.length > 0 ? (
+        <table class="w-full text-left border-collapse">
+          <thead>
+            <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-600">
+              <th class="py-4 px-6 font-semibold">Bilet No</th>
+              <th class="py-4 px-6 font-semibold">Konu</th>
+              <th class="py-4 px-6 font-semibold">Tarih</th>
+              <th class="py-4 px-6 font-semibold">Durum</th>
+              <th class="py-4 px-6 font-semibold">İşlem</th>
+            </tr>
+          </thead>
+          <tbody class="divide-y divide-gray-200 text-sm">
+            {mockTickets.map(ticket => (
+              <tr class="hover:bg-gray-50 transition-colors">
+                <td class="py-4 px-6 font-medium text-gray-900">{ticket.id}</td>
+                <td class="py-4 px-6 text-gray-800">{ticket.subject}</td>
+                <td class="py-4 px-6 text-gray-600">{ticket.date}</td>
+                <td class="py-4 px-6">
+                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
+                    {ticket.status}
+                  </span>
+                </td>
+                <td class="py-4 px-6">
+                  <button class="text-blue-600 hover:text-blue-800 font-medium text-xs">Görüntüle</button>
+                </td>
+              </tr>
+            ))}
+          </tbody>
+        </table>
+      ) : (
+        <div class="p-12 text-center text-gray-500">
+          <i class="fa-solid fa-handshake-angle text-4xl mb-4 text-gray-300"></i>
+          <p>Şu anda açık bir destek bildiriminiz bulunmamaktadır.</p>
+        </div>
+      )}
+    </div>
+  </div>
+</DashboardLayout>

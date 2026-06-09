@@ -11,12 +11,14 @@
   },
   "dependencies": {
     "@astrojs/cloudflare": "^9.2.1",
-    "astro": "^4.0.0"
+    "astro": "^4.0.0",
+    "bcryptjs": "^3.0.3"
   },
   "engines": {
     "node": ">=18.0.0"
   },
   "devDependencies": {
+    "@types/bcryptjs": "^2.4.6",
     "typescript": "^6.0.3"
   }
 }
