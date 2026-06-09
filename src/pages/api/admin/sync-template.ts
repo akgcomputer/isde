@@ -173,7 +173,7 @@ jobs:
           if git diff --staged --quiet; then
             echo "No changes to commit — template is already up-to-date."
           else
-            git commit -m "chore: sync with template repository and run migrations [skip ci]"
+            git commit -m "chore: sync with template repository and run migrations"
             git push origin main
             echo "Changes pushed successfully."
           fi
