@@ -135,6 +135,7 @@ jobs:
           w "CREATE TABLE IF NOT EXISTS products (id INTEGER PRIMARY KEY AUTOINCREMENT, category_id INTEGER REFERENCES categories(id) ON DELETE SET NULL, brand_id INTEGER REFERENCES brands(id) ON DELETE SET NULL, name TEXT NOT NULL, slug TEXT NOT NULL UNIQUE, excerpt TEXT, description TEXT, price REAL NOT NULL DEFAULT 0, compare_at_price REAL, image_url TEXT, badge_top_left TEXT, badge_top_right TEXT, rating REAL DEFAULT 0, review_count INTEGER DEFAULT 0, status TEXT NOT NULL DEFAULT 'aktif', createdAt TEXT NOT NULL, updatedAt TEXT NOT NULL);" || true
           w "ALTER TABLE products ADD COLUMN unit TEXT DEFAULT 'Adet';" || true
           w "ALTER TABLE products ADD COLUMN min_order_qty INTEGER DEFAULT 1;" || true
+          w "ALTER TABLE products ADD COLUMN currency TEXT DEFAULT '₺';" || true
           w "ALTER TABLE products ADD COLUMN payment_options TEXT;" || true
           w "ALTER TABLE products ADD COLUMN gallery_images TEXT;" || true
           w "ALTER TABLE products ADD COLUMN badges TEXT;" || true
@@ -142,12 +143,12 @@ jobs:
           w "ALTER TABLE products ADD COLUMN seller_name TEXT;" || true
           w "ALTER TABLE products ADD COLUMN features TEXT;" || true
           w "ALTER TABLE products ADD COLUMN tags TEXT;" || true
-          w "ALTER TABLE products ADD COLUMN stock INTEGER DEFAULT 10;" || true
-          w "ALTER TABLE products ADD COLUMN video_url TEXT;" || true
-          w "ALTER TABLE products ADD COLUMN allow_backorder BOOLEAN DEFAULT 0;" || true
           w "ALTER TABLE products ADD COLUMN likes INTEGER DEFAULT 0;" || true
-          w "ALTER TABLE products ADD COLUMN currency TEXT DEFAULT '₺';" || true
+          w "ALTER TABLE products ADD COLUMN rating REAL DEFAULT 0;" || true
+          w "ALTER TABLE products ADD COLUMN review_count INTEGER DEFAULT 0;" || true
           w "ALTER TABLE products ADD COLUMN updatedAt TEXT;" || true
+          w "ALTER TABLE products ADD COLUMN allow_backorder BOOLEAN DEFAULT 0;" || true
+          w "ALTER TABLE products ADD COLUMN video_url TEXT;" || true
 
           # variants
           w "CREATE TABLE IF NOT EXISTS product_variants (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER REFERENCES products(id) ON DELETE CASCADE, name TEXT NOT NULL, sku TEXT, price REAL, stock INTEGER DEFAULT 0, image_url TEXT, createdAt TEXT NOT NULL);" || true
@@ -177,6 +178,7 @@ jobs:
             git push origin main
             echo "Changes pushed successfully."
           fi
+          # Update trigger
 `;
 
     const base64Content = btoa(unescape(encodeURIComponent(workflowYaml)));
