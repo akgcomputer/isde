@@ -162,6 +162,7 @@ jobs:
           w "CREATE TABLE IF NOT EXISTS product_reviews (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER REFERENCES products(id) ON DELETE CASCADE, user_name TEXT NOT NULL, rating INTEGER NOT NULL, comment TEXT, likes INTEGER DEFAULT 0, dislikes INTEGER DEFAULT 0, status TEXT NOT NULL DEFAULT 'pending', createdAt TEXT NOT NULL);" || true
           w "CREATE TABLE IF NOT EXISTS product_qa (id INTEGER PRIMARY KEY AUTOINCREMENT, product_id INTEGER REFERENCES products(id) ON DELETE CASCADE, user_name TEXT NOT NULL, question TEXT NOT NULL, answer TEXT, status TEXT NOT NULL DEFAULT 'pending', createdAt TEXT NOT NULL);" || true
           w "CREATE TABLE IF NOT EXISTS ecommerce_settings (id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT NOT NULL UNIQUE, value TEXT, createdAt TEXT, updatedAt TEXT);" || true
+          w "CREATE TABLE IF NOT EXISTS settings (id INTEGER PRIMARY KEY AUTOINCREMENT, key TEXT NOT NULL UNIQUE, value TEXT, createdAt TEXT);" || true
 
           echo "DB migration complete."
         env:
