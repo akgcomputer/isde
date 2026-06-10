@@ -9,58 +9,80 @@ if (!user || user.is_partner !== 1) {
   return Astro.redirect('/login?error=unauthorized');
 }
 
-const mockTickets = [
-];
+const mockTickets: any[] = [];
 ---
 
 <DashboardLayout title="Partner Destek | İş De Yeter İş Ortağı" activeTab="support">
-  <div class="max-w-6xl mx-auto space-y-6">
-    <div class="flex justify-between items-center">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">Partner Destek</h1>
-        <p class="text-gray-500">Müşterilerle veya sistemle ilgili karşılaştığınız sorunlar için yönetime ulaşın.</p>
+  <div class="flex flex-col gap-8 max-w-7xl mx-auto px-2">
+    
+    <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
+      <div class="flex flex-col">
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Partner Destek (Ticket)</h1>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">Sistemle veya müşterilerle ilgili karşılaştığınız tüm sorunlar için yönetim ekibiyle buradan iletişime geçebilirsiniz.</p>
       </div>
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
-        <i class="fa-solid fa-plus"></i> Yeni Bildirim
+      
+      <button onclick="alert('Destek bildirim sistemi altyapısı kuruluyor. Acil destek talepleriniz için lütfen sistem yöneticinize WhatsApp üzerinden ulaşın.')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+        <i class="fa-solid fa-plus text-lg"></i>
+        <span>Yeni Destek Başlat</span>
       </button>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col mt-2">
+      <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-headset"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Destek Bildirimlerim</h2>
+      </div>
+
       {mockTickets.length > 0 ? (
-        <table class="w-full text-left border-collapse">
-          <thead>
-            <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-600">
-              <th class="py-4 px-6 font-semibold">Bilet No</th>
-              <th class="py-4 px-6 font-semibold">Konu</th>
-              <th class="py-4 px-6 font-semibold">Tarih</th>
-              <th class="py-4 px-6 font-semibold">Durum</th>
-              <th class="py-4 px-6 font-semibold">İşlem</th>
-            </tr>
-          </thead>
-          <tbody class="divide-y divide-gray-200 text-sm">
-            {mockTickets.map(ticket => (
-              <tr class="hover:bg-gray-50 transition-colors">
-                <td class="py-4 px-6 font-medium text-gray-900">{ticket.id}</td>
-                <td class="py-4 px-6 text-gray-800">{ticket.subject}</td>
-                <td class="py-4 px-6 text-gray-600">{ticket.date}</td>
-                <td class="py-4 px-6">
-                  <span class="inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium bg-gray-100 text-gray-800">
-                    {ticket.status}
-                  </span>
-                </td>
-                <td class="py-4 px-6">
-                  <button class="text-blue-600 hover:text-blue-800 font-medium text-xs">Görüntüle</button>
-                </td>
+        <div class="overflow-x-auto">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
+            <thead>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <th class="py-4 px-6">Bilet No</th>
+                <th class="py-4 px-6">Konu</th>
+                <th class="py-4 px-6">Tarih</th>
+                <th class="py-4 px-6">Durum</th>
+                <th class="py-4 px-6 text-right">İşlem</th>
               </tr>
-            ))}
-          </tbody>
-        </table>
+            </thead>
+            <tbody class="divide-y divide-slate-100 text-sm">
+              {mockTickets.map(ticket => (
+                <tr class="hover:bg-slate-50 transition-colors group">
+                  <td class="py-4 px-6">
+                    <span class="font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md text-[13px]">{ticket.id}</span>
+                  </td>
+                  <td class="py-4 px-6 font-semibold text-slate-700">
+                    {ticket.subject}
+                  </td>
+                  <td class="py-4 px-6 text-slate-500 font-medium">
+                    <i class="fa-regular fa-calendar mr-1.5 text-slate-400"></i>{ticket.date}
+                  </td>
+                  <td class="py-4 px-6">
+                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide bg-slate-100 text-slate-700">
+                      {ticket.status}
+                    </span>
+                  </td>
+                  <td class="py-4 px-6 text-right">
+                    <button class="bg-white border border-slate-200 hover:border-blue-300 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-bold text-xs px-4 py-2 rounded-lg transition-all shadow-sm">
+                      Görüntüle
+                    </button>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
       ) : (
-        <div class="p-12 text-center text-gray-500">
-          <i class="fa-solid fa-handshake-angle text-4xl mb-4 text-gray-300"></i>
-          <p>Şu anda açık bir destek bildiriminiz bulunmamaktadır.</p>
+        <div class="py-24 flex flex-col items-center justify-center text-center gap-4 bg-slate-50/50">
+          <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-300 text-4xl shadow-sm border border-slate-100">
+            <i class="fa-solid fa-handshake-angle"></i>
+          </div>
+          <p class="text-slate-500 font-medium max-w-sm mt-2">Şu anda açık bir destek bildiriminiz bulunmamaktadır.</p>
         </div>
       )}
     </div>
+
   </div>
 </DashboardLayout>
