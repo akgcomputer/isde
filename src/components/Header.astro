@@ -1,265 +1,467 @@
 ---
-import { getSettings } from '../lib/db';
+// src/components/Header.astro
 
-const dbBinding = Astro.locals.runtime?.env?.DB;
-const settings = await getSettings(dbBinding);
-const menuItems = settings.menu_items ? JSON.parse(settings.menu_items) : [
-  { title: 'Ana Sayfa', url: '/' },
-  { title: 'Yaşam', url: '/yasam' },
-  { title: 'Teknoloji', url: '/teknoloji' },
-  { title: 'Kadın', url: '/kadin' },
-  { title: 'Otomobil', url: '/otomobil' },
-  { title: 'Anne & Bebek', url: '/anne-bebek' },
+const menuItems = [
+  {
+    label: '',
+    icon: 'fas fa-home',
+    to: '/',
+    
+  },
+  {
+    label: 'Şirket Kur',
+    icon: 'fas fa-building',
+    to: '/sirket-kur',
+    
+  },
+  {
+    label: 'Yapay Zeka',
+    icon: 'fas fa-robot',
+    children: [
+    { label: 'AI Destek Chatbot', to: '/ai-destek-chatbot', icon: 'fas fa-robot' },
+    { label: 'Robot Server', to: '/robot-server', icon: 'fas fa-robot' },
+    { label: 'AI Robot', to: '/ai-robot', icon: 'fas fa-rocket' },
+    { label: 'E-Mutabakat', to: '/e-mutabakat', icon: 'fas fa-calculator' },
+    { label: 'WhatsApp Chatbot', to: '/ai-destek-chatbot', icon: 'fab fa-whatsapp' },
+    { label: 'İnstagram Chatbot', to: '/ai-destek-chatbot', icon: 'fab fa-instagram' },
+    { label: 'Web Site Chatbot', to: '/ai-destek-chatbot', icon: 'fas fa-globe' }
+
+    ]
+  },
+  {
+    label: 'Yazılım',
+    icon: 'fas fa-laptop-code',
+    children: [
+      { label: 'Dijital İşler', to: '/dijital-isler', icon: 'fas fa-desktop' },
+      { label: 'E-Ticaret Paketleri', to: '/e-ticaret-paketleri', icon: 'fas fa-shopping-cart' },
+      { label: 'Web Paketleri', to: '/web-paketleri', icon: 'fas fa-globe' },
+      { label: 'Muhasebe Paketleri', to: '/muhasebe-paketleri', icon: 'fas fa-calculator' },
+      { label: 'Muhasebe Programı Özellikleri', to: '/muhasebe-programinin-ozellikleri', icon: 'fas fa-chart-line' },
+      { label: 'SEO ve Pazarlama', to: '/seo-ve-pazarlama-paketleri', icon: 'fas fa-search' },
+      { label: 'Bulut Muhasebe', to: '/neden-bulut-muhasebe-yazilimi', icon: 'fas fa-cloud' },
+      { label: 'Dijitalde Yerini Al', to: '/dijital-isler-ekibi', icon: 'fas fa-rocket' },
+      { label: 'Dijital Pazarlama', to: '/dijital-pazarlama-hizmetleri', icon: 'fas fa-bullhorn' }
+      
+    ]
+  },
+  {
+    label: 'Donanım & Server',
+    icon: 'fas fa-server',
+    children: [
+      
+      { label: 'IT Çözümleri', to: '/it-cozumleri', icon: 'fas fa-tools' },
+      { label: 'Sunucu Kiralama', to: '/sunucu-kiralama', icon: 'fas fa-cloud-upload-alt' },
+      { label: 'Domain Hosting', to: '/domain-hosting', icon: 'fas fa-hdd' },
+      { label: 'cPanel Hosting', to: '/cpanel-hosting', icon: 'fas fa-cpanel' },
+      { label: 'Ekonomik Hosting', to: '/ekonomik-hosting', icon: 'fas fa-server' },
+      { label: 'SSL Sertifikası', to: '/ssl-sertifikasi', icon: 'fas fa-shield-alt' }
+      
+    ]
+  },
+  {
+    label: 'Hizmetler',
+    icon: 'fas fa-concierge-bell',
+    children: [
+     { label: 'Psikolog Hizmetleri', to: '/psikolog-hizmetleri', icon: 'fas fa-heart' },
+     { label: 'Online Psikolog', to: '/online-psikolog', icon: 'fas fa-user-md' },
+      { label: 'Dijital İşler', to: '/dijital-isler', icon: 'fas fa-desktop' },
+      { label: 'Temizlik', to: '/temizlik', icon: 'fas fa-broom' },
+      { label: 'Nakliyat', to: '/nakliyat', icon: 'fas fa-truck' },
+      { label: 'Tamirat', to: '/tamirat', icon: 'fas fa-tools' },
+      { label: 'Tadilat', to: '/tadilat', icon: 'fas fa-hammer' },
+      { label: 'Organizasyon', to: '/organizasyon', icon: 'fas fa-calendar-alt' },
+      { label: 'Sağlık', to: '/psikolog-hizmetleri', icon: 'fas fa-heartbeat' },
+      { label: 'Özel Ders', to: '/ozel-ders', icon: 'fas fa-graduation-cap' },
+      { label: 'Online Psikolog Randevu', to: '/online-psikolog-randevu', icon: 'fas fa-calendar-check' }
+    ]
+  },
+  {
+    label: 'Biz',
+    icon: 'fas fa-building',
+    children: [
+      { label: 'Gizlilik Politikası', to: '/gizlilik-politikasi', icon: 'fas fa-shield-alt' },
+      { label: 'İletişim', to: '/iletisim', icon: 'fas fa-envelope' },
+      { label: 'Bayimiz Olun', to: '/bayimiz-olun', icon: 'fas fa-handshake' },
+      { label: 'Site Haritası', to: '/sitemap', icon: 'fas fa-sitemap' }
+    ]
+  },
+  {
+    label: 'İş de yeter!',
+    icon: 'fas fa-bullhorn',
+    to: '/isdeyeter',
+    
+  },
+  {
+    label: '',
+    icon: 'fab fa-whatsapp',
+    to: 'https://wa.me/905412465429?text=Merhaba,%20%C4%B0%C5%9F%20De%20Yeter%20hakk%C4%B1nda%20bilgi%20almak%20istiyorum',
+   },
+   {
+    label: '',
+    icon: 'fab fa-instagram',
+    to: 'https://www.instagram.com/isdeyeter/',
+   },
+   {
+    label: '',
+    icon: 'fab fa-linkedin-in',
+    to: 'https://www.linkedin.com/company/isdeyeter',
+   }
 ];
-
-// Social media icons logic
-let rawSocialLinks = [];
-try {
-  rawSocialLinks = settings.social_media_links ? JSON.parse(settings.social_media_links) : [];
-} catch (e) {
-  console.error("Error parsing social_media_links", e);
-}
-
-const activeSocials = rawSocialLinks.filter((item: any) => item.active && item.url);
-
-const maxVisibleSocials = 5;
-let displayedSocials = [];
-let showMore = false;
-
-if (activeSocials.length <= maxVisibleSocials) {
-  displayedSocials = activeSocials;
-  showMore = false;
-} else {
-  displayedSocials = activeSocials.slice(0, 4);
-  showMore = true;
-}
-
-function getSvgForPlatform(platform: string) {
-  const paths: Record<string, string> = {
-    x: '<path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>',
-    facebook: '<path d="M22 12c0-5.52-4.48-10-10-10S2 6.48 2 12c0 4.84 3.44 8.87 8 9.8V15H8v-3h2V9.5C10 7.57 11.57 6 13.5 6H16v3h-2c-.55 0-1 .45-1 1v2h3v3h-3v6.95c4.56-.93 8-4.96 8-9.75z"/>',
-    instagram: '<path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.051.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98 1.281.058 1.689.072 4.948.072 3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/>',
-    linkedin: '<path d="M19 0h-14c-2.761 0-5 2.239-5 5v14c0 2.761 2.239 5 5 5h14c2.762 0 5-2.239 5-5v-14c0-2.761-2.238-5-5-5zm-11 19h-3v-11h3v11zm-1.5-12.268c-.966 0-1.75-.779-1.75-1.75s.784-1.75 1.75-1.75 1.75.779 1.75 1.75-.784 1.75-1.75 1.75zm13.5 12.268h-3v-5.604c0-3.368-4-3.113-4 0v5.604h-3v-11h3v1.765c1.396-2.586 7-2.777 7 2.476v6.759z"/>',
-    pinterest: '<path d="M12.017 0C5.396 0 .029 5.367.029 11.987c0 5.079 3.158 9.417 7.618 11.162-.105-.949-.199-2.403.041-3.439.219-.937 1.406-5.966 1.406-5.966s-.359-.72-.359-1.781c0-1.668.967-2.914 2.171-2.914 1.023 0 1.518.769 1.518 1.69 0 1.029-.655 2.568-.994 3.995-.283 1.194.599 2.169 1.777 2.169 2.133 0 3.772-2.249 3.772-5.495 0-2.873-2.064-4.882-5.012-4.882-3.414 0-5.418 2.561-5.418 5.207 0 1.031.397 2.138.893 2.738.098.119.112.224.083.345-.09.375-.293 1.199-.334 1.363-.053.21-.174.254-.402.148-1.5-3.058-2.23-7.5-2.23-11.493 0-6.006 4.307-10.278 10.562-10.278 5.756 0 9.207 3.53 9.207 8.24 0 5.86-3.234 10.28-7.925 10.28-1.546 0-3.007-.84-3.506-1.795l-.959 3.648c-.346 1.314-1.29 2.917-1.92 3.948 1.413.416 2.91.643 4.46.643 6.62 0 11.988-5.367 11.988-11.987C23.987 5.367 18.625 0 12.017 0z"/>',
-    youtube: '<path d="M23.498 6.163a3.003 3.003 0 00-2.11-2.11C19.517 3.545 12 3.545 12 3.545s-7.517 0-9.388.508a3.003 3.003 0 00-2.11 2.11C0 8.033 0 12 0 12s0 3.967.502 5.837a3.003 3.003 0 002.11 2.11c1.871.508 9.388.508 9.388.508s7.517 0 9.388-.508a3.002 3.002 0 002.11-2.11C24 15.967 24 12 24 12s0-3.967-.502-5.837zM9.545 15.568V8.432L15.818 12l-6.273 3.568z"/>',
-    tiktok: '<path d="M12.525.02c1.31-.02 2.61-.01 3.91-.02.08 1.53.63 3.02 1.59 4.23.85.95 1.95 1.62 3.16 1.97V10.3c-1.68-.17-3.26-.87-4.48-2.04v7.7c.01 1.43-.37 2.85-1.1 4.07-.8 1.26-1.97 2.25-3.35 2.82-1.89.82-4.04.85-5.95.09-1.78-.68-3.25-2.04-4.1-3.77C1.19 17.39.95 15.17 1.5 13.06c.5-1.95 1.76-3.64 3.48-4.63 1.25-.74 2.68-1.13 4.14-1.13.25 0 .5 0 .75.02v3.97c-.42-.1-.86-.14-1.3-.12-1.08.02-2.11.48-2.85 1.27-.79.82-1.18 1.95-1.08 3.07.1 1.2.73 2.29 1.68 3.02.94.73 2.15.98 3.27.7 1.05-.24 1.95-.94 2.48-1.9.4-.73.57-1.56.55-2.4V.02z"/>',
-    medium: '<path d="M13.54 12a6.8 6.8 0 01-6.77 6.82A6.8 6.8 0 010 12a6.8 6.8 0 016.77-6.82A6.8 6.8 0 0113.54 12zm5.9 0c0 3.5-1.37 6.34-3.07 6.34s-3.07-2.85-3.07-6.34 1.37-6.34 3.07-6.34 3.07 2.85 3.07 6.34zM24 12c0 3.17-.53 5.75-1.19 5.75-.66 0-1.19-2.58-1.19-5.75s.53-5.75 1.19-5.75C23.47 6.25 24 8.83 24 12z"/>',
-    whatsapp: '<path d="M17.472 14.382c-.297-.149-1.758-.867-2.03-.967-.273-.099-.471-.148-.67.15-.197.297-.767.966-.94 1.164-.173.199-.347.223-.644.075-.297-.15-1.255-.463-2.39-1.475-.883-.788-1.48-1.761-1.653-2.059-.173-.297-.018-.458.13-.606.134-.133.298-.347.446-.52.149-.174.198-.298.298-.497.099-.198.05-.371-.025-.52-.075-.149-.669-1.612-.916-2.207-.242-.579-.487-.5-.669-.51-.173-.008-.371-.01-.57-.01-.198 0-.52.074-.792.372-.272.297-1.04 1.016-1.04 2.479 0 1.462 1.065 2.875 1.213 3.074.149.198 2.096 3.2 5.077 4.487.709.306 1.262.489 1.694.625.712.227 1.36.195 1.871.118.571-.085 1.758-.719 2.006-1.413.248-.694.248-1.289.173-1.413-.074-.124-.272-.198-.57-.347m-5.421 7.403h-.004a9.87 9.87 0 01-5.031-1.378l-.361-.214-3.741.982.998-3.648-.235-.374a9.86 9.86 0 01-1.51-5.26c.001-5.45 4.436-9.884 9.888-9.884 2.64 0 5.122 1.03 6.988 2.898a9.825 9.825 0 012.893 6.994c-.003 5.45-4.437 9.884-9.885 9.884m8.413-18.297A11.815 11.815 0 0012.05 0C5.495 0 .16 5.335.157 11.892c0 2.096.547 4.142 1.588 5.945L0 24l6.335-1.662c1.746.953 3.71 1.458 5.704 1.459h.005c6.554 0 11.89-5.335 11.893-11.893a11.821 11.821 0 00-3.48-8.413z"/>',
-    telegram: '<path d="M12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm4.64 6.8c-.16 1.88-.85 6.01-1.2 7.9-.15.8-.45 1.07-.73 1.1-.63.06-1.11-.42-1.72-.82-.96-.63-1.5-1.03-2.43-1.64-1.07-.71-.38-1.1.23-1.74.16-.17 2.97-2.72 3.03-2.97.01-.03.01-.15-.06-.21-.07-.06-.18-.04-.26-.02-.11.02-1.93 1.23-5.46 3.62-.51.35-.98.53-1.39.51-.46-.01-1.34-.26-2-.48-.8-.27-1.44-.42-1.39-.89.03-.25.38-.51 1.07-.78 4.2-1.83 7-3.04 8.4-3.63 4-.17 4.83.69 4.84.8z"/>',
-    phone: '<path d="M20.01 15.38c-1.23 0-2.42-.2-3.53-.56a.977.977 0 00-1.01.24l-2.2 2.2a15.045 15.045 0 01-6.59-6.59l2.2-2.2c.28-.28.36-.67.25-1.02A11.36 11.36 0 008.5 3.99c0-.55-.45-1-1-1H4.03c-.55 0-1 .45-1 1C3.03 14.1 9.9 20.97 19.97 21c.55 0 1-.45 1-1v-3.62c0-.55-.45-1-1-1z"/>',
-    email: '<path d="M20 4H4c-1.1 0-1.99.9-1.99 2L2 18c0 1.1.9 2 2 2h16c1.1 0 2-.9 2-2V6c0-1.1-.9-2-2-2zm0 4l-8 5-8-5V6l8 5 8-5v2z"/>'
-  };
-  return `<svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">${paths[platform] || ""}</svg>`;
-}
 ---
-<header class="sticky top-0 z-50 bg-white dark:bg-gray-900 border-b border-gray-200 dark:border-gray-700 shadow-sm">
-  <nav class="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-    <div class="flex justify-between items-center h-16">
-      <!-- Logo -->
-      <a href="/" class="flex items-center gap-2">
-        {settings.site_logo && (settings.site_logo.startsWith('http') || settings.site_logo.startsWith('/')) ? (
-          <img src={settings.site_logo} alt={settings.site_title || 'Logo'} class="h-8 w-auto object-contain" />
-        ) : (
-          <span class="text-2xl font-black tracking-tighter bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">
-            {settings.site_logo || settings.site_title || 'LAF'}
-          </span>
-        )}
-      </a>
 
-      <!-- Sağ İkonlar (dark/light uyumlu) -->
-      <div class="flex items-center gap-4">
-        <!-- Arama İkonu -->
-        <a href="/arama" class="text-gray-700 dark:text-white hover:text-orange-500 transition text-xl">
-          <i class="fas fa-search"></i>
-        </a>
-        
-        <!-- Kullanıcı İkonu -->
-        <a href="/profil" class="text-gray-700 dark:text-white hover:text-orange-500 transition text-xl">
-          <i class="far fa-user-circle"></i>
-        </a>
-
-        <!-- Sepet İkonu -->
-        {settings.site_mode !== 'blog' && settings.site_mode !== 'corporate' && settings.site_mode !== 'mixed2a' ? (
-          <div class="relative">
-            <a href="/sepet" class="text-gray-700 dark:text-white hover:text-orange-500 transition text-xl">
-              <i class="fas fa-shopping-cart"></i>
-            </a>
-            <span id="headerCartBadge" class="absolute -top-2 -right-2 w-5 h-5 bg-red-500 text-white text-[10px] font-bold rounded-full flex items-center justify-center opacity-0 transition-opacity pointer-events-none">0</span>
-          </div>
-        ) : null}
-        
-        <!-- Bildirim İkonu -->
-        <div class="relative">
-          <a href="/profil" class="text-gray-700 dark:text-white hover:text-red-500 transition text-xl">
-            <i class="far fa-bell"></i>
-          </a>
-          <span class="absolute -top-1 -right-2 w-2 h-2 bg-red-500 rounded-full animate-pulse pointer-events-none"></span>
+<header class="header" id="header">
+    <div class="container">
+        <div class="header-content">
+            <!-- Logo -->
+            <a href="/" class="logo">
+                <img src="/img/isdeyeter-logo-5000px.png" alt="İşDeYeter Logo" style="width: 70px; height: auto;">
+                </a>
+            
+            <!-- Navigation -->
+            <nav>
+                <ul class="nav-menu" id="navMenu">
+                    {menuItems.map((item, index) => (
+                        <li class="nav-dropdown">
+                            {item.to ? (
+                                <a href={item.to} class="nav-link">
+                                    <i class={item.icon} style="margin-right: 8px;"></i>
+                                    {item.label}
+                                </a>
+                            ) : (
+                                <a href="javascript:void(0)" class="nav-link">
+                                    <i class={item.icon} style="margin-right: 8px;"></i>
+                                    {item.label}
+                                    <i class="fas fa-chevron-down" style="margin-left: 5px; font-size: 12px;"></i>
+                                </a>
+                            )}
+                            
+                            {item.children && (
+                                <div class="dropdown-content">
+                                    {item.children.map((child, childIndex) => (
+                                        <a href={child.to} class="dropdown-item">
+                                            <i class={child.icon}></i>
+                                            {child.label}
+                                        </a>
+                                    ))}
+                                </div>
+                            )}
+                        </li>
+                    ))}
+                </ul>
+                
+                <button class="mobile-toggle" id="mobileToggle">
+                    <i class="fas fa-bars"></i>
+                </button>
+            </nav>
         </div>
-
-        <!-- Sosyal Medya İkon Modülü -->
-        {displayedSocials.length > 0 && (
-          <div class="flex items-center gap-3 social-media-group">
-            {displayedSocials.map((social: any) => (
-              <a href={social.url} target="_blank" rel="noopener noreferrer" class={`social-icon-link social-icon-${social.id} hover:scale-110 transition-transform duration-200`} title={social.name}>
-                <Fragment set:html={getSvgForPlatform(social.id)} />
-              </a>
-            ))}
-            {showMore && (
-              <a href="/social-media" class="social-icon-link social-icon-more hover:text-orange-500 hover:scale-110 transition-transform duration-200" title="Daha Fazla">
-                <svg class="w-5 h-5" viewBox="0 0 24 24" fill="currentColor">
-                  <path d="M19 13h-6v6h-2v-6H5v-2h6V5h2v6h6v2z"/>
-                </svg>
-              </a>
-            )}
-          </div>
-        )}
-        
-        <!-- Menü İkonu (sandwich) -->
-        <button id="menuIconBtn" class="text-gray-700 dark:text-white hover:text-orange-500 transition text-xl">
-          <i class="fas fa-bars"></i>
-        </button>
-      </div>
     </div>
-  </nav>
 </header>
 
-<!-- Off-Canvas Yan Menü -->
-<div id="sideMenuOverlay" class="fixed inset-0 bg-black/50 z-[60] hidden opacity-0 transition-opacity duration-300"></div>
-<div id="sideMenu" class="fixed top-0 right-0 h-full w-80 bg-white dark:bg-gray-900 shadow-2xl z-[70] transform translate-x-full transition-transform duration-300 ease-in-out flex flex-col">
-  <div class="flex items-center justify-between p-6 border-b border-gray-200 dark:border-gray-800">
-    <span class="text-xl font-bold bg-gradient-to-r from-orange-500 to-purple-600 bg-clip-text text-transparent">Menü</span>
-    <button id="closeMenuBtn" class="text-gray-500 hover:text-red-500 transition text-2xl p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-800">
-      <i class="fas fa-times"></i>
-    </button>
-  </div>
-  <div class="flex-1 overflow-y-auto p-6">
-    <ul class="space-y-2">
-      {menuItems.map((item: any) => (
-        <li>
-          <a href={item.url} class="block px-4 py-3 rounded-lg text-gray-700 dark:text-gray-200 hover:bg-orange-50 dark:hover:bg-gray-800 hover:text-orange-500 transition font-medium">
-            <i class="fas fa-link w-6 text-gray-400"></i> {item.title}
-          </a>
-        </li>
-      ))}
-    </ul>
-  </div>
-  <div class="p-6 border-t border-gray-200 dark:border-gray-800 text-center text-sm text-gray-500">
-    <p>&copy; 2026 Laflaf.net</p>
-  </div>
-</div>
+<style>
+/* Header Styles */
+.header {
+    position: fixed;
+    top: 0;
+    left: 0;
+    right: 0;
+    z-index: 1000;
+    background: rgba(255, 255, 255, 0.95);
+    backdrop-filter: blur(10px);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.2);
+    box-shadow: 0 2px 6px rgba(0,0,0,0.06);
+    transition: all 0.3s ease;
+}
+
+.header.scrolled {
+    background: rgba(255, 255, 255, 0.98);
+    box-shadow: 0 4px 6px -1px rgba(0,0,0,0.1);
+}
+
+.container {
+    width: 100%;
+    max-width: 1280px;
+    margin: 0 auto;
+    padding: 0 20px;
+}
+
+.header-content {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 15px 0;
+}
+
+.logo {
+    display: flex;
+    align-items: center;
+    text-decoration: none;
+}
+
+/* Navigation */
+nav {
+    position: relative;
+}
+
+.nav-menu {
+    display: flex;
+    gap: 25px;
+    list-style: none;
+    margin: 0;
+    padding: 0;
+}
+
+.nav-dropdown {
+    position: relative;
+}
+
+.nav-link {
+    color: #1F2937;
+    text-decoration: none;
+    font-weight: 500;
+    font-size: 15px;
+    padding: 10px 0;
+    display: flex;
+    align-items: center;
+    transition: color 0.2s;
+}
+
+.nav-link:hover {
+    color: #3B82F6;
+}
+
+/* Dropdown */
+.dropdown-content {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    background: white;
+    min-width: 220px;
+    border-radius: 8px;
+    box-shadow: 0 10px 25px rgba(0,0,0,0.1);
+    padding: 10px 0;
+    opacity: 0;
+    visibility: hidden;
+    transform: translateY(10px);
+    transition: all 0.3s ease;
+    z-index: 1000;
+}
+
+.nav-dropdown:hover .dropdown-content {
+    opacity: 1;
+    visibility: visible;
+    transform: translateY(0);
+}
+
+.dropdown-item {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    color: #374151;
+    text-decoration: none;
+    padding: 10px 15px;
+    font-size: 14px;
+    transition: all 0.2s;
+}
+
+.dropdown-item i {
+    width: 16px;
+    text-align: center;
+    color: #6B7280;
+}
+
+.dropdown-item:hover {
+    background: rgba(59, 130, 246, 0.1);
+    color: #3B82F6;
+}
+
+.dropdown-item:hover i {
+    color: #3B82F6;
+}
+
+/* Mobile Toggle */
+.mobile-toggle {
+    display: none;
+    font-size: 24px;
+    color: #1F2937;
+    cursor: pointer;
+    background: none;
+    border: none;
+    padding: 5px;
+}
+
+/* Responsive */
+@media (max-width: 1024px) {
+    .nav-menu {
+        gap: 20px;
+    }
+}
+
+@media (max-width: 768px) {
+    .nav-menu {
+        display: none;
+        position: fixed;
+        top: 70px;
+        left: 0;
+        right: 0;
+        background: white;
+        flex-direction: column;
+        padding: 20px;
+        box-shadow: 0 10px 15px -3px rgba(0,0,0,0.1);
+        border-radius: 0 0 12px 12px;
+        gap: 0;
+        max-height: calc(100vh - 70px);
+        overflow-y: auto;
+        z-index: 999;
+    }
+    
+    .nav-menu.active {
+        display: flex;
+    }
+    
+    .nav-dropdown {
+        width: 100%;
+    }
+    
+    .nav-link {
+        padding: 12px 0;
+        width: 100%;
+        border-bottom: 1px solid #f0f0f0;
+    }
+    
+    .nav-link:last-child {
+        border-bottom: none;
+    }
+    
+    .dropdown-content {
+        position: static;
+        opacity: 1;
+        visibility: visible;
+        transform: none;
+        box-shadow: none;
+        background: rgba(0,0,0,0.02);
+        padding-left: 20px;
+        margin-top: 5px;
+        display: none;
+        border-left: 2px solid #3B82F6;
+    }
+    
+    .nav-dropdown.active .dropdown-content {
+        display: block;
+    }
+    
+    .mobile-toggle {
+        display: block;
+    }
+    
+    /* Dropdown item'ları daha belirgin yapalım */
+    .dropdown-item {
+        padding: 10px 15px 10px 25px;
+        margin: 5px 0;
+        border-radius: 6px;
+        background: rgba(255,255,255,0.5);
+    }
+}
+</style>
 
 <script>
-  document.addEventListener('astro:page-load', () => {
-    // Menü butonu ve Yan Menü İşlemleri
-    const menuBtn = document.getElementById('menuIconBtn');
-    const closeMenuBtn = document.getElementById('closeMenuBtn');
-    const sideMenu = document.getElementById('sideMenu');
-    const sideMenuOverlay = document.getElementById('sideMenuOverlay');
-
-    function openMenu() {
-      if (sideMenu && sideMenuOverlay) {
-        sideMenuOverlay.classList.remove('hidden');
-        // Force reflow
-        void sideMenuOverlay.offsetWidth;
-        sideMenuOverlay.classList.remove('opacity-0');
-        sideMenu.classList.remove('translate-x-full');
-        document.body.style.overflow = 'hidden';
-      }
-    }
-
-    function closeMenu() {
-      if (sideMenu && sideMenuOverlay) {
-        sideMenu.classList.add('translate-x-full');
-        sideMenuOverlay.classList.add('opacity-0');
-        setTimeout(() => {
-          sideMenuOverlay.classList.add('hidden');
-          document.body.style.overflow = '';
-        }, 300);
-      }
-    }
-
-    if (menuBtn && closeMenuBtn && sideMenu && sideMenuOverlay) {
-      menuBtn.addEventListener('click', openMenu);
-      closeMenuBtn.addEventListener('click', closeMenu);
-      sideMenuOverlay.addEventListener('click', closeMenu);
+document.addEventListener('DOMContentLoaded', function() {
+    const mobileToggle = document.getElementById('mobileToggle');
+    const navMenu = document.getElementById('navMenu');
+    const header = document.getElementById('header');
+    
+    if (mobileToggle && navMenu) {
+        // Mobile menu toggle
+        mobileToggle.addEventListener('click', function(e) {
+            e.stopPropagation();
+            navMenu.classList.toggle('active');
+            
+            // İkon değiştir
+            const icon = mobileToggle.querySelector('i');
+            if (navMenu.classList.contains('active')) {
+                icon.className = 'fas fa-times';
+                // Body scroll'u engelle
+                document.body.style.overflow = 'hidden';
+            } else {
+                icon.className = 'fas fa-bars';
+                // Body scroll'u geri getir
+                document.body.style.overflow = '';
+            }
+        });
+        
+        // Mobile dropdown toggle
+        const dropdownParents = document.querySelectorAll('.nav-dropdown');
+        dropdownParents.forEach(parent => {
+            const link = parent.querySelector('.nav-link');
+            // Sadece href="javascript:void(0)" olanlara click event ekle
+            if (link.getAttribute('href') === 'javascript:void(0)') {
+                link.addEventListener('click', function(e) {
+                    if (window.innerWidth <= 768) {
+                        e.preventDefault();
+                        e.stopPropagation();
+                        parent.classList.toggle('active');
+                        
+                        // Diğer dropdown'ları kapat
+                        dropdownParents.forEach(otherParent => {
+                            if (otherParent !== parent) {
+                                otherParent.classList.remove('active');
+                            }
+                        });
+                    }
+                });
+            }
+        });
+        
+        // Close menu when clicking outside on mobile
+        document.addEventListener('click', function(e) {
+            if (window.innerWidth <= 768 && navMenu.classList.contains('active')) {
+                if (!navMenu.contains(e.target) && !mobileToggle.contains(e.target)) {
+                    navMenu.classList.remove('active');
+                    mobileToggle.querySelector('i').className = 'fas fa-bars';
+                    document.body.style.overflow = '';
+                    
+                    // Tüm dropdown'ları kapat
+                    dropdownParents.forEach(parent => {
+                        parent.classList.remove('active');
+                    });
+                }
+            }
+        });
+        
+        // Link tıklamalarında menüyü kapat
+        const allLinks = navMenu.querySelectorAll('a[href]:not([href="javascript:void(0)"])');
+        allLinks.forEach(link => {
+            link.addEventListener('click', function() {
+                if (window.innerWidth <= 768) {
+                    navMenu.classList.remove('active');
+                    mobileToggle.querySelector('i').className = 'fas fa-bars';
+                    document.body.style.overflow = '';
+                }
+            });
+        });
     }
     
-    // Header Cart Badge Update Logic
-    const headerCartBadge = document.getElementById('headerCartBadge');
+    // Header scroll effect
+    if (header) {
+        window.addEventListener('scroll', function() {
+            if (window.scrollY > 50) {
+                header.classList.add('scrolled');
+            } else {
+                header.classList.remove('scrolled');
+            }
+        });
+    }
     
-    function updateHeaderCartBadge() {
-      if (!headerCartBadge) return;
-      try {
-        const cartStr = localStorage.getItem('laflaf_cart');
-        if (cartStr) {
-          const cart = JSON.parse(cartStr);
-          const totalItems = cart.reduce((sum, item) => sum + item.qty, 0);
-          if (totalItems > 0) {
-            headerCartBadge.textContent = totalItems.toString();
-            headerCartBadge.classList.remove('opacity-0');
-          } else {
-            headerCartBadge.classList.add('opacity-0');
-          }
-        } else {
-          headerCartBadge.classList.add('opacity-0');
+    // Window resize'da menüyü düzelt
+    window.addEventListener('resize', function() {
+        if (window.innerWidth > 768 && navMenu) {
+            navMenu.classList.remove('active');
+            document.body.style.overflow = '';
+            
+            if (mobileToggle) {
+                mobileToggle.querySelector('i').className = 'fas fa-bars';
+            }
         }
-      } catch (e) {
-        console.error('Error updating cart badge', e);
-      }
-    }
+    });
+});
 
-    // İlk yüklemede badge güncelle
-    if (headerCartBadge) {
-      updateHeaderCartBadge();
-      
-      // Başka sekmelerden localStorage değişirse tetiklensin
-      window.addEventListener('storage', (e) => {
-        if (e.key === 'laflaf_cart') {
-          updateHeaderCartBadge();
-        }
-      });
-      
-      // Aynı sayfada sepete ekleme yapıldığında tetiklenmesi için custom event
-      window.addEventListener('cart_updated', () => {
-        updateHeaderCartBadge();
-      });
-    }
-
-    // Window event listener for opening from other components if needed
-    window.addEventListener('openSideMenu', openMenu);
-  });
 </script>
-
-<style>
-  .social-media-group {
-    display: flex;
-    align-items: center;
-    gap: 0.75rem; /* gap-3 */
-  }
-  .social-icon-link {
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    color: #6b7280; /* text-gray-500 */
-    transition: color 0.3s ease;
-  }
-  :global(.dark) .social-icon-link {
-    color: #9ca3af; /* text-gray-400 */
-  }
-  
-  .social-icon-x:hover { color: #000000; }
-  :global(.dark) .social-icon-x:hover { color: #ffffff; }
-  .social-icon-facebook:hover { color: #1877F2; }
-  .social-icon-instagram:hover { color: #E1306C; }
-  .social-icon-linkedin:hover { color: #0A66C2; }
-  .social-icon-pinterest:hover { color: #BD081C; }
-  .social-icon-youtube:hover { color: #FF0000; }
-  .social-icon-tiktok:hover { color: #010101; }
-  :global(.dark) .social-icon-tiktok:hover { color: #ffffff; }
-  .social-icon-medium:hover { color: #000000; }
-  :global(.dark) .social-icon-medium:hover { color: #ffffff; }
-  .social-icon-whatsapp:hover { color: #25D366; }
-  .social-icon-telegram:hover { color: #0088cc; }
-  .social-icon-phone:hover { color: #25D366; }
-  .social-icon-email:hover { color: #ea4335; }
-</style>
