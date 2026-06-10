@@ -10,7 +10,8 @@ if (!user || user.is_partner !== 1) {
 }
 
 const mockOrders = [
-  { id: 'SİP-10042', client: 'Ahmet Yılmaz', date: '2026-06-10', total: '1.250 TL', status: 'Hazırlanıyor' }
+  { id: 'SİP-10042', client: 'Ahmet Yılmaz', date: '2026-06-10', total: '1.250 TL', status: 'Hazırlanıyor', hasInvoice: false },
+  { id: 'SİP-10043', client: 'Mehmet Öz', date: '2026-06-08', total: '2.500 TL', status: 'Tamamlandı', hasInvoice: true }
 ];
 ---
 
@@ -39,6 +40,7 @@ const mockOrders = [
                 <th class="py-4 px-6">Tarih</th>
                 <th class="py-4 px-6">Hakediş Tutarı</th>
                 <th class="py-4 px-6">Durum</th>
+                <th class="py-4 px-6">Fatura</th>
                 <th class="py-4 px-6 text-right">İşlem</th>
               </tr>
             </thead>
@@ -65,6 +67,22 @@ const mockOrders = [
                       <i class={`fa-solid ${order.status === 'Tamamlandı' ? 'fa-check' : 'fa-spinner fa-spin-pulse'}`}></i>
                       {order.status}
                     </span>
+                  </td>
+                  <td class="py-4 px-6">
+                    {order.hasInvoice ? (
+                      <div class="flex items-center gap-2">
+                        <button onclick="alert('Fatura detayı yükleniyor...')" class="bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 font-bold text-[11px] px-2.5 py-1.5 rounded-md transition-all shadow-sm">
+                          <i class="fa-solid fa-eye"></i> Görüntüle
+                        </button>
+                        <button onclick="alert('Fatura PDF olarak indiriliyor...')" class="bg-white border border-slate-200 hover:border-slate-300 text-slate-600 hover:text-slate-800 font-bold text-[11px] px-2.5 py-1.5 rounded-md transition-all shadow-sm">
+                          <i class="fa-solid fa-download"></i> İndir
+                        </button>
+                      </div>
+                    ) : (
+                      <span class="text-red-500 font-bold text-[11px] bg-red-50 px-2.5 py-1 rounded-md">
+                        <i class="fa-solid fa-triangle-exclamation"></i> Faturalandırılmadı
+                      </span>
+                    )}
                   </td>
                   <td class="py-4 px-6 text-right">
                     <button class="bg-white border border-slate-200 hover:border-blue-300 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-bold text-xs px-4 py-2 rounded-lg transition-all shadow-sm">

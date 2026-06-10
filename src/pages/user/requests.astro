@@ -191,14 +191,63 @@ function formatDate(dateStr: string) {
         </div>
 
         <div class="form-group">
-          <label for="category">Hizmet Kategorisi Seçin *</label>
-          <select name="category" id="category" required class="select-box">
+          <label for="mainCategory">Hizmet Kategorisi Seçin *</label>
+          <select id="mainCategory" required class="select-box">
             <option value="">Lütfen kategori seçin...</option>
-            {flatCategories.map(cat => (
-              <option value={cat}>{cat}</option>
+            {servicesData.categories.map((cat: any) => (
+              <option value={cat.name}>{cat.name}</option>
             ))}
           </select>
         </div>
+
+        <div class="form-group">
+          <label for="subCategory">Alt Kategori Seçin *</label>
+          <select id="subCategory" required disabled class="select-box">
+            <option value="">Önce kategori seçin...</option>
+          </select>
+        </div>
+
+        <input type="hidden" name="category" id="category" required />
+
+        <script define:vars={{ categoriesData: servicesData.categories }}>
+          document.addEventListener('DOMContentLoaded', () => {
+            const mainSelect = document.getElementById('mainCategory');
+            const subSelect = document.getElementById('subCategory');
+            const hiddenCategory = document.getElementById('category');
+
+            if(mainSelect && subSelect) {
+                mainSelect.addEventListener('change', (e) => {
+                  const selectedMain = e.target.value;
+                  const catObj = categoriesData.find(c => c.name === selectedMain);
+                  
+                  subSelect.innerHTML = '<option value="">Lütfen alt kategori seçin...</option>';
+                  
+                  if (catObj && catObj.services) {
+                    catObj.services.forEach(sub => {
+                      const opt = document.createElement('option');
+                      opt.value = sub;
+                      opt.textContent = sub;
+                      subSelect.appendChild(opt);
+                    });
+                    subSelect.disabled = false;
+                  } else {
+                    subSelect.disabled = true;
+                  }
+                  hiddenCategory.value = '';
+                });
+
+                subSelect.addEventListener('change', (e) => {
+                  const selectedMain = mainSelect.value;
+                  const selectedSub = e.target.value;
+                  if(selectedMain && selectedSub) {
+                    hiddenCategory.value = selectedMain + ': ' + selectedSub;
+                  } else {
+                    hiddenCategory.value = '';
+                  }
+                });
+            }
+          });
+        </script>
 
         <div class="form-group">
           <label for="description">Detaylı İlan Açıklaması *</label>

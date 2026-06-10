@@ -21,12 +21,12 @@ const mockTickets = [
         <h1 class="text-2xl font-bold text-gray-900">Destek Taleplerim</h1>
         <p class="text-gray-500">Yaşadığınız sorunlarla ilgili destek ekibimize ulaşabilirsiniz.</p>
       </div>
-      <button class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
-        <i class="fa-solid fa-plus"></i> Yeni Talep
+      <button onclick="alert('Destek bildirim sistemi altyapısı hazırlanmaktadır. Acil talepleriniz için WhatsApp destek hattımıza yazabilirsiniz.')" class="bg-blue-600 hover:bg-blue-700 text-white px-5 py-2.5 rounded-lg font-medium text-sm transition-colors flex items-center gap-2">
+        <i class="fa-solid fa-plus"></i> Destek Talebi Oluştur
       </button>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden mt-6">
       {mockTickets.length > 0 ? (
         <table class="w-full text-left border-collapse">
           <thead>
@@ -50,7 +50,7 @@ const mockTickets = [
                   </span>
                 </td>
                 <td class="py-4 px-6">
-                  <button class="text-blue-600 hover:text-blue-800 font-medium text-xs">Görüntüle</button>
+                  <button onclick="alert('Bilet detayı sayfası henüz aktif değil. WhatsApp üzerinden durumunu sorgulayabilirsiniz.')" class="text-blue-600 hover:text-blue-800 font-medium text-xs">Görüntüle</button>
                 </td>
               </tr>
             ))}
