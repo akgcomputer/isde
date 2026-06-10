@@ -19,37 +19,36 @@ let errorMessage = '';
 if (Astro.request.method === 'POST' && db) {
   try {
     const formData = await Astro.request.formData();
-    const addressType = formData.get('address_type') as string;
-    let domainInput = (formData.get('domain') as string || '').trim().toLowerCase();
+    const noDomain = formData.get('no_domain') === '1';
+    let domainInput = '';
     const mode = formData.get('mode') as string;
 
-    if (!domainInput) {
-      errorMessage = 'Lütfen geçerli bir alan adı veya alt alan adı girin.';
-    } else {
-      let finalDomain = domainInput;
-
-      if (addressType === 'subdomain') {
-        // Sadece harf, rakam ve tire kontrolü
-        const subdomainRegex = /^[a-z0-9-]+$/;
-        if (!subdomainRegex.test(domainInput)) {
-          errorMessage = 'Alt alan adı sadece küçük harf, rakam ve tire (-) içerebilir.';
-        } else {
-          finalDomain = `${domainInput}.isdeyeter.com`;
-        }
+    if (noDomain) {
+      const desired = (formData.get('desired_domain') as string || '').trim().toLowerCase();
+      if (!desired) {
+        errorMessage = 'Lütfen istediğiniz alan adını girin.';
       } else {
-        // Özel alan adı validation
-        const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/;
-        if (!domainRegex.test(domainInput)) {
-          errorMessage = 'Geçersiz özel alan adı formatı (Örn: firmam.com).';
+        const subdomainRegex = /^[a-z0-9-]+$/;
+        if (!subdomainRegex.test(desired)) {
+          errorMessage = 'İstediğiniz alan adı sadece küçük harf, rakam ve tire (-) içerebilir.';
         } else {
-          // Alt alan adı kontrolü
-          const dots = (domainInput.match(/\./g) || []).length;
-          const isTr = domainInput.endsWith('.com.tr') || domainInput.endsWith('.net.tr') || domainInput.endsWith('.org.tr');
-          if ((dots > 1 && !isTr) || (dots > 2 && isTr)) {
-            errorMessage = 'Web paketleri sadece ana alan adı için kurulabilir. Alt alan adı (subdomain) girilemez!';
-          }
+          domainInput = `${desired} (Alan Adı Alınacak)`;
         }
       }
+    } else {
+      domainInput = (formData.get('domain') as string || '').trim().toLowerCase();
+      if (!domainInput) {
+        errorMessage = 'Lütfen sahip olduğunuz alan adını girin.';
+      } else {
+        const domainRegex = /^[a-z0-9]+([\-\.]{1}[a-z0-9]+)*\.[a-z]{2,5}$/;
+        if (!domainRegex.test(domainInput)) {
+          errorMessage = 'Geçersiz özel alan adı formatı (Örn: isletme-marka-adiniz.com).';
+        }
+      }
+    }
+
+    if (!errorMessage) {
+      let finalDomain = domainInput;
 
       if (!errorMessage) {
         // Veritabanında çakışma var mı kontrol et
@@ -146,43 +145,58 @@ if (db) {
       <form method="POST" class="wizard-form shadow-card">
         <h2><i class="fa-solid fa-wand-magic-sparkles text-blue-500 mr-2"></i>Yeni Web Sitesi Başlat</h2>
         
-        <div class="form-group">
-          <label>Adres Tipi Seçin</label>
-          <div class="address-type-selector">
-            <label class="radio-label">
-              <input type="radio" name="address_type" value="subdomain" checked id="type-subdomain" />
-              <span>Ücretsiz Alt Alan Adı (.isdeyeter.com)</span>
-            </label>
-            <label class="radio-label">
-              <input type="radio" name="address_type" value="domain" id="type-domain" />
-              <span>Kendi Özel Alan Adım (Domain)</span>
-            </label>
-          </div>
-        </div>
-
-        <div class="form-group">
-          <label for="domain" id="domain-label">Alt Alan Adı (Subdomain)</label>
+        <div class="form-group" id="domain-primary-group">
+          <label for="domain">Kendi Özel Alan Adınız (Domain)</label>
           <div class="domain-input-group">
             <input 
               type="text" 
               name="domain" 
               id="domain" 
-              required 
-              placeholder="firmaadi" 
+              placeholder="isletme-marka-adiniz.com" 
               class="domain-input"
             />
-            <span class="domain-suffix" id="domain-suffix">.isdeyeter.com</span>
           </div>
-          <small class="helper-text" id="domain-helper">Sadece küçük harfler, rakamlar ve tire (-) kullanın. Türkçe karakter kullanmayın.</small>
+          <small class="helper-text" id="domain-helper">Satın aldığınız alan adını girin (Örn: isdeyeter.com gibi). Eğer Domain (alan adı) almadıysanız size ekibimiz destek olacaktır.</small>
         </div>
 
-        <div class="form-group">
+        <div class="form-group checkbox-group" style="margin-top: 4px;">
+          <label class="radio-label">
+            <input type="checkbox" id="no-domain-check" name="no_domain" value="1" />
+            <span style="font-weight: 600; color: #0f172a;">Alan adı almadım</span>
+          </label>
+        </div>
+
+        <div class="form-group" id="desired-domain-group" style="display: none; margin-top: 10px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px dashed #cbd5e1;">
+          <label for="desired-domain">İstediğiniz alan adını yazınız</label>
+          <input 
+            type="text" 
+            name="desired_domain" 
+            id="desired-domain" 
+            placeholder="Örn: comlekgida" 
+            class="domain-input"
+            style="border: 1px solid #cbd5e1; border-radius: 8px; width: 100%; margin-top: 5px; background: #fff;"
+          />
+          <small class="helper-text" style="display: block; margin-top: 8px;">
+            Örneğin Çömlek Gıda için <strong>comlekgida</strong> yazmalısınız. İsim uzantısı (.com, .net, .com.tr müsait olanı tarafınıza bildirilecek).<br/>
+            Sadece küçük harfler, rakamlar ve tire (-) kullanın. Türkçe karakter kullanmayın.
+          </small>
+        </div>
+
+        <div class="form-group" style="margin-top: 15px;">
           <label for="mode">Web Sitesi Çalışma Modu (Model)</label>
           <select name="mode" id="mode" class="mode-select" required>
-            <option value="hizmet" selected>💼 Hizmet Kataloğu Modu (Servis odaklı firmalar için)</option>
-            <option value="urun">📦 E-Ticaret / Ürün Kataloğu Modu (Ürün odaklı satıcılar için)</option>
+            <optgroup label="Tekil Kullanım">
+              <option value="blog">Sadece Blog Web Sitesi</option>
+              <option value="kurumsal" selected>Sadece Kurumsal Tanıtım Web Sitesi</option>
+              <option value="eticaret">Sadece E-Ticaret Web Sitesi</option>
+            </optgroup>
+            <optgroup label="Karma Web Sitesi Kullanımı">
+              <option value="blog_kurumsal">Blog + Kurumsal</option>
+              <option value="kurumsal_eticaret">Kurumsal + E-Ticaret</option>
+              <option value="blog_eticaret">Blog + E-Ticaret</option>
+              <option value="hepsi">Blog + E-Ticaret + Kurumsal (Hepsi)</option>
+            </optgroup>
           </select>
-          <small class="helper-text">Mod seçimi sitenizin menü yapısını otomatik belirler.</small>
         </div>
 
         <button type="submit" class="submit-btn">
@@ -248,30 +262,26 @@ if (db) {
   </div>
 
   <script>
-    const typeSubdomain = document.getElementById('type-subdomain') as HTMLInputElement;
-    const typeDomain = document.getElementById('type-domain') as HTMLInputElement;
-    const domainLabel = document.getElementById('domain-label') as HTMLLabelElement;
+    const noDomainCheck = document.getElementById('no-domain-check') as HTMLInputElement;
     const domainInput = document.getElementById('domain') as HTMLInputElement;
-    const domainSuffix = document.getElementById('domain-suffix') as HTMLSpanElement;
-    const domainHelper = document.getElementById('domain-helper') as HTMLElement;
+    const desiredDomainGroup = document.getElementById('desired-domain-group') as HTMLDivElement;
+    const desiredDomainInput = document.getElementById('desired-domain') as HTMLInputElement;
+    const domainPrimaryGroup = document.getElementById('domain-primary-group') as HTMLDivElement;
 
-    if (typeSubdomain && typeDomain && domainLabel && domainInput && domainSuffix && domainHelper) {
-      typeSubdomain.addEventListener('change', updateFormState);
-      typeDomain.addEventListener('change', updateFormState);
-
-      function updateFormState() {
-        if (typeSubdomain.checked) {
-          domainLabel.textContent = "Alt Alan Adı (Subdomain)";
-          domainInput.placeholder = "firmaadi";
-          domainSuffix.style.display = "flex";
-          domainHelper.textContent = "Sadece küçük harfler, rakamlar ve tire (-) kullanın. Türkçe karakter kullanmayın.";
+    if (noDomainCheck && desiredDomainGroup && domainPrimaryGroup && domainInput && desiredDomainInput) {
+      noDomainCheck.addEventListener('change', () => {
+        if (noDomainCheck.checked) {
+          desiredDomainGroup.style.display = "block";
+          domainPrimaryGroup.style.display = "none";
+          domainInput.removeAttribute('required');
+          desiredDomainInput.setAttribute('required', 'true');
         } else {
-          domainLabel.textContent = "Kendi Özel Alan Adınız (Domain)";
-          domainInput.placeholder = "firmamiz.com";
-          domainSuffix.style.display = "none";
-          domainHelper.textContent = "Satın aldığınız alan adını girin (Örn: firmamiz.com). Alt alan adı girilemez.";
+          desiredDomainGroup.style.display = "none";
+          domainPrimaryGroup.style.display = "block";
+          desiredDomainInput.removeAttribute('required');
+          domainInput.setAttribute('required', 'true');
         }
-      }
+      });
     }
   </script>
 
