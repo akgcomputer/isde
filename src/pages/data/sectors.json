@@ -1,0 +1,178 @@
+[
+  {
+    "name": "Dijital İşler",
+    "categories": [
+      {
+        "name": "Hepsi Bir Arada Hibrit Paketler",
+        "services": ["Ön Muhasebe", "E-Ticaret", "B2B", "Entegrasyon"]
+      },
+      {
+        "name": "Muhasebe Paketleri",
+        "services": ["Ön Muhasebe", "Finansal Raporlama", "Fatura Kesimi", "Defter Tutma"]
+      },
+      {
+        "name": "E-Ticaret Paketleri",
+        "services": ["E-Ticaret Kurulumu", "Ödeme Entegrasyonları", "Kargo Entegrasyonları", "Mağaza Yönetimi"]
+      },
+      {
+        "name": "Web Sitesi Yapımı ve Web Paketleri",
+        "services": ["Kurumsal Web Siteleri", "Kişisel Blog Siteleri", "Haber Siteleri", "Portal Siteleri"]
+      },
+      {
+        "name": "İnternet Reklamcılığı",
+        "services": ["Google Ads", "Sosyal Medya Reklamları", "Display Reklamlar", "Video Reklamları"]
+      },
+      {
+        "name": "SEO Hizmeti",
+        "services": ["On-Page SEO", "Off-Page SEO", "Teknik SEO", "Anahtar Kelime Analizi"]
+      },
+      {
+        "name": "ERP ve CRM Çözümleri",
+        "services": ["ERP Entegrasyonu", "CRM Yönetimi", "Stok Takibi", "Müşteri Segmentasyonu"]
+      },
+      {
+        "name": "Sosyal Medya Yönetimi",
+        "services": ["İçerik Üretimi", "Hesap Yönetimi", "Etkileşim Artırma", "Raporlama"]
+      },
+      {
+        "name": "Instagram Hesap Yönetimi",
+        "services": ["İçerik Planlama", "Analiz & Raporlama", "Müşteri Etkileşimi", "Otomatik Yayınlama"]
+      },
+      {
+        "name": "Domain & Hosting",
+        "services": ["Alan Adı Kaydı", "Hosting Paketleri", "SSL Sertifikaları", "Email Hosting"]
+      },
+      {
+        "name": "Pazaryeri Entegrasyonları",
+        "services": ["Trendyol Entegrasyonu", "Hepsiburada Entegrasyonu", "Amazon Entegrasyonu", "Stok Senkronizasyonu"]
+      },
+      {
+        "name": "Server Kurulumu",
+        "services": ["Sunucu Kurulumu", "Güvenlik Yapılandırması", "Yedekleme Çözümleri", "Performans Optimizasyonu"]
+      },
+      {
+        "name": "WordPress",
+        "services": ["WordPress Kurulumu", "Tema Geliştirme", "Eklenti Entegrasyonu", "WordPress Optimizasyonu"]
+      },
+      {
+        "name": "Web Yazılım Geliştirme",
+        "services": ["Özel Yazılım Geliştirme", "API Entegrasyonları", "Veritabanı Yönetimi", "Backend Çözümler"]
+      },
+      {
+        "name": "WooCommerce",
+        "services": ["WooCommerce Kurulumu", "Ödeme Entegrasyonları", "Ürün Yönetimi", "Kargo Entegrasyonları"]
+      },
+      {
+        "name": "Sanal Asistan",
+        "services": ["İdari Destek", "Müşteri İlişkileri", "Veri Girişi", "ChatBot Çözümleri"]
+      },
+      {
+        "name": "Oyun Geliştirme",
+        "services": ["Oyun Tasarımı", "2D/3D Grafikler", "Oyun Programlama", "Test ve Debug"]
+      },
+      {
+        "name": "Otomasyon Paketleri",
+        "services": ["Trendyol Tam Otomasyon", "HepsiBurada Tam Otomasyon", "Amazon Tam Otomasyon", "Etsy Tam Otomasyon", "Ozon Tam Otomasyon", "ÇiçekSepeti Tam Otomasyon", "Amazon Global Destek", "Ürün Girişi", "Fiyat Takibi", "Kampanya Yönetimi", "Stok Senkronizasyonu", "Global Ürün Listeleme", "Uluslararası Fiyat Stratejisi", "Çoklu Dil Desteği", "Global Nakliye Yönetimi"]
+      }
+    ]
+  },
+  {
+    "name": "Temizlik",
+    "categories": [
+      {
+        "name": "Temel Temizlik Hizmetleri",
+        "services": ["Ev Temizliği", "Ofis Temizliği", "İnşaat Sonrası Temizlik", "Cam Temizliği", "Halı Yıkama", "Koltuk Yıkama", "Yatak Yıkama", "Villa Temizliği", "Kuru Temizleme", "Yerinde Araç Yıkama", "Apartman Temizliği", "Evde Ütü Hizmeti"]
+      },
+      {
+        "name": "Diğer Temizlik Hizmetleri",
+        "services": ["Hizmetçi Temizlik", "Günlük Ev Temizliği", "Haftalık Ev Temizliği", "Aylık Ev Temizliği", "Yazlık Ev Temizliği", "Beyaz Eşya Temizliği", "Çamaşır Makinesi Temizliği", "Bulaşık Makinesi Temizliği", "Fırın Temizliği", "Mikrodalga Temizliği", "Aspiratör Temizliği", "Tezgah Temizliği", "Duşakabin Temizliği", "Klozet Temizliği", "Lavabo Temizliği", "Fayans Temizliği", "Derz Temizliği", "Ahşap Zemin Temizliği", "Mermer Parlatma", "Granit Temizliği", "Laminant Parke Temizliği", "PVC Temizliği", "Perde Yıkama", "Stor Perde Temizliği", "Tül Perde Temizliği", "Jaluzi Temizliği", "Salon Temizliği", "Mutfak Temizliği", "Banyo Temizliği", "Yatak Odası Temizliği", "Çocuk Odası Temizliği", "Balkon Temizliği", "Garaj Temizliği", "Bodrum Temizliği", "Çatı Temizliği", "Dış Cephe Temizliği", "Bahçe Temizliği"]
+      }
+    ]
+  },
+  {
+    "name": "Nakliyat",
+    "categories": [
+      {
+        "name": "Temel Nakliyat Hizmetleri",
+        "services": ["Şehir İçi Kurye", "Evden Eve Nakliyat", "Şehirler Arası Nakliyat", "Uluslararası Nakliyat", "Araç Çekici ve Yol Yardım", "Mobilya Taşıma ve Montaj", "Ofis ve İşyeri Taşıma", "Depolama Hizmetleri", "Değerli Eşya Taşıma", "Asansörlü Nakliyat", "Beyaz Eşya Taşıma", "Otomobil Taşımacılığı"]
+      },
+      {
+        "name": "Diğer Nakliyat Hizmetleri",
+        "services": ["Nakliye Sigortası", "Ambar ve Taşımacılık", "Öğrenci Taşımacılığı", "Sanat ve Antika Taşıma", "Hurda ve Geri Dönüşüm Taşıma", "Motosiklet Taşıma", "Hamal Hizmeti", "Yurtdışı Kargo", "Personel Servisi", "Paletli Depolama", "Arşivleme Hizmetleri", "Gemi ve Yat Taşımacılığı", "Havaalanı Taşımacılığı", "Kontrat Lojistik", "Parça Eşya Taşıma", "Kurumsal Nakliyat", "Kamyonet Kiralama", "Konteyner Taşımacılığı", "Banka Eşyası Taşıma", "İş Makinesi Taşıma", "İlaç ve Tıbbi Malzeme Nakliyesi", "Sanal Depolama", "Fabrika Taşıma", "Otobüs Kiralama", "Minibüs Kiralama", "Araç Kiralama", "Piyano Taşıma", "Kasa Taşıma", "Harita Taşıma", "Laboratuvar Eşyası Taşıma", "Medikal Ekipman Taşıma", "Hastane Eşyası Taşıma", "Okul Taşıma", "Kütüphane Taşıma", "Müze Eşyası Taşıma", "Sergi Malzemesi Taşıma", "Stand Taşıma", "Billboard Taşıma", "Jeneratör Taşıma", "Trafo Taşıma", "Sanayi Makinesi Taşıma", "Tarım Makinesi Taşıma", "İnşaat Makinesi Taşıma", "Forklift Taşıma", "Vinç Hizmeti", "Tırlı Taşıma", "Kamyonlu Taşıma", "Kırık Araç Taşıma", "Oto Kurtarma", "Karavan Taşıma", "Tekne Taşıma", "Deniz Taşımacılığı", "Kara Taşımacılığı", "Hava Taşımacılığı", "Demiryolu Taşımacılığı", "Soğuk Hava Deposu Taşıma", "Gıda Taşımacılığı", "Kimyasal Madde Taşıma", "Tehlikeli Madde Taşıma", "Canlı Hayvan Taşıma", "Evcil Hayvan Taşıma", "Kargo Sigortası", "Ekspres Kurye"]
+      }
+    ]
+  },
+  {
+    "name": "Tamirat",
+    "categories": [
+      {
+        "name": "Temel Tamirat Hizmetleri",
+        "services": ["Beyaz Eşya Tamiri", "TV Tamiri", "Bilgisayar Tamiri", "Güvenlik Kamera Sistemleri", "Alarm Sistemi Kurulumu", "Yangın Söndürme Tesisatı", "Mobilya Sökme ve Montaj", "Oto Tamiri", "Yol Yardım Hizmeti"]
+      },
+      {
+        "name": "Diğer Tamirat Hizmetleri",
+        "services": ["Arızalı Priz Tamiri", "Sigorta Kutusu Değişimi", "Elektrik Hattı Çekme", "Avize Montajı", "Aplik Montajı", "Spot Lamba Montajı", "Led Aydınlatma", "Sensörlü Lamba Kurulumu", "Gaz Dedektörü Kurulumu", "Tıkalı Lavabo Açma", "Tıkalı Mutfak Gideri", "Tıkalı Tuvalet Açma", "Klozet Tamiri", "Lavabo Tamiri", "Duşakabin Tamiri", "Batarya Değişimi", "Sifon Tamiri", "Çekvalf Değişimi", "Flex Hortum Değişimi", "Termosifon Tamiri", "Şofben Tamiri", "Güneş Enerjisi Tamiri", "Petek Temizliği", "Radyatör Vanası Değişimi", "Doğalgaz Sobası Tamiri", "Ocak Tamiri", "Fırın Tamiri", "Davlumbaz Tamiri", "Mikrodalga Tamiri", "Küçük Ev Aletleri Tamiri", "Ütü Tamiri", "Saç Kurutma Makinesi Tamiri", "Vantilatör Tamiri", "Klima Tamiri", "Klima Gaz Dolumu", "Klima Bakımı", "VRF Klima Sistemi", "Chiller Sistemi", "Havalandırma Tamiri", "Damper Tamiri", "Fan Coil Tamiri", "Kanal Tipi Klima", "Pencere Kolları Değişimi", "Pvc Menteşe Tamiri", "Pvc Kilit Değişimi", "Pvc Cam Değişimi", "Pvc Conta Değişimi", "Sürme Sistem Tamiri", "Kapı Tamiri", "Kapı Kilit Değişimi", "Kapı Menteşe Değişimi", "Kapı Kol Değişimi", "Çekmece Rayı Değişimi", "Dolap Kulp Değişimi", "Raf Sistemi Kurulumu", "Kitaplık Montajı", "Yemek Masası Montajı", "Çalışma Masası Montajı", "Gardırop Montajı", "Şifonyer Montajı", "Komodin Montajı", "TV Ünitesi Montajı", "Baza Montajı", "Yatak Başlığı Montajı", "Sandalye Tamiri", "Koltuk Tamiri", "Mobilya Boyama", "Mobilya Cila", "Ahşap Tamir", "Laminat Parke Tamiri", "Marley Döşeme", "Halıfleks Döşeme", "Boya Tahribatsız Kontrol", "Sıva Tamiri", "Alçı Tamiri", "Çatlak Tamiri", "Derz Tamiri", "Fayans Tamiri", "Seramik Tamiri", "Mermer Tamiri", "Granit Tamiri", "Teras Tamiri", "Balkon Tamiri", "Çatı Tamiri", "Su Yalıtımı", "Isı Yalıtımı", "Ses Yalıtımı", "Mantolama Tamiri", "Dış Cephe Tamiri", "İç Cephe Tamiri", "Duvar Yalıtımı", "Bodrum Yalıtımı", "Banyo Yalıtımı", "Mutfak Yalıtımı", "Güneş Enerjisi Bakımı"]
+      }
+    ]
+  },
+  {
+    "name": "Tadilat",
+    "categories": [
+      {
+        "name": "Temel Tadilat Hizmetleri",
+        "services": ["Boya Badana", "Komple Ev Ofis Tadilatı", "Mutfak Tadilatı", "Banyo Tadilatı", "Fayans Döşeme", "Çatı Tadilatı", "Güneş Enerjisi Sistemi", "Elektrikli Araç Şarj İstasyonu ve Kurulumu", "Elektrikçi", "Su Tesisatçısı", "Doğalgaz Tesisatçısı", "Klima Servisi", "Cam Balkon ve PVC Doğrama", "Alçıpan Asma Tavan ve Bölme Duvar", "Havalandırma Hizmeti", "Havuz Yapımı", "Mantolama", "Bahçe Peyzaj Yapımı", "Parke Döşeme", "Çim Biçme ve Bahçıvan", "Müteahhit ve İnşaat"]
+      },
+      {
+        "name": "Diğer Tadilat Hizmetleri",
+        "services": ["Komple Ev Tadili", "Ofis Tadilatı", "Dükkan Tadilatı", "Restoran Tadilatı", "Villa Tadilatı", "Daire Tadilatı", "Bahçe Düzenleme", "Teras Tadilatı", "Bodrum Tadilatı", "Çatı Katı Düzenleme", "Tuğla Örme", "Gazbeton Örme", "Kaba İnşaat", "İç Sıva", "Dış Sıva", "Alçı Sıva", "Kartonpiyer", "Stropiyer", "Taş Duvar", "Bims Blok", "Yerden Isıtma", "Kalorifer Tesisatı", "VRV Klima Sistemi", "Yangın Merdiveni", "Yangın Sprinkleri", "Site Yönetimi Tadilat", "Fabrika Tadilatı", "Depo Düzenleme", "Garaj Düzenleme", "Veranda Yapımı", "Pergola Yapımı", "Gazebo Yapımı"]
+      }
+    ]
+  },
+  {
+    "name": "Organizasyon",
+    "categories": [
+      {
+        "name": "Temel Organizasyon Hizmetleri",
+        "services": ["Düğün Organizasyonu", "Etkinlik Organizasyonu", "Yat Kiralama", "Garson Kiralama", "Kına Organizasyonu", "Palyaço", "Butik Pasta", "Bando Takımı", "DJ Hizmeti", "Sünnet Organizasyonu", "Balon Süsleme", "Catering Hizmeti", "Evlilik Teklifi", "İkramlıklar Finger Foods", "Gelin Arabası Kiralama ve Süsleme"]
+      },
+      {
+        "name": "Diğer Organizasyon Hizmetleri",
+        "services": ["Açılış Organizasyonu", "Hastane Açılış Organizasyonu", "Animatör", "Canlı Müzik", "Davet Catering", "Davul Zurnacı Kiralama", "Doğum Günü Catering", "Doğum Günü Mekanları", "Doğum Günü Organizasyonu", "Gelin Alma Bandosu", "Gelinlik Dikimi", "Hastane Odası Süsleme", "Kiralık Kaleci", "Klasik Araba Kiralama", "Kokteyl Catering", "Masa Sandalye Kiralama", "Mevlüt Yemeği", "Müzisyen", "Nişan Organizasyonu", "Sihirbaz", "Söz Organizasyonu", "Tabldot Yemek", "Temsili Nikah Memuru", "Yetişkin Doğum Günü Organizasyonu", "Baby Shower Organizasyonu", "Toplantı Organizasyonu", "Piknik Organizasyonu", "Team Building", "Kahvaltı Organizasyonu", "Sürpriz Doğum Günü", "Online Party", "Sanal Düğün", "Ses Sistemi Kiralama", "Işık Sistemi Kiralama", "Dekorasyon", "Fotoğrafçı", "Video Çekimi"]
+      }
+    ]
+  },
+  {
+    "name": "Sağlık / Psikolog / Diyetisyen",
+    "categories": [
+      {
+        "name": "Uzmanlık Alanlarımız",
+        "services": ["Ergen Psikolojisi", "Anksiyete Bozuklukları", "Travma ve PTSD", "Çift ve Aile Terapisi", "Depresyon Tedavisi", "Çocuk Psikolojisi", "Öfke Kontrolü", "Ekran Bağımlılığı ve Yeme Bozuklukları", "Sosyal Fobi", "Uyku Problemleri", "Cinsel Terapi", "Online Psikoterapi", "Kurumsal Psikoloji", "Sınav Kaygısı ve Akademik Danışmanlık", "Gelecek Planlama ve Kariyer Danışmanlığı", "Diyetisyen"]
+      }
+    ]
+  },
+  {
+    "name": "Özel Ders",
+    "categories": [
+      {
+        "name": "Bilişim Dersleri",
+        "services": ["Yazılım Eğitimi", "Excel Eğitimi", "Python Eğitimi", "Blogger Eğitimi", "PHP Eğitimi", "SEO ve Dijital Reklam Yönetimi", "Sistem Uzmanlığı", "Web Tasarım Eğitimi", "Veri Tabanı Uzmanlığı", "Node JS Eğitimi"]
+      },
+      {
+        "name": "Müzik Dersleri",
+        "services": ["Piyano Dersi", "Gitar Dersi", "Keman Dersi", "Davul Dersi", "Şan Dersi", "Saksafon Dersi"]
+      },
+      {
+        "name": "Spor ve Fitness",
+        "services": ["Jimnastik Dersi", "Pilates Dersi", "Yoga Dersi", "Savunma / Dövüş", "Boks", "Futbol Dersi", "Dans Dersi", "Yüzme Dersi", "Basketbol", "Voleybol"]
+      },
+      {
+        "name": "Yabancı Dil",
+        "services": ["İngilizce", "Almanca", "Fransızca", "İspanyolca", "Rusça", "Arapça", "Japonca"]
+      },
+      {
+        "name": "Sanat ve El Sanatları",
+        "services": ["Resim Dersi", "Kaligrafi", "Heykel", "Takı Tasarımı"]
+      }
+    ]
+  }
+]
