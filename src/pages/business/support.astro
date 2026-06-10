@@ -9,30 +9,121 @@ if (!user || user.is_partner !== 1) {
   return Astro.redirect('/login?error=unauthorized');
 }
 
-const mockTickets: any[] = [];
+let successMessage = '';
+let errorMessage = '';
+
+if (Astro.request.method === 'POST') {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+
+    if (action === 'create_ticket') {
+      const subject = formData.get('subject') as string;
+      const priority = formData.get('priority') as string;
+      const message = formData.get('message') as string;
+
+      if (!subject || !priority || !message) {
+        errorMessage = 'Lütfen tüm alanları doldurunuz.';
+      } else {
+        // TODO: Insert into database when tickets table is available
+        successMessage = 'Destek talebiniz başarıyla oluşturuldu! Ekibimiz en kısa sürede sizinle iletişime geçecektir.';
+      }
+    }
+  } catch (e) {
+    errorMessage = 'Destek talebi oluşturulurken bir hata oluştu.';
+  }
+}
+
+const mockTickets = [
+  { id: 'DS-1025', subject: 'Ödeme alamıyorum, IBAN hatalı', status: 'İşlemde', date: '2026-06-10' },
+  { id: 'DS-1018', subject: 'Profilimde uzmanlık alanı ekleme', status: 'Tamamlandı', date: '2026-06-05' }
+];
 ---
 
-<DashboardLayout title="Partner Destek | İş De Yeter İş Ortağı" activeTab="support">
+<DashboardLayout title="Destek Talepleri | İş De Yeter İş Ortağı" activeTab="support">
   <div class="flex flex-col gap-8 max-w-7xl mx-auto px-2">
     
     <div class="flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4">
       <div class="flex flex-col">
-        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Partner Destek (Ticket)</h1>
-        <p class="text-slate-500 mt-2 text-sm sm:text-base">Sistemle veya müşterilerle ilgili karşılaştığınız tüm sorunlar için yönetim ekibiyle buradan iletişime geçebilirsiniz.</p>
+        <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Destek Taleplerim</h1>
+        <p class="text-slate-500 mt-2 text-sm sm:text-base">Sistem, ödemeler veya diğer konular hakkında destek alabilirsiniz.</p>
       </div>
       
-      <button onclick="alert('Destek bildirim sistemi altyapısı kuruluyor. Acil destek talepleriniz için lütfen sistem yöneticinize WhatsApp üzerinden ulaşın.')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
+      <button onclick="document.getElementById('new-ticket-form').classList.toggle('hidden')" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-6 py-3.5 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 whitespace-nowrap shrink-0">
         <i class="fa-solid fa-plus text-lg"></i>
         <span>Destek Talebi Oluştur</span>
       </button>
     </div>
 
+    {successMessage && (
+      <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <span>{successMessage}</span>
+      </div>
+    )}
+
+    {errorMessage && (
+      <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        <span>{errorMessage}</span>
+      </div>
+    )}
+
+    <!-- Yeni Destek Formu -->
+    <div id="new-ticket-form" class="hidden bg-white rounded-3xl shadow-sm border border-slate-200 p-6 sm:p-8">
+      <div class="flex items-center gap-3 border-b border-slate-100 pb-4 mb-6">
+        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-pen-to-square"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Yeni Destek Talebi</h2>
+      </div>
+
+      <form method="POST" class="flex flex-col gap-6">
+        <input type="hidden" name="action" value="create_ticket" />
+        
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-slate-700 uppercase tracking-wide">Destek Başlığı</label>
+          <input type="text" name="subject" required placeholder="Örn: Ödeme Hatası, Profil Düzenleme vb." class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all font-semibold text-slate-800" />
+        </div>
+
+        <div class="flex flex-col gap-3">
+          <label class="text-sm font-bold text-slate-700 uppercase tracking-wide">Durumu (Aciliyet)</label>
+          <div class="flex gap-6 items-center">
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="priority" value="Normal" checked class="w-4 h-4 text-blue-600 border-gray-300 focus:ring-blue-500">
+              <span class="text-sm font-medium text-slate-700">Normal</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="priority" value="Yüksek" class="w-4 h-4 text-amber-500 border-gray-300 focus:ring-amber-500">
+              <span class="text-sm font-medium text-slate-700">Yüksek</span>
+            </label>
+            <label class="flex items-center gap-2 cursor-pointer">
+              <input type="radio" name="priority" value="Acil" class="w-4 h-4 text-red-600 border-gray-300 focus:ring-red-500">
+              <span class="text-sm font-medium text-slate-700">Acil</span>
+            </label>
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <label class="text-sm font-bold text-slate-700 uppercase tracking-wide">İçerik</label>
+          <textarea name="message" required rows="4" placeholder="Lütfen karşılaştığınız sorunu detaylıca açıklayın..." class="bg-slate-50 border border-slate-200 rounded-xl px-4 py-3 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all font-medium text-slate-800 resize-y"></textarea>
+        </div>
+
+        <div class="flex justify-end mt-2">
+          <button type="submit" class="bg-blue-600 hover:bg-blue-700 text-white font-bold px-8 py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center gap-2">
+            <i class="fa-solid fa-paper-plane"></i> Kaydet ve Gönder
+          </button>
+        </div>
+      </form>
+    </div>
+
+    <!-- Geçmiş Biletler -->
     <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col mt-2">
       <div class="p-6 border-b border-slate-100 flex items-center gap-3">
         <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
-          <i class="fa-solid fa-headset"></i>
+          <i class="fa-solid fa-list-check"></i>
         </div>
-        <h2 class="text-xl font-bold text-slate-800">Destek Bildirimlerim</h2>
+        <h2 class="text-xl font-bold text-slate-800">Mevcut Talepler</h2>
       </div>
 
       {mockTickets.length > 0 ? (
@@ -40,7 +131,7 @@ const mockTickets: any[] = [];
           <table class="w-full text-left border-collapse whitespace-nowrap">
             <thead>
               <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
-                <th class="py-4 px-6">Bilet No</th>
+                <th class="py-4 px-6">Talep No</th>
                 <th class="py-4 px-6">Konu</th>
                 <th class="py-4 px-6">Tarih</th>
                 <th class="py-4 px-6">Durum</th>
@@ -60,7 +151,8 @@ const mockTickets: any[] = [];
                     <i class="fa-regular fa-calendar mr-1.5 text-slate-400"></i>{ticket.date}
                   </td>
                   <td class="py-4 px-6">
-                    <span class="inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide bg-slate-100 text-slate-700">
+                    <span class={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide ${ticket.status === 'Tamamlandı' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>
+                      <i class={`fa-solid ${ticket.status === 'Tamamlandı' ? 'fa-check' : 'fa-spinner fa-spin-pulse'}`}></i>
                       {ticket.status}
                     </span>
                   </td>
@@ -75,14 +167,13 @@ const mockTickets: any[] = [];
           </table>
         </div>
       ) : (
-        <div class="py-24 flex flex-col items-center justify-center text-center gap-4 bg-slate-50/50">
+        <div class="py-20 flex flex-col items-center justify-center text-center gap-4 bg-slate-50/50">
           <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-300 text-4xl shadow-sm border border-slate-100">
-            <i class="fa-solid fa-handshake-angle"></i>
+            <i class="fa-solid fa-headset"></i>
           </div>
-          <p class="text-slate-500 font-medium max-w-sm mt-2">Şu anda açık bir destek bildiriminiz bulunmamaktadır.</p>
+          <p class="text-slate-500 font-medium max-w-sm mt-2">Henüz bir destek talebiniz bulunmamaktadır.</p>
         </div>
       )}
     </div>
-
   </div>
 </DashboardLayout>

@@ -1,175 +1,92 @@
 {
   "categories": [
     {
-      "name": "Yazılım ve Teknoloji",
+      "name": "Hizmetler",
       "services": [
-        "Web Yazılım",
-        "Mobil Uygulamalar",
-        "E-ticaret",
-        "Masaüstü Uygulamalar",
-        "Domain & Hosting Hizmetleri",
-        "Son Kullanıcı Testleri",
-        "Teknolojik Destek",
-        "WordPress"
+        "Genel Hizmetler",
+        "Danışmanlık",
+        "Diğer Hizmetler"
       ]
     },
     {
-      "name": "Oyun Geliştirme & CMS",
+      "name": "Dijital İşler",
       "services": [
-        "Oyun Geliştirme",
-        "Websitesi Kurulumu",
-        "Data Analizi & Raporlama",
-        "WordPress ile E-Ticaret",
-        "Web Sitesi Oluşturucular & CMS",
-        "Diğer Yazılım Teknoloji",
-        "WooCommerce ile E-Ticaret"
-      ]
-    },
-    {
-      "name": "İnternet Reklamcılığı",
-      "services": [
+        "Web Tasarım & Yazılım",
+        "SEO Danışmanlığı",
         "Sosyal Medya Yönetimi",
-        "Web Analytics & İzleme",
-        "Diğer İnternet Reklamcılığı",
-        "Influencer Marketing",
-        "Reklam Yönetimi",
-        "Mobil Reklamcılık",
-        "Arama Motoru Optimizasyonu (SEO)"
+        "E-Ticaret Danışmanlığı",
+        "Grafik & Logo Tasarımı"
       ]
     },
     {
-      "name": "İş ve Yönetim",
+      "name": "Temizlik",
       "services": [
-        "Pazar Araştırmaları",
-        "Marka Hizmetleri",
-        "Sanal Asistanlık",
-        "Ürün & Veri Girişi",
-        "Excel İşleri",
-        "Danışmanlıklar",
-        "Satış & Müşteri Bulma",
-        "Diğer İş Yönetim"
+        "Ev Temizliği",
+        "Ofis Temizliği",
+        "İnşaat Sonrası Temizlik",
+        "Koltuk & Halı Yıkama",
+        "Cam Temizliği"
       ]
     },
     {
-      "name": "Video ve Animasyon",
+      "name": "Nakliyat",
       "services": [
-        "Introlar",
-        "Video Reklamlar",
-        "Video Prodüksiyon",
-        "Oyunculu Tanıtım Videoları",
-        "Diğer Video",
-        "Animasyon & 3D",
-        "Kurgu & Post Prodüksiyon",
-        "Yayıncılar İçin Videolar",
-        "Özel Günlere Videolar"
+        "Evden Eve Taşıma",
+        "Ofis Taşıma",
+        "Parça Eşya Taşıma",
+        "Şehirlerarası Nakliyat",
+        "Kasa Taşıma"
       ]
     },
     {
-      "name": "Ses ve Müzik",
+      "name": "Tamirat",
       "services": [
-        "Seslendirme",
-        "Mix & Mastering",
-        "Beste & Şarkı Yazarlığı",
-        "Jingle & Reklam Müziği",
-        "Podcast Düzenleme",
-        "Diğer Ses & Müzik"
+        "Su Tesisatı",
+        "Elektrik Tesisatı",
+        "Kombi & Petek Bakımı",
+        "Mobilya Montajı",
+        "Beyaz Eşya Servisi"
       ]
     },
     {
-      "name": "Çeviri ve Metin",
+      "name": "Tadilat",
       "services": [
-        "Web Sitesi İçeriği Çeviri",
-        "Senaryo & Yaratıcı Metin",
-        "Basın Bülteni",
-        "CV & Ön Yazı",
-        "Diğer Yazı & Çeviri",
-        "Metin Yazarlığı",
-        "Redaksiyon & Metin Düzenleme",
-        "Deşifre",
-        "Marka Adı & Slogan",
-        "Yorum & İnceleme"
+        "Boya & Badana",
+        "Banyo & Mutfak Yenileme",
+        "Alçıpan & Kartonpiyer",
+        "Çatı Tamiri",
+        "Anahtar Teslim Tadilat"
       ]
     },
     {
-      "name": "Grafik ve Tasarım",
+      "name": "Organizasyon",
       "services": [
-        "Logo Tasarımı",
-        "Reklam & Banner Tasarımı",
-        "3D Tasarımlar",
-        "UI/UX Tasarımı",
-        "İllüstrasyon",
-        "Fotoğraf & Düzenleme",
-        "Dövme Tasarımı",
-        "Kurumsal Kimlik & Kartvizit",
-        "Davetiye Tasarımları",
-        "Yayıncılar İçin Tasarımlar",
-        "Broşür & Katalog Tasarımı",
-        "Oyun Sanatı",
-        "Sosyal Medya Tasarımları",
-        "Ambalaj Tasarımı",
-        "Storyboard Tasarımı",
-        "Sunum & Infografik",
-        "Karikatür & Karakalem",
-        "Diğer Tasarımlar"
+        "Düğün & Nişan",
+        "Doğum Günü & Parti",
+        "Kurumsal Etkinlik",
+        "Catering",
+        "Mekan Süsleme"
       ]
-    }
-  ],
-  "featuredServices": [
-    {
-      "title": "İnternet Reklamcılığı ile Pazarlamanı Yaptır",
-      "slug": "internet-reklamciligi-ile-pazarlamani-yaptir",
-      "description": "Google Ads, sosyal medya reklamları ve dijital pazarlama stratejileri ile markanızı doğru kitlelere ulaştırın.",
-      "icon": "fa-bullhorn",
-      "link": "https://isdeyeter.com/diger-internet-reklamciligi-37/"
     },
     {
-      "title": "Web Sitesi Yapımı ve Paketler",
-      "slug": "web-sitesi-yapimi-ve-paketler",
-      "description": "Modern, responsive ve SEO uyumlu web siteleri ile dijital varlığınızı güçlendirin.",
-      "icon": "fa-globe",
-      "link": "https://isdeyeter.com/ana-dijital-isler-web-sitesi-yapimi-web-paketleri/"
+      "name": "Sağlık",
+      "services": [
+        "Psikolojik Danışmanlık",
+        "Diyetisyen",
+        "Fizyoterapi",
+        "Evde Hemşire",
+        "Yaşam Koçu"
+      ]
     },
     {
-      "title": "SEO ile Google'da 1. Sıraya Çıkın",
-      "slug": "seo-ile-googleda-1-siraya-cikin",
-      "description": "Organik trafik ve kalıcı sonuçlar için profesyonel SEO hizmetleri.",
-      "icon": "fa-search",
-      "link": "https://isdeyeter.com/ana-dijital-isler-seo-hizmeti-alarak-web-sitenizi-google-aramalarinda-bir-numara-yapin/"
-    },
-    {
-      "title": "E-Ticaret Çözümleri",
-      "slug": "e-ticaret-cozumleri",
-      "description": "Online mağazanızı kurun, yönetin ve satışlarınızı artırın.",
-      "icon": "fa-shopping-cart",
-      "link": "https://isdeyeter.com/is-de-yeter/"
-    },
-    {
-      "title": "Sosyal Medya Yönetimi",
-      "slug": "sosyal-medya-yonetimi",
-      "description": "Sosyal medya hesaplarınızı profesyonel ekibimizle yönetin.",
-      "icon": "fa-instagram",
-      "link": "https://isdeyeter.com/is-de-yeter/"
-    },
-    {
-      "title": "Pazaryeri Entegrasyonları",
-      "slug": "pazaryeri-entegrasyonlari",
-      "description": "Trendyol, Hepsiburada, Amazon ve diğer pazaryerlerinde satış yapın.",
-      "icon": "fa-store",
-      "link": "https://isdeyeter.com/is-de-yeter/"
-    },
-    {
-      "title": "Yazılım Geliştirme",
-      "slug": "yazilim-gelistirme",
-      "description": "Özel yazılım çözümleri ile iş süreçlerinizi dijitalleştirin.",
-      "icon": "fa-code",
-      "link": "https://isdeyeter.com/is-de-yeter/"
-    },
-    {
-      "title": "Grafik Tasarım Hizmetleri",
-      "slug": "grafik-tasarim-hizmetleri",
-      "description": "Marka kimliğinize uygun profesyonel grafik tasarımlar.",
-      "icon": "fa-palette",
-      "link": "https://isdeyeter.com/is-de-yeter/"
+      "name": "Özel Ders",
+      "services": [
+        "Matematik Özel Ders",
+        "İngilizce & Yabancı Dil",
+        "Müzik & Enstrüman Dersi",
+        "Sürücü & Direksiyon Dersi",
+        "LGS/YKS Hazırlık"
+      ]
     }
   ]
 }
