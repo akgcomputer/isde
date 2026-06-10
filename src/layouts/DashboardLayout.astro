@@ -62,6 +62,9 @@ const menuItems = [
             <span class="user-name">{user.name}</span>
             <span class="user-role">{isAdmin ? 'Sistem Yöneticisi' : isPartner ? 'İş Ortağı' : 'Müşteri'}</span>
           </div>
+          <a href="/api/auth/logout" class="footer-logout-btn" title="Oturumu Kapat">
+            <i class="fa-solid fa-power-off"></i>
+          </a>
         </div>
       </div>
     </aside>
@@ -215,6 +218,21 @@ const menuItems = [
       align-items: center;
       gap: 12px;
       overflow: hidden;
+      width: 100%;
+    }
+
+    .footer-logout-btn {
+      margin-left: auto;
+      color: #ef4444;
+      font-size: 1.2rem;
+      transition: color 0.2s;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .footer-logout-btn:hover {
+      color: #dc2626;
     }
 
     .avatar-icon {
