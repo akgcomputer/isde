@@ -115,12 +115,13 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
           </div>
 
           <div class="input-group">
-            <label for="reg-phone"><i class="fa-solid fa-phone icon-label"></i> Telefon Numarası <span class="required-star">*</span></label>
+            <label for="reg-phone"><i class="fa-solid fa-phone icon-label"></i> Telefon Numarası <span class="optional-label">(Kullanıcı Adı)</span> <span class="required-star">*</span></label>
             <input 
               type="tel" 
               name="phone" 
               id="reg-phone" 
               placeholder="Tel: 05XX XXX XX XX" 
+              maxlength="11"
               required 
             />
           </div>
@@ -145,14 +146,6 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
               onkeyup="checkPasswordStrength(this.value)"
               required
             />
-            
-            <div class="password-strength" id="password-strength-container" style="display: none; margin-top: 4px; font-size: 0.8rem; font-weight: 600;">
-              Güç: <span id="password-strength-text"></span>
-            </div>
-            
-            <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: 4px; cursor: pointer; font-weight: normal;">
-              <input type="checkbox" onchange="togglePasswordVisibility('reg-password', this.checked)" /> Şifreyi göster
-            </label>
           </div>
 
           <div class="input-group">
@@ -164,10 +157,15 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
               placeholder="Şifrenizi tekrar girin" 
               required
             />
-            <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: 4px; cursor: pointer; font-weight: normal;">
-              <input type="checkbox" onchange="togglePasswordVisibility('reg-password-confirm', this.checked)" /> Şifreyi göster
-            </label>
           </div>
+
+          <div class="password-strength" id="password-strength-container" style="display: none; margin-top: -10px; font-size: 0.82rem; font-weight: 600;">
+            Zorluk seviyesi : <span id="password-strength-text"></span>
+          </div>
+          
+          <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: -8px; cursor: pointer; font-weight: normal;">
+            <input type="checkbox" onchange="togglePasswordVisibility('reg-password', this.checked); togglePasswordVisibility('reg-password-confirm', this.checked);" /> Şifreyi göster
+          </label>
 
           <!-- Ben Robot Değilim (Kayıt Formu için) -->
           <div class="captcha-container">
