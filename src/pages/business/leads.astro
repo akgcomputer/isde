@@ -1,0 +1,231 @@
+---
+// src/pages/business/leads.astro
+import DashboardLayout from '../../layouts/DashboardLayout.astro';
+import { getPartnerContactLink } from '../../utils/whatsapp';
+
+export const prerender = false;
+
+const user = Astro.locals.user;
+if (!user || user.is_partner !== 1) {
+  return Astro.redirect('/login?error=unauthorized');
+}
+
+const runtime = Astro.locals.runtime as any;
+const db = runtime?.env?.DB;
+
+let successMessage = '';
+let errorMessage = '';
+
+if (Astro.request.method === 'POST' && db) {
+  try {
+    const formData = await Astro.request.formData();
+    const action = formData.get('action') as string;
+
+    if (action === 'submit_offer') {
+      if (user.is_approved !== 1) {
+        errorMessage = 'Teklif gönderebilmek için hesabınızın onaylanmış olması gerekmektedir.';
+      } else {
+        const requestId = formData.get('request_id') as string;
+        const priceStr = formData.get('price') as string;
+        const duration = formData.get('duration') as string;
+
+        const price = parseFloat(priceStr);
+
+        if (!requestId || isNaN(price) || !duration) {
+          errorMessage = 'Lütfen teklif fiyatı ve tamamlanma süresini doğru girin.';
+        } else {
+          await db.batch([
+            db.prepare(
+              "INSERT INTO offers (request_id, partner_id, price, duration, status) VALUES (?, ?, ?, ?, 'PENDING')"
+            ).bind(requestId, user.id, price, duration),
+            db.prepare(
+              "UPDATE service_requests SET status = 'OFFER_RECEIVED' WHERE id = ? AND status = 'PENDING'"
+            ).bind(requestId)
+          ]);
+
+          successMessage = 'Teklifiniz başarıyla müşteriye iletildi! Müşteri onayladığında size haber verilecektir.';
+        }
+      }
+    }
+  } catch (e) {
+    console.error("Partner offer submission error:", e);
+    errorMessage = 'Teklif gönderilirken veritabanı hatası oluştu.';
+  }
+}
+
+let myServices: any[] = [];
+let availablePool: any[] = [];
+let pendingOffers: any[] = [];
+
+if (db) {
+  try {
+    const servicesQuery = await db.prepare("SELECT service_category FROM partner_services WHERE partner_id = ?").bind(user.id).all();
+    myServices = servicesQuery.results || [];
+
+    if (myServices.length > 0 && user.is_approved === 1) {
+      const rawPool = await db.prepare(
+        "SELECT r.*, u.name as client_name FROM service_requests r " +
+        "JOIN users u ON r.client_id = u.id " +
+        "WHERE r.status IN ('PENDING', 'OFFER_RECEIVED') " +
+        "AND r.id NOT IN (SELECT request_id FROM offers WHERE partner_id = ?) " +
+        "ORDER BY r.created_at DESC"
+      ).bind(user.id).all();
+
+      const poolResults = rawPool.results || [];
+      const selectedCatNames = myServices.map((s: any) => s.service_category);
+      availablePool = poolResults.filter((req: any) => selectedCatNames.includes(req.category));
+    }
+
+    const pendingQuery = await db.prepare(
+      "SELECT o.id as offer_id, o.price, o.duration, o.status as offer_status, r.id as request_id, r.title, r.category " +
+      "FROM offers o " +
+      "JOIN service_requests r ON o.request_id = r.id " +
+      "WHERE o.partner_id = ? AND o.status = 'PENDING' AND r.status != 'ACCEPTED'"
+    ).bind(user.id).all();
+    pendingOffers = pendingQuery.results || [];
+
+  } catch (err) {
+    console.error("Partner leads data query error:", err);
+  }
+}
+---
+
+<DashboardLayout title="Hizmet Taleplerim | İş De Yeter İş Ortağı" activeTab="requests">
+  <div class="flex flex-col gap-8 max-w-7xl mx-auto px-2">
+    
+    <div class="flex flex-col">
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Hizmet Taleplerim (Leads)</h1>
+      <p class="text-slate-500 mt-2 text-sm sm:text-base">Müşterilerin uzmanlık alanınızda açtığı güncel talepleri inceleyip anında fiyat teklifi verebilirsiniz.</p>
+    </div>
+
+    {successMessage && (
+      <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-circle-check text-xl"></i>
+        <span>{successMessage}</span>
+      </div>
+    )}
+
+    {errorMessage && (
+      <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
+        <span>{errorMessage}</span>
+      </div>
+    )}
+
+    <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-8">
+      <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+        <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-satellite-dish"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Yeni Fırsatlar (İş Havuzu)</h2>
+      </div>
+
+      {user.is_approved === 1 ? (
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-2 gap-6">
+          {availablePool.map((req: any) => (
+            <div class="bg-white border border-slate-200 rounded-2xl overflow-hidden shadow-sm flex flex-col hover:border-blue-300 transition-colors">
+              <div class="bg-slate-50 border-b border-slate-200 p-4 flex justify-between items-center">
+                <span class="bg-blue-50 text-blue-600 text-[10px] uppercase font-bold px-2.5 py-1 rounded-md">{req.category}</span>
+                <span class="text-xs font-semibold text-slate-500 flex items-center gap-1.5"><i class="fa-solid fa-user-tie text-slate-400"></i> {req.client_name}</span>
+              </div>
+
+              <div class="p-6 flex flex-col gap-4 flex-1">
+                <div>
+                  <h3 class="text-xl font-extrabold text-slate-900 mb-2 leading-tight">{req.title}</h3>
+                  <p class="text-[13px] text-slate-600 leading-relaxed">{req.description}</p>
+                </div>
+                
+                {req.image_url && (
+                  <a href={req.image_url} target="_blank" class="inline-flex items-center gap-2 text-[11px] font-bold text-blue-600 bg-blue-50 border border-blue-100 px-3 py-1.5 rounded-lg w-max hover:bg-blue-100 transition-colors mt-2">
+                    <i class="fa-solid fa-image"></i> Resim Önizleme
+                  </a>
+                )}
+              </div>
+
+              <div class="p-5 bg-slate-50 border-t border-slate-200 mt-auto">
+                <form method="POST" class="flex flex-col gap-4">
+                  <input type="hidden" name="action" value="submit_offer" />
+                  <input type="hidden" name="request_id" value={req.id} />
+                  
+                  <div class="grid grid-cols-2 gap-4">
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Fiyat Teklifi (TL)</label>
+                      <input type="number" name="price" required min="1" placeholder="Tutar girin" class="bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all font-semibold text-slate-800" />
+                    </div>
+                    
+                    <div class="flex flex-col gap-1.5">
+                      <label class="text-[10px] font-bold text-slate-500 uppercase tracking-wider">Süre Teklifi</label>
+                      <select name="duration" required class="bg-white border border-slate-300 rounded-xl px-3 py-2.5 text-sm focus:border-blue-500 focus:ring-2 focus:ring-blue-500/20 outline-none transition-all font-semibold text-slate-800 bg-none">
+                        <option value="1 Gün">1 Gün</option>
+                        <option value="2 Gün">2 Gün</option>
+                        <option value="3 Gün">3 Gün</option>
+                        <option value="5 Gün">5 Gün</option>
+                        <option value="1 Hafta">1 Hafta</option>
+                        <option value="2 Hafta">2 Hafta</option>
+                      </select>
+                    </div>
+                  </div>
+
+                  <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-3 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 mt-1">
+                    <i class="fa-solid fa-paper-plane"></i> Teklifi Gönder
+                  </button>
+                </form>
+              </div>
+            </div>
+          ))}
+
+          {availablePool.length === 0 && (
+            <div class="col-span-full py-16 flex flex-col items-center justify-center text-center gap-4 bg-slate-50 rounded-2xl border border-dashed border-slate-300">
+              <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-slate-300 text-3xl shadow-sm border border-slate-100">
+                <i class="fa-solid fa-gavel"></i>
+              </div>
+              <p class="text-slate-500 max-w-sm mt-2">Şu an uzmanlık kategorilerinizde teklif verebileceğiniz yeni bir talep bulunmamaktadır.</p>
+            </div>
+          )}
+        </div>
+      ) : (
+        <div class="py-16 flex flex-col items-center justify-center text-center gap-5 bg-amber-50 rounded-2xl border border-dashed border-amber-300 px-6">
+          <div class="w-16 h-16 bg-white rounded-full flex items-center justify-center text-amber-500 text-3xl shadow-sm border border-amber-100">
+            <i class="fa-solid fa-lock"></i>
+          </div>
+          <h3 class="text-lg font-bold text-amber-900">Hesabınız Onay Bekliyor</h3>
+          <p class="text-amber-800 max-w-md text-sm">Talepleri görüntüleyebilmek için hesabınızın yönetici tarafından onaylanması gerekmektedir.</p>
+        </div>
+      )}
+    </div>
+
+    <!-- Bekleyen Tekliflerim (Zaten teklif verdikleri) -->
+    {pendingOffers.length > 0 && (
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+        <div class="flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="w-10 h-10 bg-amber-50 text-amber-600 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-hourglass-half"></i>
+          </div>
+          <h2 class="text-xl font-bold text-slate-800">Cevap Bekleyen Tekliflerim</h2>
+        </div>
+
+        <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-6">
+          {pendingOffers.map((offer: any) => (
+            <div class="flex flex-col bg-slate-50 border border-slate-200 rounded-2xl overflow-hidden hover:shadow-md transition-shadow">
+              <div class="bg-white border-b border-slate-200 p-4 flex justify-between items-center">
+                <span class="bg-blue-50 text-blue-600 text-[10px] uppercase font-bold px-2.5 py-1 rounded-md">{offer.category}</span>
+                <span class="bg-amber-50 text-amber-600 text-[10px] uppercase font-bold px-2.5 py-1 rounded-md flex items-center gap-1.5"><i class="fa-solid fa-hourglass-half"></i> Beklemede</span>
+              </div>
+              
+              <div class="p-6 flex flex-col gap-3 flex-1">
+                <h3 class="text-lg font-bold text-slate-900 leading-snug">{offer.title}</h3>
+                <p class="text-[13px] text-slate-500 italic">Müşteri değerlendiriyor.</p>
+              </div>
+
+              <div class="bg-white border-t border-slate-200 p-4 flex justify-between items-center text-sm">
+                <span class="font-extrabold text-blue-600">Teklif: {offer.price} TL</span>
+                <span class="font-semibold text-slate-500 flex items-center gap-1.5"><i class="fa-regular fa-clock"></i> {offer.duration}</span>
+              </div>
+            </div>
+          ))}
+        </div>
+      </div>
+    )}
+
+  </div>
+</DashboardLayout>
