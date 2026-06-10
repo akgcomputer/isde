@@ -1,0 +1,19 @@
+---
+// src/components/CategoryList.astro
+const { parentId, categories } = Astro.props;
+const subcategories = categories.filter((c: any) => c.parent_id === parentId);
+---
+
+{subcategories.length > 0 && (
+  <ul class="pl-4 border-l-2 border-gray-100 dark:border-gray-700 space-y-2 mt-2 ml-4">
+    {subcategories.map((sub: any) => (
+      <li>
+        <a href={`/${sub.slug}`} class="text-gray-600 dark:text-gray-300 hover:text-orange-600 dark:hover:text-orange-400 font-medium transition flex items-center gap-2 py-1">
+          <span class="w-1.5 h-1.5 rounded-full bg-gray-300 dark:bg-gray-600"></span>
+          {sub.name}
+        </a>
+        <Astro.self parentId={sub.id} categories={categories} />
+      </li>
+    ))}
+  </ul>
+)}

@@ -1,0 +1,544 @@
+---
+import Header from '../components/Header.astro';
+import { getSettings } from '../lib/db';
+import { ViewTransitions } from 'astro:transitions';
+import FloatingContactWidget from '../components/FloatingContactWidget.astro';
+
+interface Props {
+  title?: string;
+  description?: string;
+  isAdmin?: boolean;
+}
+
+const { title, description, isAdmin = false } = Astro.props;
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const settings = await getSettings(dbBinding);
+
+const sessionData = Astro.cookies.has('user_session') ? Astro.cookies.get('user_session')?.json() : null;
+const userRole = sessionData?.role || 'misafir';
+const userName = sessionData?.name || 'Misafir';
+
+if (isAdmin) {
+  if (userRole === 'abone') {
+    return Astro.redirect('/');
+  }
+  if (userRole === 'editor' || userRole === 'yazar') {
+    const path = Astro.url.pathname.replace(/\/$/, '');
+    // If attempting to access the admin home or any page other than posts, redirect to post management immediately
+    if (!path.startsWith('/admin/posts')) {
+      return Astro.redirect('/admin/posts');
+    }
+  }
+}
+
+const siteTitle = settings.site_title || 'Laflaf';
+const finalDescription = description || settings.site_description || 'Meraklı İçerikleri Keşfet';
+const finalTitle = title ? `${title} - ${siteTitle}` : `${siteTitle} - ${finalDescription}`;
+const siteFavicon = settings.site_favicon || '/favicon.svg';
+const siteKeywords = settings.site_keywords || '';
+
+const popupActive = settings.popup_active === 'true';
+const popupImage = settings.popup_image;
+const popupLink = settings.popup_link;
+
+const cookieBannerActive = settings.cookie_banner_active === 'true';
+const cookieText = settings.cookie_text || 'Bu site size daha iyi bir deneyim sunmak için çerezleri kullanır. Bildirimlere izin vererek en yeni içeriklerden haberdar olabilirsiniz.';
+
+
+// Menü görünürlük kontrolleri
+const canSeeSayfalar = userRole === 'admin';
+const canSeeKategoriler = userRole === 'admin';
+const canSeeYorumlar = userRole === 'admin';
+const canSeeReklamlar = userRole === 'admin';
+const canSeeKullanicilar = userRole === 'admin';
+const canSeeAyarlar = userRole === 'admin';
+const canSeeBildirimler = userRole === 'admin';
+const canSeeGuvenlik = true; // Accessible by admin, editor, yazar
+const canSeeMedya = userRole === 'admin';
+---
+
+<!DOCTYPE html>
+<html lang="tr">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <meta name="description" content={finalDescription}>
+  {siteKeywords && <meta name="keywords" content={siteKeywords}>}
+  <title>{finalTitle}</title>
+  <link rel="icon" type="image/svg+xml" href={siteFavicon}>
+  <link rel="stylesheet" href="/src/styles/global.css">
+  <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+  {!isAdmin && <ViewTransitions />}
+  <script is:inline>
+    const theme = (() => {
+      if (typeof localStorage !== 'undefined' && localStorage.getItem('theme')) {
+        return localStorage.getItem('theme');
+      }
+      return 'dark'; // default
+    })();
+    if (theme === 'light') {
+      document.documentElement.classList.remove('dark');
+    } else {
+      document.documentElement.classList.add('dark');
+    }
+  </script>
+</head>
+<body class="bg-white dark:bg-gray-900 text-gray-900 dark:text-gray-100">
+
+  {isAdmin ? (
+    // ==================== ADMIN LAYOUT ====================
+    <div class="flex min-h-screen">
+      {/* Sidebar - Desktop */}
+      <aside class="hidden lg:flex flex-col w-64 bg-gray-900 text-white fixed inset-y-0 left-0 z-40">
+        <div class="p-4 border-b border-gray-800">
+          <a href="/admin" class="text-xl font-bold text-orange-500">Yönetim Paneli</a>
+        </div>
+        <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+          {userRole === 'admin' ? (
+            <>
+              <a href="/admin" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 12l2-2m0 0l7-7 7 7M5 10v10a1 1 0 001 1h3m10-11l2 2m-2-2v10a1 1 0 01-1 1h-3m-6 0a1 1 0 001-1v-4a1 1 0 011-1h2a1 1 0 011 1v4a1 1 0 001 1m-6 0h6"></path></svg>
+                <span>Dashboard</span>
+              </a>
+              <a href="/admin/ecommerce/sliders" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                <span>Slider (Manşet) Yönetimi</span>
+              </a>
+              <a href="/admin/posts" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                <span>İçerikler</span>
+              </a>
+              {canSeeSayfalar && (
+                <a href="/admin/pages" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8l-6-6z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M14 2v6h6M16 13H8M16 17H8M10 9H8"></path></svg>
+                  <span>Sabit Sayfalar</span>
+                </a>
+              )}
+              {canSeeKategoriler && (
+                <a href="/admin/categories" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M7 7h.01M7 3h5c.512 0 1.024.195 1.414.586l7 7a2 2 0 010 2.828l-7 7a2 2 0 01-2.828 0l-7-7A2 2 0 013 12V7a4 4 0 014-4z"></path></svg>
+                  <span>Kategoriler</span>
+                </a>
+              )}
+              <div class="pt-4 mt-4 border-t border-gray-200 dark:border-gray-700">
+                <a href="/admin/ecommerce" class="flex items-center gap-3 px-4 py-2 rounded-lg text-orange-600 dark:text-orange-400 font-bold hover:bg-orange-50 dark:hover:bg-orange-900/30 transition">
+                  <i class="fas fa-shopping-basket w-5"></i>
+                  <span>E-Ticaret</span>
+                </a>
+              </div>
+              {canSeeYorumlar && (
+                <a href="/admin/comments" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M8 12h.01M12 12h.01M16 12h.01M21 12c0 4.418-4.03 8-9 8a9.863 9.863 0 01-4.255-.949L3 20l1.395-3.72C3.512 15.042 3 13.574 3 12c0-4.418 4.03-8 9-8s9 3.582 9 8z"></path></svg>
+                  <span>Yorumlar</span>
+                </a>
+              )}
+              {canSeeReklamlar && (
+                <a href="/admin/ads" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M11 5H6a2 2 0 00-2 2v11a2 2 0 002 2h11a2 2 0 002-2v-5m-1.414-9.414a2 2 0 112.828 2.828L11.828 15H9v-2.828l8.586-8.586z"></path></svg>
+                  <span>Reklam Alanları</span>
+                </a>
+              )}
+              {canSeeKullanicilar && (
+                <a href="/admin/users" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4.354a4 4 0 110 5.292M15 21H3v-1a6 6 0 0112 0v1zm0 0h6v-1a6 6 0 00-9-5.197M13 7a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+                  <span>Kullanıcılar</span>
+                </a>
+              )}
+              {canSeeAyarlar && (
+                <a href="/admin/settings" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+                  <span>Ayarlar</span>
+                </a>
+              )}
+              {canSeeBildirimler && (
+                <a href="/admin/notifications" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+                  <span>Bildirimler</span>
+                </a>
+              )}
+              {canSeeGuvenlik && (
+                <a href="/admin/security" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 15v2m-6 4h12a2 2 0 002-2v-6a2 2 0 00-2-2H6a2 2 0 00-2 2v6a2 2 0 002 2zm10-10V7a4 4 0 00-8 0v4h8z"></path></svg>
+                  <span>Güvenlik</span>
+                </a>
+              )}
+              {canSeeMedya && (
+                <a href="/admin/media" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                  <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 16l4.586-4.586a2 2 0 012.828 0L16 16m-2-2l1.586-1.586a2 2 0 012.828 0L20 14m-6-6h.01M6 20h12a2 2 0 002-2V6a2 2 0 00-2-2H6a2 2 0 00-2 2v12a2 2 0 002 2z"></path></svg>
+                  <span>Medya</span>
+                </a>
+              )}
+            </>
+          ) : (
+            <>
+              <a href="/admin/posts" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 20H5a2 2 0 01-2-2V6a2 2 0 012-2h10a2 2 0 012 2v1m2 13a2 2 0 01-2-2V7m2 13a2 2 0 002-2V9a2 2 0 00-2-2h-2m-4-3H9M7 16h6M7 8h6v4H7V8z"></path></svg>
+                <span>İçerikler</span>
+              </a>
+              <a href="/admin/posts/new" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">
+                <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+                <span>Yeni İçerik Ekle</span>
+              </a>
+            </>
+          )}
+        </nav>
+        <div class="p-4 border-t border-gray-800">
+          <div class="flex items-center gap-3">
+            <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white">{userName.charAt(0).toUpperCase()}</div>
+            <div class="flex-1">
+              <p class="text-sm font-medium">{userName}</p>
+              <p class="text-xs text-gray-400 capitalize">{userRole}</p>
+            </div>
+            <form method="POST" action="/profil" class="inline">
+              <input type="hidden" name="action" value="logout" />
+              <button type="submit" class="text-gray-400 hover:text-white" title="Çıkış Yap">🚪</button>
+            </form>
+          </div>
+        </div>
+      </aside>
+
+      {/* Mobil Sidebar */}
+      <div id="mobileSidebar" class="fixed inset-0 z-50 hidden">
+        <div class="absolute inset-0 bg-black/50" id="mobileOverlay"></div>
+        <div class="absolute left-0 top-0 bottom-0 w-64 bg-gray-900 text-white flex flex-col">
+          <div class="flex items-center justify-between p-4 border-b border-gray-800">
+            <a href="/admin" class="text-xl font-bold text-orange-500">Yönetim Paneli</a>
+            <button id="closeMenuBtn" class="p-2 hover:bg-gray-800 rounded-lg">
+              <svg class="w-5 h-5" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+            </button>
+          </div>
+          <nav class="flex-1 p-4 space-y-1 overflow-y-auto">
+            {userRole === 'admin' ? (
+              <>
+                <a href="/admin" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📊 Dashboard</a>
+                <a href="/admin/ecommerce/sliders" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">🖼️ Slider (Manşet) Yönetimi</a>
+                <a href="/admin/posts" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📄 İçerikler</a>
+                {canSeeSayfalar && <a href="/admin/pages" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📝 Sabit Sayfalar</a>}
+                {canSeeKategoriler && <a href="/admin/categories" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📁 Kategoriler</a>}
+                {canSeeYorumlar && <a href="/admin/comments" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">💬 Yorumlar</a>}
+                {canSeeReklamlar && <a href="/admin/ads" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📢 Reklam Alanları</a>}
+                {canSeeKullanicilar && <a href="/admin/users" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">👥 Kullanıcılar</a>}
+                {canSeeAyarlar && <a href="/admin/settings" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">⚙️ Ayarlar</a>}
+                {canSeeBildirimler && <a href="/admin/notifications" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">🔔 Bildirimler</a>}
+                {canSeeGuvenlik && <a href="/admin/security" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">🛡️ Güvenlik</a>}
+                {canSeeMedya && <a href="/admin/media" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">🖼️ Medya</a>}
+              </>
+            ) : (
+              <>
+                <a href="/admin/posts" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">📄 &nbsp; İçerikler</a>
+                <a href="/admin/posts/new" class="flex items-center gap-3 px-4 py-2 rounded-lg hover:bg-gray-800 transition">➕ &nbsp; Yeni İçerik Ekle</a>
+              </>
+            )}
+          </nav>
+          <div class="p-4 border-t border-gray-800">
+            <div class="flex items-center gap-3">
+              <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white">{userName.charAt(0).toUpperCase()}</div>
+              <div class="flex-1">
+                <p class="text-sm font-medium">{userName}</p>
+                <p class="text-xs text-gray-400 capitalize">{userRole}</p>
+              </div>
+              <form method="POST" action="/profil" class="inline">
+                <input type="hidden" name="action" value="logout" />
+                <button type="submit" class="text-gray-400 hover:text-white" title="Çıkış Yap">🚪</button>
+              </form>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      {/* Ana İçerik */}
+      <div class="flex-1 lg:ml-64">
+        {/* Üst Bar */}
+        <header class="sticky top-0 z-30 bg-white dark:bg-gray-800 border-b border-gray-200 dark:border-gray-700 h-16 flex items-center justify-between px-4 lg:px-6">
+          <div class="flex items-center gap-4">
+            <button id="mobileMenuOpenBtn" class="lg:hidden p-2 rounded-lg hover:bg-gray-100 dark:hover:bg-gray-700">
+              <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M4 6h16M4 12h16M4 18h16"></path></svg>
+            </button>
+            <h1 class="text-xl font-semibold text-gray-900 dark:text-white">{title}</h1>
+          </div>
+          
+          <div class="flex items-center gap-2">
+            <a href="/admin/posts/new" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Yeni İçerik">
+              <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 4v16m8-8H4"></path></svg>
+            </a>
+            
+            <div class="relative">
+              <button id="notificationBtn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 17h5l-1.405-1.405A2.032 2.032 0 0118 14.158V11a6.002 6.002 0 00-4-5.659V5a2 2 0 10-4 0v.341C7.67 6.165 6 8.388 6 11v3.159c0 .538-.214 1.055-.595 1.436L4 17h5m6 0v1a3 3 0 11-6 0v-1m6 0H9"></path></svg>
+              </button>
+              <span class="absolute top-1 right-1 w-2 h-2 bg-red-500 rounded-full animate-pulse"></span>
+            </div>
+
+            <div class="relative">
+              <button id="langBtn" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M3 5h12M9 3v2m1.048 9.5A18.022 18.022 0 016.412 9m6.088 9h7M11 21l5-10 5 10M12.751 5C11.783 10.77 8.07 15.61 3 18.129"></path></svg>
+              </button>
+              <div id="langMenu" class="hidden absolute right-0 mt-2 w-32 bg-white dark:bg-gray-800 rounded-lg shadow-lg border py-1 z-50">
+                <a href="#" data-lang="tr" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">🇹🇷 Türkçe</a>
+                <a href="#" data-lang="en" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">🇬🇧 English</a>
+              </div>
+            </div>
+
+            <button id="themeToggle" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+              <svg id="sunIcon" class="w-5 h-5 hidden dark:block text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+              <svg id="moonIcon" class="w-5 h-5 block dark:hidden text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+            </button>
+
+            <a href="/admin/settings" class="p-2 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition" title="Ayarlar">
+              <svg class="w-5 h-5 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M10.325 4.317c.426-1.756 2.924-1.756 3.35 0a1.724 1.724 0 002.573 1.066c1.543-.94 3.31.826 2.37 2.37a1.724 1.724 0 001.065 2.572c1.756.426 1.756 2.924 0 3.35a1.724 1.724 0 00-1.066 2.573c.94 1.543-.826 3.31-2.37 2.37a1.724 1.724 0 00-2.572 1.065c-.426 1.756-2.924 1.756-3.35 0a1.724 1.724 0 00-2.573-1.066c-1.543.94-3.31-.826-2.37-2.37a1.724 1.724 0 00-1.065-2.572c-1.756-.426-1.756-2.924 0-3.35a1.724 1.724 0 001.066-2.573c-.94-1.543.826-3.31 2.37-2.37.996.608 2.296.07 2.572-1.065z"></path><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M15 12a3 3 0 11-6 0 3 3 0 016 0z"></path></svg>
+            </a>
+
+            <div class="relative">
+              <button id="userMenuBtn" class="flex items-center gap-2 p-1 rounded-full hover:bg-gray-100 dark:hover:bg-gray-700 transition">
+                <div class="w-8 h-8 bg-orange-600 rounded-full flex items-center justify-center text-white font-semibold">{userName.charAt(0).toUpperCase()}</div>
+                <svg class="w-4 h-4 text-gray-600 dark:text-gray-400" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M19 9l-7 7-7-7"></path></svg>
+              </button>
+              <div id="userMenu" class="hidden absolute right-0 mt-2 w-48 bg-white dark:bg-gray-800 rounded-lg shadow-lg border py-1 z-50">
+                <div class="px-4 py-2 border-b dark:border-gray-700">
+                  <p class="text-sm font-semibold">{userName}</p>
+                  <p class="text-xs text-gray-500 capitalize">{userRole}</p>
+                </div>
+                <a href="/profil" class="block px-4 py-2 text-sm hover:bg-gray-100 dark:hover:bg-gray-700">👤 Profilim</a>
+                <form method="POST" action="/profil">
+                  <input type="hidden" name="action" value="logout" />
+                  <button type="submit" class="w-full text-left block px-4 py-2 text-sm text-red-600 hover:bg-gray-100 dark:hover:bg-gray-700">🚪 Çıkış Yap</button>
+                </form>
+              </div>
+            </div>
+          </div>
+        </header>
+
+        {/* Sayfa İçeriği - Taşma sorunu çözüldü */}
+        <main class="p-4 lg:p-6">
+          <slot />
+        </main>
+      </div>
+    </div>
+  ) : (
+    <!-- ==================== PUBLIC LAYOUT ==================== -->
+    <>
+      <Header />
+      <button id="themeTogglePublic" class="fixed top-20 right-4 z-50 p-2 rounded-full bg-gray-200 dark:bg-gray-700 hover:bg-gray-300 dark:hover:bg-gray-600 transition shadow-lg">
+        <svg id="sunIconPublic" class="w-5 h-5 hidden dark:block" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M12 3v1m0 16v1m9-9h-1M4 12H3m15.364 6.364l-.707-.707M6.343 6.343l-.707-.707m12.728 0l-.707.707M6.343 17.657l-.707.707M16 12a4 4 0 11-8 0 4 4 0 018 0z"></path></svg>
+        <svg id="moonIconPublic" class="w-5 h-5 block dark:hidden" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M20.354 15.354A9 9 0 018.646 3.646 9.003 9.003 0 0012 21a9.003 9.003 0 008.354-5.646z"></path></svg>
+      </button>
+      <main class="flex-grow max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-8 w-full min-h-screen">
+        <slot />
+      </main>
+      <footer class="border-t border-gray-200 dark:border-gray-800 py-8 text-center text-gray-500 mt-auto">
+        <p>© {new Date().getFullYear()} {siteTitle}. Tüm hakları saklıdır.</p>
+      </footer>
+      
+      {/* Pop-up Modalı */}
+      {popupActive && popupImage && (
+        <div id="globalPopup" class="fixed inset-0 z-[100] flex items-center justify-center bg-black/60 hidden opacity-0 transition-opacity duration-300">
+          <div class="relative bg-white dark:bg-gray-800 rounded-xl shadow-2xl max-w-lg w-full mx-4 overflow-hidden transform scale-95 transition-transform duration-300" id="globalPopupContent">
+            <button id="closePopupBtn" class="absolute top-3 right-3 w-8 h-8 flex items-center justify-center bg-black/50 hover:bg-black/80 text-white rounded-full z-10 transition">
+              <i class="fas fa-times"></i>
+            </button>
+            {popupLink ? (
+              <a href={popupLink} target="_blank" rel="noopener noreferrer">
+                <img src={popupImage} alt="Kampanya" class="w-full h-auto object-cover" />
+              </a>
+            ) : (
+              <img src={popupImage} alt="Kampanya" class="w-full h-auto object-cover" />
+            )}
+          </div>
+        </div>
+      )}
+
+      {/* Çerez ve Bildirim Barı */}
+      {cookieBannerActive && (
+        <div id="cookieBanner" class="fixed bottom-0 left-0 right-0 bg-gray-900 text-white p-4 shadow-2xl z-50 transform translate-y-full transition-transform duration-500 flex flex-col md:flex-row items-center justify-between gap-4">
+          <div class="text-sm flex-1 text-gray-300">
+            {cookieText}
+          </div>
+          <button id="acceptCookiesBtn" class="whitespace-nowrap px-6 py-2 bg-orange-600 hover:bg-orange-700 text-white font-medium rounded-lg transition shadow-lg w-full md:w-auto">
+            Çerez ve Bildirimleri Kabul Et
+          </button>
+        </div>
+      )}
+    </>
+  )}
+
+  <script>
+    document.addEventListener('astro:page-load', () => {
+      // Mobil menü işlemleri
+      const openBtn = document.getElementById('mobileMenuOpenBtn');
+    const mobileSidebar = document.getElementById('mobileSidebar');
+    const closeBtn = document.getElementById('closeMenuBtn');
+    const overlay = document.getElementById('mobileOverlay');
+    
+    if (openBtn && mobileSidebar) {
+      openBtn.addEventListener('click', () => {
+        mobileSidebar.classList.remove('hidden');
+        document.body.style.overflow = 'hidden';
+      });
+    }
+    
+    function closeMobileMenu() {
+      if (mobileSidebar) {
+        mobileSidebar.classList.add('hidden');
+        document.body.style.overflow = '';
+      }
+    }
+    
+    closeBtn?.addEventListener('click', closeMobileMenu);
+    overlay?.addEventListener('click', closeMobileMenu);
+    
+    // Kullanıcı menüsü
+    const userBtn = document.getElementById('userMenuBtn');
+    const userMenu = document.getElementById('userMenu');
+    if (userBtn && userMenu) {
+      userBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        userMenu.classList.toggle('hidden');
+      });
+    }
+    
+    // Dil menüsü
+    const langBtn = document.getElementById('langBtn');
+    const langMenu = document.getElementById('langMenu');
+    if (langBtn && langMenu) {
+      langBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        langMenu.classList.toggle('hidden');
+      });
+    }
+    
+    // Bildirim butonu
+    document.getElementById('notificationBtn')?.addEventListener('click', () => {
+      window.location.href = '/admin/notifications';
+    });
+    
+    // Dark mode (admin)
+    const themeToggle = document.getElementById('themeToggle');
+    if (themeToggle) {
+      themeToggle.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        try { localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+      });
+    }
+    
+    // Dark mode (public)
+    const themeTogglePublic = document.getElementById('themeTogglePublic');
+    if (themeTogglePublic) {
+      themeTogglePublic.addEventListener('click', () => {
+        document.documentElement.classList.toggle('dark');
+        try { localStorage.setItem('theme', document.documentElement.classList.contains('dark') ? 'dark' : 'light'); } catch (e) {}
+      });
+    }
+    
+    // Dışarı tıklayınca menüleri kapat
+    document.addEventListener('click', (e) => {
+      const target = e.target as HTMLElement;
+      if (!target.closest('#userMenuBtn') && !target.closest('#userMenu')) userMenu?.classList.add('hidden');
+      if (!target.closest('#langBtn') && !target.closest('#langMenu')) langMenu?.classList.add('hidden');
+    });
+
+    // --- POPUP LOGIC ---
+    const popup = document.getElementById('globalPopup');
+    const popupContent = document.getElementById('globalPopupContent');
+    const closePopupBtn = document.getElementById('closePopupBtn');
+    
+    let popupSeen = false;
+    try { popupSeen = !!localStorage.getItem('popup_seen'); } catch (e) {}
+    
+    if (popup && !popupSeen) {
+      setTimeout(() => {
+        popup.classList.remove('hidden');
+        // Trigger reflow
+        void popup.offsetWidth;
+        popup.classList.remove('opacity-0');
+        popupContent?.classList.remove('scale-95');
+        popupContent?.classList.add('scale-100');
+        try { localStorage.setItem('popup_seen', 'true'); } catch (e) {}
+      }, 1000);
+    }
+
+    if (closePopupBtn && popup) {
+      closePopupBtn.addEventListener('click', () => {
+        popup.classList.add('opacity-0');
+        popupContent?.classList.remove('scale-100');
+        popupContent?.classList.add('scale-95');
+        setTimeout(() => popup.classList.add('hidden'), 300);
+      });
+    }
+
+    // --- COOKIE / PUSH NOTIFICATION LOGIC ---
+    const cookieBanner = document.getElementById('cookieBanner');
+    const acceptCookiesBtn = document.getElementById('acceptCookiesBtn');
+
+    let cookiesAccepted = false;
+    try { cookiesAccepted = !!localStorage.getItem('cookies_accepted'); } catch (e) {}
+
+    if (cookieBanner && !cookiesAccepted) {
+      setTimeout(() => {
+        cookieBanner.classList.remove('translate-y-full');
+      }, 500);
+    }
+
+    if (acceptCookiesBtn && cookieBanner) {
+      acceptCookiesBtn.addEventListener('click', async () => {
+        try { localStorage.setItem('cookies_accepted', 'true'); } catch (e) {}
+        cookieBanner.classList.add('translate-y-full');
+        
+        // Push notification izni iste
+        if ('Notification' in window && 'serviceWorker' in navigator) {
+          try {
+            const permission = await Notification.requestPermission();
+            if (permission === 'granted') {
+              console.log('Bildirim izni verildi!');
+              
+              // Service Worker kaydet
+              const registration = await navigator.serviceWorker.register('/sw.js');
+              console.log('Service Worker kaydedildi:', registration.scope);
+              
+              // VAPID key backend'den (veya statik)
+              const publicVapidKey = 'BKOH_T9sAo-B0LbqG-gIoZ9-p8mLnYfAl5_DbS8aFlBOTEc1dyisvXhlbVTjqtYGuq31Q115eVkDzabsmFUHFBw';
+              
+              // Public key'i Uint8Array formatına dönüştür
+              const urlBase64ToUint8Array = (base64String) => {
+                const padding = '='.repeat((4 - base64String.length % 4) % 4);
+                const base64 = (base64String + padding)
+                  .replace(/\-/g, '+')
+                  .replace(/_/g, '/');
+                
+                const rawData = window.atob(base64);
+                const outputArray = new Uint8Array(rawData.length);
+                
+                for (let i = 0; i < rawData.length; ++i) {
+                  outputArray[i] = rawData.charCodeAt(i);
+                }
+                return outputArray;
+              };
+
+              // Sunucuya abone ol
+              const subscription = await registration.pushManager.subscribe({
+                userVisibleOnly: true,
+                applicationServerKey: urlBase64ToUint8Array(publicVapidKey)
+              });
+
+              // Aboneliği backend'e gönder
+              await fetch('/api/push/subscribe', {
+                method: 'POST',
+                body: JSON.stringify(subscription),
+                headers: {
+                  'content-type': 'application/json'
+                }
+              });
+              
+              console.log('Push aboneliği başarıyla gönderildi.');
+            }
+          } catch (e) {
+            console.error('Bildirim izni alınırken hata oluştu:', e);
+          }
+        }
+      });
+    }
+    }); // end of astro:page-load
+  </script>
+  {!isAdmin && <FloatingContactWidget />}
+</body>
+</html>

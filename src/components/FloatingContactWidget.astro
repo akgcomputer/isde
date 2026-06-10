@@ -1,0 +1,308 @@
+---
+// src/components/FloatingContactWidget.astro
+import { getSettings } from '../lib/db';
+
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const settings = await getSettings(dbBinding);
+
+const active = settings.fab_widget_active === 'true';
+if (!active) {
+  return null;
+}
+
+const rawChannels = settings.fab_active_channels;
+const activeChannels = rawChannels ? JSON.parse(rawChannels) : [];
+const whatsapp = settings.fab_whatsapp_number;
+const telegram = settings.fab_telegram_username;
+const instagram = settings.fab_instagram_username;
+const phone = settings.fab_phone_number;
+const email = settings.fab_email_address;
+const position = settings.fab_widget_position || 'right-bottom';
+---
+
+<div class={`fab-wrapper ${position}`} id="fabWrapper">
+  <!-- Dynamic list of channel buttons -->
+  <div class="fab-menu" id="fabMenu">
+    {activeChannels.includes('WhatsApp') && whatsapp && (
+      <a 
+        href={`https://wa.me/${whatsapp.replace(/[^0-9]/g, '')}`} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="fab-item whatsapp" 
+        title="WhatsApp"
+        aria-label="WhatsApp'tan mesaj gönderin"
+      >
+        <i class="fab fa-whatsapp"></i>
+      </a>
+    )}
+    
+    {activeChannels.includes('Telegram') && telegram && (
+      <a 
+        href={`https://t.me/${telegram.replace('@', '')}`} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="fab-item telegram" 
+        title="Telegram"
+        aria-label="Telegram'dan ulaşın"
+      >
+        <i class="fab fa-telegram-plane"></i>
+      </a>
+    )}
+    
+    {activeChannels.includes('Instagram') && instagram && (
+      <a 
+        href={`https://ig.me/m/${instagram}`} 
+        target="_blank" 
+        rel="noopener noreferrer" 
+        class="fab-item instagram" 
+        title="Instagram"
+        aria-label="Instagram DM'den yazın"
+      >
+        <i class="fab fa-instagram"></i>
+      </a>
+    )}
+    
+    {activeChannels.includes('Telefon') && phone && (
+      <a 
+        href={`tel:${phone}`} 
+        class="fab-item phone" 
+        title="Telefon Et"
+        aria-label="Arayın"
+      >
+        <i class="fas fa-phone-alt"></i>
+      </a>
+    )}
+    
+    {activeChannels.includes('E-Posta') && email && (
+      <a 
+        href={`mailto:${email}`} 
+        class="fab-item email" 
+        title="E-Posta Gönder"
+        aria-label="E-posta gönderin"
+      >
+        <i class="far fa-envelope"></i>
+      </a>
+    )}
+  </div>
+  
+  <!-- Trigger FAB Main Button -->
+  <button class="fab-main-btn" id="fabMainBtn" aria-label="İletişim Seçenekleri">
+    <i class="fas fa-comments main-icon"></i>
+    <i class="fas fa-times close-icon hidden"></i>
+  </button>
+</div>
+
+<style>
+  /* Container positioning */
+  .fab-wrapper {
+    position: fixed;
+    z-index: 9999;
+    bottom: 24px;
+    width: 60px;
+    height: 60px;
+  }
+  
+  .fab-wrapper.right-bottom {
+    right: 24px;
+  }
+  
+  .fab-wrapper.left-bottom {
+    left: 24px;
+  }
+  
+  /* Main Button styling */
+  .fab-main-btn {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    background: linear-gradient(135deg, #f97316, #a855f7); /* Elegant gradient */
+    color: white;
+    border: none;
+    cursor: pointer;
+    box-shadow: 0 10px 25px -5px rgba(168, 85, 247, 0.4);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    transition: transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.275), box-shadow 0.3s ease;
+    outline: none;
+    position: absolute;
+    bottom: 0;
+    left: 0;
+    z-index: 10000;
+  }
+  
+  .fab-main-btn:hover {
+    transform: scale(1.08) rotate(5deg);
+    box-shadow: 0 15px 30px -5px rgba(168, 85, 247, 0.6);
+  }
+  
+  .fab-main-btn:active {
+    transform: scale(0.95);
+  }
+  
+  .fab-main-btn .close-icon {
+    font-size: 20px;
+  }
+  
+  .fab-main-btn .hidden {
+    display: none;
+  }
+  
+  /* Menu styling & animation */
+  .fab-menu {
+    position: absolute;
+    bottom: 72px;
+    left: 7px; /* Centered relative to 60px main button: (60px - 46px)/2 = 7px */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    gap: 10px;
+    opacity: 0;
+    pointer-events: none;
+    transform: translateY(20px) scale(0.85);
+    transition: opacity 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1), 
+                transform 0.3s cubic-bezier(0.175, 0.885, 0.32, 1.1);
+  }
+  
+  .fab-wrapper.open .fab-menu {
+    opacity: 1;
+    pointer-events: auto;
+    transform: translateY(0) scale(1);
+  }
+  
+  /* Item base styling */
+  .fab-item {
+    width: 46px;
+    height: 46px;
+    border-radius: 50%;
+    color: white;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 20px;
+    box-shadow: 0 6px 16px -4px rgba(0, 0, 0, 0.2);
+    transition: transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.25), box-shadow 0.2s ease;
+    text-decoration: none;
+    position: relative;
+  }
+  
+  .fab-item:hover {
+    transform: scale(1.12);
+  }
+  
+  /* Brand colors & shadow matching */
+  .fab-item.whatsapp {
+    background-color: #25D366;
+    box-shadow: 0 6px 16px -4px rgba(37, 211, 102, 0.4);
+  }
+  .fab-item.whatsapp:hover {
+    box-shadow: 0 10px 20px -4px rgba(37, 211, 102, 0.6);
+  }
+  
+  .fab-item.telegram {
+    background-color: #0088cc;
+    box-shadow: 0 6px 16px -4px rgba(0, 136, 204, 0.4);
+  }
+  .fab-item.telegram:hover {
+    box-shadow: 0 10px 20px -4px rgba(0, 136, 204, 0.6);
+  }
+  
+  .fab-item.instagram {
+    background: linear-gradient(45deg, #f09433 0%, #e6683c 25%, #dc2743 50%, #cc2366 75%, #bc1888 100%);
+    box-shadow: 0 6px 16px -4px rgba(220, 39, 67, 0.4);
+  }
+  .fab-item.instagram:hover {
+    box-shadow: 0 10px 20px -4px rgba(220, 39, 67, 0.6);
+  }
+  
+  .fab-item.phone {
+    background-color: #10b981;
+    box-shadow: 0 6px 16px -4px rgba(16, 185, 129, 0.4);
+  }
+  .fab-item.phone:hover {
+    box-shadow: 0 10px 20px -4px rgba(16, 185, 129, 0.6);
+  }
+  
+  .fab-item.email {
+    background-color: #ef4444;
+    box-shadow: 0 6px 16px -4px rgba(239, 68, 68, 0.4);
+  }
+  .fab-item.email:hover {
+    box-shadow: 0 10px 20px -4px rgba(239, 68, 68, 0.6);
+  }
+  
+  /* Tooltips */
+  .fab-item::after {
+    content: attr(title);
+    position: absolute;
+    background-color: rgba(17, 24, 39, 0.95);
+    color: white;
+    padding: 6px 10px;
+    border-radius: 8px;
+    font-size: 12px;
+    font-family: 'Inter', system-ui, sans-serif;
+    font-weight: 500;
+    pointer-events: none;
+    opacity: 0;
+    transition: opacity 0.2s, transform 0.2s cubic-bezier(0.175, 0.885, 0.32, 1.25);
+    white-space: nowrap;
+    box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.15);
+  }
+  
+  .fab-wrapper.right-bottom .fab-item::after {
+    right: 58px;
+    transform: translateX(8px);
+  }
+  
+  .fab-wrapper.left-bottom .fab-item::after {
+    left: 58px;
+    transform: translateX(-8px);
+  }
+  
+  .fab-item:hover::after {
+    opacity: 1;
+    transform: translateX(0);
+  }
+</style>
+
+<script>
+  function initFabWidget() {
+    const fabMainBtn = document.getElementById('fabMainBtn');
+    const fabWrapper = document.getElementById('fabWrapper');
+    const mainIcon = fabMainBtn?.querySelector('.main-icon');
+    const closeIcon = fabMainBtn?.querySelector('.close-icon');
+    
+    if (fabMainBtn && fabWrapper && !fabMainBtn.dataset.bound) {
+      fabMainBtn.dataset.bound = 'true';
+      
+      fabMainBtn.addEventListener('click', (e) => {
+        e.stopPropagation();
+        const isOpen = fabWrapper.classList.toggle('open');
+        
+        if (isOpen) {
+          mainIcon?.classList.add('hidden');
+          closeIcon?.classList.remove('hidden');
+          fabMainBtn.style.transform = 'rotate(90deg)';
+        } else {
+          mainIcon?.classList.remove('hidden');
+          closeIcon?.classList.add('hidden');
+          fabMainBtn.style.transform = 'none';
+        }
+      });
+      
+      // Close FAB menu when clicking outside
+      document.addEventListener('click', (e) => {
+        const target = e.target as HTMLElement;
+        if (!fabWrapper.contains(target)) {
+          fabWrapper.classList.remove('open');
+          mainIcon?.classList.remove('hidden');
+          closeIcon?.classList.add('hidden');
+          fabMainBtn.style.transform = 'none';
+        }
+      });
+    }
+  }
+
+  document.addEventListener('astro:page-load', initFabWidget);
+</script>

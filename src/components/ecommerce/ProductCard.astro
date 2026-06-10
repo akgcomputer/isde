@@ -1,0 +1,190 @@
+---
+import { getBrands } from '../../lib/db';
+
+export interface Props {
+  product: {
+    id: number;
+    name: string;
+    slug: string;
+    price: number;
+    compare_at_price: number | null;
+    image_url: string | null;
+    badge_top_left: string | null;
+    badge_top_right: string | null;
+    badges?: string | null;
+    wholesalePrices?: any[];
+    rating: number;
+    brand_id: number | null;
+  };
+  brands?: any[]; // Optimize etmek için dışarıdan gönderilebilir
+}
+
+const { product, brands: propBrands } = Astro.props;
+
+// Eğer dışarıdan brands array'i gelmediyse veritabanından çek (Performans için liste sayfalarında dışarıdan yollanması önerilir)
+const dbBinding = Astro.locals.runtime?.env?.DB;
+const allBrands = propBrands || await getBrands(dbBinding);
+const brand = allBrands.find((b: any) => b.id === product.brand_id);
+
+// İndirim oranı hesaplama
+let discountPercentage = 0;
+if (product.compare_at_price && product.compare_at_price > product.price) {
+  discountPercentage = Math.round(((product.compare_at_price - product.price) / product.compare_at_price) * 100);
+}
+
+let parsedBadges: any[] = [];
+if (product.badges) {
+  try {
+    parsedBadges = JSON.parse(product.badges);
+    if (!Array.isArray(parsedBadges)) parsedBadges = [parsedBadges];
+  } catch(e) {
+    parsedBadges = [product.badges]; // JSON değilse kendisini ilk eleman yap
+  }
+}
+
+let maxWholesaleDiscount = 0;
+if (product.wholesalePrices && product.wholesalePrices.length > 0) {
+  maxWholesaleDiscount = Math.max(...product.wholesalePrices.map((wp: any) => wp.discount_percentage || 0));
+}
+
+// Resim mi yazı mı kontrolü için yardımcı fonksiyon (HTML döndürmez)
+const getBadgeString = (b: any): string | null => {
+  if (!b) return null;
+  return typeof b === 'string' ? b : (b.content || null);
+};
+
+const isBadgeImage = (b: any) => {
+  const content = getBadgeString(b);
+  if (!content) return false;
+  return content.startsWith('http') || content.startsWith('/') || content.match(/\.(jpeg|jpg|gif|png|svg|webp)$/i) != null;
+};
+---
+
+<a href={`/urunler/${product.slug}`} class="block group">
+  <div class="bg-white dark:bg-gray-800 rounded-xl overflow-hidden shadow-sm hover:shadow-xl transition-all duration-300 border border-gray-100 dark:border-gray-700 flex flex-col h-full relative">
+    
+    <!-- Ürün Görseli (Dik Format 3/4) ve 4 Köşe Dinamik Yapı -->
+    <div class="relative w-full aspect-[3/4] bg-gray-100 dark:bg-gray-900 overflow-hidden">
+      
+      {/* Ürün Görseli */}
+      {product.image_url ? (
+        <img 
+          src={product.image_url} 
+          alt={product.name} 
+          class="w-full h-full object-cover group-hover:scale-105 transition-transform duration-500"
+          loading="lazy"
+        />
+      ) : (
+        <div class="w-full h-full flex flex-col items-center justify-center text-gray-300 dark:text-gray-700">
+          <i class="fas fa-box-open text-4xl mb-2"></i>
+          <span class="text-xs font-medium">Görsel Yok</span>
+        </div>
+      )}
+
+      {/* OVERLAY: 4 Köşe Dinamik Mantığı */}
+      <div class="absolute inset-0 p-3 pointer-events-none flex flex-col justify-between">
+        
+        <!-- Üst Satır -->
+        <div class="flex justify-between items-start">
+          {/* Sol Üst (Kargo vb.) */}
+          <div class="flex flex-col items-start gap-1">
+            {(getBadgeString(product.badge_top_left) || getBadgeString(parsedBadges[0])) && (
+              isBadgeImage(product.badge_top_left || parsedBadges[0]) ? (
+                <img src={getBadgeString(product.badge_top_left) || getBadgeString(parsedBadges[0])} alt="Badge" class="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-md" loading="lazy" />
+              ) : (
+                <span class="inline-block bg-black/80 backdrop-blur-md text-white text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded shadow-sm">
+                  {getBadgeString(product.badge_top_left) || getBadgeString(parsedBadges[0])}
+                </span>
+              )
+            )}
+            {maxWholesaleDiscount > 0 && (
+              <span class="inline-block bg-green-600 text-white text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded shadow-sm">
+                Toptan %{maxWholesaleDiscount} İndirim
+              </span>
+            )}
+          </div>
+          
+          {/* Sağ Üst (Kampanya / İndirim) */}
+          <div class="flex flex-col items-end gap-1">
+            {discountPercentage > 0 && (
+              <span class="inline-block bg-red-600 text-white text-xs font-bold px-2 py-1 rounded shadow-sm">
+                %{discountPercentage}
+              </span>
+            )}
+            {(getBadgeString(product.badge_top_right) || getBadgeString(parsedBadges[1])) && (
+              isBadgeImage(product.badge_top_right || parsedBadges[1]) ? (
+                <img src={getBadgeString(product.badge_top_right) || getBadgeString(parsedBadges[1])} alt="Badge" class="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-md" loading="lazy" />
+              ) : (
+                <span class="inline-block bg-orange-500 text-white text-[10px] font-bold tracking-wider uppercase px-2 py-1 rounded shadow-sm">
+                  {getBadgeString(product.badge_top_right) || getBadgeString(parsedBadges[1])}
+                </span>
+              )
+            )}
+          </div>
+        </div>
+
+        {/* Alt Satır */}
+        <div class="flex justify-between items-end">
+          {/* Sol Alt (Marka Logosu veya 3. Rozet) */}
+          {brand && brand.logo_url ? (
+            <div class="w-10 h-10 md:w-12 md:h-12 bg-white/90 backdrop-blur p-1 rounded-lg shadow-sm flex items-center justify-center pointer-events-auto">
+              <img src={brand.logo_url} alt={brand.name} class="w-full h-full object-contain mix-blend-multiply" />
+            </div>
+          ) : (
+            <div class="flex flex-col items-start gap-1 pointer-events-auto">
+              {getBadgeString(parsedBadges[2]) && (
+                isBadgeImage(parsedBadges[2]) ? (
+                  <img src={getBadgeString(parsedBadges[2])} alt="Badge" class="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-md" loading="lazy" />
+                ) : (
+                  <span class="inline-block bg-purple-600 text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded shadow-sm">
+                    {getBadgeString(parsedBadges[2])}
+                  </span>
+                )
+              )}
+            </div>
+          )}
+          
+          {/* Sağ Alt (Yıldız veya 4. Rozet) */}
+          <div class="flex flex-col items-end gap-1 pointer-events-auto">
+            {getBadgeString(parsedBadges[3]) ? (
+              isBadgeImage(parsedBadges[3]) ? (
+                <img src={getBadgeString(parsedBadges[3])} alt="Badge" class="w-8 h-8 md:w-10 md:h-10 object-contain drop-shadow-md" loading="lazy" />
+              ) : (
+                <span class="inline-block bg-indigo-600 text-white text-[9px] font-bold tracking-wider uppercase px-2 py-0.5 rounded shadow-sm">
+                  {getBadgeString(parsedBadges[3])}
+                </span>
+              )
+            ) : (
+              <div class="bg-white/90 backdrop-blur px-2 py-1 rounded-full shadow-sm flex items-center gap-1">
+                <i class="fas fa-star text-yellow-400 text-[10px]"></i>
+                <span class="text-[11px] font-bold text-gray-800">{product.rating > 0 ? product.rating.toFixed(1) : '5.0'}</span>
+              </div>
+            )}
+          </div>
+        </div>
+        
+      </div>
+    </div>
+
+    <!-- Ürün Bilgileri -->
+    <div class="p-4 flex flex-col flex-1">
+      <h3 class="text-sm md:text-base font-medium text-gray-900 dark:text-gray-100 line-clamp-2 mb-2 group-hover:text-orange-600 dark:group-hover:text-orange-400 transition-colors">
+        {product.name}
+      </h3>
+      
+      <div class="mt-auto pt-2">
+        <div class="flex items-baseline gap-2">
+          <span class="text-lg md:text-xl font-bold text-gray-900 dark:text-white">
+            {product.price.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺
+          </span>
+          {product.compare_at_price && product.compare_at_price > product.price && (
+            <span class="text-xs md:text-sm text-gray-500 line-through">
+              {product.compare_at_price.toLocaleString('tr-TR', { minimumFractionDigits: 0, maximumFractionDigits: 0 })} ₺
+            </span>
+          )}
+        </div>
+      </div>
+    </div>
+
+  </div>
+</a>

@@ -1,0 +1,43 @@
+---
+// src/components/admin/CategoryRow.astro
+const { category, categories, depth = 0 } = Astro.props;
+
+const subcategories = categories.filter((c: any) => c.parent_id === category.id);
+const parentName = categories.find((c: any) => c.id === category.parent_id)?.name || 'Ana Kategori';
+
+const paddingLeft = depth * 1.5 + 1; // rem
+---
+<tr class="hover:bg-gray-50 dark:hover:bg-gray-700/50 transition">
+  <td class="px-4 py-4"><input type="checkbox" class="category-checkbox w-4 h-4 rounded border-gray-300" data-id={category.id}></td>
+  <td class="px-4 py-4 text-sm font-semibold text-gray-500 dark:text-gray-400">
+    {category.image_url ? <img src={category.image_url} class="w-8 h-8 rounded object-cover" /> : <div class="w-8 h-8 rounded bg-gray-200 dark:bg-gray-600 flex items-center justify-center"><i class="fas fa-image text-gray-400"></i></div>}
+  </td>
+  <td class="px-6 py-3.5 font-semibold text-gray-900 dark:text-white flex items-center gap-2" style={`padding-left: ${paddingLeft}rem;`}>
+    {depth > 0 && <span class="text-gray-400">↳</span>}
+    {depth === 0 && <span class="w-2.5 h-2.5 rounded-full bg-orange-500 inline-block"></span>}
+    {category.name}
+  </td>
+  <td class="px-6 py-3.5 text-gray-400 text-sm">{depth === 0 ? 'Ana Kategori' : parentName}</td>
+  <td class="px-6 py-3.5 text-center">
+    <div class="flex items-center justify-center gap-3">
+      <button 
+        class="edit-category-btn text-blue-600 hover:bg-blue-50 dark:hover:bg-blue-900/30 p-2 rounded-lg transition" 
+        data-id={category.id} 
+        data-ad={category.name}
+        data-img={category.image_url || ''}
+        title="Düzenle"
+      >
+        ✏️
+      </button>
+      <form method="POST" class="inline" onsubmit="return confirm('Sil? Alt kategorileri varsa üst kategorisi yok olarak güncellenecektir!')">
+        <input type="hidden" name="islem" value="sil" />
+        <input type="hidden" name="id" value={category.id} />
+        <button type="submit" class="text-red-600 hover:bg-red-50 dark:hover:bg-red-900/30 p-2 rounded-lg transition" title="Sil">🗑️</button>
+      </form>
+    </div>
+  </td>
+</tr>
+
+{subcategories.map((sub: any) => (
+  <Astro.self category={sub} categories={categories} depth={depth + 1} />
+))}

@@ -1,0 +1,296 @@
+---
+export interface Props {
+  inputId: string; // The ID of the input field to populate with the selected image URL
+  multiple?: boolean; // Select multiple images
+}
+
+const { inputId, multiple = false } = Astro.props;
+---
+
+<!-- Buton Grubu -->
+<div class="flex gap-2 w-full">
+  <button type="button" onclick={`window.openMediaPicker('${inputId}', ${multiple})`} class="flex-1 px-3 py-2 bg-indigo-50 text-indigo-600 dark:bg-indigo-900/30 dark:text-indigo-400 rounded hover:bg-indigo-100 dark:hover:bg-indigo-900/50 transition border border-indigo-200 dark:border-indigo-800 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap font-bold text-xs">
+    <i class="fas fa-images"></i> Sistemden
+  </button>
+  <label class="flex-1 px-3 py-2 bg-orange-50 text-orange-600 dark:bg-orange-900/30 dark:text-orange-400 rounded hover:bg-orange-100 dark:hover:bg-orange-900/50 transition border border-orange-200 dark:border-orange-800 flex items-center justify-center gap-2 cursor-pointer whitespace-nowrap font-bold text-xs">
+    <i class="fas fa-upload" id={`iconInlineUpload_${inputId}`}></i> <span id={`textInlineUpload_${inputId}`}>Cihazdan</span>
+    <input type="file" id={`mediaPickerInlineUpload_${inputId}`} class="hidden" accept="image/*" multiple={multiple} />
+  </label>
+  <button type="button" onclick={`document.getElementById('${inputId}').value=''; document.getElementById('${inputId}').dispatchEvent(new Event('change'))`} title="Temizle" class="px-3 py-2 bg-red-50 text-red-600 dark:bg-red-900/30 dark:text-red-400 rounded hover:bg-red-100 dark:hover:bg-red-900/50 transition border border-red-200 dark:border-red-800 flex items-center justify-center cursor-pointer font-bold text-xs">
+    <i class="fas fa-times"></i>
+  </button>
+</div>
+
+<!-- Media Picker Modal -->
+<div id={`mediaPickerModal_${inputId}`} class="fixed inset-0 z-[100] hidden items-center justify-center bg-black/60 backdrop-blur-sm p-4">
+  <div class="bg-white dark:bg-gray-800 w-full max-w-4xl rounded-xl shadow-2xl flex flex-col max-h-[90vh]">
+    <div class="p-4 border-b border-gray-200 dark:border-gray-700 flex justify-between items-center bg-gray-50 dark:bg-gray-900 rounded-t-xl">
+      <h3 class="text-lg font-bold text-gray-900 dark:text-white">Sistemden Seç</h3>
+      <div class="flex items-center gap-3">
+        <label class="px-3 py-1.5 bg-indigo-600 text-white rounded font-bold text-sm hover:bg-indigo-700 cursor-pointer flex items-center gap-2">
+          <i class="fas fa-upload"></i> Bilgisayardan Yükle
+          <input type="file" id={`mediaPickerDirectUpload_${inputId}`} class="hidden" accept="image/*" />
+        </label>
+        {multiple && <button type="button" id={`btnConfirm_${inputId}`} onclick={`window.confirmMediaSelection('${inputId}')`} class="px-4 py-1.5 bg-orange-600 text-white rounded font-bold text-sm hover:bg-orange-700 hidden">Seçilenleri Onayla (0)</button>}
+        <button type="button" onclick={`window.closeMediaPicker('${inputId}')`} class="text-gray-500 hover:text-gray-700 dark:text-gray-400 dark:hover:text-white">
+          <svg class="w-6 h-6" fill="none" stroke="currentColor" viewBox="0 0 24 24"><path stroke-linecap="round" stroke-linejoin="round" stroke-width="2" d="M6 18L18 6M6 6l12 12"></path></svg>
+        </button>
+      </div>
+    </div>
+    
+    <div class="p-4 border-b border-gray-200 dark:border-gray-700 bg-white dark:bg-gray-800">
+      <input type="text" id={`mediaPickerSearch_${inputId}`} placeholder="Görsel ara..." class="w-full px-4 py-2 border border-gray-300 dark:border-gray-600 rounded-lg dark:bg-gray-700 dark:text-white focus:ring-2 focus:ring-orange-500 outline-none" />
+    </div>
+
+    <div class="p-4 flex-1 overflow-y-auto">
+      <div id={`mediaPickerLoading_${inputId}`} class="text-center py-8 text-gray-500">Yükleniyor...</div>
+      <div id={`mediaPickerGrid_${inputId}`} class="grid grid-cols-2 sm:grid-cols-3 md:grid-cols-4 lg:grid-cols-5 gap-4 hidden">
+        <!-- JS will populate this -->
+      </div>
+    </div>
+  </div>
+</div>
+
+<script>
+  let mediaFiles = [];
+  
+  document.addEventListener('astro:page-load', () => {
+    // Tüm sistemden yükle butonlarını dinle
+    window.openMediaPicker = async function(inputId, multiple) {
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      const grid = document.getElementById(`mediaPickerGrid_${inputId}`);
+      const loading = document.getElementById(`mediaPickerLoading_${inputId}`);
+      
+      modal.classList.remove('hidden');
+      modal.classList.add('flex');
+      
+      // Store state on the modal element
+      modal.dataset.multiple = multiple;
+      if (!modal.selectedUrls) modal.selectedUrls = new Set();
+      modal.selectedUrls.clear();
+      updateConfirmBtn(inputId);
+      
+      if (mediaFiles.length === 0) {
+        try {
+          loading.classList.remove('hidden');
+          grid.classList.add('hidden');
+          const res = await fetch('/api/media/list.json');
+          mediaFiles = await res.json();
+          renderMedia(inputId, mediaFiles);
+        } catch (err) {
+          loading.innerHTML = 'Medyalar yüklenirken hata oluştu.';
+        }
+      } else {
+        renderMedia(inputId, mediaFiles);
+      }
+    };
+    
+    window.closeMediaPicker = function(inputId) {
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      if(modal) {
+        modal.classList.add('hidden');
+        modal.classList.remove('flex');
+      }
+    };
+    
+    window.toggleSelectMedia = function(inputId, url, el) {
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      const multiple = modal.dataset.multiple === 'true';
+      
+      if (!multiple) {
+        const inputField = document.getElementById(inputId);
+        if (inputField) {
+          inputField.value = url;
+          inputField.dispatchEvent(new Event('change', { bubbles: true }));
+        }
+        window.closeMediaPicker(inputId);
+        return;
+      }
+      
+      if (modal.selectedUrls.has(url)) {
+        modal.selectedUrls.delete(url);
+        if (el) el.classList.remove('ring-4', 'ring-orange-500');
+      } else {
+        modal.selectedUrls.add(url);
+        if (el) el.classList.add('ring-4', 'ring-orange-500');
+      }
+      updateConfirmBtn(inputId);
+    };
+
+    function updateConfirmBtn(inputId) {
+      const btnConfirm = document.getElementById(`btnConfirm_${inputId}`);
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      if (btnConfirm && modal) {
+        if (modal.selectedUrls.size > 0) {
+          btnConfirm.classList.remove('hidden');
+          btnConfirm.innerHTML = `Seçilenleri Onayla (${modal.selectedUrls.size})`;
+        } else {
+          btnConfirm.classList.add('hidden');
+        }
+      }
+    }
+
+    window.confirmMediaSelection = function(inputId) {
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      const inputField = document.getElementById(inputId);
+      if (inputField && modal) {
+        let existing = inputField.value ? inputField.value.split(',').map(s=>s.trim()).filter(Boolean) : [];
+        const newUrls = Array.from(modal.selectedUrls);
+        inputField.value = [...new Set([...existing, ...newUrls])].join(',');
+        inputField.dispatchEvent(new Event('change', { bubbles: true }));
+      }
+      window.closeMediaPicker(inputId);
+    };
+    
+    function renderMedia(inputId, files) {
+      const modal = document.getElementById(`mediaPickerModal_${inputId}`);
+      const grid = document.getElementById(`mediaPickerGrid_${inputId}`);
+      const loading = document.getElementById(`mediaPickerLoading_${inputId}`);
+      const multiple = modal.dataset.multiple === 'true';
+      
+      loading.classList.add('hidden');
+      grid.classList.remove('hidden');
+      
+      grid.innerHTML = files.map(file => {
+        const isSelected = modal.selectedUrls && modal.selectedUrls.has(file.url);
+        const ringClass = isSelected ? 'ring-4 ring-orange-500' : '';
+        return `
+          <div onclick="window.toggleSelectMedia('${inputId}', '${file.url}', this)" class="cursor-pointer group rounded-lg overflow-hidden border border-gray-200 dark:border-gray-700 hover:border-orange-500 dark:hover:border-orange-500 transition shadow-sm hover:shadow-md bg-white dark:bg-gray-800 ${ringClass}">
+            <div class="aspect-square bg-gray-100 dark:bg-gray-900 relative">
+              <img src="${file.url}" alt="${file.name}" class="w-full h-full object-cover group-hover:opacity-90 transition" loading="lazy" />
+              <div class="absolute inset-0 bg-black/50 opacity-0 group-hover:opacity-100 flex items-center justify-center transition">
+                <span class="text-white font-medium text-sm px-3 py-1 bg-orange-600 rounded-full">${multiple ? 'Seç / Çıkar' : 'Seç'}</span>
+              </div>
+            </div>
+            <div class="p-2">
+              <p class="text-xs text-gray-700 dark:text-gray-300 truncate" title="${file.name}">${file.name}</p>
+            </div>
+          </div>
+        `;
+      }).join('');
+    }
+
+    // Arama ve Direct Upload (Modal İçi) ve Inline Upload
+    document.querySelectorAll('[id^="mediaPickerModal_"]').forEach(modal => {
+      const inputId = modal.id.replace('mediaPickerModal_', '');
+      
+      const searchInput = document.getElementById(`mediaPickerSearch_${inputId}`);
+      if (searchInput && !searchInput.dataset.bound) {
+        searchInput.dataset.bound = 'true';
+        searchInput.addEventListener('input', (e) => {
+          const term = e.target.value.toLowerCase().trim();
+          const filtered = mediaFiles.filter(f => f.name.toLowerCase().includes(term));
+          renderMedia(inputId, filtered);
+        });
+      }
+
+      const directUpload = document.getElementById(`mediaPickerDirectUpload_${inputId}`);
+      if (directUpload && !directUpload.dataset.bound) {
+        directUpload.dataset.bound = 'true';
+        directUpload.addEventListener('change', async (e) => {
+          const file = e.target.files[0];
+          if (!file) return;
+          const loading = document.getElementById(`mediaPickerLoading_${inputId}`);
+          const grid = document.getElementById(`mediaPickerGrid_${inputId}`);
+          try {
+            loading.classList.remove('hidden');
+            loading.innerHTML = '<i class="fas fa-spinner fa-spin mr-2"></i> Yükleniyor...';
+            grid.classList.add('hidden');
+
+            const res = await fetch('/api/media/upload.json', {
+              method: 'POST',
+              headers: {
+                'Content-Type': file.type || 'application/octet-stream',
+                'X-File-Name': encodeURIComponent(file.name)
+              },
+              body: file
+            });
+            
+            if (res.ok) {
+              const data = await res.json();
+              const newFile = { url: data.url, name: file.name, size: file.size, date: new Date().toISOString() };
+              mediaFiles.unshift(newFile);
+              renderMedia(inputId, mediaFiles);
+              
+              if (modal.dataset.multiple !== 'true') {
+                window.toggleSelectMedia(inputId, data.url, null);
+              } else {
+                modal.selectedUrls.add(data.url);
+                updateConfirmBtn(inputId);
+                renderMedia(inputId, mediaFiles);
+              }
+            } else {
+              alert("Yükleme başarısız oldu.");
+              renderMedia(inputId, mediaFiles);
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Yükleme sırasında bir hata oluştu.");
+          } finally {
+            e.target.value = '';
+          }
+        });
+      }
+      
+      const inlineUpload = document.getElementById(`mediaPickerInlineUpload_${inputId}`);
+      if (inlineUpload && !inlineUpload.dataset.bound) {
+        inlineUpload.dataset.bound = 'true';
+        inlineUpload.addEventListener('change', async (e) => {
+          const files = e.target.files;
+          if (!files || files.length === 0) return;
+          
+          const icon = document.getElementById(`iconInlineUpload_${inputId}`);
+          const text = document.getElementById(`textInlineUpload_${inputId}`);
+          const originalIcon = icon.className;
+          const originalText = text.innerText;
+          
+          try {
+            icon.className = 'fas fa-spinner fa-spin';
+            text.innerText = 'Yükleniyor...';
+            
+            let newUrls = [];
+            for(let i=0; i<files.length; i++) {
+              const file = files[i];
+              const res = await fetch('/api/media/upload.json', {
+                method: 'POST',
+                headers: {
+                  'Content-Type': file.type || 'application/octet-stream',
+                  'X-File-Name': encodeURIComponent(file.name)
+                },
+                body: file
+              });
+              
+              if (res.ok) {
+                const data = await res.json();
+                newUrls.push(data.url);
+              } else {
+                alert(file.name + " yüklenirken hata oluştu.");
+              }
+            }
+            
+            if (newUrls.length > 0) {
+              const inputField = document.getElementById(inputId);
+              if (inputField) {
+                const isMultiple = inlineUpload.hasAttribute('multiple');
+                if (!isMultiple) {
+                  inputField.value = newUrls[0];
+                } else {
+                  let existing = inputField.value ? inputField.value.split(',').map(s=>s.trim()).filter(Boolean) : [];
+                  inputField.value = [...new Set([...existing, ...newUrls])].join(',');
+                }
+                inputField.dispatchEvent(new Event('change', { bubbles: true }));
+              }
+            }
+          } catch (err) {
+            console.error(err);
+            alert("Yükleme sırasında bir hata oluştu.");
+          } finally {
+            icon.className = originalIcon;
+            text.innerText = originalText;
+            e.target.value = '';
+          }
+        });
+      }
+    });
+  });
+</script>
