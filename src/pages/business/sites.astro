@@ -116,131 +116,149 @@ if (db) {
 ---
 
 <DashboardLayout title="Ücretsiz Hizmetlerim | İş De Yeter" activeTab="sites">
-  <div class="sites-wizard">
+  <div class="flex flex-col gap-8 max-w-7xl mx-auto px-2">
     
-    <div class="wizard-header">
-      <h1>Ücretsiz Hizmetlerim & Sitelerim</h1>
-      <p>İş ortaklarımıza özel web altyapısını kullanarak kendi markanıza özel profesyonel hizmet sitenizi saniyeler içinde kurun.</p>
+    <div class="flex flex-col">
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">Ücretsiz Hizmetlerim & Sitelerim</h1>
+      <p class="text-slate-500 mt-2 text-sm sm:text-base">İş ortaklarımıza özel web altyapısını kullanarak kendi markanıza özel profesyonel hizmet sitenizi saniyeler içinde kurun.</p>
     </div>
 
     <!-- Alerts -->
     {successMessage && (
-      <div class="alert success">
-        <i class="fa-solid fa-circle-check"></i>
+      <div class="bg-emerald-50 border border-emerald-200 text-emerald-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-circle-check text-xl"></i>
         <span>{successMessage}</span>
       </div>
     )}
 
     {errorMessage && (
-      <div class="alert error">
-        <i class="fa-solid fa-triangle-exclamation"></i>
+      <div class="bg-red-50 border border-red-200 text-red-700 p-4 rounded-xl flex items-center gap-3 shadow-sm font-medium">
+        <i class="fa-solid fa-triangle-exclamation text-xl"></i>
         <span>{errorMessage}</span>
       </div>
     )}
 
     <!-- Split content: Form on left, active sites on right -->
-    <div class="wizard-layout">
+    <div class="grid grid-cols-1 lg:grid-cols-2 gap-8 items-start">
       
       <!-- Creation Form -->
-      <form method="POST" class="wizard-form shadow-card">
-        <h2><i class="fa-solid fa-wand-magic-sparkles text-blue-500 mr-2"></i>Yeni Web Sitesi Başlat</h2>
+      <form method="POST" class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="w-10 h-10 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-wand-magic-sparkles"></i>
+          </div>
+          Yeni Web Sitesi Başlat
+        </h2>
         
-        <div class="form-group" id="domain-primary-group">
-          <label for="domain">Kendi Özel Alan Adınız (Domain)</label>
-          <div class="domain-input-group">
+        <div class="flex flex-col gap-2" id="domain-primary-group">
+          <label for="domain" class="text-sm font-bold text-slate-600">Kendi Özel Alan Adınız (Domain)</label>
+          <div class="flex border border-slate-300 rounded-xl overflow-hidden bg-white focus-within:border-blue-500 focus-within:ring-4 focus-within:ring-blue-500/10 transition-all">
             <input 
               type="text" 
               name="domain" 
               id="domain" 
               placeholder="isletme-marka-adiniz.com" 
-              class="domain-input"
+              class="w-full border-none px-4 py-3 text-slate-800 text-sm outline-none bg-transparent"
             />
           </div>
-          <small class="helper-text" id="domain-helper">Satın aldığınız alan adını girin (Örn: isdeyeter.com gibi). Eğer Domain (alan adı) almadıysanız size ekibimiz destek olacaktır.</small>
+          <small class="text-[13px] text-slate-500 mt-1" id="domain-helper">Satın aldığınız alan adını girin (Örn: isdeyeter.com gibi). Eğer Domain (alan adı) almadıysanız size ekibimiz destek olacaktır.</small>
         </div>
 
-        <div class="form-group checkbox-group" style="margin-top: 4px;">
-          <label class="radio-label">
-            <input type="checkbox" id="no-domain-check" name="no_domain" value="1" />
-            <span style="font-weight: 600; color: #0f172a;">Alan adı almadım</span>
+        <div class="flex items-center gap-2 mt-1">
+          <label class="flex items-center gap-2.5 cursor-pointer">
+            <input type="checkbox" id="no-domain-check" name="no_domain" value="1" class="w-5 h-5 rounded border-slate-300 text-blue-600 focus:ring-blue-500 cursor-pointer" />
+            <span class="font-bold text-slate-800">Alan adı almadım</span>
           </label>
         </div>
 
-        <div class="form-group" id="desired-domain-group" style="display: none; margin-top: 10px; background: #f8fafc; padding: 15px; border-radius: 10px; border: 1px dashed #cbd5e1;">
-          <label for="desired-domain">İstediğiniz alan adını yazınız</label>
+        <div class="hidden flex-col gap-3 mt-2 bg-slate-50/80 p-5 rounded-2xl border-2 border-dashed border-slate-200" id="desired-domain-group">
+          <label for="desired-domain" class="text-sm font-bold text-slate-700">İstediğiniz alan adını yazınız</label>
           <input 
             type="text" 
             name="desired_domain" 
             id="desired-domain" 
             placeholder="Örn: comlekgida" 
-            class="domain-input"
-            style="border: 1px solid #cbd5e1; border-radius: 8px; width: 100%; margin-top: 5px; background: #fff;"
+            class="w-full border border-slate-300 rounded-xl px-4 py-3 text-slate-800 text-sm outline-none bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all"
           />
-          <small class="helper-text" style="display: block; margin-top: 8px;">
-            Örneğin Çömlek Gıda için <strong>comlekgida</strong> yazmalısınız. İsim uzantısı (.com, .net, .com.tr müsait olanı tarafınıza bildirilecek).<br/>
-            Sadece küçük harfler, rakamlar ve tire (-) kullanın. Türkçe karakter kullanmayın.
-          </small>
+          <div class="bg-amber-50 border border-amber-200 rounded-xl p-3 mt-1">
+            <small class="text-[12px] text-amber-800 leading-relaxed block">
+              Örneğin Çömlek Gıda için <strong class="bg-amber-200/50 px-1.5 py-0.5 rounded text-amber-900">comlekgida</strong> yazmalısınız. İsim uzantısı (.com, .net, .com.tr müsait olanı tarafınıza bildirilecek).<br/>
+              Sadece küçük harfler, rakamlar ve tire (-) kullanın. Türkçe karakter kullanmayın.
+            </small>
+          </div>
         </div>
 
-        <div class="form-group" style="margin-top: 15px;">
-          <label for="mode">Web Sitesi Çalışma Modu (Model)</label>
-          <select name="mode" id="mode" class="mode-select" required>
-            <optgroup label="Tekil Kullanım">
-              <option value="blog">Sadece Blog Web Sitesi</option>
-              <option value="kurumsal" selected>Sadece Kurumsal Tanıtım Web Sitesi</option>
-              <option value="eticaret">Sadece E-Ticaret Web Sitesi</option>
-            </optgroup>
-            <optgroup label="Karma Web Sitesi Kullanımı">
-              <option value="blog_kurumsal">Blog + Kurumsal</option>
-              <option value="kurumsal_eticaret">Kurumsal + E-Ticaret</option>
-              <option value="blog_eticaret">Blog + E-Ticaret</option>
-              <option value="hepsi">Blog + E-Ticaret + Kurumsal (Hepsi)</option>
-            </optgroup>
-          </select>
+        <div class="flex flex-col gap-2 mt-2">
+          <label for="mode" class="text-sm font-bold text-slate-600">Web Sitesi Çalışma Modu (Model)</label>
+          <div class="relative">
+            <select name="mode" id="mode" class="w-full appearance-none border border-slate-300 rounded-xl px-4 py-3.5 text-slate-800 text-sm outline-none bg-white focus:border-blue-500 focus:ring-4 focus:ring-blue-500/10 transition-all font-medium" required>
+              <optgroup label="Tekil Kullanım">
+                <option value="blog">Sadece Blog Web Sitesi</option>
+                <option value="kurumsal" selected>Sadece Kurumsal Tanıtım Web Sitesi</option>
+                <option value="eticaret">Sadece E-Ticaret Web Sitesi</option>
+              </optgroup>
+              <optgroup label="Karma Web Sitesi Kullanımı">
+                <option value="blog_kurumsal">Blog + Kurumsal</option>
+                <option value="kurumsal_eticaret">Kurumsal + E-Ticaret</option>
+                <option value="blog_eticaret">Blog + E-Ticaret</option>
+                <option value="hepsi">Blog + E-Ticaret + Kurumsal (Hepsi)</option>
+              </optgroup>
+            </select>
+            <div class="pointer-events-none absolute inset-y-0 right-0 flex items-center px-4 text-slate-500">
+              <i class="fa-solid fa-chevron-down text-xs"></i>
+            </div>
+          </div>
         </div>
 
-        <button type="submit" class="submit-btn">
-          <i class="fa-solid fa-cloud-arrow-up mr-2"></i>
+        <button type="submit" class="w-full bg-blue-600 hover:bg-blue-700 text-white font-bold py-4 rounded-xl transition-all shadow-md shadow-blue-600/20 flex items-center justify-center gap-2 mt-4 text-[15px]">
+          <i class="fa-solid fa-cloud-arrow-up text-lg"></i>
           <span>Kurulum Talebi Gönder</span>
         </button>
       </form>
 
       <!-- Active Sites List -->
-      <div class="sites-list shadow-card">
-        <h2><i class="fa-solid fa-server text-teal-500 mr-2"></i>Aktif Hizmetlerim</h2>
+      <div class="bg-white border border-slate-200 rounded-3xl p-6 sm:p-8 shadow-sm flex flex-col gap-6">
+        <h2 class="text-xl font-bold text-slate-800 flex items-center gap-3 border-b border-slate-100 pb-4">
+          <div class="w-10 h-10 bg-teal-50 text-teal-600 rounded-xl flex items-center justify-center">
+            <i class="fa-solid fa-server"></i>
+          </div>
+          Aktif Hizmetlerim
+        </h2>
         
-        <div class="list-container">
-          {mySites.map(site => (
-            <div class="site-row">
-              <div class="site-info">
-                <i class="fa-solid fa-globe site-globe"></i>
-                <div class="site-meta">
-                  <a href={`http://${site.domain}`} target="_blank" class="site-domain">{site.domain}</a>
-                  <div class="meta-row">
-                    <span class={`site-mode ${site.mode}`}>
+        <div class="flex flex-col gap-4">
+          {mySites.map((site: any) => (
+            <div class="bg-slate-50 border border-slate-200 rounded-2xl p-4 sm:p-5 flex flex-col sm:flex-row justify-between items-start sm:items-center gap-4 hover:border-slate-300 transition-colors">
+              <div class="flex items-center gap-4">
+                <div class="w-12 h-12 bg-blue-50 text-blue-600 rounded-xl flex items-center justify-center text-xl shrink-0">
+                  <i class="fa-solid fa-globe"></i>
+                </div>
+                <div class="flex flex-col gap-1.5">
+                  <a href={`http://${site.domain}`} target="_blank" class="text-[15px] font-bold text-slate-900 hover:text-blue-600 hover:underline transition-colors">{site.domain}</a>
+                  <div class="flex items-center gap-2 flex-wrap">
+                    <span class={`text-[10px] uppercase font-bold px-2 py-0.5 rounded-md ${site.mode === 'urun' ? 'bg-teal-100 text-teal-700' : 'bg-purple-100 text-purple-700'}`}>
                       {site.mode === 'urun' ? '📦 Ürün' : '💼 Hizmet'} Modu
                     </span>
-                    <span class="service-type-badge">
+                    <span class="text-[10px] uppercase font-bold px-2 py-0.5 rounded-md bg-slate-200 text-slate-600">
                       {site.service_type === 'web_sitesi' ? 'Web Sitesi' : site.service_type}
                     </span>
                   </div>
                 </div>
               </div>
               
-              <div class="site-status-area">
+              <div class="flex items-center shrink-0">
                 {site.status === 'PENDING' ? (
-                  <div class="status-indicator pending" title="Kurulum kuyrukta bekliyor">
-                    <span class="spinner"></span>
-                    <span>Bekliyor...</span>
+                  <div class="flex items-center gap-2 bg-amber-50 text-amber-700 px-3 py-1.5 rounded-full text-xs font-bold border border-amber-100" title="Kurulum kuyrukta bekliyor">
+                    <i class="fa-solid fa-circle-notch fa-spin"></i>
+                    <span>Bekliyor</span>
                   </div>
                 ) : site.status === 'ACTIVE' ? (
-                  <div class="status-indicator active" title="Siteniz yayında ve aktif">
-                    <span class="active-dot"></span>
+                  <div class="flex items-center gap-2 bg-emerald-50 text-emerald-700 px-3 py-1.5 rounded-full text-xs font-bold border border-emerald-100" title="Siteniz yayında ve aktif">
+                    <span class="w-2 h-2 bg-emerald-500 rounded-full shadow-[0_0_0_2px_rgba(16,185,129,0.2)]"></span>
                     <span>Aktif</span>
                   </div>
                 ) : (
-                  <div class="status-indicator passive" title="Hizmet süresi dolmuş veya askıya alınmış">
-                    <span class="passive-dot"></span>
+                  <div class="flex items-center gap-2 bg-red-50 text-red-700 px-3 py-1.5 rounded-full text-xs font-bold border border-red-100" title="Hizmet süresi dolmuş veya askıya alınmış">
+                    <span class="w-2 h-2 bg-red-500 rounded-full shadow-[0_0_0_2px_rgba(239,68,68,0.2)]"></span>
                     <span>Pasif</span>
                   </div>
                 )}
@@ -249,9 +267,9 @@ if (db) {
           ))}
 
           {mySites.length === 0 && (
-            <div class="empty-state">
-              <i class="fa-solid fa-folder-open empty-icon"></i>
-              <p>Henüz kurulmuş bir web siteniz veya hizmetiniz bulunmuyor. Soldaki formu kullanarak ilk hizmetinizi hemen oluşturun!</p>
+            <div class="py-12 flex flex-col items-center justify-center text-center gap-4 bg-slate-50/50 rounded-2xl border border-dashed border-slate-300 px-4">
+              <i class="fa-solid fa-folder-open text-4xl text-slate-300"></i>
+              <p class="text-sm text-slate-500 leading-relaxed max-w-sm">Henüz kurulmuş bir web siteniz veya hizmetiniz bulunmuyor. Soldaki formu kullanarak ilk hizmetinizi hemen oluşturun!</p>
             </div>
           )}
         </div>
@@ -261,380 +279,33 @@ if (db) {
 
   </div>
 
-  <script>
-    const noDomainCheck = document.getElementById('no-domain-check') as HTMLInputElement;
-    const domainInput = document.getElementById('domain') as HTMLInputElement;
-    const desiredDomainGroup = document.getElementById('desired-domain-group') as HTMLDivElement;
-    const desiredDomainInput = document.getElementById('desired-domain') as HTMLInputElement;
-    const domainPrimaryGroup = document.getElementById('domain-primary-group') as HTMLDivElement;
+  <script is:inline>
+    document.addEventListener('DOMContentLoaded', () => {
+      const noDomainCheck = document.getElementById('no-domain-check');
+      const domainInput = document.getElementById('domain');
+      const desiredDomainGroup = document.getElementById('desired-domain-group');
+      const desiredDomainInput = document.getElementById('desired-domain');
+      const domainPrimaryGroup = document.getElementById('domain-primary-group');
 
-    if (noDomainCheck && desiredDomainGroup && domainPrimaryGroup && domainInput && desiredDomainInput) {
-      noDomainCheck.addEventListener('change', () => {
-        if (noDomainCheck.checked) {
-          desiredDomainGroup.style.display = "block";
-          domainPrimaryGroup.style.display = "none";
-          domainInput.removeAttribute('required');
-          desiredDomainInput.setAttribute('required', 'true');
-        } else {
-          desiredDomainGroup.style.display = "none";
-          domainPrimaryGroup.style.display = "block";
-          desiredDomainInput.removeAttribute('required');
-          domainInput.setAttribute('required', 'true');
-        }
-      });
-    }
-  </script>
-
-  <style>
-    .sites-wizard {
-      display: flex;
-      flex-direction: column;
-      gap: 32px;
-    }
-
-    .wizard-header h1 {
-      font-size: 2rem;
-      color: #0f172a;
-      letter-spacing: -0.5px;
-    }
-
-    .wizard-header p {
-      font-size: 0.95rem;
-      color: #64748b;
-      margin-top: 4px;
-    }
-
-    /* Alerts */
-    .alert {
-      padding: 16px 20px;
-      border-radius: 12px;
-      font-weight: 500;
-      display: flex;
-      align-items: center;
-      gap: 12px;
-      font-size: 0.95rem;
-    }
-
-    .alert.success {
-      background: rgba(16, 185, 129, 0.05);
-      border: 1px solid rgba(16, 185, 129, 0.3);
-      color: #059669;
-    }
-
-    .alert.error {
-      background: rgba(239, 68, 68, 0.05);
-      border: 1px solid rgba(239, 68, 68, 0.3);
-      color: #dc2626;
-    }
-
-    /* Layout Split */
-    .wizard-layout {
-      display: grid;
-      grid-template-columns: 1fr 1fr;
-      gap: 32px;
-      align-items: start;
-    }
-
-    .shadow-card {
-      background: #ffffff;
-      border: 1px solid #e2e8f0;
-      border-radius: 20px;
-      padding: 32px;
-      display: flex;
-      flex-direction: column;
-      gap: 24px;
-    }
-
-    .wizard-layout h2 {
-      font-size: 1.15rem;
-      color: #1e293b;
-      font-weight: 700;
-      display: flex;
-      align-items: center;
-    }
-
-    .form-group {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-
-    label {
-      font-size: 0.88rem;
-      font-weight: 600;
-      color: #475569;
-    }
-
-    /* Address Type Selector */
-    .address-type-selector {
-      display: flex;
-      gap: 16px;
-      margin-bottom: 8px;
-      flex-wrap: wrap;
-    }
-
-    .radio-label {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      color: #334155;
-    }
-
-    .radio-label input {
-      cursor: pointer;
-    }
-
-    /* Domain input group styling */
-    .domain-input-group {
-      display: flex;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      overflow: hidden;
-      background: #ffffff;
-      transition: all 0.2s ease;
-    }
-
-    .domain-input-group:focus-within {
-      border-color: #3b82f6;
-      box-shadow: 0 0 0 4px rgba(59, 130, 246, 0.1);
-    }
-
-    .domain-input {
-      border: none;
-      flex: 1;
-      font-family: inherit;
-      font-size: 0.92rem;
-      padding: 12px 16px;
-      color: #0f172a;
-      outline: none;
-      background: transparent;
-    }
-
-    .domain-suffix {
-      background: #f1f5f9;
-      color: #64748b;
-      font-weight: 600;
-      font-size: 0.92rem;
-      padding: 12px 16px;
-      border-left: 1px solid #e2e8f0;
-      display: flex;
-      align-items: center;
-      user-select: none;
-    }
-
-    .helper-text {
-      font-size: 0.78rem;
-      color: #64748b;
-    }
-
-    /* Select design */
-    .mode-select {
-      font-family: inherit;
-      font-size: 0.92rem;
-      padding: 12px 16px;
-      border: 1px solid #cbd5e1;
-      border-radius: 10px;
-      color: #0f172a;
-      background: #ffffff;
-      outline: none;
-    }
-
-    .mode-select:focus {
-      border-color: #3b82f6;
-    }
-
-    /* Submit btn */
-    .submit-btn {
-      background: #3b82f6;
-      color: #ffffff;
-      border: none;
-      padding: 14px;
-      font-size: 0.95rem;
-      font-weight: 600;
-      border-radius: 12px;
-      cursor: pointer;
-      display: flex;
-      align-items: center;
-      justify-content: center;
-      transition: all 0.2s ease;
-      box-shadow: 0 4px 12px rgba(59, 130, 246, 0.15);
-      margin-top: 10px;
-    }
-
-    .submit-btn:hover {
-      background: #2563eb;
-      box-shadow: 0 8px 20px rgba(59, 130, 246, 0.25);
-    }
-
-    /* Active sites list styling */
-    .list-container {
-      display: flex;
-      flex-direction: column;
-      gap: 16px;
-    }
-
-    .site-row {
-      display: flex;
-      justify-content: space-between;
-      align-items: center;
-      background: #f8fafc;
-      border: 1px solid #e2e8f0;
-      border-radius: 14px;
-      padding: 16px;
-    }
-
-    .site-info {
-      display: flex;
-      align-items: center;
-      gap: 16px;
-    }
-
-    .site-globe {
-      font-size: 1.6rem;
-      color: #3b82f6;
-      background: rgba(59, 130, 246, 0.08);
-      width: 48px;
-      height: 48px;
-      border-radius: 10px;
-      display: flex;
-      justify-content: center;
-      align-items: center;
-    }
-
-    .site-meta {
-      display: flex;
-      flex-direction: column;
-      gap: 4px;
-    }
-
-    .site-domain {
-      font-size: 0.95rem;
-      font-weight: 700;
-      color: #0f172a;
-      text-decoration: none;
-      transition: color 0.15s ease;
-    }
-
-    .site-domain:hover {
-      color: #2563eb;
-      text-decoration: underline;
-    }
-
-    .meta-row {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      flex-wrap: wrap;
-    }
-
-    .site-mode {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      width: fit-content;
-    }
-
-    .site-mode.hizmet { background: rgba(168, 85, 247, 0.08); color: #a855f7; }
-    .site-mode.urun { background: rgba(20, 184, 166, 0.08); color: #0d9488; }
-
-    .service-type-badge {
-      font-size: 0.72rem;
-      font-weight: 700;
-      padding: 2px 6px;
-      border-radius: 4px;
-      background: #e2e8f0;
-      color: #475569;
-    }
-
-    /* Site status tag indicators */
-    .status-indicator {
-      display: flex;
-      align-items: center;
-      gap: 8px;
-      font-size: 0.8rem;
-      font-weight: 700;
-      padding: 6px 12px;
-      border-radius: 20px;
-    }
-
-    .status-indicator.pending {
-      background: rgba(245, 158, 11, 0.08);
-      color: #d97706;
-    }
-
-    .status-indicator.active {
-      background: rgba(16, 185, 129, 0.08);
-      color: #059669;
-    }
-
-    .status-indicator.passive {
-      background: rgba(220, 38, 38, 0.08);
-      color: #dc2626;
-    }
-
-    /* Active flashing dot */
-    .active-dot {
-      width: 6px;
-      height: 6px;
-      background: #10b981;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(16, 185, 129, 0.2);
-    }
-
-    /* Passive dot */
-    .passive-dot {
-      width: 6px;
-      height: 6px;
-      background: #dc2626;
-      border-radius: 50%;
-      box-shadow: 0 0 0 3px rgba(220, 38, 38, 0.2);
-    }
-
-    /* Spinner loader animation for pending provisioning */
-    .spinner {
-      width: 12px;
-      height: 12px;
-      border: 2px solid rgba(245, 158, 11, 0.2);
-      border-top: 2px solid #f59e0b;
-      border-radius: 50%;
-      animation: spin 0.8s linear infinite;
-    }
-
-    @keyframes spin {
-      0% { transform: rotate(0deg); }
-      100% { transform: rotate(360deg); }
-    }
-
-    /* Empty lists */
-    .empty-state {
-      display: flex;
-      flex-direction: column;
-      align-items: center;
-      text-align: center;
-      gap: 12px;
-      padding: 40px 20px;
-    }
-
-    .empty-icon {
-      font-size: 2.5rem;
-      color: #cbd5e1;
-    }
-
-    .empty-state p {
-      font-size: 0.88rem;
-      color: #64748b;
-      line-height: 1.4;
-    }
-
-    /* Responsive */
-    @media (max-width: 992px) {
-      .wizard-layout {
-        grid-template-columns: 1fr;
+      if (noDomainCheck && desiredDomainGroup && domainPrimaryGroup && domainInput && desiredDomainInput) {
+        noDomainCheck.addEventListener('change', () => {
+          if (noDomainCheck.checked) {
+            desiredDomainGroup.classList.remove('hidden');
+            desiredDomainGroup.classList.add('flex');
+            domainPrimaryGroup.classList.remove('flex');
+            domainPrimaryGroup.classList.add('hidden');
+            domainInput.removeAttribute('required');
+            desiredDomainInput.setAttribute('required', 'true');
+          } else {
+            desiredDomainGroup.classList.remove('flex');
+            desiredDomainGroup.classList.add('hidden');
+            domainPrimaryGroup.classList.remove('hidden');
+            domainPrimaryGroup.classList.add('flex');
+            desiredDomainInput.removeAttribute('required');
+            domainInput.setAttribute('required', 'true');
+          }
+        });
       }
-    }
-  </style>
+    });
+  </script>
 </DashboardLayout>
-

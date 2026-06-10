@@ -15,42 +15,61 @@ const mockOrders = [
 ---
 
 <DashboardLayout title="İş Siparişleri | İş De Yeter İş Ortağı" activeTab="orders">
-  <div class="max-w-6xl mx-auto space-y-6">
-    <div class="flex items-center justify-between">
-      <div>
-        <h1 class="text-2xl font-bold text-gray-900">İş Siparişleri</h1>
-        <p class="text-gray-500 mt-1">Üstlendiğiniz projeler ve aktif siparişleriniz.</p>
-      </div>
+  <div class="flex flex-col gap-8 max-w-7xl mx-auto px-2">
+    <div class="flex flex-col">
+      <h1 class="text-3xl font-extrabold text-slate-900 tracking-tight">İş Siparişleri</h1>
+      <p class="text-slate-500 mt-2 text-sm sm:text-base">Üstlendiğiniz projeler, tamamlanan işleriniz ve aktif siparişlerinizi bu tablodan yönetebilirsiniz.</p>
     </div>
 
-    <div class="bg-white rounded-xl shadow-sm border border-gray-200 overflow-hidden">
+    <div class="bg-white rounded-3xl shadow-sm border border-slate-200 overflow-hidden flex flex-col">
+      <div class="p-6 border-b border-slate-100 flex items-center gap-3">
+        <div class="w-10 h-10 bg-indigo-50 text-indigo-600 rounded-xl flex items-center justify-center">
+          <i class="fa-solid fa-list-check"></i>
+        </div>
+        <h2 class="text-xl font-bold text-slate-800">Sipariş Yönetimi</h2>
+      </div>
+
       {mockOrders.length > 0 ? (
         <div class="overflow-x-auto">
-          <table class="w-full text-left border-collapse">
+          <table class="w-full text-left border-collapse whitespace-nowrap">
             <thead>
-              <tr class="bg-gray-50 border-b border-gray-200 text-sm text-gray-600">
-                <th class="py-4 px-6 font-semibold">Sipariş Kodu</th>
-                <th class="py-4 px-6 font-semibold">Müşteri</th>
-                <th class="py-4 px-6 font-semibold">Tarih</th>
-                <th class="py-4 px-6 font-semibold">Hakediş</th>
-                <th class="py-4 px-6 font-semibold">Durum</th>
-                <th class="py-4 px-6 font-semibold">İşlem</th>
+              <tr class="bg-slate-50 border-b border-slate-200 text-xs font-bold text-slate-500 uppercase tracking-wider">
+                <th class="py-4 px-6">Sipariş Kodu</th>
+                <th class="py-4 px-6">Müşteri</th>
+                <th class="py-4 px-6">Tarih</th>
+                <th class="py-4 px-6">Hakediş Tutarı</th>
+                <th class="py-4 px-6">Durum</th>
+                <th class="py-4 px-6 text-right">İşlem</th>
               </tr>
             </thead>
-            <tbody class="divide-y divide-gray-200 text-sm">
+            <tbody class="divide-y divide-slate-100 text-sm">
               {mockOrders.map(order => (
-                <tr class="hover:bg-gray-50 transition-colors">
-                  <td class="py-4 px-6 font-medium text-gray-900">{order.id}</td>
-                  <td class="py-4 px-6 text-gray-800">{order.client}</td>
-                  <td class="py-4 px-6 text-gray-600">{order.date}</td>
-                  <td class="py-4 px-6 font-semibold text-green-600">{order.total}</td>
+                <tr class="hover:bg-slate-50 transition-colors group">
                   <td class="py-4 px-6">
-                    <span class={`inline-flex items-center px-2.5 py-0.5 rounded-full text-xs font-medium ${order.status === 'Tamamlandı' ? 'bg-green-100 text-green-800' : 'bg-blue-100 text-blue-800'}`}>
+                    <span class="font-bold text-slate-800 bg-slate-100 px-2.5 py-1 rounded-md text-[13px]">{order.id}</span>
+                  </td>
+                  <td class="py-4 px-6 font-semibold text-slate-700 flex items-center gap-2">
+                    <div class="w-8 h-8 rounded-full bg-blue-100 text-blue-600 flex items-center justify-center text-xs font-bold">
+                      {order.client.charAt(0)}
+                    </div>
+                    {order.client}
+                  </td>
+                  <td class="py-4 px-6 text-slate-500 font-medium">
+                    <i class="fa-regular fa-calendar mr-1.5 text-slate-400"></i>{order.date}
+                  </td>
+                  <td class="py-4 px-6 font-extrabold text-emerald-600">
+                    {order.total}
+                  </td>
+                  <td class="py-4 px-6">
+                    <span class={`inline-flex items-center gap-1.5 px-3 py-1 rounded-md text-[11px] font-bold uppercase tracking-wide ${order.status === 'Tamamlandı' ? 'bg-emerald-50 text-emerald-700' : 'bg-blue-50 text-blue-700'}`}>
+                      <i class={`fa-solid ${order.status === 'Tamamlandı' ? 'fa-check' : 'fa-spinner fa-spin-pulse'}`}></i>
                       {order.status}
                     </span>
                   </td>
-                  <td class="py-4 px-6">
-                    <button class="text-blue-600 hover:text-blue-800 font-medium text-xs">Yönet</button>
+                  <td class="py-4 px-6 text-right">
+                    <button class="bg-white border border-slate-200 hover:border-blue-300 text-blue-600 hover:text-blue-700 hover:bg-blue-50 font-bold text-xs px-4 py-2 rounded-lg transition-all shadow-sm">
+                      Detayları Yönet
+                    </button>
                   </td>
                 </tr>
               ))}
@@ -58,9 +77,11 @@ const mockOrders = [
           </table>
         </div>
       ) : (
-        <div class="p-12 text-center text-gray-500">
-          <i class="fa-solid fa-clipboard-check text-4xl mb-4 text-gray-300"></i>
-          <p>Şu anda aktif bir siparişiniz bulunmamaktadır.</p>
+        <div class="py-20 flex flex-col items-center justify-center text-center gap-4 bg-slate-50/50">
+          <div class="w-20 h-20 bg-white rounded-full flex items-center justify-center text-slate-300 text-4xl shadow-sm border border-slate-100">
+            <i class="fa-solid fa-clipboard-list"></i>
+          </div>
+          <p class="text-slate-500 font-medium max-w-sm mt-2">Şu anda aktif veya geçmiş bir siparişiniz bulunmamaktadır.</p>
         </div>
       )}
     </div>
