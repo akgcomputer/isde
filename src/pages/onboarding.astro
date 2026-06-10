@@ -98,7 +98,7 @@ if (Astro.request.method === 'POST') {
         <div id="step-1-container">
           <div class="card-header">
             <div class="step-badge">ADIM 1 / 2</div>
-            <h1>Hoş Geldin, {user.name}!</h1>
+            <h1>Hoş Geldin, {user.name && user.name !== user.email ? user.name : user.email.split('@')[0]}!</h1>
             <p class="subtitle">Platformda size uygun iş fırsatlarını listeyebilmemiz için hizmet verdiğiniz ana sektörü seçin.</p>
           </div>
 

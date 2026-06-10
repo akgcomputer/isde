@@ -77,6 +77,9 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
               placeholder="Şifreniz" 
               required 
             />
+            <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: 4px; cursor: pointer; font-weight: normal;">
+              <input type="checkbox" onchange="togglePasswordVisibility('login-password', this.checked)" /> Şifreyi göster
+            </label>
           </div>
 
           <!-- Ben Robot Değilim (Mock reCAPTCHA) -->
@@ -117,7 +120,7 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
               type="tel" 
               name="phone" 
               id="reg-phone" 
-              placeholder="Örn: 5325000999" 
+              placeholder="Tel: 05XX XXX XX XX" 
               required 
             />
           </div>
@@ -133,13 +136,37 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
           </div>
 
           <div class="input-group">
-            <label for="reg-password"><i class="fa-solid fa-lock icon-label"></i> Şifre <span class="optional-label">(Opsiyonel)</span></label>
+            <label for="reg-password"><i class="fa-solid fa-lock icon-label"></i> Şifre</label>
             <input 
               type="password" 
               name="password" 
               id="reg-password" 
-              placeholder="Opsiyonel (Boş bırakılırsa 123456 tanımlanır)" 
+              placeholder="Güçlü şifre belirleyin (Büyük-küçük harf, rakam, karakter)" 
+              onkeyup="checkPasswordStrength(this.value)"
+              required
             />
+            
+            <div class="password-strength" id="password-strength-container" style="display: none; margin-top: 4px; font-size: 0.8rem; font-weight: 600;">
+              Güç: <span id="password-strength-text"></span>
+            </div>
+            
+            <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: 4px; cursor: pointer; font-weight: normal;">
+              <input type="checkbox" onchange="togglePasswordVisibility('reg-password', this.checked)" /> Şifreyi göster
+            </label>
+          </div>
+
+          <div class="input-group">
+            <label for="reg-password-confirm"><i class="fa-solid fa-lock icon-label"></i> Şifre Tekrar</label>
+            <input 
+              type="password" 
+              name="password_confirm" 
+              id="reg-password-confirm" 
+              placeholder="Şifrenizi tekrar girin" 
+              required
+            />
+            <label class="show-password-label" style="display: flex; align-items: center; gap: 6px; font-size: 0.85rem; color: #64748b; margin-top: 4px; cursor: pointer; font-weight: normal;">
+              <input type="checkbox" onchange="togglePasswordVisibility('reg-password-confirm', this.checked)" /> Şifreyi göster
+            </label>
           </div>
 
           <!-- Ben Robot Değilim (Kayıt Formu için) -->
@@ -161,7 +188,7 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
 
         <!-- Social Login Buttons Container -->
         <div class="social-login-container">
-          <p class="section-title">Sosyal Hesap ile Güvenli ve Hızlı Bağlan</p>
+          <p class="section-title">Sosyal Hesap ile Bağlan</p>
           
           <div class="social-buttons-row">
             <!-- Google -->
@@ -195,11 +222,11 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
   <style>
     /* CSS Variables System */
     :root {
-      --primary-color: #3b82f6;      /* Mavi - Üye Rengi */
-      --primary-hover: #1d4ed8;
-      --primary-light: rgba(59, 130, 246, 0.1);
-      --primary-border: rgba(59, 130, 246, 0.3);
-      --primary-glow: rgba(59, 130, 246, 0.2);
+      --primary-color: #16a34a;      /* Yeşil - Üye Rengi */
+      --primary-hover: #15803d;
+      --primary-light: rgba(22, 163, 74, 0.1);
+      --primary-border: rgba(22, 163, 74, 0.3);
+      --primary-glow: rgba(22, 163, 74, 0.2);
       
       --partner-orange: #f97316;     /* Turuncu - İş Ortağı Rengi */
       --partner-orange-hover: #ea580c;
@@ -597,20 +624,32 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
       padding: 16px;
       border-radius: 12px;
       border: none;
-      background: var(--active-primary);
       color: #ffffff;
       font-size: 1.05rem;
       font-weight: 700;
       cursor: pointer;
-      box-shadow: 0 8px 18px var(--active-glow);
-      transition: all 0.25s ease;
       text-align: center;
+      transition: all 0.25s ease;
+    }
+    
+    #btn-login-submit {
+      background: #ef4444; /* Kırmızı */
+      box-shadow: 0 8px 18px rgba(239, 68, 68, 0.25);
+    }
+    #btn-login-submit:hover {
+      background: #dc2626;
+      transform: translateY(-2px);
+      box-shadow: 0 12px 24px rgba(239, 68, 68, 0.35);
     }
 
-    .submit-btn:hover {
-      background: var(--active-hover);
+    #btn-register-submit {
+      background: #3b82f6; /* Mavi */
+      box-shadow: 0 8px 18px rgba(59, 130, 246, 0.25);
+    }
+    #btn-register-submit:hover {
+      background: #2563eb;
       transform: translateY(-2px);
-      box-shadow: 0 12px 24px var(--active-glow);
+      box-shadow: 0 12px 24px rgba(59, 130, 246, 0.35);
     }
 
     .submit-btn:active {
@@ -714,6 +753,60 @@ export const prerender = true; // Login sayfası statik olarak önceden derlenir
 
   <!-- Client-side handler for role switching, form tabs, and URL errors -->
   <script is:inline>
+    function togglePasswordVisibility(inputId, show) {
+      const input = document.getElementById(inputId);
+      if (input) {
+        input.type = show ? 'text' : 'password';
+      }
+    }
+
+    function checkPasswordStrength(password) {
+      const container = document.getElementById('password-strength-container');
+      const text = document.getElementById('password-strength-text');
+      
+      if (!password) {
+        container.style.display = 'none';
+        return;
+      }
+      container.style.display = 'block';
+
+      let strength = 0;
+      if (password.length >= 8) strength++;
+      if (/[A-Z]/.test(password)) strength++;
+      if (/[a-z]/.test(password)) strength++;
+      if (/[0-9]/.test(password)) strength++;
+      if (/[^A-Za-z0-9]/.test(password)) strength++;
+
+      if (strength < 3) {
+        text.innerText = 'Zayıf';
+        text.style.color = '#ef4444'; // Kırmızı
+      } else if (strength === 3 || strength === 4) {
+        text.innerText = 'Normal';
+        text.style.color = '#eab308'; // Sarı
+      } else {
+        text.innerText = 'Güçlü';
+        text.style.color = '#22c55e'; // Yeşil
+      }
+    }
+
+    // Parola eşleşme kontrolü formu göndermeden önce eklenebilir
+    document.addEventListener('DOMContentLoaded', () => {
+      const registerForm = document.getElementById('form-register');
+      if (registerForm) {
+        registerForm.addEventListener('submit', (e) => {
+          const pass = document.getElementById('reg-password');
+          const confirm = document.getElementById('reg-password-confirm');
+          if (pass && confirm && pass.value !== confirm.value) {
+            e.preventDefault();
+            const alertBox = document.getElementById('alert-box');
+            const alertMessage = document.getElementById('alert-message');
+            alertMessage.innerText = 'Şifreler eşleşmiyor. Lütfen tekrar kontrol edin.';
+            alertBox.classList.remove('hidden');
+          }
+        });
+      }
+    });
+
     let activeRole = 'member';
     let activeForm = 'login';
 
